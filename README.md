@@ -7,9 +7,9 @@ The files are public domain - unless there is a different note (by their respect
 Screenshots
 ==========
 
-[tiled-dungeon-devloglogan](https://github.com/afarber/godot-questions/tree/master/tiled-dungeon-devloglogan) from the tutorial [Godot 4 - Tiled Dungeon Environment From Scratch](https://youtu.be/VjuyfBaryu8):
+[checkered-board-buttons](https://github.com/afarber/pixi-questions/tree/master/checkered-board-buttons) with draggable rectangles and a column of buttons on the right, based on [Pixi.js Tutorial for Absolute Beginners](https://www.youtube.com/watch?v=kkbzL5dXezU&list=PLjcjAqAnHd1ELH6j5RZaT2Ilvwj1sMCi6) by Wael Yasmina:
 
-![screenshot](https://raw.github.com/afarber/godot-questions/master/tiled-dungeon-devloglogan/screenshot.png)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/checkered-board-buttons/screenshot.png)
 
 ![StackOverflow](http://stackoverflow.com/users/flair/165071.png)
 

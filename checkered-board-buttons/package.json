@@ -1,0 +1,24 @@
+{
+  "name": "checkered-board-buttons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@pixi/ui": "^2.2.3",
+    "pixi.js": "^8.9.1"
+  },
+  "devDependencies": {
+    "vite": "^6.3.2"
+  }
+}
