@@ -1,41 +1,48 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Assets, Graphics, Sprite } from "pixi.js";
+import { CELL } from "./Tile";
 
 (async () => {
-  // Create a new application
   const app = new Application();
-
-  // Initialize the application
   await app.init({ background: "#CCFFCC", resizeTo: window });
-
-  // Append the application canvas to the document body
+  // Append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
-  // Load the bunny texture
-  const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
+  const background = createBackground();
+  app.stage.addChild(background);
 
-  // Create a bunny Sprite
-  const bunny = new Sprite(texture);
+  const bunny = await createBunny();
+  app.stage.addChild(bunny);
 
   const centerBunny = () => {
-    // Move the sprite to the center of the screen
     bunny.x = app.screen.width / 2;
     bunny.y = app.screen.height / 2;
   };
 
-  // Center the bunny when the window is resized
   addEventListener("resize", centerBunny);
-
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
   centerBunny();
 
-  app.stage.addChild(bunny);
-
-  // Listen for animate update
   app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
     bunny.rotation += 0.1 * time.deltaTime;
   });
 })();
+
+function createBackground() {
+  const background = new Graphics();
+  background.setFillStyle({ color: "0xCCCCFF" });
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if ((i + j) % 2 === 0) {
+        background.rect(i * CELL, j * CELL, CELL, CELL);
+        background.fill();
+      }
+    }
+  }
+  return background;
+}
+
+async function createBunny() {
+  const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
+  const bunny = new Sprite(texture);
+  bunny.anchor.set(0.5);
+  return bunny;
+}
