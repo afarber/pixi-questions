@@ -9,6 +9,9 @@ import {
 import { Tile, CELL } from "./Tile";
 
 (async () => {
+  let boardScale = 1.0;
+  let boardOrigin = { x: 0, y: 0 };
+
   // the relative offset point of the click on the tile
   let grabPoint = new Point();
   let draggedTile;
@@ -56,35 +59,44 @@ import { Tile, CELL } from "./Tile";
   app.stage.hitArea = app.screen;
   app.stage.removeChildren();
 
-  const background = createBackground();
-  app.stage.addChild(background);
+  const rootContainer = new Container();
+  app.stage.addChild(rootContainer);
 
-  const tilesContainer = new Container();
-  app.stage.addChild(tilesContainer);
+  const background = createBackground();
+  rootContainer.addChild(background);
 
   const r = new Tile("red", onDragStart, onDragEnd, 3, 3);
   const g = new Tile("green", onDragStart, onDragEnd, 4, 3);
   const b = new Tile("blue", onDragStart, onDragEnd, 5, 3);
 
-  tilesContainer.addChild(r);
-  tilesContainer.addChild(g);
-  tilesContainer.addChild(b);
+  rootContainer.addChild(r);
+  rootContainer.addChild(g);
+  rootContainer.addChild(b);
+
+  function resizeRootContainer(appWidth, appHeight) {
+    const boardSize = 8 * CELL;
+    const appSize = Math.min(appWidth, appHeight);
+    boardScale = appSize / boardSize;
+    rootContainer.scale.set(boardScale);
+
+    boardOrigin.x = (appWidth - appSize) / 2;
+    boardOrigin.y = (appHeight - appSize) / 2;
+    rootContainer.position.set(boardOrigin.x, boardOrigin.y);
+  }
 
   const bunny = await createBunny();
-  app.stage.addChild(bunny);
+  rootContainer.addChild(bunny);
 
   app.ticker.add((time) => {
     bunny.rotation += 0.1 * time.deltaTime;
   });
 
   const onResize = () => {
-    resizeBunny(bunny, app.screen.width, app.screen.height);
-    resizeBackground(background, app.screen.width, app.screen.height);
-    resizeTilesContainer(tilesContainer, app.screen.width, app.screen.height);
+    resizeRootContainer(rootContainer, app.screen.width, app.screen.height);
   };
 
   addEventListener("resize", onResize);
-  onResize();
+  //onResize();
 })();
 
 function createBackground() {
@@ -103,36 +115,11 @@ function createBackground() {
   return background;
 }
 
-function resizeBackground(background, width, height) {
-  const size = Math.min(width, height);
-
-  background.width = size;
-  background.height = size;
-
-  background.x = (width - size) / 2;
-  background.y = (height - size) / 2;
-}
-
-function resizeTilesContainer(tilesContainer, width, height) {
-  const size = Math.min(width, height);
-
-  //tilesContainer.width = size;
-  //tilesContainer.height = size;
-
-  //tilesContainer.x = (width - size) / 2;
-  //tilesContainer.y = (height - size) / 2;
-}
-
 async function createBunny() {
   const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
   const bunny = new Sprite(texture);
   bunny.anchor.set(0.5);
+  bunny.x = CELL / 2;
+  bunny.y = CELL / 2;
   return bunny;
-}
-
-function resizeBunny(bunny, width, height) {
-  const size = Math.min(width, height);
-
-  bunny.x = (width - size) / 2 + size / 8;
-  bunny.y = (height - size) / 2 + size / 8;
 }
