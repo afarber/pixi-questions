@@ -1,4 +1,11 @@
-import { Application, Assets, Graphics, Point, Sprite } from "pixi.js";
+import {
+  Application,
+  Assets,
+  Container,
+  Graphics,
+  Point,
+  Sprite,
+} from "pixi.js";
 import { Tile, CELL } from "./Tile";
 
 (async () => {
@@ -52,16 +59,19 @@ import { Tile, CELL } from "./Tile";
   const background = createBackground();
   app.stage.addChild(background);
 
-  const bunny = await createBunny();
-  app.stage.addChild(bunny);
+  const tilesContainer = new Container();
+  app.stage.addChild(tilesContainer);
 
   const r = new Tile("red", onDragStart, onDragEnd, 3, 3);
   const g = new Tile("green", onDragStart, onDragEnd, 4, 3);
   const b = new Tile("blue", onDragStart, onDragEnd, 5, 3);
 
-  app.stage.addChild(r);
-  app.stage.addChild(g);
-  app.stage.addChild(b);
+  tilesContainer.addChild(r);
+  tilesContainer.addChild(g);
+  tilesContainer.addChild(b);
+
+  const bunny = await createBunny();
+  app.stage.addChild(bunny);
 
   app.ticker.add((time) => {
     bunny.rotation += 0.1 * time.deltaTime;
@@ -70,6 +80,7 @@ import { Tile, CELL } from "./Tile";
   const onResize = () => {
     resizeBunny(bunny, app.screen.width, app.screen.height);
     resizeBackground(background, app.screen.width, app.screen.height);
+    resizeTilesContainer(tilesContainer, app.screen.width, app.screen.height);
   };
 
   addEventListener("resize", onResize);
@@ -102,6 +113,16 @@ function resizeBackground(background, width, height) {
   background.y = (height - size) / 2;
 }
 
+function resizeTilesContainer(tilesContainer, width, height) {
+  const size = Math.min(width, height);
+
+  //tilesContainer.width = size;
+  //tilesContainer.height = size;
+
+  //tilesContainer.x = (width - size) / 2;
+  //tilesContainer.y = (height - size) / 2;
+}
+
 async function createBunny() {
   const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
   const bunny = new Sprite(texture);
@@ -110,6 +131,8 @@ async function createBunny() {
 }
 
 function resizeBunny(bunny, width, height) {
-  bunny.x = width / 2;
-  bunny.y = height / 2;
+  const size = Math.min(width, height);
+
+  bunny.x = (width - size) / 2 + size / 8;
+  bunny.y = (height - size) / 2 + size / 8;
 }
