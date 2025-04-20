@@ -13,13 +13,20 @@ import { CELL } from "./Tile";
   const bunny = await createBunny();
   app.stage.addChild(bunny);
 
-  const centerBunny = () => {
+  const onResize = () => {
     bunny.x = app.screen.width / 2;
     bunny.y = app.screen.height / 2;
+
+    const size = Math.min(app.screen.width, app.screen.height);
+
+    background.width = size;
+    background.height = size;
+    background.x = (app.screen.width - size) / 2;
+    background.y = (app.screen.height - size) / 2;
   };
 
-  addEventListener("resize", centerBunny);
-  centerBunny();
+  addEventListener("resize", onResize);
+  onResize();
 
   app.ticker.add((time) => {
     bunny.rotation += 0.1 * time.deltaTime;
