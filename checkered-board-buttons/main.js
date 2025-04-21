@@ -11,7 +11,6 @@ import { Tile, CELL } from "./Tile";
 (async () => {
   let boardScale = 1.0;
   let boardOrigin = new Point();
-
   // the relative offset point of the click on the tile
   let grabPoint = new Point();
   let draggedTile;
@@ -51,7 +50,7 @@ import { Tile, CELL } from "./Tile";
 
   const app = new Application();
   await app.init({ background: "#CCFFCC", resizeTo: window });
-  // Append the app canvas to the document body
+  // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
   // The stage will handle the move events
@@ -59,51 +58,50 @@ import { Tile, CELL } from "./Tile";
   app.stage.hitArea = app.screen;
   app.stage.removeChildren();
 
-  const rootContainer = new Container();
-  app.stage.addChild(rootContainer);
+  const boardContainer = new Container();
+  app.stage.addChild(boardContainer);
 
   const background = createBackground();
-  rootContainer.addChild(background);
+  boardContainer.addChild(background);
 
   const r = new Tile("red", onDragStart, onDragEnd, 3, 3);
   const g = new Tile("green", onDragStart, onDragEnd, 4, 3);
   const b = new Tile("blue", onDragStart, onDragEnd, 5, 3);
 
-  rootContainer.addChild(r);
-  rootContainer.addChild(g);
-  rootContainer.addChild(b);
+  boardContainer.addChild(r);
+  boardContainer.addChild(g);
+  boardContainer.addChild(b);
 
-  function resizeRootContainer(appWidth, appHeight) {
+  function resizeBoardContainer(appWidth, appHeight) {
     const boardSize = 8 * CELL;
     const appSize = Math.min(appWidth, appHeight);
     boardScale = appSize / boardSize;
-    rootContainer.scale.set(boardScale);
+    boardContainer.scale.set(boardScale);
 
     boardOrigin.x = (appWidth - appSize) / 2;
     boardOrigin.y = (appHeight - appSize) / 2;
-    rootContainer.position.set(boardOrigin.x, boardOrigin.y);
+    boardContainer.position.set(boardOrigin.x, boardOrigin.y);
 
     console.log(
       "resizeRootContainer",
       appWidth,
+      "x",
       appHeight,
-      boardSize,
-      appSize,
+      "scale",
       boardScale,
       boardOrigin
     );
   }
 
   const bunny = await createBunny();
-  rootContainer.addChild(bunny);
+  boardContainer.addChild(bunny);
 
   app.ticker.add((time) => {
-    bunny.rotation += 0.1 * time.deltaTime;
+    bunny.rotation += 0.05 * time.deltaTime;
   });
 
   const onResize = () => {
-    console.log("onResize", CELL, app.screen.width, app.screen.height);
-    resizeRootContainer(app.screen.width, app.screen.height);
+    resizeBoardContainer(app.screen.width, app.screen.height);
   };
 
   addEventListener("resize", onResize);
