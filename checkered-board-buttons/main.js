@@ -20,11 +20,11 @@ import { Tile, CELL } from "./Tile";
     draggedTile.toLocal(global, null, grabPoint);
     grabPoint.x *= draggedTile.scale.x;
     grabPoint.y *= draggedTile.scale.y;
-    app.stage.cursor = "pointer";
-    app.stage.on("pointermove", onDragMove);
+    boardContainer.cursor = "pointer";
+    boardContainer.on("pointermove", onDragMove);
     // put the dragged object on the top
-    app.stage.removeChild(draggedTile);
-    app.stage.addChild(draggedTile);
+    boardContainer.removeChild(draggedTile);
+    boardContainer.addChild(draggedTile);
     draggedTile.startDragging();
     console.log("onDragStart:", draggedTile.x, draggedTile.y);
   }
@@ -40,10 +40,10 @@ import { Tile, CELL } from "./Tile";
     draggedTile.stopDragging();
     // the next 2 lines are not needed here, but
     // in my real game the tile is put beneath the HUD
-    app.stage.removeChild(draggedTile);
-    app.stage.addChildAt(draggedTile, app.stage.children.length);
-    app.stage.cursor = null;
-    app.stage.off("pointermove", onDragMove);
+    boardContainer.removeChild(draggedTile);
+    boardContainer.addChildAt(draggedTile, app.stage.children.length);
+    boardContainer.cursor = null;
+    boardContainer.off("pointermove", onDragMove);
     console.log("onDragEnd:", draggedTile.x, draggedTile.y);
     draggedTile = null;
   }
@@ -53,13 +53,12 @@ import { Tile, CELL } from "./Tile";
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
-  // The stage will handle the move events
-  app.stage.eventMode = "static";
-  app.stage.hitArea = app.screen;
-  app.stage.removeChildren();
-
   const boardContainer = new Container();
   app.stage.addChild(boardContainer);
+
+  // the board container will handle the move events
+  boardContainer.eventMode = "static";
+  boardContainer.hitArea = app.screen; // TODO
 
   const background = createBackground();
   boardContainer.addChild(background);
