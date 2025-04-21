@@ -10,7 +10,7 @@ import { Tile, CELL } from "./Tile";
 
 (async () => {
   let boardScale = 1.0;
-  let boardOrigin = { x: 0, y: 0 };
+  let boardOrigin = new Point();
 
   // the relative offset point of the click on the tile
   let grabPoint = new Point();
@@ -82,6 +82,16 @@ import { Tile, CELL } from "./Tile";
     boardOrigin.x = (appWidth - appSize) / 2;
     boardOrigin.y = (appHeight - appSize) / 2;
     rootContainer.position.set(boardOrigin.x, boardOrigin.y);
+
+    console.log(
+      "resizeRootContainer",
+      appWidth,
+      appHeight,
+      boardSize,
+      appSize,
+      boardScale,
+      boardOrigin
+    );
   }
 
   const bunny = await createBunny();
@@ -92,11 +102,12 @@ import { Tile, CELL } from "./Tile";
   });
 
   const onResize = () => {
-    resizeRootContainer(rootContainer, app.screen.width, app.screen.height);
+    console.log("onResize", CELL, app.screen.width, app.screen.height);
+    resizeRootContainer(app.screen.width, app.screen.height);
   };
 
   addEventListener("resize", onResize);
-  //onResize();
+  onResize();
 })();
 
 function createBackground() {
