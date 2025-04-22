@@ -20,9 +20,9 @@ import { Tile, CELL } from "./Tile";
     draggedTile.toLocal(global, null, grabPoint);
     grabPoint.x *= draggedTile.scale.x;
     grabPoint.y *= draggedTile.scale.y;
-    boardContainer.cursor = "pointer";
-    boardContainer.on("pointermove", onDragMove);
-    // put the dragged object on the top
+    app.stage.cursor = "pointer";
+    app.stage.on("pointermove", onDragMove);
+    // put the dragged tile on the top
     boardContainer.removeChild(draggedTile);
     boardContainer.addChild(draggedTile);
     draggedTile.startDragging();
@@ -30,6 +30,9 @@ import { Tile, CELL } from "./Tile";
   }
 
   function onDragMove({ global: { x, y } }) {
+    //let mousePoint = new Point();
+    //boardContainer.toLocal(x, y, null, mousePoint);
+    // calculate the new position of the dragged tile
     draggedTile.x = x - grabPoint.x;
     draggedTile.y = y - grabPoint.y;
     console.log("onDragMove:", draggedTile.x, draggedTile.y);
@@ -38,12 +41,8 @@ import { Tile, CELL } from "./Tile";
   function onDragEnd() {
     // reset the tile scale and calculate its col and row
     draggedTile.stopDragging();
-    // the next 2 lines are not needed here, but
-    // in my real game the tile is put beneath the HUD
-    boardContainer.removeChild(draggedTile);
-    boardContainer.addChildAt(draggedTile, app.stage.children.length);
-    boardContainer.cursor = null;
-    boardContainer.off("pointermove", onDragMove);
+    app.stage.cursor = null;
+    app.stage.off("pointermove", onDragMove);
     console.log("onDragEnd:", draggedTile.x, draggedTile.y);
     draggedTile = null;
   }
@@ -53,12 +52,12 @@ import { Tile, CELL } from "./Tile";
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
+  // the app stage will handle the move events
+  app.stage.eventMode = "static";
+  app.stage.hitArea = app.screen;
+
   const boardContainer = new Container();
   app.stage.addChild(boardContainer);
-
-  // the board container will handle the move events
-  boardContainer.eventMode = "static";
-  boardContainer.hitArea = app.screen; // TODO
 
   const background = createBackground();
   boardContainer.addChild(background);
