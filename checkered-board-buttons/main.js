@@ -12,16 +12,11 @@ import { Tile, CELL } from "./Tile";
   let boardScale = 1.0;
   let boardOrigin = new Point();
   // the relative offset point of the click on the tile
-  let grabPoint = new Point();
   let draggedTile;
 
-  function onDragStart({ target, global }) {
+  function onDragStart({ target }) {
     draggedTile = target;
-    draggedTile.toLocal(global, null, grabPoint);
-    grabPoint.x *= draggedTile.scale.x;
-    grabPoint.y *= draggedTile.scale.y;
     app.stage.cursor = "pointer";
-    app.stage.on("pointermove", onDragMove);
     // put the dragged tile on the top
     boardContainer.removeChild(draggedTile);
     boardContainer.addChild(draggedTile);
@@ -30,11 +25,8 @@ import { Tile, CELL } from "./Tile";
   }
 
   function onDragMove({ global: { x, y } }) {
-    //let mousePoint = new Point();
-    //boardContainer.toLocal(x, y, null, mousePoint);
-    // calculate the new position of the dragged tile
-    draggedTile.x = x - grabPoint.x;
-    draggedTile.y = y - grabPoint.y;
+    draggedTile.x = x;
+    draggedTile.y = y;
     console.log("onDragMove:", draggedTile.x, draggedTile.y);
   }
 

@@ -1,8 +1,10 @@
-import { Container, Graphics, Rectangle } from "pixi.js";
+import { Container, Graphics, Rectangle, Point } from "pixi.js";
 
 export const CELL = 100;
 
 export class Tile extends Container {
+  isDragging = false;
+  dragOffset = new Point();
   constructor(color, onDragStart, onDragEnd, col, row) {
     super();
 
@@ -14,7 +16,22 @@ export class Tile extends Container {
       this.cursor = "pointer";
       // setting hitArea is important for correct pointerdown events delivery
       this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
-      this.on("pointerdown", onDragStart).on("pointerup", onDragEnd);
+      this.on("pointerdown", (e) => {
+        this.isDragging = true;
+        // TODO use event.global https://pixijs.com/8.x/examples/events/dragging
+        const pos = e.data.getLocalPosition(this.parent);
+        this.dragOffset.set(pos.x - this.x, pos.y - this.y);
+        onDragStart(e);
+      })
+        .on("pointerup", onDragEnd)
+        .on("pointerupoutside", onDragEnd)
+        .on("pointercancel", onDragEnd)
+        .on("globalpointermove", (e) => {
+          if (!this.isDragging) return;
+          const pos = e.data.getLocalPosition(this.parent);
+          this.x = pos.x - this.dragOffset.x;
+          this.y = pos.y - this.dragOffset.y;
+        });
     } else {
       this.eventMode = "none";
     }
@@ -34,6 +51,7 @@ export class Tile extends Container {
   }
 
   stopDragging() {
+    this.isDragging = false;
     this.scale.x = 1;
     this.scale.y = 1;
     this.alpha = 1;
