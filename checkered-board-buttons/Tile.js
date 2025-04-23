@@ -4,53 +4,56 @@ export const CELL = 100;
 
 export class Tile extends Container {
   isDragging = false;
+  // the relative offset point of the click on the tile
   dragOffset = new Point();
-  constructor(color, onDragStart, onDragEnd, col, row) {
+
+  constructor(color, col, row, stage) {
     super();
 
     this.x = (col + 0.5) * CELL;
     this.y = (row + 0.5) * CELL;
 
-    if (typeof onDragStart === "function" && typeof onDragEnd === "function") {
+    if (stage instanceof Container) {
       this.eventMode = "static";
       this.cursor = "pointer";
       // setting hitArea is important for correct pointerdown events delivery
       this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
-      this.on("pointerdown", (e) => {
-        this.isDragging = true;
-        // TODO use event.global https://pixijs.com/8.x/examples/events/dragging
-        const pos = e.getLocalPosition(this.parent);
-        this.dragOffset.set(pos.x - this.x, pos.y - this.y);
-        onDragStart(e);
-      })
-        .on("pointerup", onDragEnd)
-        .on("pointerupoutside", onDragEnd)
-        .on("pointercancel", onDragEnd)
-        .on("globalpointermove", (e) => {
-          if (!this.isDragging) return;
-          const pos = e.getLocalPosition(this.parent);
-          this.x = pos.x - this.dragOffset.x;
-          this.y = pos.y - this.dragOffset.y;
-        });
+
+      this.onpointerdown = (e) => this.onDragStart(e);
+      this.onpointerup = (e) => this.onDragEnd(e);
+      this.onpointerupoutside = (e) => this.onDragEnd(e);
+      this.onpointercancel = (e) => this.onDragEnd(e);
     } else {
       this.eventMode = "none";
+      this.cursor = null;
     }
 
-    this.graph = new Graphics();
-    this.graph.setFillStyle({ color: color });
-    this.graph.rect(-CELL / 2, -CELL / 2, CELL, CELL);
-    this.graph.fill();
-    this.addChild(this.graph);
-    this.cacheAsBitmap = true;
+    this.g = new Graphics();
+    this.g.setFillStyle({ color: color });
+    this.g.rect(-CELL / 2, -CELL / 2, CELL, CELL);
+    this.g.fill();
+    this.addChild(this.g);
+    this.interactiveChildren = false;
+    this.cacheAsTexture = true;
   }
 
-  startDragging() {
+  onDragStart(e) {
+    console.log("onDragStart:", this.x, this.y);
+
+    this.isDragging = true;
     this.scale.x = 1.6;
     this.scale.y = 1.6;
     this.alpha = 0.8;
+
+    let parent = this.parent;
+    // put the dragged tile on the top
+    parent.removeChild(this);
+    parent.addChild(this);
   }
 
-  stopDragging() {
+  onDragEnd(e) {
+    console.log("onDragEnd:", this.x, this.y);
+
     this.isDragging = false;
     this.scale.x = 1;
     this.scale.y = 1;
@@ -68,5 +71,12 @@ export class Tile extends Container {
 
     this.x = (col + 0.5) * CELL;
     this.y = (row + 0.5) * CELL;
+  }
+
+  onDragMove(e) {
+    console.log("onDragMove:", this.x, this.y);
+
+    if (this.isDragging) {
+    }
   }
 }
