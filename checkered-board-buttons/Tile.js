@@ -4,8 +4,6 @@ export const CELL = 100;
 
 export class Tile extends Container {
   isDragging = false;
-  // the relative offset point of the click on the tile
-  dragOffset = new Point();
 
   constructor(color, col, row, stage) {
     super();
@@ -14,15 +12,15 @@ export class Tile extends Container {
     this.y = (row + 0.5) * CELL;
 
     if (stage instanceof Container) {
+      this.stage = stage;
       this.eventMode = "static";
       this.cursor = "pointer";
       // setting hitArea is important for correct pointerdown events delivery
       this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
+      // the relative offset point of the click on the tile
+      this.grabPoint = new Point();
 
       this.onpointerdown = (e) => this.onDragStart(e);
-      this.onpointerup = (e) => this.onDragEnd(e);
-      this.onpointerupoutside = (e) => this.onDragEnd(e);
-      this.onpointercancel = (e) => this.onDragEnd(e);
     } else {
       this.eventMode = "none";
       this.cursor = null;
@@ -38,21 +36,33 @@ export class Tile extends Container {
   }
 
   onDragStart(e) {
-    console.log("onDragStart:", this.x, this.y);
+    console.log("onDragStart:", e.type, this.x, this.y);
 
     this.isDragging = true;
     this.scale.x = 1.6;
     this.scale.y = 1.6;
     this.alpha = 0.8;
 
-    let parent = this.parent;
+    // store the local mouse coordinates into grab point
+    e.getLocalPosition(this, this.grabPoint);
+
+    this.onpointerdown = null;
+
+    this.stage.onpointermove = (e) => this.onDragMove(e);
+
+    this.stage.onpointerup = (e) => this.onDragEnd(e);
+    this.stage.onpointercancel = (e) => this.onDragEnd(e);
+    this.stage.onpointerupoutside = (e) => this.onDragEnd(e);
+    this.stage.onpointercanceloutside = (e) => this.onDragEnd(e);
+
     // put the dragged tile on the top
+    let parent = this.parent;
     parent.removeChild(this);
     parent.addChild(this);
   }
 
   onDragEnd(e) {
-    console.log("onDragEnd:", this.x, this.y);
+    console.log("onDragEnd:", e.type, this.x, this.y);
 
     this.isDragging = false;
     this.scale.x = 1;
@@ -71,12 +81,27 @@ export class Tile extends Container {
 
     this.x = (col + 0.5) * CELL;
     this.y = (row + 0.5) * CELL;
+
+    this.onpointerdown = (e) => this.onDragStart(e);
+
+    this.stage.onpointermove = null;
+
+    this.stage.onpointerup = null;
+    this.stage.onpointercancel = null;
+    this.stage.onpointerupoutside = null;
+    this.stage.onpointercanceloutside = null;
   }
 
   onDragMove(e) {
-    console.log("onDragMove:", this.x, this.y);
+    console.log("onDragMove:", e.type, this.x, this.y);
 
     if (this.isDragging) {
+      const pos = e.getLocalPosition(this.parent);
+      // set the new position of the tile
+      // to be same as mouse position
+      // minus the grab point offset
+      this.x = pos.x - this.grabPoint.x;
+      this.y = pos.y - this.grabPoint.y;
     }
   }
 }

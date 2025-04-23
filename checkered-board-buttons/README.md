@@ -7,4 +7,4 @@
     npm install vite --save-dev
     npx vite (or add entries to package.json "scripts" and: npm run dev)
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/checkered-board-buttons/screenshot.png)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/checkered-board-buttons/screenshot.gif)

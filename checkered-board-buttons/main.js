@@ -15,9 +15,6 @@ import { Tile, CELL } from "./Tile";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
-  const bunny = await createBunny();
-  boardContainer.addChild(bunny);
-
   const r = new Tile("red", 3, 3, app.stage);
   const g = new Tile("green", 4, 3, app.stage);
   const b = new Tile("blue", 5, 3, app.stage);
@@ -25,6 +22,9 @@ import { Tile, CELL } from "./Tile";
   boardContainer.addChild(r);
   boardContainer.addChild(g);
   boardContainer.addChild(b);
+
+  const bunny = await createBunny();
+  boardContainer.addChild(bunny);
 
   app.ticker.add((time) => {
     bunny.rotation += 0.05 * time.deltaTime;
