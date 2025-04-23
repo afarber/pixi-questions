@@ -19,7 +19,7 @@ export class Tile extends Container {
       this.on("pointerdown", (e) => {
         this.isDragging = true;
         // TODO use event.global https://pixijs.com/8.x/examples/events/dragging
-        const pos = e.data.getLocalPosition(this.parent);
+        const pos = e.getLocalPosition(this.parent);
         this.dragOffset.set(pos.x - this.x, pos.y - this.y);
         onDragStart(e);
       })
@@ -28,7 +28,7 @@ export class Tile extends Container {
         .on("pointercancel", onDragEnd)
         .on("globalpointermove", (e) => {
           if (!this.isDragging) return;
-          const pos = e.data.getLocalPosition(this.parent);
+          const pos = e.getLocalPosition(this.parent);
           this.x = pos.x - this.dragOffset.x;
           this.y = pos.y - this.dragOffset.y;
         });
