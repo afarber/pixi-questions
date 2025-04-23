@@ -3,8 +3,6 @@ import { Container, Graphics, Rectangle, Point } from "pixi.js";
 export const CELL = 100;
 
 export class Tile extends Container {
-  isDragging = false;
-
   constructor(color, col, row, stage) {
     super();
 
@@ -38,7 +36,6 @@ export class Tile extends Container {
   onDragStart(e) {
     console.log("onDragStart:", e.type, this.x, this.y);
 
-    this.isDragging = true;
     this.scale.x = 1.6;
     this.scale.y = 1.6;
     this.alpha = 0.8;
@@ -64,7 +61,6 @@ export class Tile extends Container {
   onDragEnd(e) {
     console.log("onDragEnd:", e.type, this.x, this.y);
 
-    this.isDragging = false;
     this.scale.x = 1;
     this.scale.y = 1;
     this.alpha = 1;
@@ -95,13 +91,11 @@ export class Tile extends Container {
   onDragMove(e) {
     console.log("onDragMove:", e.type, this.x, this.y);
 
-    if (this.isDragging) {
-      const pos = e.getLocalPosition(this.parent);
-      // set the new position of the tile
-      // to be same as mouse position
-      // minus the grab point offset
-      this.x = pos.x - this.grabPoint.x;
-      this.y = pos.y - this.grabPoint.y;
-    }
+    const pos = e.getLocalPosition(this.parent);
+    // set the new position of the tile
+    // to be same as mouse position
+    // minus the grab point offset
+    this.x = pos.x - this.grabPoint.x;
+    this.y = pos.y - this.grabPoint.y;
   }
 }

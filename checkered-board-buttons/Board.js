@@ -41,7 +41,7 @@ export class Board extends Container {
       w,
       "x",
       h,
-      "@",
+      "origin",
       boardOrigin,
       "scale",
       boardScale
