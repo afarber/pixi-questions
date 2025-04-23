@@ -39,6 +39,7 @@ export class Tile extends Container {
     this.scale.x = 1.6;
     this.scale.y = 1.6;
     this.alpha = 0.8;
+    // TODO display shadow
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
@@ -64,6 +65,7 @@ export class Tile extends Container {
     this.scale.x = 1;
     this.scale.y = 1;
     this.alpha = 1;
+    // TODO hide shadow
 
     // align x, y to the checker board grid
     let col = Math.floor(this.x / CELL);
