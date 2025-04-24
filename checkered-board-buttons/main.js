@@ -1,4 +1,4 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board } from "./Board";
 import { Tile, CELL } from "./Tile";
 
@@ -26,8 +26,17 @@ import { Tile, CELL } from "./Tile";
   const bunny = await createBunny();
   boardContainer.addChild(bunny);
 
+  const label = createLabel();
+  boardContainer.addChild(label);
+
+  console.log("__YES__");
+  console.log("__NO__");
+  console.log("__CANCEL__");
+
   app.ticker.add((time) => {
     bunny.rotation += 0.05 * time.deltaTime;
+    label.skew.x += 0.02 * time.deltaTime;
+    label.skew.y += 0.01 * time.deltaTime;
   });
 
   const onResize = () => {
@@ -45,4 +54,12 @@ async function createBunny() {
   bunny.x = CELL / 2;
   bunny.y = CELL / 2;
   return bunny;
+}
+
+function createLabel() {
+  const label = new Text({ text: "__NO__" });
+  label.x = CELL * 7.5;
+  label.y = CELL * 7.5;
+  label.anchor.set(0.5);
+  return label;
 }

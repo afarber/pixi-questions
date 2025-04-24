@@ -1,13 +1,13 @@
 {
   "name": "checkered-board-buttons",
   "version": "1.0.0",
-  "description": "",
+  "description": "A checkered board with a bunny and 3 draggable tiles",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "keywords": [],
