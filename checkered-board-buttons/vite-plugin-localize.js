@@ -8,16 +8,22 @@ const localizedStrings = {
     __YES__: "Yes",
     __NO__: "No",
     __CANCEL__: "Cancel",
+    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
+    __VITE_PRELOAD__: "void 0",
   },
   de: {
     __YES__: "Ja",
     __NO__: "Nein",
     __CANCEL__: "Abbrechen",
+    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
+    __VITE_PRELOAD__: "void 0",
   },
   fr: {
     __YES__: "Oui",
     __NO__: "Non",
     __CANCEL__: "Annuler",
+    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
+    __VITE_PRELOAD__: "void 0",
   },
 };
 
