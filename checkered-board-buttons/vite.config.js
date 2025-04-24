@@ -7,6 +7,8 @@ const isBuildingBundle =
 
 export default defineConfig({
   plugins: [localize(isBuildingBundle)],
+  // Set base to './' for relative paths in HTML
+  base: "./",
   build: {
     target: "es2015",
     rollupOptions: {
@@ -16,6 +18,7 @@ export default defineConfig({
         assetFileNames: `[name].[ext]`,
         // Ensures all imports are in one file
         inlineDynamicImports: true,
+        format: "iife",
       },
     },
   },
