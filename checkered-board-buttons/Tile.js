@@ -51,13 +51,28 @@ export class Tile extends Container {
   onDragStart(e) {
     console.log("onDragStart:", e.type, this.x, this.y);
 
-    this.scale.x = 1.6;
-    this.scale.y = 1.6;
-    this.alpha = 0.8;
+    this.scale.x = 1.05;
+    this.scale.y = 1.05;
+    this.alpha = 0.9;
     this.shadow.visible = true;
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
+    console.log("this.grabPoint:", this.grabPoint);
+
+    // Calculate skew based on the grab point's distance from the center
+
+    // TODO the Ballatro-like pseudo 3D effect does not work well
+
+    // Normalize to -1 to 1
+    const normalizedGrabX = this.grabPoint.x / (CELL / 2);
+    const normalizedGrabY = this.grabPoint.y / (CELL / 2);
+
+    // Adjust for desired maximum skew
+    const maxSkew = Math.PI / 60;
+
+    this.skew.x = normalizedGrabX * maxSkew;
+    this.skew.y = normalizedGrabY * maxSkew;
 
     this.onpointerdown = null;
 
@@ -81,6 +96,10 @@ export class Tile extends Container {
     this.scale.y = 1;
     this.alpha = 1;
     this.shadow.visible = false;
+
+    // remove the skew
+    this.skew.x = 0;
+    this.skew.y = 0;
 
     // align x, y to the checker board grid
     let col = Math.floor(this.x / CELL);
