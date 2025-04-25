@@ -2,6 +2,10 @@ import { Container, Graphics, Rectangle, Point } from "pixi.js";
 
 export const CELL = 100;
 
+const SHADOW_COLOR = 0x000000;
+const SHADOW_ALPHA = 0.2;
+const SHADOW_OFFSET = new Point(8, 6);
+
 export class Tile extends Container {
   constructor(color, col, row, stage) {
     super();
@@ -24,11 +28,22 @@ export class Tile extends Container {
       this.cursor = null;
     }
 
-    this.g = new Graphics();
-    this.g.setFillStyle({ color: color });
-    this.g.rect(-CELL / 2, -CELL / 2, CELL, CELL);
-    this.g.fill();
+    this.shadow = new Graphics()
+      .rect(
+        -CELL / 2 + SHADOW_OFFSET.x,
+        -CELL / 2 + SHADOW_OFFSET.y,
+        CELL,
+        CELL
+      )
+      .fill({ color: SHADOW_COLOR, alpha: SHADOW_ALPHA });
+    this.shadow.visible = false;
+    this.addChild(this.shadow);
+
+    this.g = new Graphics()
+      .rect(-CELL / 2, -CELL / 2, CELL, CELL)
+      .fill({ color: color });
     this.addChild(this.g);
+
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
   }
@@ -39,7 +54,7 @@ export class Tile extends Container {
     this.scale.x = 1.6;
     this.scale.y = 1.6;
     this.alpha = 0.8;
-    // TODO display shadow
+    this.shadow.visible = true;
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
@@ -65,7 +80,7 @@ export class Tile extends Container {
     this.scale.x = 1;
     this.scale.y = 1;
     this.alpha = 1;
-    // TODO hide shadow
+    this.shadow.visible = false;
 
     // align x, y to the checker board grid
     let col = Math.floor(this.x / CELL);
