@@ -25,6 +25,14 @@ export class Tile extends Container {
       // the relative offset point of the click on the tile
       this.grabPoint = new Point();
 
+      this.points = [
+        { x: -CELL / 2, y: -CELL / 2 },
+        { x: CELL / 2, y: -CELL / 2 },
+        { x: CELL / 2, y: CELL / 2 },
+        { x: -CELL / 2, y: CELL / 2 },
+      ];
+      this.outPoints = this.points.map((p) => ({ ...p }));
+
       this.onpointerdown = (e) => this.onDragStart(e);
     } else {
       this.eventMode = "none";
@@ -78,8 +86,6 @@ export class Tile extends Container {
   }
 
   onDragStart(e) {
-    console.log("onDragStart:", e.type, this.x, this.y);
-
     this.scale.x = TILE_SCALE;
     this.scale.y = TILE_SCALE;
     this.alpha = TILE_ALPHA;
@@ -88,6 +94,40 @@ export class Tile extends Container {
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
     console.log("this.grabPoint:", this.grabPoint);
+
+    // add a 3D effect, where the tile is tilted based on the grab point
+    const grabX = this.grabPoint.x - CELL / 2;
+    const grabY = this.grabPoint.y - CELL / 2;
+
+    const perspective = 300;
+
+    // max 30 deg tilt based on grab point
+    const angleX = (grabY / CELL) * 30;
+    const angleY = (grabX / CELL) * 30;
+
+    this.rotate3D(this.points, this.outPoints, angleX, angleY, perspective);
+
+    this.mesh.setCorners(
+      this.outPoints[0].x,
+      this.outPoints[0].y,
+      this.outPoints[1].x,
+      this.outPoints[1].y,
+      this.outPoints[2].x,
+      this.outPoints[2].y,
+      this.outPoints[3].x,
+      this.outPoints[3].y
+    );
+
+    this.shadow.setCorners(
+      this.outPoints[0].x + SHADOW_OFFSET.x,
+      this.outPoints[0].y + SHADOW_OFFSET.y,
+      this.outPoints[1].x + SHADOW_OFFSET.x,
+      this.outPoints[1].y + SHADOW_OFFSET.y,
+      this.outPoints[2].x + SHADOW_OFFSET.x,
+      this.outPoints[2].y + SHADOW_OFFSET.y,
+      this.outPoints[3].x + SHADOW_OFFSET.x,
+      this.outPoints[3].y + SHADOW_OFFSET.y
+    );
 
     this.onpointerdown = null;
 
@@ -105,8 +145,6 @@ export class Tile extends Container {
   }
 
   onDragEnd(e) {
-    console.log("onDragEnd:", e.type, this.x, this.y);
-
     this.scale.x = 1;
     this.scale.y = 1;
     this.alpha = 1;
@@ -133,16 +171,71 @@ export class Tile extends Container {
     this.stage.onpointercancel = null;
     this.stage.onpointerupoutside = null;
     this.stage.onpointercanceloutside = null;
+
+    // Reset mesh to flat
+    this.mesh.setCorners(
+      -CELL / 2,
+      -CELL / 2,
+      CELL / 2,
+      -CELL / 2,
+      CELL / 2,
+      CELL / 2,
+      -CELL / 2,
+      CELL / 2
+    );
+
+    this.shadow.setCorners(
+      -CELL / 2 + SHADOW_OFFSET.x,
+      -CELL / 2 + SHADOW_OFFSET.y,
+      CELL / 2 + SHADOW_OFFSET.x,
+      -CELL / 2 + SHADOW_OFFSET.y,
+      CELL / 2 + SHADOW_OFFSET.x,
+      CELL / 2 + SHADOW_OFFSET.y,
+      -CELL / 2 + SHADOW_OFFSET.x,
+      CELL / 2 + SHADOW_OFFSET.y
+    );
   }
 
   onDragMove(e) {
-    console.log("onDragMove:", e.type, this.x, this.y);
-
     const pos = e.getLocalPosition(this.parent);
     // set the new position of the tile
     // to be same as mouse position
     // minus the grab point offset
     this.x = pos.x - this.grabPoint.x;
     this.y = pos.y - this.grabPoint.y;
+  }
+
+  // Function to apply 3D rotation to the points
+  rotate3D(points, outPoints, angleX, angleY, perspective) {
+    const radX = (angleX * Math.PI) / 180;
+    const radY = (angleY * Math.PI) / 180;
+    const cosX = Math.cos(radX);
+    const sinX = Math.sin(radX);
+    const cosY = Math.cos(radY);
+    const sinY = Math.sin(radY);
+
+    for (let i = 0; i < points.length; i++) {
+      const src = points[i];
+      const out = outPoints[i];
+
+      // Flat plane initially
+      const x = src.x;
+      const y = src.y;
+      let z = 0;
+
+      // Rotate around Y axis
+      const xY = cosY * x - sinY * z;
+      z = sinY * x + cosY * z;
+
+      // Rotate around X axis
+      const yX = cosX * y - sinX * z;
+      z = sinX * y + cosX * z;
+
+      // Apply perspective projection
+      const scale = perspective / (perspective - z);
+
+      out.x = xY * scale;
+      out.y = yX * scale;
+    }
   }
 }
