@@ -25,13 +25,15 @@ export class Tile extends Container {
       // the relative offset point of the click on the tile
       this.grabPoint = new Point();
 
-      this.points = [
+      // the points of the tile in local coordinates, clockwise
+      this.cornerPoints = [
         { x: -CELL / 2, y: -CELL / 2 },
         { x: CELL / 2, y: -CELL / 2 },
         { x: CELL / 2, y: CELL / 2 },
         { x: -CELL / 2, y: CELL / 2 },
       ];
-      this.outPoints = this.points.map((p) => ({ ...p }));
+      // create a shallow copy of the corner points array
+      this.projectedCornerPoints = this.cornerPoints.map((p) => ({ ...p }));
 
       this.onpointerdown = (e) => this.onDragStart(e);
     } else {
@@ -44,17 +46,17 @@ export class Tile extends Container {
       verticesX: 10,
       verticesY: 10,
       // top left corner
-      x0: -CELL / 2 + SHADOW_OFFSET.x,
-      y0: -CELL / 2 + SHADOW_OFFSET.y,
+      x0: this.cornerPoints[0].x + SHADOW_OFFSET.x,
+      y0: this.cornerPoints[0].y + SHADOW_OFFSET.y,
       // top right corner
-      x1: CELL / 2 + SHADOW_OFFSET.x,
-      y1: -CELL / 2 + SHADOW_OFFSET.y,
+      x1: this.cornerPoints[1].x + SHADOW_OFFSET.x,
+      y1: this.cornerPoints[1].y + SHADOW_OFFSET.y,
       // bottom right corner
-      x2: CELL / 2 + SHADOW_OFFSET.x,
-      y2: CELL / 2 + SHADOW_OFFSET.y,
+      x2: this.cornerPoints[2].x + SHADOW_OFFSET.x,
+      y2: this.cornerPoints[2].y + SHADOW_OFFSET.y,
       // bottom left corner
-      x3: -CELL / 2 + SHADOW_OFFSET.x,
-      y3: CELL / 2 + SHADOW_OFFSET.y,
+      x3: this.cornerPoints[3].x + SHADOW_OFFSET.x,
+      y3: this.cornerPoints[3].y + SHADOW_OFFSET.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
@@ -66,17 +68,17 @@ export class Tile extends Container {
       verticesX: 10,
       verticesY: 10,
       // top left corner
-      x0: -CELL / 2,
-      y0: -CELL / 2,
+      x0: this.cornerPoints[0].x,
+      y0: this.cornerPoints[0].y,
       // top right corner
-      x1: CELL / 2,
-      y1: -CELL / 2,
+      x1: this.cornerPoints[1].x,
+      y1: this.cornerPoints[1].y,
       // bottom right corner
-      x2: CELL / 2,
-      y2: CELL / 2,
+      x2: this.cornerPoints[2].x,
+      y2: this.cornerPoints[2].y,
       // bottom left corner
-      x3: -CELL / 2,
-      y3: CELL / 2,
+      x3: this.cornerPoints[3].x,
+      y3: this.cornerPoints[3].y,
     });
     this.mesh.tint = color;
     this.addChild(this.mesh);
@@ -105,28 +107,34 @@ export class Tile extends Container {
     const angleX = normalizedGrabY * 15;
     const angleY = normalizedGrabX * 15;
 
-    this.rotate3D(this.points, this.outPoints, angleX, angleY, perspective);
+    this.rotate3D(
+      this.cornerPoints,
+      this.projectedCornerPoints,
+      angleX,
+      angleY,
+      perspective
+    );
 
     this.mesh.setCorners(
-      this.outPoints[0].x,
-      this.outPoints[0].y,
-      this.outPoints[1].x,
-      this.outPoints[1].y,
-      this.outPoints[2].x,
-      this.outPoints[2].y,
-      this.outPoints[3].x,
-      this.outPoints[3].y
+      this.projectedCornerPoints[0].x,
+      this.projectedCornerPoints[0].y,
+      this.projectedCornerPoints[1].x,
+      this.projectedCornerPoints[1].y,
+      this.projectedCornerPoints[2].x,
+      this.projectedCornerPoints[2].y,
+      this.projectedCornerPoints[3].x,
+      this.projectedCornerPoints[3].y
     );
 
     this.shadow.setCorners(
-      this.outPoints[0].x + SHADOW_OFFSET.x,
-      this.outPoints[0].y + SHADOW_OFFSET.y,
-      this.outPoints[1].x + SHADOW_OFFSET.x,
-      this.outPoints[1].y + SHADOW_OFFSET.y,
-      this.outPoints[2].x + SHADOW_OFFSET.x,
-      this.outPoints[2].y + SHADOW_OFFSET.y,
-      this.outPoints[3].x + SHADOW_OFFSET.x,
-      this.outPoints[3].y + SHADOW_OFFSET.y
+      this.projectedCornerPoints[0].x + SHADOW_OFFSET.x,
+      this.projectedCornerPoints[0].y + SHADOW_OFFSET.y,
+      this.projectedCornerPoints[1].x + SHADOW_OFFSET.x,
+      this.projectedCornerPoints[1].y + SHADOW_OFFSET.y,
+      this.projectedCornerPoints[2].x + SHADOW_OFFSET.x,
+      this.projectedCornerPoints[2].y + SHADOW_OFFSET.y,
+      this.projectedCornerPoints[3].x + SHADOW_OFFSET.x,
+      this.projectedCornerPoints[3].y + SHADOW_OFFSET.y
     );
 
     this.onpointerdown = null;
