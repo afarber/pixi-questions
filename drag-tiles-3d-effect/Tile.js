@@ -96,14 +96,14 @@ export class Tile extends Container {
     console.log("this.grabPoint:", this.grabPoint);
 
     // add a 3D effect, where the tile is tilted based on the grab point
-    const grabX = this.grabPoint.x - CELL / 2;
-    const grabY = this.grabPoint.y - CELL / 2;
+    const normalizedGrabX = (this.grabPoint.x - CELL / 2) / (CELL / 2);
+    const normalizedGrabY = (this.grabPoint.y - CELL / 2) / (CELL / 2);
 
     const perspective = 300;
 
-    // max 30 deg tilt based on grab point
-    const angleX = (grabY / CELL) * 30;
-    const angleY = (grabX / CELL) * 30;
+    // max 15 deg tilt based on grab point
+    const angleX = normalizedGrabY * 15;
+    const angleY = normalizedGrabX * 15;
 
     this.rotate3D(this.points, this.outPoints, angleX, angleY, perspective);
 
