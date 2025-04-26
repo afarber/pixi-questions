@@ -1,14 +1,17 @@
 {
   "name": "drag-tiles-3d-effect",
   "version": "1.0.0",
-  "description": "mkdir drag-tiles-3d-effect\r     cd drag-tiles-3d-effect\r     npm init -y\r     npm install pixi.js @pixi/ui\r     npm install vite --save-dev\r     npx vite (or add entries to package.json \"scripts\" and: npm run dev)",
-  "main": "index.js",
+  "description": "A checkered board with 3 draggable tiles and a 3D effect using PixiJS.",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Alexander Farber",
+  "license": "Public Domain",
   "dependencies": {
     "@pixi/ui": "^2.2.3",
     "pixi.js": "^8.9.1"

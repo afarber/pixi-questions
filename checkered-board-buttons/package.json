@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "Alexander Farber",
-  "license": "Public domain",
+  "license": "Public Domain",
   "type": "commonjs",
   "dependencies": {
     "@pixi/ui": "^2.2.3",
