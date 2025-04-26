@@ -3,8 +3,11 @@ import { Container, Graphics, Rectangle, Point } from "pixi.js";
 export const CELL = 100;
 
 const SHADOW_COLOR = 0x000000;
-const SHADOW_ALPHA = 0.2;
+const SHADOW_ALPHA = 0.1;
 const SHADOW_OFFSET = new Point(8, 6);
+
+const TILE_SCALE = 1.4;
+const TILE_ALPHA = 0.7;
 
 export class Tile extends Container {
   constructor(color, col, row, stage) {
@@ -51,28 +54,14 @@ export class Tile extends Container {
   onDragStart(e) {
     console.log("onDragStart:", e.type, this.x, this.y);
 
-    this.scale.x = 1.05;
-    this.scale.y = 1.05;
-    this.alpha = 0.9;
+    this.scale.x = TILE_SCALE;
+    this.scale.y = TILE_SCALE;
+    this.alpha = TILE_ALPHA;
     this.shadow.visible = true;
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
     console.log("this.grabPoint:", this.grabPoint);
-
-    // Calculate skew based on the grab point's distance from the center
-
-    // TODO the Ballatro-like pseudo 3D effect does not work well
-
-    // Normalize to -1 to 1
-    const normalizedGrabX = this.grabPoint.x / (CELL / 2);
-    const normalizedGrabY = this.grabPoint.y / (CELL / 2);
-
-    // Adjust for desired maximum skew
-    const maxSkew = Math.PI / 60;
-
-    this.skew.x = normalizedGrabX * maxSkew;
-    this.skew.y = normalizedGrabY * maxSkew;
 
     this.onpointerdown = null;
 
@@ -97,10 +86,6 @@ export class Tile extends Container {
     this.alpha = 1;
     this.shadow.visible = false;
 
-    // remove the skew
-    this.skew.x = 0;
-    this.skew.y = 0;
-
     // align x, y to the checker board grid
     let col = Math.floor(this.x / CELL);
     let row = Math.floor(this.y / CELL);
@@ -110,7 +95,7 @@ export class Tile extends Container {
     // ensure the row is between 0 and 7
     row = Math.max(row, 0);
     row = Math.min(row, 7);
-
+    // snap to the center of the grid cell
     this.x = (col + 0.5) * CELL;
     this.y = (row + 0.5) * CELL;
 
