@@ -214,7 +214,7 @@ export class Tile extends Container {
   }
 
   // Function to apply 3D rotation to the points
-  rotate3D(points, outPoints, angleX, angleY, perspective) {
+  rotate3D(cornerPoints, projectCornerPoints, angleX, angleY, perspective) {
     const radX = (angleX * Math.PI) / 180;
     const radY = (angleY * Math.PI) / 180;
     const cosX = Math.cos(radX);
@@ -222,9 +222,9 @@ export class Tile extends Container {
     const cosY = Math.cos(radY);
     const sinY = Math.sin(radY);
 
-    for (let i = 0; i < points.length; i++) {
-      const src = points[i];
-      const out = outPoints[i];
+    for (let i = 0; i < cornerPoints.length; i++) {
+      const src = cornerPoints[i];
+      const out = projectCornerPoints[i];
 
       // Flat plane initially
       const x = src.x;
