@@ -35,16 +35,5 @@ export class Board extends Container {
     boardOrigin.x = (w - appSize) / 2;
     boardOrigin.y = (h - appSize) / 2;
     this.position.set(boardOrigin.x, boardOrigin.y);
-
-    console.log(
-      "Board.resize",
-      w,
-      "x",
-      h,
-      "origin",
-      boardOrigin,
-      "scale",
-      boardScale
-    );
   }
 }

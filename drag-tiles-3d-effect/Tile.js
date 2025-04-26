@@ -8,6 +8,10 @@ const SHADOW_OFFSET = new Point(8, 6);
 
 const TILE_SCALE = 1.4;
 const TILE_ALPHA = 0.7;
+const NUM_VERTICES = 10;
+
+const PERSPECTIVE = 300;
+const TILT_ANGLE = 15;
 
 export class Tile extends Container {
   constructor(color, col, row, stage) {
@@ -43,8 +47,8 @@ export class Tile extends Container {
 
     this.shadow = new PerspectiveMesh({
       texture: Texture.WHITE,
-      verticesX: 10,
-      verticesY: 10,
+      verticesX: NUM_VERTICES,
+      verticesY: NUM_VERTICES,
       // top left corner
       x0: this.cornerPoints[0].x + SHADOW_OFFSET.x,
       y0: this.cornerPoints[0].y + SHADOW_OFFSET.y,
@@ -65,8 +69,8 @@ export class Tile extends Container {
 
     this.mesh = new PerspectiveMesh({
       texture: Texture.WHITE,
-      verticesX: 10,
-      verticesY: 10,
+      verticesX: NUM_VERTICES,
+      verticesY: NUM_VERTICES,
       // top left corner
       x0: this.cornerPoints[0].x,
       y0: this.cornerPoints[0].y,
@@ -95,24 +99,21 @@ export class Tile extends Container {
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
-    console.log("this.grabPoint:", this.grabPoint);
 
     // add a 3D effect, where the tile is tilted based on the grab point
-    const normalizedGrabX = (this.grabPoint.x - CELL / 2) / (CELL / 2);
-    const normalizedGrabY = (this.grabPoint.y - CELL / 2) / (CELL / 2);
+    const normalizedGrabX = this.grabPoint.x / (CELL / 2);
+    const normalizedGrabY = this.grabPoint.y / (CELL / 2);
 
-    const perspective = 300;
-
-    // max 15 deg tilt based on grab point
-    const angleX = normalizedGrabY * 15;
-    const angleY = normalizedGrabX * 15;
+    // max TILT_ANGLE degree tilt based on grab point
+    const angleX = normalizedGrabY * TILT_ANGLE;
+    const angleY = normalizedGrabX * TILT_ANGLE;
 
     this.rotate3D(
       this.cornerPoints,
       this.projectedCornerPoints,
       angleX,
       angleY,
-      perspective
+      PERSPECTIVE
     );
 
     this.mesh.setCorners(
@@ -213,7 +214,7 @@ export class Tile extends Container {
     this.y = pos.y - this.grabPoint.y;
   }
 
-  // Function to apply 3D rotation to the points
+  // Function to apply 3D rotation to the corner points
   rotate3D(cornerPoints, projectCornerPoints, angleX, angleY, perspective) {
     const radX = (angleX * Math.PI) / 180;
     const radY = (angleY * Math.PI) / 180;
