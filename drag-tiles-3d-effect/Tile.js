@@ -1,4 +1,4 @@
-import { Container, Graphics, Rectangle, Point } from "pixi.js";
+import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
 
 export const CELL = 100;
 
@@ -31,21 +31,47 @@ export class Tile extends Container {
       this.cursor = null;
     }
 
-    this.shadow = new Graphics()
-      .rect(
-        -CELL / 2 + SHADOW_OFFSET.x,
-        -CELL / 2 + SHADOW_OFFSET.y,
-        CELL,
-        CELL
-      )
-      .fill({ color: SHADOW_COLOR, alpha: SHADOW_ALPHA });
+    this.shadow = new PerspectiveMesh({
+      texture: Texture.WHITE,
+      verticesX: 10,
+      verticesY: 10,
+      // top left corner
+      x0: -CELL / 2 + SHADOW_OFFSET.x,
+      y0: -CELL / 2 + SHADOW_OFFSET.y,
+      // top right corner
+      x1: CELL / 2 + SHADOW_OFFSET.x,
+      y1: -CELL / 2 + SHADOW_OFFSET.y,
+      // bottom right corner
+      x2: CELL / 2 + SHADOW_OFFSET.x,
+      y2: CELL / 2 + SHADOW_OFFSET.y,
+      // bottom left corner
+      x3: -CELL / 2 + SHADOW_OFFSET.x,
+      y3: CELL / 2 + SHADOW_OFFSET.y,
+    });
+    this.shadow.tint = SHADOW_COLOR;
+    this.shadow.alpha = SHADOW_ALPHA;
     this.shadow.visible = false;
     this.addChild(this.shadow);
 
-    this.g = new Graphics()
-      .rect(-CELL / 2, -CELL / 2, CELL, CELL)
-      .fill({ color: color });
-    this.addChild(this.g);
+    this.mesh = new PerspectiveMesh({
+      texture: Texture.WHITE,
+      verticesX: 10,
+      verticesY: 10,
+      // top left corner
+      x0: -CELL / 2,
+      y0: -CELL / 2,
+      // top right corner
+      x1: CELL / 2,
+      y1: -CELL / 2,
+      // bottom right corner
+      x2: CELL / 2,
+      y2: CELL / 2,
+      // bottom left corner
+      x3: -CELL / 2,
+      y3: CELL / 2,
+    });
+    this.mesh.tint = color;
+    this.addChild(this.mesh);
 
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
