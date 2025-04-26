@@ -1,6 +1,6 @@
-import { Application, Assets, Sprite, Text } from "pixi.js";
+import { Application } from "pixi.js";
 import { Board } from "./Board";
-import { Tile, CELL } from "./Tile";
+import { Tile } from "./Tile";
 
 (async () => {
   const app = new Application();
@@ -23,22 +23,6 @@ import { Tile, CELL } from "./Tile";
   boardContainer.addChild(g);
   boardContainer.addChild(b);
 
-  const bunny = await createBunny();
-  boardContainer.addChild(bunny);
-
-  const label = createLabel();
-  boardContainer.addChild(label);
-
-  console.log("__YES__");
-  console.log("__NO__");
-  console.log("__CANCEL__");
-
-  app.ticker.add((time) => {
-    bunny.rotation += 0.05 * time.deltaTime;
-    label.skew.x += 0.02 * time.deltaTime;
-    label.skew.y += 0.01 * time.deltaTime;
-  });
-
   const onResize = () => {
     boardContainer.resize(app.screen.width, app.screen.height);
   };
@@ -46,20 +30,3 @@ import { Tile, CELL } from "./Tile";
   addEventListener("resize", onResize);
   onResize();
 })();
-
-async function createBunny() {
-  const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
-  const bunny = new Sprite(texture);
-  bunny.anchor.set(0.5);
-  bunny.x = CELL / 2;
-  bunny.y = CELL / 2;
-  return bunny;
-}
-
-function createLabel() {
-  const label = new Text({ text: "__NO__" });
-  label.x = CELL * 7.5;
-  label.y = CELL * 7.5;
-  label.anchor.set(0.5);
-  return label;
-}
