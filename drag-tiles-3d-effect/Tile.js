@@ -28,6 +28,11 @@ export class Tile extends Container {
       this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
       // the relative offset point of the click on the tile
       this.grabPoint = new Point();
+      // the four corners of the tile in local coordinates, clockwise
+      this.topLeftCorner = new Point(-CELL / 2, -CELL / 2);
+      this.topRightCorner = new Point(CELL / 2, -CELL / 2);
+      this.bottomRightCorner = new Point(CELL / 2, CELL / 2);
+      this.bottomLeftCorner = new Point(-CELL / 2, CELL / 2);
 
       // the points of the tile in local coordinates, clockwise
       this.cornerPoints = [
@@ -183,25 +188,33 @@ export class Tile extends Container {
 
     // Reset mesh to flat
     this.mesh.setCorners(
-      -CELL / 2,
-      -CELL / 2,
-      CELL / 2,
-      -CELL / 2,
-      CELL / 2,
-      CELL / 2,
-      -CELL / 2,
-      CELL / 2
+      // top left corner
+      this.cornerPoints[0].x,
+      this.cornerPoints[0].y,
+      // top right corner
+      this.cornerPoints[1].x,
+      this.cornerPoints[1].y,
+      // bottom right corner
+      this.cornerPoints[2].x,
+      this.cornerPoints[2].y,
+      // bottom left corner
+      this.cornerPoints[3].x,
+      this.cornerPoints[3].y
     );
 
     this.shadow.setCorners(
-      -CELL / 2 + SHADOW_OFFSET.x,
-      -CELL / 2 + SHADOW_OFFSET.y,
-      CELL / 2 + SHADOW_OFFSET.x,
-      -CELL / 2 + SHADOW_OFFSET.y,
-      CELL / 2 + SHADOW_OFFSET.x,
-      CELL / 2 + SHADOW_OFFSET.y,
-      -CELL / 2 + SHADOW_OFFSET.x,
-      CELL / 2 + SHADOW_OFFSET.y
+      // top left corner
+      this.cornerPoints[0].x + SHADOW_OFFSET.x,
+      this.cornerPoints[0].y + SHADOW_OFFSET.y,
+      // top right corner
+      this.cornerPoints[1].x + SHADOW_OFFSET.x,
+      this.cornerPoints[1].y + SHADOW_OFFSET.y,
+      // bottom right corner
+      this.cornerPoints[2].x + SHADOW_OFFSET.x,
+      this.cornerPoints[2].y + SHADOW_OFFSET.y,
+      // bottom left corner
+      this.cornerPoints[3].x + SHADOW_OFFSET.x,
+      this.cornerPoints[3].y + SHADOW_OFFSET.y
     );
   }
 
