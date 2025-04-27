@@ -1,54 +1,69 @@
 import { Container, Graphics, Rectangle, Point } from "pixi.js";
 
-export const CELL = 100;
-
-const SHADOW_COLOR = 0x000000;
-const SHADOW_ALPHA = 0.1;
-const SHADOW_OFFSET = new Point(8, 6);
+export const TILE_SIZE = 100;
 
 const TILE_SCALE = 1.4;
 const TILE_ALPHA = 0.7;
+
+const SHADOW_COLOR = "black";
+const SHADOW_ALPHA = 0.1;
+const SHADOW_OFFSET = new Point(8, 6);
 
 export class Tile extends Container {
   constructor(color, col, row, stage) {
     super();
 
-    this.x = (col + 0.5) * CELL;
-    this.y = (row + 0.5) * CELL;
+    this.x = (col + 0.5) * TILE_SIZE;
+    this.y = (row + 0.5) * TILE_SIZE;
 
     if (stage instanceof Container) {
-      this.stage = stage;
-      this.eventMode = "static";
-      this.cursor = "pointer";
-      // setting hitArea is important for correct pointerdown events delivery
-      this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
-      // the relative offset point of the click on the tile
-      this.grabPoint = new Point();
-
-      this.onpointerdown = (e) => this.onDragStart(e);
+      this.setupDraggable(stage);
     } else {
-      this.eventMode = "none";
-      this.cursor = null;
+      this.setupStatic();
     }
+
+    this.g = new Graphics()
+      .rect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, TILE_SIZE)
+      .fill({ color: color });
+    this.addChild(this.g);
+  }
+
+  // setup static, non-draggable Tile
+  setupStatic() {
+    this.eventMode = "none";
+    this.cursor = null;
+  }
+
+  // setup interactive, draggable Tile and add shadow
+  setupDraggable(stage) {
+    this.eventMode = "static";
+    this.cursor = "pointer";
+
+    // the app.stage is needed to add/remove event listeners
+    this.stage = stage;
+
+    // setting hitArea is important for correct pointerdown events delivery
+    this.hitArea = new Rectangle(
+      -TILE_SIZE / 2,
+      -TILE_SIZE / 2,
+      TILE_SIZE,
+      TILE_SIZE
+    );
+    // the relative offset point of the click on the tile
+    this.grabPoint = new Point();
 
     this.shadow = new Graphics()
       .rect(
-        -CELL / 2 + SHADOW_OFFSET.x,
-        -CELL / 2 + SHADOW_OFFSET.y,
-        CELL,
-        CELL
+        -TILE_SIZE / 2 + SHADOW_OFFSET.x,
+        -TILE_SIZE / 2 + SHADOW_OFFSET.y,
+        TILE_SIZE,
+        TILE_SIZE
       )
       .fill({ color: SHADOW_COLOR, alpha: SHADOW_ALPHA });
     this.shadow.visible = false;
     this.addChild(this.shadow);
 
-    this.g = new Graphics()
-      .rect(-CELL / 2, -CELL / 2, CELL, CELL)
-      .fill({ color: color });
-    this.addChild(this.g);
-
-    this.interactiveChildren = false;
-    this.cacheAsTexture = true;
+    this.onpointerdown = (e) => this.onDragStart(e);
   }
 
   onDragStart(e) {
@@ -87,8 +102,8 @@ export class Tile extends Container {
     this.shadow.visible = false;
 
     // align x, y to the checker board grid
-    let col = Math.floor(this.x / CELL);
-    let row = Math.floor(this.y / CELL);
+    let col = Math.floor(this.x / TILE_SIZE);
+    let row = Math.floor(this.y / TILE_SIZE);
     // ensure the col is between 0 and 7
     col = Math.max(col, 0);
     col = Math.min(col, 7);
@@ -96,8 +111,8 @@ export class Tile extends Container {
     row = Math.max(row, 0);
     row = Math.min(row, 7);
     // snap to the center of the grid cell
-    this.x = (col + 0.5) * CELL;
-    this.y = (row + 0.5) * CELL;
+    this.x = (col + 0.5) * TILE_SIZE;
+    this.y = (row + 0.5) * TILE_SIZE;
 
     this.onpointerdown = (e) => this.onDragStart(e);
 

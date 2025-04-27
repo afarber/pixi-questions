@@ -1,10 +1,11 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board } from "./Board";
-import { Tile, CELL } from "./Tile";
+import { Tile, TILE_SIZE } from "./Tile";
 
 (async () => {
   const app = new Application();
-  await app.init({ background: "#CCFFCC", resizeTo: window });
+  await app.init({ background: "LightSalmon", resizeTo: window });
+
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
@@ -15,13 +16,17 @@ import { Tile, CELL } from "./Tile";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
-  const r = new Tile("red", 3, 3, app.stage);
-  const g = new Tile("green", 4, 3, app.stage);
-  const b = new Tile("blue", 5, 3, app.stage);
+  // create 3 interactive, draggable Tiles
+  const r = new Tile("Red", 3, 3, app.stage);
+  const g = new Tile("Green", 4, 3, app.stage);
+  const b = new Tile("Blue", 5, 3, app.stage);
+  // create a static, non-draggable Tile
+  const c = new Tile("Cyan", 7, 0);
 
   boardContainer.addChild(r);
   boardContainer.addChild(g);
   boardContainer.addChild(b);
+  boardContainer.addChild(c);
 
   const bunny = await createBunny();
   boardContainer.addChild(bunny);
@@ -51,15 +56,15 @@ async function createBunny() {
   const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
   const bunny = new Sprite(texture);
   bunny.anchor.set(0.5);
-  bunny.x = CELL / 2;
-  bunny.y = CELL / 2;
+  bunny.x = TILE_SIZE / 2;
+  bunny.y = TILE_SIZE / 2;
   return bunny;
 }
 
 function createLabel() {
   const label = new Text({ text: "__NO__" });
-  label.x = CELL * 7.5;
-  label.y = CELL * 7.5;
+  label.x = TILE_SIZE * 7.5;
+  label.y = TILE_SIZE * 7.5;
   label.anchor.set(0.5);
   return label;
 }

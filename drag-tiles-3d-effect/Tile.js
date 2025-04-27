@@ -26,6 +26,15 @@ export class Tile extends Container {
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
 
+    this.interactiveChildren = false;
+    this.cacheAsTexture = true;
+
+    if (stage instanceof Container) {
+      this.setupDraggable(stage);
+    } else {
+      this.setupStatic();
+    }
+
     this.mesh = new PerspectiveMesh({
       texture: Texture.WHITE,
       verticesX: NUM_VERTICES,
@@ -42,15 +51,6 @@ export class Tile extends Container {
     });
     this.mesh.tint = color;
     this.addChild(this.mesh);
-
-    this.interactiveChildren = false;
-    this.cacheAsTexture = true;
-
-    if (stage instanceof Container) {
-      this.setupDraggable(stage);
-    } else {
-      this.setupStatic();
-    }
   }
 
   // setup static, non-draggable Tile
@@ -59,7 +59,7 @@ export class Tile extends Container {
     this.cursor = null;
   }
 
-  // setup interactive, draggable Tile
+  // setup interactive, draggable Tile and add shadow
   setupDraggable(stage) {
     this.eventMode = "static";
     this.cursor = "pointer";
