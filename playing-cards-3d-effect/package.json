@@ -1,7 +1,7 @@
 {
-  "name": "drag-tiles-3d-effect",
+  "name": "playing-cards-3d-effect",
   "version": "1.0.0",
-  "description": "A checkered board with 3 draggable tiles and a 3D tilt effect",
+  "description": "Draggable playing cards with a 3D tilt effect",
   "main": "main.js",
   "scripts": {
     "dev": "vite",
@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "keywords": [],
-  "author": "Alexander Farber",
-  "license": "Public Domain",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@pixi/ui": "^2.2.3",
     "pixi.js": "^8.9.1"

@@ -11,9 +11,13 @@ Screenshots
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/checkered-board-buttons/screenshot.gif)
 
-[drag-tiles-3d-effect](https://github.com/afarber/pixi-questions/tree/master/drag-tiles-3d-effect) with draggable rectangles and a 3D effect
+[drag-tiles-3d-effect](https://github.com/afarber/pixi-questions/tree/master/drag-tiles-3d-effect) with draggable square rectangles and a 3D tilt effect
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-3d-effect/screenshot.gif)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
+
+[playing-cards-3d-effect](https://github.com/afarber/pixi-questions/tree/master/playing-cards-3d-effect) with draggable SVG cards created by [Adrian Kennard](https://www.me.uk/cards/)
+
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
 
 ![StackOverflow](http://stackoverflow.com/users/flair/165071.png)
 
