@@ -1,141 +1,159 @@
 import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
 
-export const CELL = 100;
+export const CARD_WIDTH = 180;
+export const CARD_HEIGHT = 250;
 
-const SHADOW_COLOR = 0x000000;
+const CARD_SCALE = 1.4;
+const CARD_ALPHA = 0.7;
+
+const SHADOW_COLOR = "black";
 const SHADOW_ALPHA = 0.1;
 const SHADOW_OFFSET = new Point(8, 6);
 
-const TILE_SCALE = 1.4;
-const TILE_ALPHA = 0.7;
-const NUM_VERTICES = 10;
-
 const PERSPECTIVE = 300;
+const NUM_VERTICES = 10;
 const TILT_ANGLE = 15;
 
 export class Card extends Container {
   constructor(color, col, row, stage) {
     super();
 
-    this.x = (col + 0.5) * CELL;
-    this.y = (row + 0.5) * CELL;
+    // the 4 corners of the tile in local coordinates, clockwise
+    this.topLeftCorner = new Point(-CARD_WIDTH / 2, -CARD_HEIGHT / 2);
+    this.topRightCorner = new Point(CARD_WIDTH / 2, -CARD_HEIGHT / 2);
+    this.bottomRightCorner = new Point(CARD_WIDTH / 2, CARD_HEIGHT / 2);
+    this.bottomLeftCorner = new Point(-CARD_WIDTH / 2, CARD_HEIGHT / 2);
+
+    this.x = (col + 0.5) * CARD_WIDTH;
+    this.y = (row + 0.5) * CARD_HEIGHT;
+
+    this.interactiveChildren = false;
+    this.cacheAsTexture = true;
 
     if (stage instanceof Container) {
-      this.stage = stage;
-      this.eventMode = "static";
-      this.cursor = "pointer";
-      // setting hitArea is important for correct pointerdown events delivery
-      this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
-      // the relative offset point of the click on the tile
-      this.grabPoint = new Point();
-
-      // the points of the tile in local coordinates, clockwise
-      this.cornerPoints = [
-        { x: -CELL / 2, y: -CELL / 2 },
-        { x: CELL / 2, y: -CELL / 2 },
-        { x: CELL / 2, y: CELL / 2 },
-        { x: -CELL / 2, y: CELL / 2 },
-      ];
-      // create a shallow copy of the corner points array
-      this.projectedCornerPoints = this.cornerPoints.map((p) => ({ ...p }));
-
-      this.onpointerdown = (e) => this.onDragStart(e);
+      this.setupDraggable(stage);
     } else {
-      this.eventMode = "none";
-      this.cursor = null;
+      this.setupStatic();
     }
+
+    this.mesh = new PerspectiveMesh({
+      texture: Texture.WHITE,
+      verticesX: NUM_VERTICES,
+      verticesY: NUM_VERTICES,
+      // the local corner coordinates, clockwise
+      x0: this.topLeftCorner.x,
+      y0: this.topLeftCorner.y,
+      x1: this.topRightCorner.x,
+      y1: this.topRightCorner.y,
+      x2: this.bottomRightCorner.x,
+      y2: this.bottomRightCorner.y,
+      x3: this.bottomLeftCorner.x,
+      y3: this.bottomLeftCorner.y,
+    });
+    this.mesh.tint = color;
+    this.addChild(this.mesh);
+  }
+
+  // setup static, non-draggable Tile
+  setupStatic() {
+    this.eventMode = "none";
+    this.cursor = null;
+  }
+
+  // setup interactive, draggable Tile and add shadow
+  setupDraggable(stage) {
+    this.eventMode = "static";
+    this.cursor = "pointer";
+
+    // the app.stage is needed to add/remove event listeners
+    this.stage = stage;
+
+    // setting hitArea is important for correct pointerdown events delivery
+    this.hitArea = new Rectangle(
+      this.topLeftCorner.x,
+      this.topLeftCorner.y,
+      CARD_WIDTH,
+      CARD_HEIGHT
+    );
+
+    // the relative offset point of the click on the tile
+    this.grabPoint = new Point();
+
+    // the 4 corners of the tile in local coordinates, clockwise
+    this.cornerPoints = [
+      this.topLeftCorner,
+      this.topRightCorner,
+      this.bottomRightCorner,
+      this.bottomLeftCorner,
+    ];
 
     this.shadow = new PerspectiveMesh({
       texture: Texture.WHITE,
       verticesX: NUM_VERTICES,
       verticesY: NUM_VERTICES,
-      // top left corner
-      x0: this.cornerPoints[0].x + SHADOW_OFFSET.x,
-      y0: this.cornerPoints[0].y + SHADOW_OFFSET.y,
-      // top right corner
-      x1: this.cornerPoints[1].x + SHADOW_OFFSET.x,
-      y1: this.cornerPoints[1].y + SHADOW_OFFSET.y,
-      // bottom right corner
-      x2: this.cornerPoints[2].x + SHADOW_OFFSET.x,
-      y2: this.cornerPoints[2].y + SHADOW_OFFSET.y,
-      // bottom left corner
-      x3: this.cornerPoints[3].x + SHADOW_OFFSET.x,
-      y3: this.cornerPoints[3].y + SHADOW_OFFSET.y,
+      // the local corner coordinates, clockwise
+      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
+      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
+      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
+      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
+      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
+      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
+      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
+      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
     this.shadow.visible = false;
     this.addChild(this.shadow);
 
-    this.mesh = new PerspectiveMesh({
-      texture: Texture.WHITE,
-      verticesX: NUM_VERTICES,
-      verticesY: NUM_VERTICES,
-      // top left corner
-      x0: this.cornerPoints[0].x,
-      y0: this.cornerPoints[0].y,
-      // top right corner
-      x1: this.cornerPoints[1].x,
-      y1: this.cornerPoints[1].y,
-      // bottom right corner
-      x2: this.cornerPoints[2].x,
-      y2: this.cornerPoints[2].y,
-      // bottom left corner
-      x3: this.cornerPoints[3].x,
-      y3: this.cornerPoints[3].y,
-    });
-    this.mesh.tint = color;
-    this.addChild(this.mesh);
-
-    this.interactiveChildren = false;
-    this.cacheAsTexture = true;
+    this.onpointerdown = (e) => this.onDragStart(e);
   }
 
   onDragStart(e) {
-    this.scale.x = TILE_SCALE;
-    this.scale.y = TILE_SCALE;
-    this.alpha = TILE_ALPHA;
+    this.scale.x = CARD_SCALE;
+    this.scale.y = CARD_SCALE;
+    this.alpha = CARD_ALPHA;
     this.shadow.visible = true;
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
 
     // add a 3D effect, where the tile is tilted based on the grab point
-    const normalizedGrabX = this.grabPoint.x / (CELL / 2);
-    const normalizedGrabY = this.grabPoint.y / (CELL / 2);
+    const normalizedGrabX = this.grabPoint.x / (CARD_WIDTH / 2);
+    const normalizedGrabY = this.grabPoint.y / (CARD_HEIGHT / 2);
 
     // max TILT_ANGLE degree tilt based on grab point
     const angleX = normalizedGrabY * TILT_ANGLE;
     const angleY = normalizedGrabX * TILT_ANGLE;
 
-    this.rotate3D(
+    // Get the projected corner points
+    const projectedCornerPoints = this.rotate3D(
       this.cornerPoints,
-      this.projectedCornerPoints,
       angleX,
       angleY,
       PERSPECTIVE
     );
 
-    this.mesh.setCorners(
-      this.projectedCornerPoints[0].x,
-      this.projectedCornerPoints[0].y,
-      this.projectedCornerPoints[1].x,
-      this.projectedCornerPoints[1].y,
-      this.projectedCornerPoints[2].x,
-      this.projectedCornerPoints[2].y,
-      this.projectedCornerPoints[3].x,
-      this.projectedCornerPoints[3].y
+    this.shadow.setCorners(
+      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[3].y + SHADOW_OFFSET.y
     );
 
-    this.shadow.setCorners(
-      this.projectedCornerPoints[0].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[0].y + SHADOW_OFFSET.y,
-      this.projectedCornerPoints[1].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[1].y + SHADOW_OFFSET.y,
-      this.projectedCornerPoints[2].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[2].y + SHADOW_OFFSET.y,
-      this.projectedCornerPoints[3].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[3].y + SHADOW_OFFSET.y
+    this.mesh.setCorners(
+      projectedCornerPoints[0].x,
+      projectedCornerPoints[0].y,
+      projectedCornerPoints[1].x,
+      projectedCornerPoints[1].y,
+      projectedCornerPoints[2].x,
+      projectedCornerPoints[2].y,
+      projectedCornerPoints[3].x,
+      projectedCornerPoints[3].y
     );
 
     this.onpointerdown = null;
@@ -160,8 +178,8 @@ export class Card extends Container {
     this.shadow.visible = false;
 
     // align x, y to the checker board grid
-    let col = Math.floor(this.x / CELL);
-    let row = Math.floor(this.y / CELL);
+    let col = Math.floor(this.x / CARD_WIDTH);
+    let row = Math.floor(this.y / CARD_HEIGHT);
     // ensure the col is between 0 and 7
     col = Math.max(col, 0);
     col = Math.min(col, 7);
@@ -169,8 +187,8 @@ export class Card extends Container {
     row = Math.max(row, 0);
     row = Math.min(row, 7);
     // snap to the center of the grid cell
-    this.x = (col + 0.5) * CELL;
-    this.y = (row + 0.5) * CELL;
+    this.x = (col + 0.5) * CARD_WIDTH;
+    this.y = (row + 0.5) * CARD_HEIGHT;
 
     this.onpointerdown = (e) => this.onDragStart(e);
 
@@ -181,27 +199,27 @@ export class Card extends Container {
     this.stage.onpointerupoutside = null;
     this.stage.onpointercanceloutside = null;
 
-    // Reset mesh to flat
-    this.mesh.setCorners(
-      -CELL / 2,
-      -CELL / 2,
-      CELL / 2,
-      -CELL / 2,
-      CELL / 2,
-      CELL / 2,
-      -CELL / 2,
-      CELL / 2
+    // Reset the both meshes back to flat
+    this.shadow.setCorners(
+      this.topLeftCorner.x + SHADOW_OFFSET.x,
+      this.topLeftCorner.y + SHADOW_OFFSET.y,
+      this.topRightCorner.x + SHADOW_OFFSET.x,
+      this.topRightCorner.y + SHADOW_OFFSET.y,
+      this.bottomRightCorner.x + SHADOW_OFFSET.x,
+      this.bottomRightCorner.y + SHADOW_OFFSET.y,
+      this.bottomLeftCorner.x + SHADOW_OFFSET.x,
+      this.bottomLeftCorner.y + SHADOW_OFFSET.y
     );
 
-    this.shadow.setCorners(
-      -CELL / 2 + SHADOW_OFFSET.x,
-      -CELL / 2 + SHADOW_OFFSET.y,
-      CELL / 2 + SHADOW_OFFSET.x,
-      -CELL / 2 + SHADOW_OFFSET.y,
-      CELL / 2 + SHADOW_OFFSET.x,
-      CELL / 2 + SHADOW_OFFSET.y,
-      -CELL / 2 + SHADOW_OFFSET.x,
-      CELL / 2 + SHADOW_OFFSET.y
+    this.mesh.setCorners(
+      this.topLeftCorner.x,
+      this.topLeftCorner.y,
+      this.topRightCorner.x,
+      this.topRightCorner.y,
+      this.bottomRightCorner.x,
+      this.bottomRightCorner.y,
+      this.bottomLeftCorner.x,
+      this.bottomLeftCorner.y
     );
   }
 
@@ -214,8 +232,8 @@ export class Card extends Container {
     this.y = pos.y - this.grabPoint.y;
   }
 
-  // Function to apply 3D rotation to the corner points
-  rotate3D(cornerPoints, projectCornerPoints, angleX, angleY, perspective) {
+  // Function to apply 3D rotation to the corner points and return projected points
+  rotate3D(cornerPoints, angleX, angleY, perspective) {
     const radX = (angleX * Math.PI) / 180;
     const radY = (angleY * Math.PI) / 180;
     const cosX = Math.cos(radX);
@@ -223,9 +241,10 @@ export class Card extends Container {
     const cosY = Math.cos(radY);
     const sinY = Math.sin(radY);
 
-    for (let i = 0; i < cornerPoints.length; i++) {
-      const src = cornerPoints[i];
-      const out = projectCornerPoints[i];
+    // Create new projected points by mapping the corner points
+    return cornerPoints.map((src) => {
+      // Create a new Point for the projection
+      const projected = new Point();
 
       // Flat plane initially
       const x = src.x;
@@ -243,8 +262,10 @@ export class Card extends Container {
       // Apply perspective projection
       const scale = perspective / (perspective - z);
 
-      out.x = xY * scale;
-      out.y = yX * scale;
-    }
+      projected.x = xY * scale;
+      projected.y = yX * scale;
+
+      return projected;
+    });
   }
 }

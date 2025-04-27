@@ -1,5 +1,5 @@
 import { Container, Graphics, Point } from "pixi.js";
-import { CELL } from "./Card.js";
+import { CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
 
 export class Board extends Container {
   constructor() {
@@ -11,12 +11,12 @@ export class Board extends Container {
 
   createBackground() {
     const g = new Graphics();
-    g.setFillStyle({ color: "0xCCCCFF" });
+    g.setFillStyle({ color: "BlanchedAlmond" });
 
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
         if ((i + j) % 2 === 0) {
-          g.rect(i * CELL, j * CELL, CELL, CELL);
+          g.rect(i * CARD_WIDTH, j * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
           g.fill();
         }
       }
@@ -26,8 +26,11 @@ export class Board extends Container {
   }
 
   resize(w, h) {
-    const boardSize = 8 * CELL;
+    const boardWidth = 8 * CARD_WIDTH;
+    const boardHeight = 8 * CARD_HEIGHT;
+    const boardSize = Math.min(boardWidth, boardHeight);
     const appSize = Math.min(w, h);
+
     let boardScale = appSize / boardSize;
     this.scale.set(boardScale);
 
