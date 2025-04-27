@@ -21,18 +21,24 @@ export class Tile extends Container {
     this.y = (row + 0.5) * CELL;
 
     if (stage instanceof Container) {
-      this.stage = stage;
-      this.eventMode = "static";
-      this.cursor = "pointer";
-      // setting hitArea is important for correct pointerdown events delivery
-      this.hitArea = new Rectangle(-CELL / 2, -CELL / 2, CELL, CELL);
-      // the relative offset point of the click on the tile
-      this.grabPoint = new Point();
       // the four corners of the tile in local coordinates, clockwise
       this.topLeftCorner = new Point(-CELL / 2, -CELL / 2);
       this.topRightCorner = new Point(CELL / 2, -CELL / 2);
       this.bottomRightCorner = new Point(CELL / 2, CELL / 2);
       this.bottomLeftCorner = new Point(-CELL / 2, CELL / 2);
+
+      this.stage = stage;
+      this.eventMode = "static";
+      this.cursor = "pointer";
+      // setting hitArea is important for correct pointerdown events delivery
+      this.hitArea = new Rectangle(
+        this.topLeftCorner.x,
+        this.topLeftCorner.y,
+        CELL,
+        CELL
+      );
+      // the relative offset point of the click on the tile
+      this.grabPoint = new Point();
 
       // the points of the tile in local coordinates, clockwise
       this.cornerPoints = [
@@ -54,18 +60,14 @@ export class Tile extends Container {
       texture: Texture.WHITE,
       verticesX: NUM_VERTICES,
       verticesY: NUM_VERTICES,
-      // top left corner
-      x0: this.cornerPoints[0].x + SHADOW_OFFSET.x,
-      y0: this.cornerPoints[0].y + SHADOW_OFFSET.y,
-      // top right corner
-      x1: this.cornerPoints[1].x + SHADOW_OFFSET.x,
-      y1: this.cornerPoints[1].y + SHADOW_OFFSET.y,
-      // bottom right corner
-      x2: this.cornerPoints[2].x + SHADOW_OFFSET.x,
-      y2: this.cornerPoints[2].y + SHADOW_OFFSET.y,
-      // bottom left corner
-      x3: this.cornerPoints[3].x + SHADOW_OFFSET.x,
-      y3: this.cornerPoints[3].y + SHADOW_OFFSET.y,
+      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
+      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
+      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
+      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
+      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
+      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
+      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
+      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
@@ -76,18 +78,14 @@ export class Tile extends Container {
       texture: Texture.WHITE,
       verticesX: NUM_VERTICES,
       verticesY: NUM_VERTICES,
-      // top left corner
-      x0: this.cornerPoints[0].x,
-      y0: this.cornerPoints[0].y,
-      // top right corner
-      x1: this.cornerPoints[1].x,
-      y1: this.cornerPoints[1].y,
-      // bottom right corner
-      x2: this.cornerPoints[2].x,
-      y2: this.cornerPoints[2].y,
-      // bottom left corner
-      x3: this.cornerPoints[3].x,
-      y3: this.cornerPoints[3].y,
+      x0: this.topLeftCorner.x,
+      y0: this.topLeftCorner.y,
+      x1: this.topRightCorner.x,
+      y1: this.topRightCorner.y,
+      x2: this.bottomRightCorner.x,
+      y2: this.bottomRightCorner.y,
+      x3: this.bottomLeftCorner.x,
+      y3: this.bottomLeftCorner.y,
     });
     this.mesh.tint = color;
     this.addChild(this.mesh);
@@ -189,32 +187,32 @@ export class Tile extends Container {
     // Reset mesh to flat
     this.mesh.setCorners(
       // top left corner
-      this.cornerPoints[0].x,
-      this.cornerPoints[0].y,
+      this.topLeftCorner.x,
+      this.topLeftCorner.y,
       // top right corner
-      this.cornerPoints[1].x,
-      this.cornerPoints[1].y,
+      this.topRightCorner.x,
+      this.topRightCorner.y,
       // bottom right corner
-      this.cornerPoints[2].x,
-      this.cornerPoints[2].y,
+      this.bottomRightCorner.x,
+      this.bottomRightCorner.y,
       // bottom left corner
-      this.cornerPoints[3].x,
-      this.cornerPoints[3].y
+      this.bottomLeftCorner.x,
+      this.bottomLeftCorner.y
     );
 
     this.shadow.setCorners(
       // top left corner
-      this.cornerPoints[0].x + SHADOW_OFFSET.x,
-      this.cornerPoints[0].y + SHADOW_OFFSET.y,
+      this.topLeftCorner.x + SHADOW_OFFSET.x,
+      this.topLeftCorner.y + SHADOW_OFFSET.y,
       // top right corner
-      this.cornerPoints[1].x + SHADOW_OFFSET.x,
-      this.cornerPoints[1].y + SHADOW_OFFSET.y,
+      this.topRightCorner.x + SHADOW_OFFSET.x,
+      this.topRightCorner.y + SHADOW_OFFSET.y,
       // bottom right corner
-      this.cornerPoints[2].x + SHADOW_OFFSET.x,
-      this.cornerPoints[2].y + SHADOW_OFFSET.y,
+      this.bottomRightCorner.x + SHADOW_OFFSET.x,
+      this.bottomRightCorner.y + SHADOW_OFFSET.y,
       // bottom left corner
-      this.cornerPoints[3].x + SHADOW_OFFSET.x,
-      this.cornerPoints[3].y + SHADOW_OFFSET.y
+      this.bottomLeftCorner.x + SHADOW_OFFSET.x,
+      this.bottomLeftCorner.y + SHADOW_OFFSET.y
     );
   }
 
