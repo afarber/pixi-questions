@@ -4,7 +4,11 @@ import { Card } from "./Card";
 
 (async () => {
   const app = new Application();
-  await app.init({ background: "DarkKhaki", resizeTo: window });
+  await app.init({
+    background: "DarkKhaki",
+    resizeTo: window,
+    antialias: true,
+  });
 
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);

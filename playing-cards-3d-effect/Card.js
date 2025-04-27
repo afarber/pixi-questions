@@ -4,7 +4,6 @@ export const CARD_WIDTH = 360;
 export const CARD_HEIGHT = 504;
 
 const CARD_SCALE = 1.4;
-const CARD_ALPHA = 0.7;
 
 const SHADOW_COLOR = "black";
 const SHADOW_ALPHA = 0.1;
@@ -111,7 +110,6 @@ export class Card extends Container {
   onDragStart(e) {
     this.scale.x = CARD_SCALE;
     this.scale.y = CARD_SCALE;
-    this.alpha = CARD_ALPHA;
     this.shadow.visible = true;
 
     // store the local mouse coordinates into grab point
@@ -173,7 +171,6 @@ export class Card extends Container {
   onDragEnd(e) {
     this.scale.x = 1;
     this.scale.y = 1;
-    this.alpha = 1;
     this.shadow.visible = false;
 
     // align x, y to the checker board grid
