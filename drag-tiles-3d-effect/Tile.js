@@ -40,15 +40,13 @@ export class Tile extends Container {
       // the relative offset point of the click on the tile
       this.grabPoint = new Point();
 
-      // the points of the tile in local coordinates, clockwise
+      // the four corners of the tile in local coordinates, clockwise
       this.cornerPoints = [
-        { x: -CELL / 2, y: -CELL / 2 },
-        { x: CELL / 2, y: -CELL / 2 },
-        { x: CELL / 2, y: CELL / 2 },
-        { x: -CELL / 2, y: CELL / 2 },
+        this.topLeftCorner,
+        this.topRightCorner,
+        this.bottomRightCorner,
+        this.bottomLeftCorner,
       ];
-      // create a shallow copy of the corner points array
-      this.projectedCornerPoints = this.cornerPoints.map((p) => ({ ...p }));
 
       this.onpointerdown = (e) => this.onDragStart(e);
     } else {
@@ -111,34 +109,34 @@ export class Tile extends Container {
     const angleX = normalizedGrabY * TILT_ANGLE;
     const angleY = normalizedGrabX * TILT_ANGLE;
 
-    this.rotate3D(
+    // Get the projected corner points
+    const projectedCornerPoints = this.rotate3D(
       this.cornerPoints,
-      this.projectedCornerPoints,
       angleX,
       angleY,
       PERSPECTIVE
     );
 
-    this.mesh.setCorners(
-      this.projectedCornerPoints[0].x,
-      this.projectedCornerPoints[0].y,
-      this.projectedCornerPoints[1].x,
-      this.projectedCornerPoints[1].y,
-      this.projectedCornerPoints[2].x,
-      this.projectedCornerPoints[2].y,
-      this.projectedCornerPoints[3].x,
-      this.projectedCornerPoints[3].y
+    this.shadow.setCorners(
+      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[3].y + SHADOW_OFFSET.y
     );
 
-    this.shadow.setCorners(
-      this.projectedCornerPoints[0].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[0].y + SHADOW_OFFSET.y,
-      this.projectedCornerPoints[1].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[1].y + SHADOW_OFFSET.y,
-      this.projectedCornerPoints[2].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[2].y + SHADOW_OFFSET.y,
-      this.projectedCornerPoints[3].x + SHADOW_OFFSET.x,
-      this.projectedCornerPoints[3].y + SHADOW_OFFSET.y
+    this.mesh.setCorners(
+      projectedCornerPoints[0].x,
+      projectedCornerPoints[0].y,
+      projectedCornerPoints[1].x,
+      projectedCornerPoints[1].y,
+      projectedCornerPoints[2].x,
+      projectedCornerPoints[2].y,
+      projectedCornerPoints[3].x,
+      projectedCornerPoints[3].y
     );
 
     this.onpointerdown = null;
@@ -184,35 +182,27 @@ export class Tile extends Container {
     this.stage.onpointerupoutside = null;
     this.stage.onpointercanceloutside = null;
 
-    // Reset mesh to flat
-    this.mesh.setCorners(
-      // top left corner
-      this.topLeftCorner.x,
-      this.topLeftCorner.y,
-      // top right corner
-      this.topRightCorner.x,
-      this.topRightCorner.y,
-      // bottom right corner
-      this.bottomRightCorner.x,
-      this.bottomRightCorner.y,
-      // bottom left corner
-      this.bottomLeftCorner.x,
-      this.bottomLeftCorner.y
-    );
-
+    // Reset the both meshes back to flat
     this.shadow.setCorners(
-      // top left corner
       this.topLeftCorner.x + SHADOW_OFFSET.x,
       this.topLeftCorner.y + SHADOW_OFFSET.y,
-      // top right corner
       this.topRightCorner.x + SHADOW_OFFSET.x,
       this.topRightCorner.y + SHADOW_OFFSET.y,
-      // bottom right corner
       this.bottomRightCorner.x + SHADOW_OFFSET.x,
       this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      // bottom left corner
       this.bottomLeftCorner.x + SHADOW_OFFSET.x,
       this.bottomLeftCorner.y + SHADOW_OFFSET.y
+    );
+
+    this.mesh.setCorners(
+      this.topLeftCorner.x,
+      this.topLeftCorner.y,
+      this.topRightCorner.x,
+      this.topRightCorner.y,
+      this.bottomRightCorner.x,
+      this.bottomRightCorner.y,
+      this.bottomLeftCorner.x,
+      this.bottomLeftCorner.y
     );
   }
 
@@ -225,8 +215,8 @@ export class Tile extends Container {
     this.y = pos.y - this.grabPoint.y;
   }
 
-  // Function to apply 3D rotation to the corner points
-  rotate3D(cornerPoints, projectCornerPoints, angleX, angleY, perspective) {
+  // Function to apply 3D rotation to the corner points and return projected points
+  rotate3D(cornerPoints, angleX, angleY, perspective) {
     const radX = (angleX * Math.PI) / 180;
     const radY = (angleY * Math.PI) / 180;
     const cosX = Math.cos(radX);
@@ -234,9 +224,10 @@ export class Tile extends Container {
     const cosY = Math.cos(radY);
     const sinY = Math.sin(radY);
 
-    for (let i = 0; i < cornerPoints.length; i++) {
-      const src = cornerPoints[i];
-      const out = projectCornerPoints[i];
+    // Create new projected points by mapping the corner points
+    return cornerPoints.map((src) => {
+      // Create a new Point for the projection
+      const projected = new Point();
 
       // Flat plane initially
       const x = src.x;
@@ -254,8 +245,10 @@ export class Tile extends Container {
       // Apply perspective projection
       const scale = perspective / (perspective - z);
 
-      out.x = xY * scale;
-      out.y = yX * scale;
-    }
+      projected.x = xY * scale;
+      projected.y = yX * scale;
+
+      return projected;
+    });
   }
 }
