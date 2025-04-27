@@ -1,8 +1,8 @@
 import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
 import { NUM_CELLS } from "./Board.js";
 
-export const CARD_WIDTH = 360;
-export const CARD_HEIGHT = 504;
+export const CARD_WIDTH = 188;
+export const CARD_HEIGHT = 263;
 
 const CARD_SCALE = 1.4;
 

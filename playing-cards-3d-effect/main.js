@@ -21,21 +21,15 @@ import { Card } from "./Card";
   app.stage.addChild(boardContainer);
 
   const tcTexture = await Assets.load({
-    src: "playing-cards-svg/TC.svg",
-    data: {
-      resolution: 4,
-    },
+    src: "playing-cards-png/TC.png",
   });
 
   const jhTexture = await Assets.load({
-    src: "playing-cards-svg/JH.svg",
-    data: {
-      resolution: 4,
-    },
+    src: "playing-cards-png/JH.png",
   });
 
   const qsTexture = await Assets.load({
-    src: "playing-cards-svg/KH.svg",
+    src: "playing-cards-png/KH.png",
   });
 
   // create 3 interactive, draggable Cards

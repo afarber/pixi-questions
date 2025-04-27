@@ -9,4 +9,13 @@
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
 
-Using [Copyright free SVG and print ready playing cards](https://www.me.uk/cards/) by Adrian Kennard
+Using [Copyright free SVG and print ready playing cards](https://www.me.uk/cards/) by Adrian Kennard.
+
+Convert SVG to PNG, preserving transparency with:
+
+    mkdir -p playing-cards-png
+    for file in playing-cards-svg/*.svg; do
+        filename=$(basename "$file")
+        png_file="playing-cards-png/${filename%.svg}.png"
+        magick -density 75 -background none "$file" "$png_file"
+    done
