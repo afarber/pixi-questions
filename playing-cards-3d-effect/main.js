@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Assets } from "pixi.js";
 import { Board } from "./Board";
 import { Card } from "./Card";
 
@@ -16,17 +16,35 @@ import { Card } from "./Card";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
+  const tcTexture = await Assets.load({
+    src: "playing-cards/TC.svg",
+    data: {
+      resolution: 4,
+    },
+  });
+
+  const jhTexture = await Assets.load({
+    src: "playing-cards/JH.svg",
+    data: {
+      resolution: 4,
+    },
+  });
+
+  const qsTexture = await Assets.load({
+    src: "playing-cards/QS.svg",
+    data: {
+      resolution: 4,
+    },
+  });
+
   // create 3 interactive, draggable Cards
-  const r = new Card("Red", 3, 3, app.stage);
-  const g = new Card("Green", 4, 3, app.stage);
-  const b = new Card("Blue", 5, 3, app.stage);
-  // create a static, non-draggable Card
-  const c = new Card("Cyan", 7, 0);
+  const r = new Card(tcTexture, 3, 3, app.stage);
+  const g = new Card(jhTexture, 4, 3, app.stage);
+  const b = new Card(qsTexture, 5, 3, app.stage);
 
   boardContainer.addChild(r);
   boardContainer.addChild(g);
   boardContainer.addChild(b);
-  boardContainer.addChild(c);
 
   const onResize = () => {
     boardContainer.resize(app.screen.width, app.screen.height);

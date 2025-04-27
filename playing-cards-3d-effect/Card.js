@@ -1,7 +1,7 @@
 import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
 
-export const CARD_WIDTH = 180;
-export const CARD_HEIGHT = 250;
+export const CARD_WIDTH = 360;
+export const CARD_HEIGHT = 504;
 
 const CARD_SCALE = 1.4;
 const CARD_ALPHA = 0.7;
@@ -11,11 +11,11 @@ const SHADOW_ALPHA = 0.1;
 const SHADOW_OFFSET = new Point(8, 6);
 
 const PERSPECTIVE = 300;
-const NUM_VERTICES = 10;
-const TILT_ANGLE = 15;
+const NUM_VERTICES = 30;
+const TILT_ANGLE = 5;
 
 export class Card extends Container {
-  constructor(color, col, row, stage) {
+  constructor(texture, col, row, stage) {
     super();
 
     // the 4 corners of the tile in local coordinates, clockwise
@@ -37,7 +37,7 @@ export class Card extends Container {
     }
 
     this.mesh = new PerspectiveMesh({
-      texture: Texture.WHITE,
+      texture: texture,
       verticesX: NUM_VERTICES,
       verticesY: NUM_VERTICES,
       // the local corner coordinates, clockwise
@@ -50,7 +50,6 @@ export class Card extends Container {
       x3: this.bottomLeftCorner.x,
       y3: this.bottomLeftCorner.y,
     });
-    this.mesh.tint = color;
     this.addChild(this.mesh);
   }
 
