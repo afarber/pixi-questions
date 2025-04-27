@@ -4,6 +4,9 @@ import { NUM_CELLS } from "./Board.js";
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
 
+// TODO how to draw rounded corners?
+export const CARD_RADIUS = 20;
+
 const CARD_SCALE = 1.4;
 
 const SHADOW_COLOR = "black";

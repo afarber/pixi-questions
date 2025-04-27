@@ -11,7 +11,7 @@
 
 Using [Copyright free SVG and print ready playing cards](https://www.me.uk/cards/) by Adrian Kennard.
 
-Convert SVG to PNG, preserving transparency with:
+Convert SVG (do not tilt well) to PNG, preserving transparency with:
 
     mkdir -p playing-cards-png
     for file in playing-cards-svg/*.svg; do
