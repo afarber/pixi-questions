@@ -1,81 +1,36 @@
 import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
 
-export const CELL = 100;
-
-const SHADOW_COLOR = 0x000000;
-const SHADOW_ALPHA = 0.1;
-const SHADOW_OFFSET = new Point(8, 6);
+export const TILE_SIZE = 100;
 
 const TILE_SCALE = 1.4;
 const TILE_ALPHA = 0.7;
-const NUM_VERTICES = 10;
+
+const SHADOW_COLOR = "black";
+const SHADOW_ALPHA = 0.1;
+const SHADOW_OFFSET = new Point(8, 6);
 
 const PERSPECTIVE = 300;
+const NUM_VERTICES = 10;
 const TILT_ANGLE = 15;
 
 export class Tile extends Container {
   constructor(color, col, row, stage) {
     super();
 
-    this.x = (col + 0.5) * CELL;
-    this.y = (row + 0.5) * CELL;
+    // the 4 corners of the tile in local coordinates, clockwise
+    this.topLeftCorner = new Point(-TILE_SIZE / 2, -TILE_SIZE / 2);
+    this.topRightCorner = new Point(TILE_SIZE / 2, -TILE_SIZE / 2);
+    this.bottomRightCorner = new Point(TILE_SIZE / 2, TILE_SIZE / 2);
+    this.bottomLeftCorner = new Point(-TILE_SIZE / 2, TILE_SIZE / 2);
 
-    if (stage instanceof Container) {
-      // the four corners of the tile in local coordinates, clockwise
-      this.topLeftCorner = new Point(-CELL / 2, -CELL / 2);
-      this.topRightCorner = new Point(CELL / 2, -CELL / 2);
-      this.bottomRightCorner = new Point(CELL / 2, CELL / 2);
-      this.bottomLeftCorner = new Point(-CELL / 2, CELL / 2);
-
-      this.stage = stage;
-      this.eventMode = "static";
-      this.cursor = "pointer";
-      // setting hitArea is important for correct pointerdown events delivery
-      this.hitArea = new Rectangle(
-        this.topLeftCorner.x,
-        this.topLeftCorner.y,
-        CELL,
-        CELL
-      );
-      // the relative offset point of the click on the tile
-      this.grabPoint = new Point();
-
-      // the four corners of the tile in local coordinates, clockwise
-      this.cornerPoints = [
-        this.topLeftCorner,
-        this.topRightCorner,
-        this.bottomRightCorner,
-        this.bottomLeftCorner,
-      ];
-
-      this.onpointerdown = (e) => this.onDragStart(e);
-    } else {
-      this.eventMode = "none";
-      this.cursor = null;
-    }
-
-    this.shadow = new PerspectiveMesh({
-      texture: Texture.WHITE,
-      verticesX: NUM_VERTICES,
-      verticesY: NUM_VERTICES,
-      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
-      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
-      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
-      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
-      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
-      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
-      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
-    });
-    this.shadow.tint = SHADOW_COLOR;
-    this.shadow.alpha = SHADOW_ALPHA;
-    this.shadow.visible = false;
-    this.addChild(this.shadow);
+    this.x = (col + 0.5) * TILE_SIZE;
+    this.y = (row + 0.5) * TILE_SIZE;
 
     this.mesh = new PerspectiveMesh({
       texture: Texture.WHITE,
       verticesX: NUM_VERTICES,
       verticesY: NUM_VERTICES,
+      // the local corner coordinates, clockwise
       x0: this.topLeftCorner.x,
       y0: this.topLeftCorner.y,
       x1: this.topRightCorner.x,
@@ -90,6 +45,67 @@ export class Tile extends Container {
 
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
+
+    if (stage instanceof Container) {
+      this.setupDraggable(stage);
+    } else {
+      this.setupStatic();
+    }
+  }
+
+  // setup static, non-draggable Tile
+  setupStatic() {
+    this.eventMode = "none";
+    this.cursor = null;
+  }
+
+  // setup interactive, draggable Tile
+  setupDraggable(stage) {
+    this.eventMode = "static";
+    this.cursor = "pointer";
+
+    // the app.stage is needed to add/remove event listeners
+    this.stage = stage;
+
+    // setting hitArea is important for correct pointerdown events delivery
+    this.hitArea = new Rectangle(
+      this.topLeftCorner.x,
+      this.topLeftCorner.y,
+      TILE_SIZE,
+      TILE_SIZE
+    );
+
+    // the relative offset point of the click on the tile
+    this.grabPoint = new Point();
+
+    // the 4 corners of the tile in local coordinates, clockwise
+    this.cornerPoints = [
+      this.topLeftCorner,
+      this.topRightCorner,
+      this.bottomRightCorner,
+      this.bottomLeftCorner,
+    ];
+
+    this.shadow = new PerspectiveMesh({
+      texture: Texture.WHITE,
+      verticesX: NUM_VERTICES,
+      verticesY: NUM_VERTICES,
+      // the local corner coordinates, clockwise
+      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
+      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
+      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
+      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
+      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
+      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
+      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
+      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
+    });
+    this.shadow.tint = SHADOW_COLOR;
+    this.shadow.alpha = SHADOW_ALPHA;
+    this.shadow.visible = false;
+    this.addChild(this.shadow);
+
+    this.onpointerdown = (e) => this.onDragStart(e);
   }
 
   onDragStart(e) {
@@ -102,8 +118,8 @@ export class Tile extends Container {
     e.getLocalPosition(this, this.grabPoint);
 
     // add a 3D effect, where the tile is tilted based on the grab point
-    const normalizedGrabX = this.grabPoint.x / (CELL / 2);
-    const normalizedGrabY = this.grabPoint.y / (CELL / 2);
+    const normalizedGrabX = this.grabPoint.x / (TILE_SIZE / 2);
+    const normalizedGrabY = this.grabPoint.y / (TILE_SIZE / 2);
 
     // max TILT_ANGLE degree tilt based on grab point
     const angleX = normalizedGrabY * TILT_ANGLE;
@@ -161,8 +177,8 @@ export class Tile extends Container {
     this.shadow.visible = false;
 
     // align x, y to the checker board grid
-    let col = Math.floor(this.x / CELL);
-    let row = Math.floor(this.y / CELL);
+    let col = Math.floor(this.x / TILE_SIZE);
+    let row = Math.floor(this.y / TILE_SIZE);
     // ensure the col is between 0 and 7
     col = Math.max(col, 0);
     col = Math.min(col, 7);
@@ -170,8 +186,8 @@ export class Tile extends Container {
     row = Math.max(row, 0);
     row = Math.min(row, 7);
     // snap to the center of the grid cell
-    this.x = (col + 0.5) * CELL;
-    this.y = (row + 0.5) * CELL;
+    this.x = (col + 0.5) * TILE_SIZE;
+    this.y = (row + 0.5) * TILE_SIZE;
 
     this.onpointerdown = (e) => this.onDragStart(e);
 

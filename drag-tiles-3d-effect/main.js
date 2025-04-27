@@ -4,7 +4,8 @@ import { Tile } from "./Tile";
 
 (async () => {
   const app = new Application();
-  await app.init({ background: "#CCFFCC", resizeTo: window });
+  await app.init({ background: "BurlyWood", resizeTo: window });
+
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
@@ -15,13 +16,17 @@ import { Tile } from "./Tile";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
-  const r = new Tile("red", 3, 3, app.stage);
-  const g = new Tile("green", 4, 3, app.stage);
-  const b = new Tile("blue", 5, 3, app.stage);
+  // create 3 interactive, draggable Tiles
+  const r = new Tile("Red", 3, 3, app.stage);
+  const g = new Tile("Green", 4, 3, app.stage);
+  const b = new Tile("Blue", 5, 3, app.stage);
+  // create a static, non-draggable Tile
+  const c = new Tile("Cyan", 7, 0);
 
   boardContainer.addChild(r);
   boardContainer.addChild(g);
   boardContainer.addChild(b);
+  boardContainer.addChild(c);
 
   const onResize = () => {
     boardContainer.resize(app.screen.width, app.screen.height);
