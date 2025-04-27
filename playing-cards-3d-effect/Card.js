@@ -7,10 +7,10 @@ const CARD_SCALE = 1.4;
 
 const SHADOW_COLOR = "black";
 const SHADOW_ALPHA = 0.1;
-const SHADOW_OFFSET = new Point(8, 6);
+const SHADOW_OFFSET = new Point(12, 8);
 
 const PERSPECTIVE = 300;
-const NUM_VERTICES = 30;
+const NUM_VERTICES = 40;
 const TILT_ANGLE = 5;
 
 export class Card extends Container {
@@ -87,8 +87,9 @@ export class Card extends Container {
 
     this.shadow = new PerspectiveMesh({
       texture: Texture.WHITE,
-      verticesX: NUM_VERTICES,
-      verticesY: NUM_VERTICES,
+      // use less vertices for the shadow
+      verticesX: NUM_VERTICES / 4,
+      verticesY: NUM_VERTICES / 4,
       // the local corner coordinates, clockwise
       x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
       y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
