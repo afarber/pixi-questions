@@ -1,4 +1,5 @@
 import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
+import { NUM_CELLS } from "./Board.js";
 
 export const CARD_WIDTH = 360;
 export const CARD_HEIGHT = 504;
@@ -177,12 +178,12 @@ export class Card extends Container {
     // align x, y to the checker board grid
     let col = Math.floor(this.x / CARD_WIDTH);
     let row = Math.floor(this.y / CARD_HEIGHT);
-    // ensure the col is between 0 and 7
+    // ensure the col is between 0 and (NUM_CELLS - 1)
     col = Math.max(col, 0);
-    col = Math.min(col, 7);
-    // ensure the row is between 0 and 7
+    col = Math.min(col, NUM_CELLS - 1);
+    // ensure the row is between 0 and (NUM_CELLS - 1)
     row = Math.max(row, 0);
-    row = Math.min(row, 7);
+    row = Math.min(row, NUM_CELLS - 1);
     // snap to the center of the grid cell
     this.x = (col + 0.5) * CARD_WIDTH;
     this.y = (row + 0.5) * CARD_HEIGHT;
