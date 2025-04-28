@@ -1,4 +1,4 @@
-import { Application, Assets } from "pixi.js";
+import { Application, Assets, Spritesheet } from "pixi.js";
 import { Board } from "./Board";
 import { Card } from "./Card";
 
@@ -8,7 +8,7 @@ import { Card } from "./Card";
     background: "DarkKhaki",
     resizeTo: window,
     antialias: true,
-    hello: true
+    hello: true,
   });
 
   // append the app canvas to the document body
@@ -21,17 +21,11 @@ import { Card } from "./Card";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
-  const tcTexture = await Assets.load({
-    src: "playing-cards-png/TC.png",
-  });
+  const spriteSheet = await Assets.load("playing-cards.json");
 
-  const jhTexture = await Assets.load({
-    src: "playing-cards-png/JH.png",
-  });
-
-  const qsTexture = await Assets.load({
-    src: "playing-cards-png/KH.png",
-  });
+  const tcTexture = spriteSheet.textures["TC"];
+  const jhTexture = spriteSheet.textures["JH"];
+  const qsTexture = spriteSheet.textures["QS"];
 
   // create 3 interactive, draggable Cards
   const r = new Card(tcTexture, 1, 1, app.stage);
