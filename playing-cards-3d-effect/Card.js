@@ -16,7 +16,7 @@ export const CARD_HEIGHT = 263;
 
 const CARD_SCALE = 1.4;
 
-const SHADOW_COLOR = "black";
+const SHADOW_COLOR = "Black";
 const SHADOW_ALPHA = 0.1;
 const SHADOW_OFFSET = new Point(12, 8);
 
@@ -25,7 +25,7 @@ const NUM_VERTICES = 40;
 const TILT_ANGLE = 5;
 
 export class Card extends Container {
-  constructor(texture, col, row, stage, renderer) {
+  constructor(texture, col, row, stage) {
     super();
 
     // the 4 corners of the tile in local coordinates, clockwise
@@ -41,7 +41,7 @@ export class Card extends Container {
     this.cacheAsTexture = true;
 
     if (stage instanceof Container) {
-      this.setupDraggable(stage, renderer, texture);
+      this.setupDraggable(stage, texture);
     } else {
       this.setupStatic();
     }
@@ -70,7 +70,7 @@ export class Card extends Container {
   }
 
   // setup interactive, draggable Tile and add shadow
-  setupDraggable(stage, renderer, texture) {
+  setupDraggable(stage, texture) {
     this.eventMode = "static";
     this.cursor = "pointer";
 
@@ -97,8 +97,7 @@ export class Card extends Container {
     ];
 
     this.shadow = new PerspectiveMesh({
-      //texture: this.createShadowTextureFrom(texture, renderer),
-      texture: Texture.WHITE,
+      texture: texture,
       // use less vertices for the shadow
       verticesX: NUM_VERTICES / 4,
       verticesY: NUM_VERTICES / 4,
@@ -175,7 +174,7 @@ export class Card extends Container {
     this.stage.onpointerupoutside = (e) => this.onDragEnd(e);
     this.stage.onpointercanceloutside = (e) => this.onDragEnd(e);
 
-    // put the dragged tile on the top
+    // put the dragged card on the top
     let parent = this.parent;
     parent.removeChild(this);
     parent.addChild(this);
@@ -276,33 +275,5 @@ export class Card extends Container {
 
       return projected;
     });
-  }
-
-  createShadowTextureFrom(texture, renderer) {
-    const sprite = new Sprite(texture);
-
-    // Create a RenderTexture the size of the texture
-    const renderTexture = RenderTexture.create({
-      width: texture.width,
-      height: texture.height,
-    });
-
-    console.log("renderTexture", renderTexture);
-
-    // Zero out RGB channels and keep the alpha channel
-    // This will create a black shadow effect
-    // with the same alpha as the original texture
-    const colorMatrix = new ColorMatrixFilter();
-    colorMatrix.reset();
-    colorMatrix.saturate(0);
-    sprite.filters = [colorMatrix];
-
-    // Render the sprite to the renderTexture
-    renderer.render({
-      container: sprite,
-      renderTexture: renderTexture,
-    });
-
-    return renderTexture;
   }
 }

@@ -33,9 +33,9 @@ import { Card } from "./Card";
   });
 
   // create 3 interactive, draggable Cards
-  const r = new Card(tcTexture, 1, 1, app.stage, app.renderer);
-  const g = new Card(jhTexture, 2, 1, app.stage, app.renderer);
-  const b = new Card(qsTexture, 3, 1, app.stage, app.renderer);
+  const r = new Card(tcTexture, 1, 1, app.stage);
+  const g = new Card(jhTexture, 2, 1, app.stage);
+  const b = new Card(qsTexture, 3, 1, app.stage);
 
   boardContainer.addChild(r);
   boardContainer.addChild(g);
