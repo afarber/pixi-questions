@@ -5,7 +5,7 @@ export const TILE_SIZE = 100;
 const TILE_SCALE = 1.4;
 const TILE_ALPHA = 0.7;
 
-const SHADOW_COLOR = "black";
+const SHADOW_COLOR = "Black";
 const SHADOW_ALPHA = 0.1;
 const SHADOW_OFFSET = new Point(8, 6);
 

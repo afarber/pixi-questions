@@ -4,7 +4,7 @@ import { Tile, TILE_SIZE } from "./Tile";
 
 (async () => {
   const app = new Application();
-  await app.init({ background: "LightSalmon", resizeTo: window });
+  await app.init({ background: "LightSalmon", resizeTo: window, hello: true });
 
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);

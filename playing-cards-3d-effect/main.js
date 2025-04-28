@@ -8,6 +8,7 @@ import { Card } from "./Card";
     background: "DarkKhaki",
     resizeTo: window,
     antialias: true,
+    hello: true
   });
 
   // append the app canvas to the document body
