@@ -287,6 +287,8 @@ export class Card extends Container {
       height: texture.height,
     });
 
+    console.log("renderTexture", renderTexture);
+
     // Zero out RGB channels and keep the alpha channel
     // This will create a black shadow effect
     // with the same alpha as the original texture
