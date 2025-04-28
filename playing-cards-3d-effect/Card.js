@@ -1,11 +1,18 @@
-import { Container, PerspectiveMesh, Rectangle, Point, Texture } from "pixi.js";
+import {
+  ColorMatrixFilter,
+  Container,
+  PerspectiveMesh,
+  Point,
+  Rectangle,
+  RenderTexture,
+  Sprite,
+  Texture,
+} from "pixi.js";
+
 import { NUM_CELLS } from "./Board.js";
 
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
-
-// TODO how to draw rounded corners?
-export const CARD_RADIUS = 20;
 
 const CARD_SCALE = 1.4;
 
@@ -18,7 +25,7 @@ const NUM_VERTICES = 40;
 const TILT_ANGLE = 5;
 
 export class Card extends Container {
-  constructor(texture, col, row, stage) {
+  constructor(texture, col, row, stage, renderer) {
     super();
 
     // the 4 corners of the tile in local coordinates, clockwise
@@ -34,7 +41,7 @@ export class Card extends Container {
     this.cacheAsTexture = true;
 
     if (stage instanceof Container) {
-      this.setupDraggable(stage);
+      this.setupDraggable(stage, renderer, texture);
     } else {
       this.setupStatic();
     }
@@ -63,7 +70,7 @@ export class Card extends Container {
   }
 
   // setup interactive, draggable Tile and add shadow
-  setupDraggable(stage) {
+  setupDraggable(stage, renderer, texture) {
     this.eventMode = "static";
     this.cursor = "pointer";
 
@@ -90,6 +97,7 @@ export class Card extends Container {
     ];
 
     this.shadow = new PerspectiveMesh({
+      //texture: this.createShadowTextureFrom(texture, renderer),
       texture: Texture.WHITE,
       // use less vertices for the shadow
       verticesX: NUM_VERTICES / 4,
@@ -268,5 +276,31 @@ export class Card extends Container {
 
       return projected;
     });
+  }
+
+  createShadowTextureFrom(texture, renderer) {
+    const sprite = new Sprite(texture);
+
+    // Create a RenderTexture the size of the texture
+    const renderTexture = RenderTexture.create({
+      width: texture.width,
+      height: texture.height,
+    });
+
+    // Zero out RGB channels and keep the alpha channel
+    // This will create a black shadow effect
+    // with the same alpha as the original texture
+    const colorMatrix = new ColorMatrixFilter();
+    colorMatrix.reset();
+    colorMatrix.saturate(0);
+    sprite.filters = [colorMatrix];
+
+    // Render the sprite to the renderTexture
+    renderer.render({
+      container: sprite,
+      renderTexture: renderTexture,
+    });
+
+    return renderTexture;
   }
 }
