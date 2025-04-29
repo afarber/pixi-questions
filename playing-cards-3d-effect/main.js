@@ -1,6 +1,6 @@
-import { Application, Assets, Spritesheet } from "pixi.js";
+import { Application, Assets } from "pixi.js";
 import { Board } from "./Board";
-import { Card } from "./Card";
+import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 
 (async () => {
   const app = new Application();
@@ -21,20 +21,29 @@ import { Card } from "./Card";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
+  // Function to create a random card with proper bounds
+  const createRandomCard = (spriteKey) => {
+    // Random position within the screen boundaries
+    const x = Math.random() * (app.screen.width - CARD_WIDTH) + CARD_WIDTH / 2;
+    const y =
+      Math.random() * (app.screen.height - CARD_HEIGHT) + CARD_HEIGHT / 2;
+
+    // Random angle between -60 and +60 degrees
+    const angle = Math.random() * 120 - 60;
+
+    return new Card(spriteSheet, spriteKey, x, y, angle, app.stage);
+  };
+
   const spriteSheet = await Assets.load("playing-cards.json");
 
-  const tcTexture = spriteSheet.textures["TC"];
-  const jhTexture = spriteSheet.textures["JH"];
-  const qsTexture = spriteSheet.textures["QS"];
+  // Create 3 interactive, draggable Cards with random positions and angles
+  const card1 = createRandomCard("TC");
+  const card2 = createRandomCard("JH");
+  const card3 = createRandomCard("QS");
 
-  // create 3 interactive, draggable Cards
-  const r = new Card(tcTexture, 1, 1, app.stage);
-  const g = new Card(jhTexture, 2, 1, app.stage);
-  const b = new Card(qsTexture, 3, 1, app.stage);
-
-  boardContainer.addChild(r);
-  boardContainer.addChild(g);
-  boardContainer.addChild(b);
+  boardContainer.addChild(card1);
+  boardContainer.addChild(card2);
+  boardContainer.addChild(card3);
 
   const onResize = () => {
     boardContainer.resize(app.screen.width, app.screen.height);

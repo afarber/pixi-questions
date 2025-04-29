@@ -1,15 +1,4 @@
-import {
-  ColorMatrixFilter,
-  Container,
-  PerspectiveMesh,
-  Point,
-  Rectangle,
-  RenderTexture,
-  Sprite,
-  Texture,
-} from "pixi.js";
-
-import { NUM_CELLS } from "./Board.js";
+import { Container, PerspectiveMesh, Point, Rectangle } from "pixi.js";
 
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
@@ -25,7 +14,7 @@ const NUM_VERTICES = 40;
 const TILT_ANGLE = 5;
 
 export class Card extends Container {
-  constructor(texture, col, row, stage) {
+  constructor(spriteSheet, spriteKey, cardX, cardY, cardAngle, stage) {
     super();
 
     // the 4 corners of the tile in local coordinates, clockwise
@@ -34,11 +23,14 @@ export class Card extends Container {
     this.bottomRightCorner = new Point(CARD_WIDTH / 2, CARD_HEIGHT / 2);
     this.bottomLeftCorner = new Point(-CARD_WIDTH / 2, CARD_HEIGHT / 2);
 
-    this.x = (col + 0.5) * CARD_WIDTH;
-    this.y = (row + 0.5) * CARD_HEIGHT;
+    this.x = cardX;
+    this.y = cardY;
+    this.angle = cardAngle;
 
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
+
+    const texture = spriteSheet.textures[spriteKey];
 
     if (stage instanceof Container) {
       this.setupDraggable(stage, texture);
@@ -96,20 +88,23 @@ export class Card extends Container {
       this.bottomLeftCorner,
     ];
 
+    // Get rotation-independent shadow offset
+    const shadowOffset = this.getRotationIndependentShadowOffset();
+
     this.shadow = new PerspectiveMesh({
       texture: texture,
       // use less vertices for the shadow
       verticesX: NUM_VERTICES / 4,
       verticesY: NUM_VERTICES / 4,
-      // the local corner coordinates, clockwise
-      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
-      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
-      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
-      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
-      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
-      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
-      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
+      // the local corner coordinates with rotation-independent shadow offset
+      x0: this.topLeftCorner.x + shadowOffset.x,
+      y0: this.topLeftCorner.y + shadowOffset.y,
+      x1: this.topRightCorner.x + shadowOffset.x,
+      y1: this.topRightCorner.y + shadowOffset.y,
+      x2: this.bottomRightCorner.x + shadowOffset.x,
+      y2: this.bottomRightCorner.y + shadowOffset.y,
+      x3: this.bottomLeftCorner.x + shadowOffset.x,
+      y3: this.bottomLeftCorner.y + shadowOffset.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
@@ -123,6 +118,8 @@ export class Card extends Container {
     this.scale.x = CARD_SCALE;
     this.scale.y = CARD_SCALE;
     this.shadow.visible = true;
+
+    console.log("onDragStart", this.angle, this.rotation);
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
@@ -143,15 +140,19 @@ export class Card extends Container {
       PERSPECTIVE
     );
 
+    // Get rotation-independent shadow offset
+    const shadowOffset = this.getRotationIndependentShadowOffset();
+
+    // Reset both meshes back to flat
     this.shadow.setCorners(
-      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[3].y + SHADOW_OFFSET.y
+      this.topLeftCorner.x + shadowOffset.x,
+      this.topLeftCorner.y + shadowOffset.y,
+      this.topRightCorner.x + shadowOffset.x,
+      this.topRightCorner.y + shadowOffset.y,
+      this.bottomRightCorner.x + shadowOffset.x,
+      this.bottomRightCorner.y + shadowOffset.y,
+      this.bottomLeftCorner.x + shadowOffset.x,
+      this.bottomLeftCorner.y + shadowOffset.y
     );
 
     this.mesh.setCorners(
@@ -185,18 +186,7 @@ export class Card extends Container {
     this.scale.y = 1;
     this.shadow.visible = false;
 
-    // align x, y to the checker board grid
-    let col = Math.floor(this.x / CARD_WIDTH);
-    let row = Math.floor(this.y / CARD_HEIGHT);
-    // ensure the col is between 0 and (NUM_CELLS - 1)
-    col = Math.max(col, 0);
-    col = Math.min(col, NUM_CELLS - 1);
-    // ensure the row is between 0 and (NUM_CELLS - 1)
-    row = Math.max(row, 0);
-    row = Math.min(row, NUM_CELLS - 1);
-    // snap to the center of the grid cell
-    this.x = (col + 0.5) * CARD_WIDTH;
-    this.y = (row + 0.5) * CARD_HEIGHT;
+    // TODO keep the card on screen
 
     this.onpointerdown = (e) => this.onDragStart(e);
 
@@ -209,6 +199,7 @@ export class Card extends Container {
 
     // Reset the both meshes back to flat
     this.shadow.setCorners(
+      // TODO fix the shadow offset, it should be independent of the card angle
       this.topLeftCorner.x + SHADOW_OFFSET.x,
       this.topLeftCorner.y + SHADOW_OFFSET.y,
       this.topRightCorner.x + SHADOW_OFFSET.x,
@@ -238,6 +229,20 @@ export class Card extends Container {
     // minus the grab point offset
     this.x = pos.x - this.grabPoint.x;
     this.y = pos.y - this.grabPoint.y;
+  }
+
+  // Make shadow offset independent of card rotation
+  // TODO fix the shadow should be to the south+east
+  getRotationIndependentShadowOffset() {
+    // Use this.rotation which already contains the angle in radians
+    const cosAngle = Math.cos(this.rotation);
+    const sinAngle = Math.sin(this.rotation);
+
+    // Rotate the shadow offset vector
+    const rotatedX = SHADOW_OFFSET.x * cosAngle - SHADOW_OFFSET.y * sinAngle;
+    const rotatedY = SHADOW_OFFSET.x * sinAngle + SHADOW_OFFSET.y * cosAngle;
+
+    return new Point(rotatedX, rotatedY);
   }
 
   // Function to apply 3D rotation to the corner points and return projected points
