@@ -1,4 +1,4 @@
-import { Container, PerspectiveMesh, Point, Rectangle } from "pixi.js";
+import { Container, Matrix, PerspectiveMesh, Point, Rectangle } from "pixi.js";
 
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
@@ -92,23 +92,21 @@ export class Card extends Container {
       this.bottomLeftCorner,
     ];
 
-    // Get rotation-independent shadow offset
-    //    const shadowOffset = this.getRotationIndependentShadowOffset();
-
     this.shadow = new PerspectiveMesh({
       texture: texture,
-      // use less vertices for the shadow
+      // Use less vertices for the shadow
       verticesX: NUM_VERTICES / 4,
       verticesY: NUM_VERTICES / 4,
-      // the local corner coordinates, clockwise
-      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
-      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
-      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
-      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
-      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
-      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
-      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
+      // Use same corner points as the tile,
+      // since the shadow is initially invisible
+      x0: this.topLeftCorner.x,
+      y0: this.topLeftCorner.y,
+      x1: this.topRightCorner.x,
+      y1: this.topRightCorner.y,
+      x2: this.bottomRightCorner.x,
+      y2: this.bottomRightCorner.y,
+      x3: this.bottomLeftCorner.x,
+      y3: this.bottomLeftCorner.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
@@ -125,14 +123,14 @@ export class Card extends Container {
 
     console.log("onDragStart", this.angle, this.rotation);
 
-    // store the local mouse coordinates into grab point
+    // Store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);
 
-    // add a 3D effect, where the tile is tilted based on the grab point
+    // Add a 3D effect, where the tile is tilted based on the grab point
     const normalizedGrabX = this.grabPoint.x / (CARD_WIDTH / 2);
     const normalizedGrabY = this.grabPoint.y / (CARD_HEIGHT / 2);
 
-    // max TILT_ANGLE degree tilt based on grab point
+    // Max TILT_ANGLE degree tilt based on grab point
     const angleX = normalizedGrabY * TILT_ANGLE;
     const angleY = normalizedGrabX * TILT_ANGLE;
 
@@ -144,21 +142,7 @@ export class Card extends Container {
       PERSPECTIVE
     );
 
-    // Get rotation-independent shadow offset
-    //    const shadowOffset = this.getRotationIndependentShadowOffset();
-
-    // Reset both meshes back to flat
-    this.shadow.setCorners(
-      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[3].y + SHADOW_OFFSET.y
-    );
-
+    // Tilt the mesh based on the grab point
     this.mesh.setCorners(
       projectedCornerPoints[0].x,
       projectedCornerPoints[0].y,
@@ -168,6 +152,19 @@ export class Card extends Container {
       projectedCornerPoints[2].y,
       projectedCornerPoints[3].x,
       projectedCornerPoints[3].y
+    );
+
+    // TODO the offsets should point to the normalized global southeast direction, multiplied by SHADOW_OFFSET
+    // In other words the shadow should always point to the southeast, independent of the card angle
+    this.shadow.setCorners(
+      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[3].y + SHADOW_OFFSET.y
     );
 
     this.onpointerdown = null;
@@ -190,8 +187,6 @@ export class Card extends Container {
     this.scale.y = 1;
     this.shadow.visible = false;
 
-    // TODO keep the card on screen
-
     this.onpointerdown = (e) => this.onDragStart(e);
 
     this.stage.onpointermove = null;
@@ -201,19 +196,7 @@ export class Card extends Container {
     this.stage.onpointerupoutside = null;
     this.stage.onpointercanceloutside = null;
 
-    // Reset the both meshes back to flat
-    this.shadow.setCorners(
-      // TODO fix the shadow offset, it should be independent of the card angle
-      this.topLeftCorner.x + SHADOW_OFFSET.x,
-      this.topLeftCorner.y + SHADOW_OFFSET.y,
-      this.topRightCorner.x + SHADOW_OFFSET.x,
-      this.topRightCorner.y + SHADOW_OFFSET.y,
-      this.bottomRightCorner.x + SHADOW_OFFSET.x,
-      this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      this.bottomLeftCorner.x + SHADOW_OFFSET.x,
-      this.bottomLeftCorner.y + SHADOW_OFFSET.y
-    );
-
+    // Reset the mesh back to flat
     this.mesh.setCorners(
       this.topLeftCorner.x,
       this.topLeftCorner.y,
@@ -224,6 +207,9 @@ export class Card extends Container {
       this.bottomLeftCorner.x,
       this.bottomLeftCorner.y
     );
+
+    // the shadow is invisible again,
+    // no need to reset its corners
   }
 
   onDragMove(e) {
@@ -236,27 +222,40 @@ export class Card extends Container {
   }
 
   // Make shadow offset independent of card rotation
-  // TODO fix the shadow should be to the south+east
-  // Make shadow offset independent of card rotation
   getRotationIndependentShadowOffset() {
-    // Define the desired shadow direction (southeast) in radians
-    const southEastAngle = Math.PI / 4; // 45 degrees
+    // Define the desired shadow direction (southeast) as a vector
+    const southeastVector = new Point(1, 1);
 
-    // Get the card's current rotation in radians
-    const cardRotation = this.rotation;
+    // Create a rotation Matrix for the *inverse* of the card's rotation
+    const inverseRotationMatrix = new Matrix();
+    inverseRotationMatrix.rotate(-this.rotation);
 
-    // Calculate the difference between the desired southeast angle and the card's rotation
-    const deltaRotation = southEastAngle - cardRotation;
+    // Apply the inverse rotation to the southeast vector
+    const rotatedSoutheast = inverseRotationMatrix.apply(southeastVector);
 
-    // Use the cosine and sine of the delta rotation to find the adjusted offset
-    const rotatedX =
-      SHADOW_OFFSET.x * Math.cos(deltaRotation) -
-      SHADOW_OFFSET.y * Math.sin(deltaRotation);
-    const rotatedY =
-      SHADOW_OFFSET.x * Math.sin(deltaRotation) +
-      SHADOW_OFFSET.y * Math.cos(deltaRotation);
+    // Normalize the rotated vector to get a direction
+    const magnitude = Math.sqrt(
+      rotatedSoutheast.x * rotatedSoutheast.x +
+        rotatedSoutheast.y * rotatedSoutheast.y
+    );
+    const normalizedRotatedSoutheast = new Point(
+      rotatedSoutheast.x / magnitude,
+      rotatedSoutheast.y / magnitude
+    );
 
-    return new Point(rotatedX, rotatedY);
+    // Scale the normalized direction vector by the desired shadow offset magnitude
+    const rotatedOffsetX =
+      normalizedRotatedSoutheast.x *
+      Math.sqrt(
+        SHADOW_OFFSET.x * SHADOW_OFFSET.x + SHADOW_OFFSET.y * SHADOW_OFFSET.y
+      );
+    const rotatedOffsetY =
+      normalizedRotatedSoutheast.y *
+      Math.sqrt(
+        SHADOW_OFFSET.x * SHADOW_OFFSET.x + SHADOW_OFFSET.y * SHADOW_OFFSET.y
+      );
+
+    return new Point(rotatedOffsetX, rotatedOffsetY);
   }
 
   // Function to apply 3D rotation to the corner points and return projected points
