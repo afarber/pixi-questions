@@ -25,7 +25,11 @@ export class Card extends Container {
 
     this.x = cardX;
     this.y = cardY;
-    this.angle = cardAngle;
+
+    // TODO do not rotate the card yet due to problems with:
+    // 1. the shadow no more pointing to the southeast, independent of the card angle
+    // 2. the grab point is not correct while the card is dragged
+    // this.angle = cardAngle;
 
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
@@ -89,22 +93,22 @@ export class Card extends Container {
     ];
 
     // Get rotation-independent shadow offset
-    const shadowOffset = this.getRotationIndependentShadowOffset();
+    //    const shadowOffset = this.getRotationIndependentShadowOffset();
 
     this.shadow = new PerspectiveMesh({
       texture: texture,
       // use less vertices for the shadow
       verticesX: NUM_VERTICES / 4,
       verticesY: NUM_VERTICES / 4,
-      // the local corner coordinates with rotation-independent shadow offset
-      x0: this.topLeftCorner.x + shadowOffset.x,
-      y0: this.topLeftCorner.y + shadowOffset.y,
-      x1: this.topRightCorner.x + shadowOffset.x,
-      y1: this.topRightCorner.y + shadowOffset.y,
-      x2: this.bottomRightCorner.x + shadowOffset.x,
-      y2: this.bottomRightCorner.y + shadowOffset.y,
-      x3: this.bottomLeftCorner.x + shadowOffset.x,
-      y3: this.bottomLeftCorner.y + shadowOffset.y,
+      // the local corner coordinates, clockwise
+      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
+      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
+      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
+      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
+      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
+      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
+      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
+      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
@@ -141,18 +145,18 @@ export class Card extends Container {
     );
 
     // Get rotation-independent shadow offset
-    const shadowOffset = this.getRotationIndependentShadowOffset();
+    //    const shadowOffset = this.getRotationIndependentShadowOffset();
 
     // Reset both meshes back to flat
     this.shadow.setCorners(
-      this.topLeftCorner.x + shadowOffset.x,
-      this.topLeftCorner.y + shadowOffset.y,
-      this.topRightCorner.x + shadowOffset.x,
-      this.topRightCorner.y + shadowOffset.y,
-      this.bottomRightCorner.x + shadowOffset.x,
-      this.bottomRightCorner.y + shadowOffset.y,
-      this.bottomLeftCorner.x + shadowOffset.x,
-      this.bottomLeftCorner.y + shadowOffset.y
+      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
+      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
+      projectedCornerPoints[3].y + SHADOW_OFFSET.y
     );
 
     this.mesh.setCorners(
@@ -233,14 +237,24 @@ export class Card extends Container {
 
   // Make shadow offset independent of card rotation
   // TODO fix the shadow should be to the south+east
+  // Make shadow offset independent of card rotation
   getRotationIndependentShadowOffset() {
-    // Use this.rotation which already contains the angle in radians
-    const cosAngle = Math.cos(this.rotation);
-    const sinAngle = Math.sin(this.rotation);
+    // Define the desired shadow direction (southeast) in radians
+    const southEastAngle = Math.PI / 4; // 45 degrees
 
-    // Rotate the shadow offset vector
-    const rotatedX = SHADOW_OFFSET.x * cosAngle - SHADOW_OFFSET.y * sinAngle;
-    const rotatedY = SHADOW_OFFSET.x * sinAngle + SHADOW_OFFSET.y * cosAngle;
+    // Get the card's current rotation in radians
+    const cardRotation = this.rotation;
+
+    // Calculate the difference between the desired southeast angle and the card's rotation
+    const deltaRotation = southEastAngle - cardRotation;
+
+    // Use the cosine and sine of the delta rotation to find the adjusted offset
+    const rotatedX =
+      SHADOW_OFFSET.x * Math.cos(deltaRotation) -
+      SHADOW_OFFSET.y * Math.sin(deltaRotation);
+    const rotatedY =
+      SHADOW_OFFSET.x * Math.sin(deltaRotation) +
+      SHADOW_OFFSET.y * Math.cos(deltaRotation);
 
     return new Point(rotatedX, rotatedY);
   }
