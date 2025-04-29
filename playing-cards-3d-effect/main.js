@@ -1,5 +1,5 @@
 import { Application, Assets } from "pixi.js";
-import { Board } from "./Board";
+import { Board, NUM_CELLS } from "./Board";
 import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 
 (async () => {
@@ -23,10 +23,11 @@ import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 
   // Function to create a random card with proper bounds
   const createRandomCard = (spriteKey) => {
-    // Random position within the screen boundaries
-    const x = Math.random() * (app.screen.width - CARD_WIDTH) + CARD_WIDTH / 2;
-    const y =
-      Math.random() * (app.screen.height - CARD_HEIGHT) + CARD_HEIGHT / 2;
+    const boardWidth = NUM_CELLS * CARD_WIDTH;
+    const boardHeight = NUM_CELLS * CARD_HEIGHT;
+    // Random position within the board container
+    const x = Math.random() * (boardWidth - CARD_WIDTH) + CARD_WIDTH / 2;
+    const y = Math.random() * (boardHeight - CARD_HEIGHT) + CARD_HEIGHT / 2;
 
     // Random angle between -60 and +60 degrees
     const angle = Math.random() * 120 - 60;
