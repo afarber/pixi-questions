@@ -1,4 +1,4 @@
-import { Container, Graphics, Rectangle, Point } from "pixi.js";
+import { Container, Graphics, Matrix, Rectangle, Point } from "pixi.js";
 
 export const TILE_SIZE = 100;
 
@@ -16,7 +16,7 @@ export class Tile extends Container {
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
 
-    //    this.angle = angle;
+    this.angle = angle;
 
     if (stage instanceof Container) {
       this.setupDraggable(stage);
@@ -70,9 +70,29 @@ export class Tile extends Container {
     this.scale.y = TILE_SCALE;
     this.alpha = TILE_ALPHA;
 
-    this.shadow.x = SHADOW_GLOBAL_OFFSET.x;
-    this.shadow.y = SHADOW_GLOBAL_OFFSET.y;
+    // Find where the tile actually is on the screen (global position)
+    const tileGlobalPos = this.getGlobalPosition();
+
+    console.log("tileGlobalPos:", tileGlobalPos);
+
+    // Add the shadow offset in that global space
+    const shadowGlobalPos = new Point(
+      tileGlobalPos.x + SHADOW_GLOBAL_OFFSET.x,
+      tileGlobalPos.y + SHADOW_GLOBAL_OFFSET.y
+    );
+
+    // Convert back to the tile's local coordinate system
+    const shadowLocalPos = this.toLocal(shadowGlobalPos);
+
+    // Set shadow position using the calculated local coordinates
+    this.shadow.x = shadowLocalPos.x;
+    this.shadow.y = shadowLocalPos.y;
     this.shadow.visible = true;
+
+    // TODO correct the issue with the grab point.
+    // The idea is to remember the offset of the click on the tile.
+    // For example, if the user clicks on the top left corner of the tile,
+    // then the dragged tile should be moved so, that the top left corner aligns with the mouse position.
 
     // store the local mouse coordinates into grab point
     e.getLocalPosition(this, this.grabPoint);

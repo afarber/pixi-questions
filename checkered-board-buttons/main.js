@@ -19,7 +19,7 @@ import { Tile, TILE_SIZE } from "./Tile";
   // create 3 interactive, draggable Tiles
   const r = new Tile("Red", 3, 3, -30, app.stage);
   const g = new Tile("Green", 4, 3, 0, app.stage);
-  const b = new Tile("Blue", 5, 3, 40, app.stage);
+  const b = new Tile("Blue", 5, 3, 80, app.stage);
   // create a static, non-draggable Tile
   const c = new Tile("Cyan", 7, 0, 5);
 
