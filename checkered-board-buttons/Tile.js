@@ -1,13 +1,14 @@
-import { Container, Graphics, Matrix, Rectangle, Point } from "pixi.js";
+import { Container, Graphics, Rectangle, Point } from "pixi.js";
 
 export const TILE_SIZE = 100;
 
 const TILE_SCALE = 1.4;
 const TILE_ALPHA = 0.7;
 
+// The shadow offset in the screen coordinate system
+const SHADOW_OFFSET = new Point(12, 8);
 const SHADOW_COLOR = "Black";
 const SHADOW_ALPHA = 0.1;
-const SHADOW_GLOBAL_OFFSET = new Point(12, 8);
 
 export class Tile extends Container {
   constructor(color, col, row, angle, stage) {
@@ -30,29 +31,30 @@ export class Tile extends Container {
     this.addChild(this.g);
   }
 
-  // setup static, non-draggable Tile
+  // Setup static, non-draggable Tile
   setupStatic() {
     this.eventMode = "none";
     this.cursor = null;
   }
 
-  // setup interactive, draggable Tile and add shadow
+  // Setup interactive, draggable Tile and add shadow
   setupDraggable(stage) {
     this.eventMode = "static";
     this.cursor = "pointer";
 
-    // the app.stage is needed to add/remove event listeners
+    // The app.stage is needed to add/remove event listeners
     this.stage = stage;
 
-    // setting hitArea is important for correct pointerdown events delivery
+    // Setting hitArea is important for correct pointerdown events delivery
     this.hitArea = new Rectangle(
       -TILE_SIZE / 2,
       -TILE_SIZE / 2,
       TILE_SIZE,
       TILE_SIZE
     );
-    // the relative offset point of the click on the tile
-    this.grabPoint = new Point();
+
+    // The offset between the pointer position and the tile position
+    this.parentGrabPoint = new Point();
 
     this.shadow = new Graphics()
       .rect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, TILE_SIZE)
@@ -69,34 +71,16 @@ export class Tile extends Container {
     this.scale.x = TILE_SCALE;
     this.scale.y = TILE_SCALE;
     this.alpha = TILE_ALPHA;
-
-    // Find where the tile actually is on the screen (global position)
-    const tileGlobalPos = this.getGlobalPosition();
-
-    console.log("tileGlobalPos:", tileGlobalPos);
-
-    // Add the shadow offset in that global space
-    const shadowGlobalPos = new Point(
-      tileGlobalPos.x + SHADOW_GLOBAL_OFFSET.x,
-      tileGlobalPos.y + SHADOW_GLOBAL_OFFSET.y
-    );
-
-    // Convert back to the tile's local coordinate system
-    const shadowLocalPos = this.toLocal(shadowGlobalPos);
-
-    // Set shadow position using the calculated local coordinates
-    this.shadow.x = shadowLocalPos.x;
-    this.shadow.y = shadowLocalPos.y;
+    this.setLocalShadowPosition();
     this.shadow.visible = true;
 
-    // TODO correct the issue with the grab point.
-    // The idea is to remember the offset of the click on the tile.
-    // For example, if the user clicks on the top left corner of the tile,
-    // then the dragged tile should be moved so, that the top left corner aligns with the mouse position.
+    // Calculate offset between the pointer position and the tile position
+    // Both positions are in the parent's coordinate system
+    const pointerParentPos = e.getLocalPosition(this.parent);
+    this.parentGrabPoint.x = pointerParentPos.x - this.x;
+    this.parentGrabPoint.y = pointerParentPos.y - this.y;
 
-    // store the local mouse coordinates into grab point
-    e.getLocalPosition(this, this.grabPoint);
-    console.log("this.grabPoint:", this.grabPoint);
+    console.log("parentGrabPoint:", this.parentGrabPoint);
 
     this.onpointerdown = null;
 
@@ -121,16 +105,16 @@ export class Tile extends Container {
     this.alpha = 1;
     this.shadow.visible = false;
 
-    // align x, y to the checker board grid
+    // Align x, y to the checker board grid
     let col = Math.floor(this.x / TILE_SIZE);
     let row = Math.floor(this.y / TILE_SIZE);
-    // ensure the col is between 0 and 7
+    // Ensure the col is between 0 and 7
     col = Math.max(col, 0);
     col = Math.min(col, 7);
-    // ensure the row is between 0 and 7
+    // Ensure the row is between 0 and 7
     row = Math.max(row, 0);
     row = Math.min(row, 7);
-    // snap to the center of the grid cell
+    // Snap to the center of the grid cell
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
 
@@ -147,11 +131,31 @@ export class Tile extends Container {
   onDragMove(e) {
     console.log("onDragMove:", e.type, this.x, this.y);
 
-    const pos = e.getLocalPosition(this.parent);
-    // set the new position of the tile
-    // to be same as mouse position
-    // minus the grab point offset
-    this.x = pos.x - this.grabPoint.x;
-    this.y = pos.y - this.grabPoint.y;
+    // Set the new tile position, but maintain the offset to the pointer
+    // Both positions are in the parent's coordinate system
+    const pointerParentPos = e.getLocalPosition(this.parent);
+    this.x = pointerParentPos.x - this.parentGrabPoint.x;
+    this.y = pointerParentPos.y - this.parentGrabPoint.y;
+  }
+
+  // At the screen, the shadow should always be southeast of the tile,
+  // but the tile can be rotated and thus this calculation is needed
+  setLocalShadowPosition() {
+    // Find where the tile actually is on the screen (the global position)
+    // (it differs from this.x, this.y - which are in the parent's coordinate system)
+    const tileGlobalPos = this.getGlobalPosition();
+
+    // Add the shadow offset in that global space
+    const shadowGlobalPos = new Point(
+      tileGlobalPos.x + SHADOW_OFFSET.x,
+      tileGlobalPos.y + SHADOW_OFFSET.y
+    );
+
+    // Convert back to the tile's local coordinate system
+    const shadowLocalPos = this.toLocal(shadowGlobalPos);
+
+    // Set shadow position using the calculated local coordinates
+    this.shadow.x = shadowLocalPos.x;
+    this.shadow.y = shadowLocalPos.y;
   }
 }
