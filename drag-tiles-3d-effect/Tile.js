@@ -5,16 +5,17 @@ export const TILE_SIZE = 100;
 const TILE_SCALE = 1.4;
 const TILE_ALPHA = 0.7;
 
+// The shadow offset in the screen coordinate system
+const SHADOW_OFFSET = new Point(12, 8);
 const SHADOW_COLOR = "Black";
 const SHADOW_ALPHA = 0.1;
-const SHADOW_OFFSET = new Point(8, 6);
 
 const PERSPECTIVE = 300;
-const NUM_VERTICES = 10;
+const NUM_VERTICES = 20;
 const TILT_ANGLE = 15;
 
 export class Tile extends Container {
-  constructor(color, col, row, stage) {
+  constructor(color, col, row, angle, stage) {
     super();
 
     // the 4 corners of the tile in local coordinates, clockwise
@@ -25,6 +26,8 @@ export class Tile extends Container {
 
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
+
+    this.angle = angle;
 
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
@@ -53,21 +56,21 @@ export class Tile extends Container {
     this.addChild(this.mesh);
   }
 
-  // setup static, non-draggable Tile
+  // Setup static, non-draggable Tile
   setupStatic() {
     this.eventMode = "none";
     this.cursor = null;
   }
 
-  // setup interactive, draggable Tile and add shadow
+  // Setup interactive, draggable Tile and add shadow
   setupDraggable(stage) {
     this.eventMode = "static";
     this.cursor = "pointer";
 
-    // the app.stage is needed to add/remove event listeners
+    // The app.stage is needed to add/remove event listeners
     this.stage = stage;
 
-    // setting hitArea is important for correct pointerdown events delivery
+    // Setting hitArea is important for correct pointerdown events delivery
     this.hitArea = new Rectangle(
       this.topLeftCorner.x,
       this.topLeftCorner.y,
@@ -75,11 +78,11 @@ export class Tile extends Container {
       TILE_SIZE
     );
 
-    // the relative offset point of the click on the tile
-    this.grabPoint = new Point();
+    // The offset between the pointer position and the tile position
+    this.parentGrabPoint = new Point();
 
-    // the 4 corners of the tile in local coordinates, clockwise
-    this.cornerPoints = [
+    // The 4 corners of the tile in local coordinates, clockwise
+    this.flatCornerPoints = [
       this.topLeftCorner,
       this.topRightCorner,
       this.bottomRightCorner,
@@ -88,17 +91,18 @@ export class Tile extends Container {
 
     this.shadow = new PerspectiveMesh({
       texture: Texture.WHITE,
-      verticesX: NUM_VERTICES,
-      verticesY: NUM_VERTICES,
-      // the local corner coordinates, clockwise
-      x0: this.topLeftCorner.x + SHADOW_OFFSET.x,
-      y0: this.topLeftCorner.y + SHADOW_OFFSET.y,
-      x1: this.topRightCorner.x + SHADOW_OFFSET.x,
-      y1: this.topRightCorner.y + SHADOW_OFFSET.y,
-      x2: this.bottomRightCorner.x + SHADOW_OFFSET.x,
-      y2: this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      x3: this.bottomLeftCorner.x + SHADOW_OFFSET.x,
-      y3: this.bottomLeftCorner.y + SHADOW_OFFSET.y,
+      // Use less vertices for the shadow
+      verticesX: NUM_VERTICES / 4,
+      verticesY: NUM_VERTICES / 4,
+      // The local corner coordinates, clockwise
+      x0: this.topLeftCorner.x,
+      y0: this.topLeftCorner.y,
+      x1: this.topRightCorner.x,
+      y1: this.topRightCorner.y,
+      x2: this.bottomRightCorner.x,
+      y2: this.bottomRightCorner.y,
+      x3: this.bottomLeftCorner.x,
+      y3: this.bottomLeftCorner.y,
     });
     this.shadow.tint = SHADOW_COLOR;
     this.shadow.alpha = SHADOW_ALPHA;
@@ -112,36 +116,41 @@ export class Tile extends Container {
     this.scale.x = TILE_SCALE;
     this.scale.y = TILE_SCALE;
     this.alpha = TILE_ALPHA;
+    this.setLocalShadowPosition();
     this.shadow.visible = true;
 
-    // store the local mouse coordinates into grab point
-    e.getLocalPosition(this, this.grabPoint);
+    // Calculate offset between the pointer position and the tile position
+    // Both positions are in the parent's coordinate system
+    const pointerParentPos = e.getLocalPosition(this.parent);
+    this.parentGrabPoint.x = pointerParentPos.x - this.x;
+    this.parentGrabPoint.y = pointerParentPos.y - this.y;
+    console.log("parentGrabPoint:", this.parentGrabPoint);
 
-    // add a 3D effect, where the tile is tilted based on the grab point
-    const normalizedGrabX = this.grabPoint.x / (TILE_SIZE / 2);
-    const normalizedGrabY = this.grabPoint.y / (TILE_SIZE / 2);
+    // Add a 3D effect, where the tile is tilted based on the grab point
+    const normalizedGrabX = this.parentGrabPoint.x / (TILE_SIZE / 2);
+    const normalizedGrabY = this.parentGrabPoint.y / (TILE_SIZE / 2);
 
-    // max TILT_ANGLE degree tilt based on grab point
+    // Max TILT_ANGLE degree tilt based on grab point
     const angleX = normalizedGrabY * TILT_ANGLE;
     const angleY = normalizedGrabX * TILT_ANGLE;
 
     // Get the projected corner points
     const projectedCornerPoints = this.rotate3D(
-      this.cornerPoints,
+      this.flatCornerPoints,
       angleX,
       angleY,
       PERSPECTIVE
     );
 
     this.shadow.setCorners(
-      projectedCornerPoints[0].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[0].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[1].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[1].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[2].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[2].y + SHADOW_OFFSET.y,
-      projectedCornerPoints[3].x + SHADOW_OFFSET.x,
-      projectedCornerPoints[3].y + SHADOW_OFFSET.y
+      projectedCornerPoints[0].x,
+      projectedCornerPoints[0].y,
+      projectedCornerPoints[1].x,
+      projectedCornerPoints[1].y,
+      projectedCornerPoints[2].x,
+      projectedCornerPoints[2].y,
+      projectedCornerPoints[3].x,
+      projectedCornerPoints[3].y
     );
 
     this.mesh.setCorners(
@@ -198,18 +207,7 @@ export class Tile extends Container {
     this.stage.onpointerupoutside = null;
     this.stage.onpointercanceloutside = null;
 
-    // Reset the both meshes back to flat
-    this.shadow.setCorners(
-      this.topLeftCorner.x + SHADOW_OFFSET.x,
-      this.topLeftCorner.y + SHADOW_OFFSET.y,
-      this.topRightCorner.x + SHADOW_OFFSET.x,
-      this.topRightCorner.y + SHADOW_OFFSET.y,
-      this.bottomRightCorner.x + SHADOW_OFFSET.x,
-      this.bottomRightCorner.y + SHADOW_OFFSET.y,
-      this.bottomLeftCorner.x + SHADOW_OFFSET.x,
-      this.bottomLeftCorner.y + SHADOW_OFFSET.y
-    );
-
+    // Reset the mesh back to flat
     this.mesh.setCorners(
       this.topLeftCorner.x,
       this.topLeftCorner.y,
@@ -223,12 +221,32 @@ export class Tile extends Container {
   }
 
   onDragMove(e) {
-    const pos = e.getLocalPosition(this.parent);
-    // set the new position of the tile
-    // to be same as mouse position
-    // minus the grab point offset
-    this.x = pos.x - this.grabPoint.x;
-    this.y = pos.y - this.grabPoint.y;
+    // Set the new tile position, but maintain the offset to the pointer
+    // Both positions are in the parent's coordinate system
+    const pointerParentPos = e.getLocalPosition(this.parent);
+    this.x = pointerParentPos.x - this.parentGrabPoint.x;
+    this.y = pointerParentPos.y - this.parentGrabPoint.y;
+  }
+
+  // At the screen, the shadow should always be southeast of the tile,
+  // but the tile can be rotated and thus this calculation is needed
+  setLocalShadowPosition() {
+    // Find where the tile actually is on the screen (the global position)
+    // (it differs from this.x, this.y - which are in the parent's coordinate system)
+    const tileGlobalPos = this.getGlobalPosition();
+
+    // Add the shadow offset in that global space
+    const shadowGlobalPos = new Point(
+      tileGlobalPos.x + SHADOW_OFFSET.x,
+      tileGlobalPos.y + SHADOW_OFFSET.y
+    );
+
+    // Convert back to the tile's local coordinate system
+    const shadowLocalPos = this.toLocal(shadowGlobalPos);
+
+    // Set shadow position using the calculated local coordinates
+    this.shadow.x = shadowLocalPos.x;
+    this.shadow.y = shadowLocalPos.y;
   }
 
   // Function to apply 3D rotation to the corner points and return projected points

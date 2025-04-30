@@ -79,7 +79,6 @@ export class Tile extends Container {
     const pointerParentPos = e.getLocalPosition(this.parent);
     this.parentGrabPoint.x = pointerParentPos.x - this.x;
     this.parentGrabPoint.y = pointerParentPos.y - this.y;
-
     console.log("parentGrabPoint:", this.parentGrabPoint);
 
     this.onpointerdown = null;
