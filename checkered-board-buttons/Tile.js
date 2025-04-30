@@ -7,14 +7,16 @@ const TILE_ALPHA = 0.7;
 
 const SHADOW_COLOR = "Black";
 const SHADOW_ALPHA = 0.1;
-const SHADOW_OFFSET = new Point(8, 6);
+const SHADOW_GLOBAL_OFFSET = new Point(12, 8);
 
 export class Tile extends Container {
-  constructor(color, col, row, stage) {
+  constructor(color, col, row, angle, stage) {
     super();
 
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
+
+    //    this.angle = angle;
 
     if (stage instanceof Container) {
       this.setupDraggable(stage);
@@ -53,12 +55,7 @@ export class Tile extends Container {
     this.grabPoint = new Point();
 
     this.shadow = new Graphics()
-      .rect(
-        -TILE_SIZE / 2 + SHADOW_OFFSET.x,
-        -TILE_SIZE / 2 + SHADOW_OFFSET.y,
-        TILE_SIZE,
-        TILE_SIZE
-      )
+      .rect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, TILE_SIZE)
       .fill({ color: SHADOW_COLOR, alpha: SHADOW_ALPHA });
     this.shadow.visible = false;
     this.addChild(this.shadow);
@@ -72,6 +69,9 @@ export class Tile extends Container {
     this.scale.x = TILE_SCALE;
     this.scale.y = TILE_SCALE;
     this.alpha = TILE_ALPHA;
+
+    this.shadow.x = SHADOW_GLOBAL_OFFSET.x;
+    this.shadow.y = SHADOW_GLOBAL_OFFSET.y;
     this.shadow.visible = true;
 
     // store the local mouse coordinates into grab point

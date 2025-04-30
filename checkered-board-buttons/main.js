@@ -17,11 +17,11 @@ import { Tile, TILE_SIZE } from "./Tile";
   app.stage.addChild(boardContainer);
 
   // create 3 interactive, draggable Tiles
-  const r = new Tile("Red", 3, 3, app.stage);
-  const g = new Tile("Green", 4, 3, app.stage);
-  const b = new Tile("Blue", 5, 3, app.stage);
+  const r = new Tile("Red", 3, 3, -30, app.stage);
+  const g = new Tile("Green", 4, 3, 0, app.stage);
+  const b = new Tile("Blue", 5, 3, 40, app.stage);
   // create a static, non-draggable Tile
-  const c = new Tile("Cyan", 7, 0);
+  const c = new Tile("Cyan", 7, 0, 5);
 
   boardContainer.addChild(r);
   boardContainer.addChild(g);
