@@ -1,5 +1,5 @@
 import { Application, Assets } from "pixi.js";
-import { Board, NUM_CELLS } from "./Board";
+import { Board } from "./Board";
 
 (async () => {
   const app = new Application();
@@ -22,7 +22,7 @@ import { Board, NUM_CELLS } from "./Board";
   const boardContainer = new Board(app.stage);
   app.stage.addChild(boardContainer);
 
-  // Create 3 interactive, draggable Cards with random positions and angle
+  // Create 3 interactive, draggable cards with random positions and angle
   boardContainer.createRandomCard(spriteSheet, "TC");
   boardContainer.createRandomCard(spriteSheet, "JH");
   boardContainer.createRandomCard(spriteSheet, "QS");

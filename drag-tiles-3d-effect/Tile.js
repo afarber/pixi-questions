@@ -124,7 +124,6 @@ export class Tile extends Container {
     const pointerParentPos = e.getLocalPosition(this.parent);
     this.parentGrabPoint.x = pointerParentPos.x - this.x;
     this.parentGrabPoint.y = pointerParentPos.y - this.y;
-    console.log("parentGrabPoint:", this.parentGrabPoint);
 
     // Add a 3D effect, where the tile is tilted based on the grab point
     const normalizedGrabX = this.parentGrabPoint.x / (TILE_SIZE / 2);
