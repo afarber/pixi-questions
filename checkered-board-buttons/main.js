@@ -1,8 +1,7 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
-import { Tween, Group } from "@tweenjs/tween.js";
-import * as TWEEN from "@tweenjs/tween.js";
+import { Tween, Easing } from "@tweenjs/tween.js";
 
 (async () => {
   const app = new Application();
@@ -37,50 +36,73 @@ import * as TWEEN from "@tweenjs/tween.js";
 
   // Define final positions for the tiles
   const finalPositions = {
-    r: { x: (3 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE },
-    g: { x: (4 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE },
-    b: { x: (5 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE },
+    r: { x: (3 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: -30 },
+    g: { x: (4 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 0 },
+    b: { x: (5 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 80 },
   };
 
   // Create animation for the red tile - bouncy entrance
-  const rTween = new TWEEN.Tween({ x: r.x, y: r.y, scale: 0 })
-    .to({ x: finalPositions.r.x, y: finalPositions.r.y, scale: 1 }, 1200)
-    .easing(TWEEN.Easing.Bounce.Out)
+  const rTween = new Tween({ x: r.x, y: r.y, angle: 0, scale: 0 })
+    .to(
+      {
+        x: finalPositions.r.x,
+        y: finalPositions.r.y,
+        angle: finalPositions.r.angle,
+        scale: 1,
+      },
+      1200
+    )
+    .easing(Easing.Bounce.Out)
     .onUpdate((props) => {
       r.x = props.x;
       r.y = props.y;
+      r.angle = props.angle;
       r.scale.set(props.scale);
     })
     .delay(300);
 
   // Create animation for the green tile - elastic entrance
-  const gTween = new TWEEN.Tween({ x: g.x, y: g.y, scale: 0 })
-    .to({ x: finalPositions.g.x, y: finalPositions.g.y, scale: 1 }, 1200)
-    .easing(TWEEN.Easing.Elastic.Out)
+  const gTween = new Tween({ x: g.x, y: g.y, angle: 0, scale: 0 })
+    .to(
+      {
+        x: finalPositions.g.x,
+        y: finalPositions.g.y,
+        angle: finalPositions.g.angle,
+        scale: 1,
+      },
+      1200
+    )
+    .easing(Easing.Elastic.Out)
     .onUpdate((props) => {
       g.x = props.x;
       g.y = props.y;
+      g.angle = props.angle;
       g.scale.set(props.scale);
     })
     .delay(600);
 
   // Create animation for the blue tile - back entrance with overshoot
-  const bTween = new TWEEN.Tween({
+  const bTween = new Tween({
     x: b.x,
     y: b.y,
+    angle: 0,
     scale: 0,
-    rotation: Math.PI * 2,
   })
     .to(
-      { x: finalPositions.b.x, y: finalPositions.b.y, scale: 1, rotation: 0 },
+      {
+        x: finalPositions.b.x,
+        y: finalPositions.b.y,
+        angle: finalPositions.b.angle,
+        scale: 1,
+      },
       1200
     )
-    .easing(TWEEN.Easing.Back.Out)
+    .easing(Easing.Back.Out)
     .onUpdate((props) => {
       b.x = props.x;
       b.y = props.y;
+      b.angle = props.angle;
       b.scale.set(props.scale);
-      b.rotation = props.rotation;
     })
     .delay(900);
 
