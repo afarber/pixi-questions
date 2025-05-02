@@ -29,88 +29,6 @@ import { Tween, Easing } from "@tweenjs/tween.js";
   boardContainer.addChild(b);
   boardContainer.addChild(c);
 
-  // Set initial scale to 0 for growth animation
-  r.scale.set(0);
-  g.scale.set(0);
-  b.scale.set(0);
-
-  // Define final positions for the tiles
-  const finalPositions = {
-    r: { x: (3 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: -30 },
-    g: { x: (4 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 0 },
-    b: { x: (5 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 80 },
-  };
-
-  // Create animation for the red tile - bouncy entrance
-  const rTween = new Tween({ x: r.x, y: r.y, angle: 0, scale: 0 })
-    .to(
-      {
-        x: finalPositions.r.x,
-        y: finalPositions.r.y,
-        angle: finalPositions.r.angle,
-        scale: 1,
-      },
-      1200
-    )
-    .easing(Easing.Bounce.Out)
-    .onUpdate((props) => {
-      r.x = props.x;
-      r.y = props.y;
-      r.angle = props.angle;
-      r.scale.set(props.scale);
-    })
-    .delay(300);
-
-  // Create animation for the green tile - elastic entrance
-  const gTween = new Tween({ x: g.x, y: g.y, angle: 0, scale: 0 })
-    .to(
-      {
-        x: finalPositions.g.x,
-        y: finalPositions.g.y,
-        angle: finalPositions.g.angle,
-        scale: 1,
-      },
-      1200
-    )
-    .easing(Easing.Elastic.Out)
-    .onUpdate((props) => {
-      g.x = props.x;
-      g.y = props.y;
-      g.angle = props.angle;
-      g.scale.set(props.scale);
-    })
-    .delay(600);
-
-  // Create animation for the blue tile - back entrance with overshoot
-  const bTween = new Tween({
-    x: b.x,
-    y: b.y,
-    angle: 0,
-    scale: 0,
-  })
-    .to(
-      {
-        x: finalPositions.b.x,
-        y: finalPositions.b.y,
-        angle: finalPositions.b.angle,
-        scale: 1,
-      },
-      1200
-    )
-    .easing(Easing.Back.Out)
-    .onUpdate((props) => {
-      b.x = props.x;
-      b.y = props.y;
-      b.angle = props.angle;
-      b.scale.set(props.scale);
-    })
-    .delay(900);
-
-  // Start all animations
-  rTween.start();
-  gTween.start();
-  bTween.start();
-
   const bunny = await createBunny();
   boardContainer.addChild(bunny);
 
@@ -120,6 +38,10 @@ import { Tween, Easing } from "@tweenjs/tween.js";
   console.log("__YES__");
   console.log("__NO__");
   console.log("__CANCEL__");
+
+  const rTween = createTileTween(r, finalPositions.r, Easing.Bounce.Out, 300);
+  const gTween = createTileTween(g, finalPositions.g, Easing.Elastic.Out, 600);
+  const bTween = createTileTween(b, finalPositions.b, Easing.Back.Out, 900);
 
   app.ticker.add((time) => {
     // Update all tweens
@@ -155,4 +77,33 @@ function createLabel() {
   label.y = TILE_SIZE * 7.5;
   label.anchor.set(0.5);
   return label;
+}
+
+// Define final positions for the tiles
+const finalPositions = {
+  r: { x: (3 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: -30 },
+  g: { x: (4 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 0 },
+  b: { x: (5 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 80 },
+};
+
+function createTileTween(tile, final, easingFn, delay) {
+  return new Tween({ x: tile.x, y: tile.y, angle: 0, scale: 0 })
+    .to(
+      {
+        x: final.x,
+        y: final.y,
+        angle: final.angle,
+        scale: 1,
+      },
+      1200
+    )
+    .easing(easingFn)
+    .onUpdate((props) => {
+      tile.x = props.x;
+      tile.y = props.y;
+      tile.angle = props.angle;
+      tile.scale.set(props.scale);
+    })
+    .delay(delay)
+    .start();
 }
