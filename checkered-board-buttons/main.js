@@ -1,6 +1,8 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
+import { Tween, Group } from "@tweenjs/tween.js";
+import * as TWEEN from "@tweenjs/tween.js";
 
 (async () => {
   const app = new Application();
@@ -16,10 +18,10 @@ import { Tile, TILE_SIZE } from "./Tile";
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
-  // create 3 interactive, draggable Tiles
-  const r = new Tile("Red", 3, 3, -30, app.stage);
-  const g = new Tile("Green", 4, 3, 0, app.stage);
-  const b = new Tile("Blue", 5, 3, 80, app.stage);
+  // create 3 interactive, draggable Tiles with initial off-screen position
+  const r = new Tile("Red", -3, -3, -30, app.stage);
+  const g = new Tile("Green", -3, -3, 0, app.stage);
+  const b = new Tile("Blue", -3, -3, 80, app.stage);
   // create a static, non-draggable Tile
   const c = new Tile("Cyan", 7, 0, 5);
 
@@ -27,6 +29,65 @@ import { Tile, TILE_SIZE } from "./Tile";
   boardContainer.addChild(g);
   boardContainer.addChild(b);
   boardContainer.addChild(c);
+
+  // Set initial scale to 0 for growth animation
+  r.scale.set(0);
+  g.scale.set(0);
+  b.scale.set(0);
+
+  // Define final positions for the tiles
+  const finalPositions = {
+    r: { x: (3 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE },
+    g: { x: (4 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE },
+    b: { x: (5 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE },
+  };
+
+  // Create animation for the red tile - bouncy entrance
+  const rTween = new TWEEN.Tween({ x: r.x, y: r.y, scale: 0 })
+    .to({ x: finalPositions.r.x, y: finalPositions.r.y, scale: 1 }, 1200)
+    .easing(TWEEN.Easing.Bounce.Out)
+    .onUpdate((props) => {
+      r.x = props.x;
+      r.y = props.y;
+      r.scale.set(props.scale);
+    })
+    .delay(300);
+
+  // Create animation for the green tile - elastic entrance
+  const gTween = new TWEEN.Tween({ x: g.x, y: g.y, scale: 0 })
+    .to({ x: finalPositions.g.x, y: finalPositions.g.y, scale: 1 }, 1200)
+    .easing(TWEEN.Easing.Elastic.Out)
+    .onUpdate((props) => {
+      g.x = props.x;
+      g.y = props.y;
+      g.scale.set(props.scale);
+    })
+    .delay(600);
+
+  // Create animation for the blue tile - back entrance with overshoot
+  const bTween = new TWEEN.Tween({
+    x: b.x,
+    y: b.y,
+    scale: 0,
+    rotation: Math.PI * 2,
+  })
+    .to(
+      { x: finalPositions.b.x, y: finalPositions.b.y, scale: 1, rotation: 0 },
+      1200
+    )
+    .easing(TWEEN.Easing.Back.Out)
+    .onUpdate((props) => {
+      b.x = props.x;
+      b.y = props.y;
+      b.scale.set(props.scale);
+      b.rotation = props.rotation;
+    })
+    .delay(900);
+
+  // Start all animations
+  rTween.start();
+  gTween.start();
+  bTween.start();
 
   const bunny = await createBunny();
   boardContainer.addChild(bunny);
@@ -39,6 +100,11 @@ import { Tile, TILE_SIZE } from "./Tile";
   console.log("__CANCEL__");
 
   app.ticker.add((time) => {
+    // Update all tweens
+    rTween.update();
+    gTween.update();
+    bTween.update();
+
     bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
