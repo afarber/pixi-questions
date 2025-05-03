@@ -1,6 +1,7 @@
 import { Container, Graphics, Point } from "pixi.js";
 import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
 
+// Number of cells in the board
 export const NUM_CELLS = 4;
 
 export class Board extends Container {

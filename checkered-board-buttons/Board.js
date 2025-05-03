@@ -1,6 +1,9 @@
 import { Container, Graphics, Point } from "pixi.js";
 import { TILE_SIZE } from "./Tile.js";
 
+// Number of cells in the board
+export const NUM_CELLS = 8;
+
 export class Board extends Container {
   constructor() {
     super();
@@ -13,8 +16,8 @@ export class Board extends Container {
     const g = new Graphics();
     g.setFillStyle({ color: "BlanchedAlmond" });
 
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
+    for (let i = 0; i < NUM_CELLS; i++) {
+      for (let j = 0; j < NUM_CELLS; j++) {
         if ((i + j) % 2 === 0) {
           g.rect(i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
           g.fill();
@@ -26,7 +29,7 @@ export class Board extends Container {
   }
 
   resize(w, h) {
-    const boardSize = 8 * TILE_SIZE;
+    const boardSize = NUM_CELLS * TILE_SIZE;
     const appSize = Math.min(w, h);
     let boardScale = appSize / boardSize;
     this.scale.set(boardScale);

@@ -1,5 +1,5 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
-import { Board } from "./Board";
+import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { Tween, Easing } from "@tweenjs/tween.js";
 
@@ -73,8 +73,8 @@ async function createBunny() {
 
 function createLabel() {
   const label = new Text({ text: "__NO__" });
-  label.x = TILE_SIZE * 7.5;
-  label.y = TILE_SIZE * 7.5;
+  label.x = (NUM_CELLS - 0.5) * TILE_SIZE;
+  label.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.anchor.set(0.5);
   return label;
 }

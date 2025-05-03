@@ -14,6 +14,8 @@ export class Tile extends Container {
   constructor(color, col, row, angle, stage) {
     super();
 
+    this.topLeftCorner = new Point(-TILE_SIZE / 2, -TILE_SIZE / 2);
+
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
 
@@ -26,7 +28,7 @@ export class Tile extends Container {
     }
 
     this.g = new Graphics()
-      .rect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, TILE_SIZE)
+      .rect(this.topLeftCorner.x, this.topLeftCorner.y, TILE_SIZE, TILE_SIZE)
       .fill({ color: color });
     this.addChild(this.g);
   }
@@ -47,8 +49,8 @@ export class Tile extends Container {
 
     // Setting hitArea is important for correct pointerdown events delivery
     this.hitArea = new Rectangle(
-      -TILE_SIZE / 2,
-      -TILE_SIZE / 2,
+      this.topLeftCorner.x,
+      this.topLeftCorner.y,
       TILE_SIZE,
       TILE_SIZE
     );
@@ -57,7 +59,7 @@ export class Tile extends Container {
     this.parentGrabPoint = new Point();
 
     this.shadow = new Graphics()
-      .rect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, TILE_SIZE)
+      .rect(this.topLeftCorner.x, this.topLeftCorner.y, TILE_SIZE, TILE_SIZE)
       .fill({ color: SHADOW_COLOR, alpha: SHADOW_ALPHA });
     this.shadow.visible = false;
     this.addChild(this.shadow);
