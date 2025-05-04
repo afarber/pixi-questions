@@ -1,3 +1,4 @@
+import "@pixi/layout";
 import { Application } from "pixi.js";
 import { Board } from "./Board";
 import { Tile } from "./Tile";
@@ -11,6 +12,15 @@ import { Tile } from "./Tile";
     antialias: true,
   });
 
+  // Create a new layout for the stage, that will
+  // fill the entire screen and center the content
+  app.stage.layout = {
+    width: app.screen.width,
+    height: app.screen.height,
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
@@ -19,6 +29,13 @@ import { Tile } from "./Tile";
   app.stage.hitArea = app.screen;
 
   const boardContainer = new Board();
+  boardContainer.layout = {
+    isLeaf: true,
+    //flexGrow: 1,
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignContent: "center",
+  };
   app.stage.addChild(boardContainer);
 
   // create 3 interactive, draggable Tiles
@@ -32,11 +49,4 @@ import { Tile } from "./Tile";
   boardContainer.addChild(g);
   boardContainer.addChild(b);
   boardContainer.addChild(c);
-
-  const onResize = () => {
-    boardContainer.resize(app.screen.width, app.screen.height);
-  };
-
-  addEventListener("resize", onResize);
-  onResize();
 })();
