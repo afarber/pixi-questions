@@ -1,0 +1,24 @@
+{
+  "name": "drag-tiles-layout",
+  "version": "1.0.0",
+  "description": "mkdir drag-tiles-layout\r     cd drag-tiles-layout\r     npm init -y\r     npm install pixi.js @pixi/ui @pixi/layout @tweenjs/tween.js\r     npm install vite --save-dev\r     npx vite (or add entries to package.json \"scripts\" and: npm run dev)",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pixi/layout": "^3.0.2",
+    "@pixi/ui": "^2.2.3",
+    "@tweenjs/tween.js": "^25.0.0",
+    "pixi.js": "^8.9.2"
+  },
+  "devDependencies": {
+    "vite": "^6.3.4"
+  }
+}

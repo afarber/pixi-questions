@@ -15,6 +15,10 @@ Screenshots
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-3d-effect/screenshot.gif)
 
+[drag-tiles-layout](https://github.com/afarber/pixi-questions/tree/master/drag-tiles-layout) same as above, but using PixiJS layout
+
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-layout/screenshot.gif)
+
 [playing-cards-3d-effect](https://github.com/afarber/pixi-questions/tree/master/playing-cards-3d-effect) with draggable SVG cards created by [Adrian Kennard](https://www.me.uk/cards/)
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
