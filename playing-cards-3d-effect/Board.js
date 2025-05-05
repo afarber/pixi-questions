@@ -1,4 +1,4 @@
-import { Container, Graphics, Point } from "pixi.js";
+import { Container, FillGradient, Graphics, Point } from "pixi.js";
 import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
 
 // Number of cells in the board
@@ -15,17 +15,22 @@ export class Board extends Container {
   }
 
   createBackground() {
-    const g = new Graphics();
-    g.setFillStyle({ color: "BlanchedAlmond" });
+    const radialGradient = new FillGradient({
+      type: "radial",
+      center: { x: 0.5, y: 0.5 },
+      innerRadius: 0,
+      outerCenter: { x: 0.5, y: 0.5 },
+      outerRadius: 0.5,
+      colorStops: [
+        { offset: 0, color: "BlanchedAlmond" }, // Center color
+        { offset: 1, color: "DarkKhaki" }, // Edge color
+      ],
+      // Use normalized coordinate system where (0,0) is the top-left and (1,1) is the bottom-right of the shape
+      textureSpace: "local",
+    });
 
-    for (let i = 0; i < NUM_CELLS; i++) {
-      for (let j = 0; j < NUM_CELLS; j++) {
-        if ((i + j) % 2 === 0) {
-          g.rect(i * CARD_WIDTH, j * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
-          g.fill();
-        }
-      }
-    }
+    console.log(this.width, this.height);
+    const g = new Graphics().rect(0, 0, 400, 300).fill(radialGradient);
 
     return g;
   }

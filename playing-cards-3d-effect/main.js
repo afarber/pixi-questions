@@ -19,8 +19,6 @@ import { Board } from "./Board";
 
   const spriteSheet = await Assets.load("playing-cards.json");
 
-  console.log(spriteSheet);
-
   const boardContainer = new Board(app.stage);
   app.stage.addChild(boardContainer);
 
