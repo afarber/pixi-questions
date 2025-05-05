@@ -33,8 +33,7 @@ import { Tile } from "./Tile";
     isLeaf: true,
     //flexGrow: 1,
     aspectRatio: 1,
-    justifyContent: "center",
-    alignContent: "center",
+    objectFit: "contain",
   };
   app.stage.addChild(boardContainer);
 
@@ -49,4 +48,12 @@ import { Tile } from "./Tile";
   boardContainer.addChild(g);
   boardContainer.addChild(b);
   boardContainer.addChild(c);
+
+  const onResize = () => {
+    app.stage.layout.width = app.screen.width;
+    app.stage.layout.height = app.screen.height;
+  };
+
+  addEventListener("resize", onResize);
+  onResize();
 })();
