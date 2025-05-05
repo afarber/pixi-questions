@@ -25,8 +25,8 @@ import { Board } from "./Board";
   app.stage.addChild(boardContainer);
 
   // Create interactive, draggable cards with random positions and angle
-  for (const key of Object.keys(spriteSheet.textures)) {
-    boardContainer.createRandomCard(spriteSheet, key);
+  for (const textureKey of Object.keys(spriteSheet.textures)) {
+    boardContainer.createRandomCard(spriteSheet, textureKey);
   }
 
   const onResize = () => {

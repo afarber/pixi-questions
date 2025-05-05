@@ -14,7 +14,7 @@ const NUM_VERTICES = 40;
 const TILT_ANGLE = 5;
 
 export class Card extends Container {
-  constructor(spriteSheet, spriteKey, cardX, cardY, cardAngle, stage) {
+  constructor(spriteSheet, textureKey, cardX, cardY, cardAngle, stage) {
     super();
 
     // the 4 corners of the tile in local coordinates, clockwise
@@ -31,7 +31,7 @@ export class Card extends Container {
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
 
-    const texture = spriteSheet.textures[spriteKey];
+    const texture = spriteSheet.textures[textureKey];
 
     if (stage instanceof Container) {
       this.setupDraggable(stage, texture);
