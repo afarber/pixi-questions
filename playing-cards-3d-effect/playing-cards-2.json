@@ -1,0 +1,975 @@
+{
+  "frames": {
+    "playing-cards-png-2/1B": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/2B": {
+      "frame": {
+        "x": 0,
+        "y": 350,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/3B": {
+      "frame": {
+        "x": 0,
+        "y": 700,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/4B": {
+      "frame": {
+        "x": 0,
+        "y": 1050,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/6C": {
+      "frame": {
+        "x": 0,
+        "y": 1400,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/6D": {
+      "frame": {
+        "x": 0,
+        "y": 1750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/6H": {
+      "frame": {
+        "x": 350,
+        "y": 1750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/6S": {
+      "frame": {
+        "x": 700,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/7C": {
+      "frame": {
+        "x": 250,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/7D": {
+      "frame": {
+        "x": 1050,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/7H": {
+      "frame": {
+        "x": 1400,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/7S": {
+      "frame": {
+        "x": 1750,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/8C": {
+      "frame": {
+        "x": 1750,
+        "y": 350,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/8D": {
+      "frame": {
+        "x": 700,
+        "y": 250,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/8H": {
+      "frame": {
+        "x": 250,
+        "y": 250,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/8S": {
+      "frame": {
+        "x": 1050,
+        "y": 250,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/9C": {
+      "frame": {
+        "x": 1400,
+        "y": 250,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/9D": {
+      "frame": {
+        "x": 700,
+        "y": 500,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/9H": {
+      "frame": {
+        "x": 250,
+        "y": 500,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/9S": {
+      "frame": {
+        "x": 1050,
+        "y": 500,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/AC": {
+      "frame": {
+        "x": 1400,
+        "y": 500,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/AD": {
+      "frame": {
+        "x": 1750,
+        "y": 700,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/AH": {
+      "frame": {
+        "x": 250,
+        "y": 1050,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/AS": {
+      "frame": {
+        "x": 250,
+        "y": 1400,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/JC": {
+      "frame": {
+        "x": 250,
+        "y": 750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/JD": {
+      "frame": {
+        "x": 500,
+        "y": 1050,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/JH": {
+      "frame": {
+        "x": 500,
+        "y": 1400,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/JS": {
+      "frame": {
+        "x": 750,
+        "y": 1400,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/KC": {
+      "frame": {
+        "x": 750,
+        "y": 1050,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/KD": {
+      "frame": {
+        "x": 700,
+        "y": 1750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/KH": {
+      "frame": {
+        "x": 600,
+        "y": 750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/KS": {
+      "frame": {
+        "x": 950,
+        "y": 750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/QC": {
+      "frame": {
+        "x": 1300,
+        "y": 750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/QD": {
+      "frame": {
+        "x": 1000,
+        "y": 1050,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/QH": {
+      "frame": {
+        "x": 1000,
+        "y": 1400,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/QS": {
+      "frame": {
+        "x": 1050,
+        "y": 1750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/TC": {
+      "frame": {
+        "x": 1400,
+        "y": 1000,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/TD": {
+      "frame": {
+        "x": 1750,
+        "y": 1050,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/TH": {
+      "frame": {
+        "x": 1250,
+        "y": 1400,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "playing-cards-png-2/TS": {
+      "frame": {
+        "x": 1400,
+        "y": 1750,
+        "w": 250,
+        "h": 350
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 350
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 350
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "texture.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2000,
+      "h": 2000
+    },
+    "scale": 1
+  }
+}

@@ -18,9 +18,9 @@ import { Tween, Easing } from "@tweenjs/tween.js";
   app.stage.addChild(boardContainer);
 
   // create 3 interactive, draggable Tiles with initial off-screen position
-  const r = new Tile("Red", -3, -3, -30, app.stage);
-  const g = new Tile("Green", -3, -3, 0, app.stage);
-  const b = new Tile("Blue", -3, -3, 80, app.stage);
+  const r = new Tile("Red", 3, 3, -30, app.stage);
+  const g = new Tile("Green", 4, 3, 0, app.stage);
+  const b = new Tile("Blue", 5, 3, 80, app.stage);
   // create a static, non-draggable Tile
   const c = new Tile("Cyan", 7, 0, 5);
 
@@ -39,16 +39,7 @@ import { Tween, Easing } from "@tweenjs/tween.js";
   console.log("__NO__");
   console.log("__CANCEL__");
 
-  const rTween = createTileTween(r, finalPositions.r, Easing.Bounce.Out, 300);
-  const gTween = createTileTween(g, finalPositions.g, Easing.Elastic.Out, 600);
-  const bTween = createTileTween(b, finalPositions.b, Easing.Back.Out, 900);
-
   app.ticker.add((time) => {
-    // Update all tweens
-    rTween.update();
-    gTween.update();
-    bTween.update();
-
     bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
@@ -77,33 +68,4 @@ function createLabel() {
   label.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.anchor.set(0.5);
   return label;
-}
-
-// Define final positions for the tiles
-const finalPositions = {
-  r: { x: (3 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: -30 },
-  g: { x: (4 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 0 },
-  b: { x: (5 + 0.5) * TILE_SIZE, y: (3 + 0.5) * TILE_SIZE, angle: 80 },
-};
-
-function createTileTween(tile, final, easingFn, delay) {
-  return new Tween({ x: tile.x, y: tile.y, angle: 0, scale: 0 })
-    .to(
-      {
-        x: final.x,
-        y: final.y,
-        angle: final.angle,
-        scale: 1,
-      },
-      1200
-    )
-    .easing(easingFn)
-    .onUpdate((props) => {
-      tile.x = props.x;
-      tile.y = props.y;
-      tile.angle = props.angle;
-      tile.scale.set(props.scale);
-    })
-    .delay(delay)
-    .start();
 }
