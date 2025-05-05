@@ -19,13 +19,15 @@ import { Board } from "./Board";
 
   const spriteSheet = await Assets.load("playing-cards.json");
 
+  console.log(spriteSheet);
+
   const boardContainer = new Board(app.stage);
   app.stage.addChild(boardContainer);
 
-  // Create 3 interactive, draggable cards with random positions and angle
-  boardContainer.createRandomCard(spriteSheet, "TC");
-  boardContainer.createRandomCard(spriteSheet, "JH");
-  boardContainer.createRandomCard(spriteSheet, "QS");
+  // Create interactive, draggable cards with random positions and angle
+  for (const key of Object.keys(spriteSheet.textures)) {
+    boardContainer.createRandomCard(spriteSheet, key);
+  }
 
   const onResize = () => {
     boardContainer.resize(app.screen.width, app.screen.height);

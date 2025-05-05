@@ -9,7 +9,7 @@ const SHADOW_COLOR = "Black";
 const SHADOW_ALPHA = 0.1;
 const SHADOW_OFFSET = new Point(12, 8);
 
-const PERSPECTIVE = 300;
+const PERSPECTIVE = 400;
 const NUM_VERTICES = 40;
 const TILT_ANGLE = 5;
 

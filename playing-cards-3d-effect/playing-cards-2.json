@@ -1,6 +1,6 @@
 {
   "frames": {
-    "playing-cards-png-2/1B": {
+    "1B": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -24,7 +24,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/2B": {
+    "2B": {
       "frame": {
         "x": 0,
         "y": 350,
@@ -48,7 +48,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/3B": {
+    "3B": {
       "frame": {
         "x": 0,
         "y": 700,
@@ -72,7 +72,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/4B": {
+    "4B": {
       "frame": {
         "x": 0,
         "y": 1050,
@@ -96,7 +96,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/6C": {
+    "6C": {
       "frame": {
         "x": 0,
         "y": 1400,
@@ -120,7 +120,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/6D": {
+    "6D": {
       "frame": {
         "x": 0,
         "y": 1750,
@@ -144,7 +144,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/6H": {
+    "6H": {
       "frame": {
         "x": 350,
         "y": 1750,
@@ -168,7 +168,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/6S": {
+    "6S": {
       "frame": {
         "x": 700,
         "y": 0,
@@ -192,7 +192,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/7C": {
+    "7C": {
       "frame": {
         "x": 250,
         "y": 0,
@@ -216,7 +216,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/7D": {
+    "7D": {
       "frame": {
         "x": 1050,
         "y": 0,
@@ -240,7 +240,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/7H": {
+    "7H": {
       "frame": {
         "x": 1400,
         "y": 0,
@@ -264,7 +264,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/7S": {
+    "7S": {
       "frame": {
         "x": 1750,
         "y": 0,
@@ -288,7 +288,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/8C": {
+    "8C": {
       "frame": {
         "x": 1750,
         "y": 350,
@@ -312,7 +312,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/8D": {
+    "8D": {
       "frame": {
         "x": 700,
         "y": 250,
@@ -336,7 +336,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/8H": {
+    "8H": {
       "frame": {
         "x": 250,
         "y": 250,
@@ -360,7 +360,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/8S": {
+    "8S": {
       "frame": {
         "x": 1050,
         "y": 250,
@@ -384,7 +384,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/9C": {
+    "9C": {
       "frame": {
         "x": 1400,
         "y": 250,
@@ -408,7 +408,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/9D": {
+    "9D": {
       "frame": {
         "x": 700,
         "y": 500,
@@ -432,7 +432,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/9H": {
+    "9H": {
       "frame": {
         "x": 250,
         "y": 500,
@@ -456,7 +456,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/9S": {
+    "9S": {
       "frame": {
         "x": 1050,
         "y": 500,
@@ -480,7 +480,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/AC": {
+    "AC": {
       "frame": {
         "x": 1400,
         "y": 500,
@@ -504,7 +504,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/AD": {
+    "AD": {
       "frame": {
         "x": 1750,
         "y": 700,
@@ -528,7 +528,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/AH": {
+    "AH": {
       "frame": {
         "x": 250,
         "y": 1050,
@@ -552,7 +552,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/AS": {
+    "AS": {
       "frame": {
         "x": 250,
         "y": 1400,
@@ -576,7 +576,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/JC": {
+    "JC": {
       "frame": {
         "x": 250,
         "y": 750,
@@ -600,7 +600,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/JD": {
+    "JD": {
       "frame": {
         "x": 500,
         "y": 1050,
@@ -624,7 +624,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/JH": {
+    "JH": {
       "frame": {
         "x": 500,
         "y": 1400,
@@ -648,7 +648,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/JS": {
+    "JS": {
       "frame": {
         "x": 750,
         "y": 1400,
@@ -672,7 +672,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/KC": {
+    "KC": {
       "frame": {
         "x": 750,
         "y": 1050,
@@ -696,7 +696,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/KD": {
+    "KD": {
       "frame": {
         "x": 700,
         "y": 1750,
@@ -720,7 +720,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/KH": {
+    "KH": {
       "frame": {
         "x": 600,
         "y": 750,
@@ -744,7 +744,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/KS": {
+    "KS": {
       "frame": {
         "x": 950,
         "y": 750,
@@ -768,7 +768,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/QC": {
+    "QC": {
       "frame": {
         "x": 1300,
         "y": 750,
@@ -792,7 +792,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/QD": {
+    "QD": {
       "frame": {
         "x": 1000,
         "y": 1050,
@@ -816,7 +816,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/QH": {
+    "QH": {
       "frame": {
         "x": 1000,
         "y": 1400,
@@ -840,7 +840,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/QS": {
+    "QS": {
       "frame": {
         "x": 1050,
         "y": 1750,
@@ -864,7 +864,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/TC": {
+    "TC": {
       "frame": {
         "x": 1400,
         "y": 1000,
@@ -888,7 +888,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/TD": {
+    "TD": {
       "frame": {
         "x": 1750,
         "y": 1050,
@@ -912,7 +912,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/TH": {
+    "TH": {
       "frame": {
         "x": 1250,
         "y": 1400,
@@ -936,7 +936,7 @@
         "y": 0.5
       }
     },
-    "playing-cards-png-2/TS": {
+    "TS": {
       "frame": {
         "x": 1400,
         "y": 1750,
@@ -962,9 +962,7 @@
     }
   },
   "meta": {
-    "app": "http://free-tex-packer.com",
-    "version": "0.6.7",
-    "image": "texture.png",
+    "image": "playing-cards-2.png",
     "format": "RGBA8888",
     "size": {
       "w": 2000,
