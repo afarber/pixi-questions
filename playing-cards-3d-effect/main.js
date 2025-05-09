@@ -1,4 +1,4 @@
-import { Application, Assets } from "pixi.js";
+import { Application, Assets, TexturePool } from "pixi.js";
 import { Board } from "./Board";
 
 (async () => {
@@ -7,7 +7,7 @@ import { Board } from "./Board";
     background: "DarkKhaki",
     resizeTo: window,
     antialias: true,
-    hello: true,
+    hello: true
   });
 
   // append the app canvas to the document body
@@ -16,6 +16,8 @@ import { Board } from "./Board";
   // the app stage will handle the move events
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
+
+  TexturePool.textureOptions.scaleMode = "nearest";
 
   const spriteSheet = await Assets.load("playing-cards.json");
 
