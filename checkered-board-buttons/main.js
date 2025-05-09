@@ -1,8 +1,7 @@
 import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
-import { Button } from "@pixi/ui";
+import { FancyButton } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
-import { Tween, Easing } from "@tweenjs/tween.js";
 
 (async () => {
   const app = new Application();
@@ -36,11 +35,77 @@ import { Tween, Easing } from "@tweenjs/tween.js";
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const button = new Button(
-    new Graphics().roundRect(0, 0, 100, 50, 15).fill("white")
-  );
+  const manifest = {
+    bundles: [
+      {
+        name: "ui-assets",
+        assets: [
+          {
+            alias: "button-large",
+            src: "./assets/button-large.png"
+          },
+          {
+            alias: "button-large-hover",
+            src: "./assets/button-large-hover.png"
+          },
+          {
+            alias: "button-large-press",
+            src: "./assets/button-large-press.png"
+          },
+          {
+            alias: "button-small",
+            src: "./assets/button-small.png"
+          },
+          {
+            alias: "button-small-hover",
+            src: "./assets/button-small-hover.png"
+          },
+          {
+            alias: "button-small-press",
+            src: "./assets/button-small-press.png"
+          }
+        ]
+      }
+    ]
+  };
 
-  button.onPress.connect(() => console.log("onPress"));
+  await Assets.init({ manifest: manifest });
+  await Assets.loadBundle("ui-assets");
+  console.log("Assets loaded");
+
+  const button = new FancyButton({
+    defaultView: "button-large",
+    hoverView: "button-large-hover",
+    pressedView: "button-large-press",
+    width: 301,
+    height: 112,
+    anchor: 0.5,
+    x: app.screen.width / 2,
+    y: app.screen.height / 2,
+    text: "Click me!",
+    animations: {
+      hover: {
+        props: {
+          scale: {
+            x: 1.1,
+            y: 1.1
+          }
+        },
+        duration: 100
+      },
+      pressed: {
+        props: {
+          scale: {
+            x: 0.9,
+            y: 0.9
+          }
+        },
+        duration: 100
+      }
+    }
+  });
+
+  button.onPress.connect(() => console.log("Button pressed!"));
   app.stage.addChild(button.view);
 
   console.log("__YES__");
