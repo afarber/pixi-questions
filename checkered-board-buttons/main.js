@@ -70,13 +70,13 @@ import { Tile, TILE_SIZE } from "./Tile";
   };
 
   await Assets.init({ manifest: manifest });
-  await Assets.loadBundle("ui-assets");
+  const uiAssets = await Assets.loadBundle("ui-assets");
   console.log("Assets loaded");
 
   const button = new FancyButton({
-    defaultView: "button-large",
-    hoverView: "button-large-hover",
-    pressedView: "button-large-press",
+    defaultView: uiAssets["button-large"],
+    hoverView: uiAssets["button-large-hover"],
+    pressedView: uiAssets["button-large-press"],
     width: 301,
     height: 112,
     anchor: 0.5,
