@@ -14,6 +14,10 @@ import { Tile, TILE_SIZE } from "./Tile";
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
+  await Assets.init({ manifest: "./manifest.json" });
+  const animalsAssets = await Assets.loadBundle("animals");
+  const uiAssets = await Assets.loadBundle("ui-assets");
+
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
 
@@ -29,60 +33,21 @@ import { Tile, TILE_SIZE } from "./Tile";
   boardContainer.addChild(b);
   boardContainer.addChild(c);
 
-  //const bunny = await createBunny();
-  //boardContainer.addChild(bunny);
+  const bunny = await createBunny("bunny");
+  boardContainer.addChild(bunny);
 
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const manifest = {
-    bundles: [
-      {
-        name: "ui-assets",
-        assets: [
-          {
-            alias: "button-large",
-            src: "./assets/button-large.png"
-          },
-          {
-            alias: "button-large-hover",
-            src: "./assets/button-large-hover.png"
-          },
-          {
-            alias: "button-large-press",
-            src: "./assets/button-large-press.png"
-          },
-          {
-            alias: "button-small",
-            src: "./assets/button-small.png"
-          },
-          {
-            alias: "button-small-hover",
-            src: "./assets/button-small-hover.png"
-          },
-          {
-            alias: "button-small-press",
-            src: "./assets/button-small-press.png"
-          }
-        ]
-      }
-    ]
-  };
-
-  await Assets.init({ manifest: manifest });
-  const uiAssets = await Assets.loadBundle("ui-assets");
-  console.log("Assets loaded", uiAssets);
-
   const button = new FancyButton({
-    defaultView: new Sprite(uiAssets["button-large"]),
-    hoverView: new Sprite(uiAssets["button-large-hover"]),
-    pressedView: new Sprite(uiAssets["button-large-press"]),
+    defaultView: "button-large",
+    hoverView: "button-large-hover",
+    pressedView: "button-large-press",
     width: 301,
     height: 112,
     anchor: 0.5,
-    x: app.screen.width / 2,
-    y: app.screen.height / 2,
-    text: "Click me!",
+    text: "Click me!"
+    /*
     animations: {
       hover: {
         props: {
@@ -103,35 +68,34 @@ import { Tile, TILE_SIZE } from "./Tile";
         duration: 100
       }
     }
+    */
   });
 
   button.onPress.connect(() => console.log("Button pressed!"));
-  console.log("Button", button);
-
-  console.log("Button view", button.view);
-  app.stage.addChild(button.view);
+  app.stage.addChild(button);
 
   console.log("__YES__");
   console.log("__NO__");
   console.log("__CANCEL__");
 
   app.ticker.add((time) => {
-    //  bunny.rotation += 0.05 * time.deltaTime;
+    bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
   });
 
   const onResize = () => {
     boardContainer.resize(app.screen.width, app.screen.height);
+    button.x = app.screen.width - button.width / 2;
+    button.y = app.screen.height / 2;
   };
 
   addEventListener("resize", onResize);
   onResize();
 })();
 
-async function createBunny() {
-  const texture = await Assets.load("https://pixijs.com/assets/bunny.png");
-  const bunny = new Sprite(texture);
+async function createBunny(textureAlias) {
+  const bunny = Sprite.from(textureAlias);
   bunny.anchor.set(0.5);
   bunny.x = TILE_SIZE / 2;
   bunny.y = TILE_SIZE / 2;

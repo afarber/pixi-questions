@@ -1,0 +1,42 @@
+{
+  "bundles": [
+    {
+      "name": "animals",
+      "assets": [
+        {
+          "alias": "bunny",
+          "src": "https://pixijs.com/assets/bunny.png"
+        }
+      ]
+    },
+    {
+      "name": "ui-assets",
+      "assets": [
+        {
+          "alias": "button-large",
+          "src": "./assets/button-large.png"
+        },
+        {
+          "alias": "button-large-hover",
+          "src": "./assets/button-large-hover.png"
+        },
+        {
+          "alias": "button-large-press",
+          "src": "./assets/button-large-press.png"
+        },
+        {
+          "alias": "button-small",
+          "src": "./assets/button-small.png"
+        },
+        {
+          "alias": "button-small-hover",
+          "src": "./assets/button-small-hover.png"
+        },
+        {
+          "alias": "button-small-press",
+          "src": "./assets/button-small-press.png"
+        }
+      ]
+    }
+  ]
+}
