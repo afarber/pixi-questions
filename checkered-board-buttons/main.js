@@ -29,8 +29,8 @@ import { Tile, TILE_SIZE } from "./Tile";
   boardContainer.addChild(b);
   boardContainer.addChild(c);
 
-  const bunny = await createBunny();
-  boardContainer.addChild(bunny);
+  //const bunny = await createBunny();
+  //boardContainer.addChild(bunny);
 
   const label = createLabel();
   boardContainer.addChild(label);
@@ -71,12 +71,12 @@ import { Tile, TILE_SIZE } from "./Tile";
 
   await Assets.init({ manifest: manifest });
   const uiAssets = await Assets.loadBundle("ui-assets");
-  console.log("Assets loaded");
+  console.log("Assets loaded", uiAssets);
 
   const button = new FancyButton({
-    defaultView: uiAssets["button-large"],
-    hoverView: uiAssets["button-large-hover"],
-    pressedView: uiAssets["button-large-press"],
+    defaultView: new Sprite(uiAssets["button-large"]),
+    hoverView: new Sprite(uiAssets["button-large-hover"]),
+    pressedView: new Sprite(uiAssets["button-large-press"]),
     width: 301,
     height: 112,
     anchor: 0.5,
@@ -106,6 +106,9 @@ import { Tile, TILE_SIZE } from "./Tile";
   });
 
   button.onPress.connect(() => console.log("Button pressed!"));
+  console.log("Button", button);
+
+  console.log("Button view", button.view);
   app.stage.addChild(button.view);
 
   console.log("__YES__");
@@ -113,7 +116,7 @@ import { Tile, TILE_SIZE } from "./Tile";
   console.log("__CANCEL__");
 
   app.ticker.add((time) => {
-    bunny.rotation += 0.05 * time.deltaTime;
+    //  bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
   });
