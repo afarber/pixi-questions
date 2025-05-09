@@ -1,4 +1,5 @@
-import { Application, Assets, Sprite, Text } from "pixi.js";
+import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
+import { Button } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { Tween, Easing } from "@tweenjs/tween.js";
@@ -34,6 +35,13 @@ import { Tween, Easing } from "@tweenjs/tween.js";
 
   const label = createLabel();
   boardContainer.addChild(label);
+
+  const button = new Button(
+    new Graphics().roundRect(0, 0, 100, 50, 15).fill("white")
+  );
+
+  button.onPress.connect(() => console.log("onPress"));
+  app.stage.addChild(button.view);
 
   console.log("__YES__");
   console.log("__NO__");
