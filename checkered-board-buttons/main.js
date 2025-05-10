@@ -3,6 +3,9 @@ import { FancyButton } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 
+const BUTTON_WIDTH = 200;
+const buttons = [];
+
 (async () => {
   const app = new Application();
   await app.init({ background: "LightSalmon", resizeTo: window, hello: true });
@@ -38,44 +41,10 @@ import { Tile, TILE_SIZE } from "./Tile";
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const button = new FancyButton({
-    defaultView: new Graphics()
-      .roundRect(0, 0, 301, 112, 20)
-      .fill({ color: "BlanchedAlmond" }),
-    hoverView: new Graphics()
-      .roundRect(0, 0, 301, 112, 20)
-      .fill({ color: "LightCoral" }),
-    pressedView: new Graphics()
-      .roundRect(0, 0, 301, 112, 20)
-      .fill({ color: "LightPink" }),
-    disabledView: new Graphics()
-      .roundRect(0, 0, 301, 112, 20)
-      .fill({ color: "LightGray" }),
-    width: 301,
-    height: 112,
-    anchor: 0.5,
-    text: "Click me!",
-
-    animations: {
-      hover: {
-        props: {
-          scale: {
-            x: 1.05,
-            y: 1.05
-          }
-        },
-        duration: 100
-      },
-      pressed: {
-        props: {
-          scale: {
-            x: 0.95,
-            y: 0.95
-          }
-        },
-        duration: 100
-      }
-    }
+  const button = createButton({
+    width: BUTTON_WIDTH,
+    height: 50,
+    text: "Click me!"
   });
 
   button.onPress.connect(() => console.log("Button pressed!"));
@@ -116,4 +85,44 @@ function createLabel() {
   label.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.anchor.set(0.5);
   return label;
+}
+
+function createButton(opts) {
+  const button = new FancyButton({
+    defaultView: new Graphics()
+      .roundRect(0, 0, opts.width, opts.height, 20)
+      .fill({ color: "BlanchedAlmond" }),
+    hoverView: new Graphics()
+      .roundRect(0, 0, opts.width, opts.height, 20)
+      .fill({ color: "LightCoral" }),
+    pressedView: new Graphics()
+      .roundRect(0, 0, opts.width, opts.height, 20)
+      .fill({ color: "LightPink" }),
+    width: opts.width,
+    height: opts.height,
+    anchor: 0.5,
+    text: opts.text,
+    animations: {
+      hover: {
+        props: {
+          scale: {
+            x: 1.05,
+            y: 1.05
+          }
+        },
+        duration: 100
+      },
+      pressed: {
+        props: {
+          scale: {
+            x: 0.95,
+            y: 0.95
+          }
+        },
+        duration: 100
+      }
+    }
+  });
+
+  return button;
 }
