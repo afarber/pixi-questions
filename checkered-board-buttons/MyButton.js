@@ -1,6 +1,9 @@
 import { Graphics } from "pixi.js";
 import { FancyButton } from "@pixi/ui";
-import { Tween, Easing } from "@tweenjs/tween.js";
+import { Group, Easing, Tween } from "@tweenjs/tween.js";
+
+// Create a shared tween group for all buttons
+export const buttonsTweenGroup = new Group();
 
 export const MY_BUTTON_WIDTH = 200;
 export const MY_BUTTON_HEIGHT = 60;
@@ -58,6 +61,77 @@ export class MyButton extends FancyButton {
         }
       }
     });
+
+    this.activeTween = null;
+
+    this.onHover.connect(this.handleHover.bind(this));
+    this.onDown.connect(this.handleDown.bind(this));
+    this.onUp.connect(this.handleUp.bind(this));
+    this.on("pointerupoutside", this.handleUp.bind(this));
+    this.on("pointerout", this.handleUp.bind(this));
+  }
+
+  handleHover() {
+    //sfx.play("common/sfx-hover.wav");
+  }
+
+  handleDown() {
+    //sfx.play("common/sfx-press.wav");
+  }
+
+  handleUp() {}
+
+  async show(animated = true) {
+    // Cancel any running tween on this object
+    if (this.activeTween) {
+      this.activeTween.stop();
+      this.activeTween = null;
+    }
+
+    this.visible = true;
+    if (animated) {
+      this.scale.set(0, 0);
+
+      return new Promise((resolve) => {
+        this.activeTween = new Tween(this.scale, buttonsTweenGroup)
+          .to({ x: 1, y: 1 }, 300) // 300ms = 0.3 seconds
+          .easing(Easing.Back.Out)
+          .onComplete(() => {
+            this.activeTween = null;
+            resolve();
+          })
+          .start();
+      });
+    } else {
+      this.scale.set(1, 1);
+      return Promise.resolve();
+    }
+  }
+
+  async hide(animated = true) {
+    // Cancel any running tween on this object
+    if (this.activeTween) {
+      this.activeTween.stop();
+      this.activeTween = null;
+    }
+
+    if (animated) {
+      return new Promise((resolve) => {
+        this.activeTween = new Tween(this.scale, buttonsTweenGroup)
+          .to({ x: 0, y: 0 }, 300) // 300ms = 0.3 seconds
+          .easing(Easing.Back.In)
+          .onComplete(() => {
+            this.visible = false;
+            this.activeTween = null;
+            resolve();
+          })
+          .start();
+      });
+    } else {
+      this.scale.set(0, 0);
+      this.visible = false;
+      return Promise.resolve();
+    }
   }
 }
 

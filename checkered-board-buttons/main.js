@@ -1,7 +1,7 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
-import { MyButton, MY_BUTTON_WIDTH } from "./MyButton";
+import { MyButton, MY_BUTTON_WIDTH, buttonsTweenGroup } from "./MyButton";
 
 const PADDING = 8;
 const RIGHT_BUTTONS_NUM = 10;
@@ -51,6 +51,9 @@ const rightButtons = [];
     button.enabled = i % 4 !== 1;
     app.stage.addChild(button);
 
+    button.hide();
+    button.show();
+
     rightButtons.push(button);
   }
 
@@ -59,6 +62,8 @@ const rightButtons = [];
   console.log("__CANCEL__");
 
   app.ticker.add((time) => {
+    buttonsTweenGroup.update();
+
     bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
