@@ -6,6 +6,7 @@ import { Tile, TILE_SIZE } from "./Tile";
 const PADDING = 8;
 const RIGHT_BUTTONS_NUM = 10;
 const RIGHT_BUTTON_WIDTH = 200;
+const RIGHT_BUTTONS_HEIGHT = 60;
 const rightButtons = [];
 
 (async () => {
@@ -46,7 +47,7 @@ const rightButtons = [];
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = createButton({
       width: RIGHT_BUTTON_WIDTH,
-      height: 50,
+      height: RIGHT_BUTTONS_HEIGHT,
       text: `Button ${i + 1}`
     });
 
@@ -80,7 +81,7 @@ const rightButtons = [];
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
       button.x = app.screen.width - RIGHT_BUTTON_WIDTH / 2 - PADDING;
-      button.y = (PADDING + newButtonHeight / 2) * i;
+      button.y = PADDING * (i + 1) + newButtonHeight * (i + 0.5);
     }
   };
 
