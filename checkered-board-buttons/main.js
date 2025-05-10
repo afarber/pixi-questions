@@ -3,8 +3,10 @@ import { FancyButton } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 
-const BUTTON_WIDTH = 200;
-const buttons = [];
+const PADDING = 8;
+const RIGHT_BUTTONS_NUM = 10;
+const RIGHT_BUTTON_WIDTH = 200;
+const rightButtons = [];
 
 (async () => {
   const app = new Application();
@@ -41,15 +43,19 @@ const buttons = [];
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const button = createButton({
-    width: BUTTON_WIDTH,
-    height: 50,
-    text: "Click me!"
-  });
+  for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
+    const button = createButton({
+      width: RIGHT_BUTTON_WIDTH,
+      height: 50,
+      text: `Button ${i + 1}`
+    });
 
-  button.onPress.connect(() => console.log("Button pressed!"));
-  //button.enabled = false;
-  app.stage.addChild(button);
+    button.onPress.connect(() => console.log("Button pressed!"));
+    button.enabled = i % 4 !== 1;
+    app.stage.addChild(button);
+
+    rightButtons.push(button);
+  }
 
   console.log("__YES__");
   console.log("__NO__");
@@ -62,9 +68,20 @@ const buttons = [];
   });
 
   const onResize = () => {
-    boardContainer.resize(app.screen.width, app.screen.height);
-    button.x = app.screen.width - button.width / 2;
-    button.y = app.screen.height / 2;
+    boardContainer.resize(
+      app.screen.width - RIGHT_BUTTON_WIDTH - 2 * PADDING,
+      app.screen.height
+    );
+
+    const newButtonHeight =
+      (app.screen.height - PADDING * (RIGHT_BUTTONS_NUM + 1)) /
+      RIGHT_BUTTONS_NUM;
+
+    for (let i = 0; i < rightButtons.length; i++) {
+      const button = rightButtons[i];
+      button.x = app.screen.width - RIGHT_BUTTON_WIDTH / 2 - PADDING;
+      button.y = (PADDING + newButtonHeight / 2) * i;
+    }
   };
 
   addEventListener("resize", onResize);
@@ -98,6 +115,9 @@ function createButton(opts) {
     pressedView: new Graphics()
       .roundRect(0, 0, opts.width, opts.height, 20)
       .fill({ color: "LightPink" }),
+    disabledView: new Graphics()
+      .roundRect(0, 0, opts.width, opts.height, 20)
+      .fill({ color: "LightGray" }),
     width: opts.width,
     height: opts.height,
     anchor: 0.5,
