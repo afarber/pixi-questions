@@ -1,12 +1,10 @@
-import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
-import { FancyButton } from "@pixi/ui";
+import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
+import { MyButton, MY_BUTTON_WIDTH } from "./MyButton";
 
 const PADDING = 8;
 const RIGHT_BUTTONS_NUM = 10;
-const RIGHT_BUTTON_WIDTH = 200;
-const RIGHT_BUTTONS_HEIGHT = 60;
 const rightButtons = [];
 
 (async () => {
@@ -21,7 +19,7 @@ const rightButtons = [];
   app.stage.hitArea = app.screen;
 
   await Assets.init({ manifest: "./manifest.json" });
-  const animalsAssets = await Assets.loadBundle("animals");
+  await Assets.loadBundle("animals");
 
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
@@ -45,9 +43,7 @@ const rightButtons = [];
   boardContainer.addChild(label);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
-    const button = createButton({
-      width: RIGHT_BUTTON_WIDTH,
-      height: RIGHT_BUTTONS_HEIGHT,
+    const button = new MyButton({
       text: `Button ${i + 1}`
     });
 
@@ -70,7 +66,7 @@ const rightButtons = [];
 
   const onResize = () => {
     boardContainer.resize(
-      app.screen.width - RIGHT_BUTTON_WIDTH - 2 * PADDING,
+      app.screen.width - MY_BUTTON_WIDTH - 2 * PADDING,
       app.screen.height
     );
 
@@ -80,7 +76,7 @@ const rightButtons = [];
 
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
-      button.x = app.screen.width - RIGHT_BUTTON_WIDTH / 2 - PADDING;
+      button.x = app.screen.width - MY_BUTTON_WIDTH / 2 - PADDING;
       button.y = PADDING * (i + 1) + newButtonHeight * (i + 0.5);
     }
   };
@@ -103,47 +99,4 @@ function createLabel() {
   label.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.anchor.set(0.5);
   return label;
-}
-
-function createButton(opts) {
-  const button = new FancyButton({
-    defaultView: new Graphics()
-      .roundRect(0, 0, opts.width, opts.height, 20)
-      .fill({ color: "BlanchedAlmond" }),
-    hoverView: new Graphics()
-      .roundRect(0, 0, opts.width, opts.height, 20)
-      .fill({ color: "LightCoral" }),
-    pressedView: new Graphics()
-      .roundRect(0, 0, opts.width, opts.height, 20)
-      .fill({ color: "LightPink" }),
-    disabledView: new Graphics()
-      .roundRect(0, 0, opts.width, opts.height, 20)
-      .fill({ color: "LightGray" }),
-    width: opts.width,
-    height: opts.height,
-    anchor: 0.5,
-    text: opts.text,
-    animations: {
-      hover: {
-        props: {
-          scale: {
-            x: 1.05,
-            y: 1.05
-          }
-        },
-        duration: 100
-      },
-      pressed: {
-        props: {
-          scale: {
-            x: 0.95,
-            y: 0.95
-          }
-        },
-        duration: 100
-      }
-    }
-  });
-
-  return button;
 }
