@@ -9,4 +9,4 @@
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/checkered-board-buttons/screenshot.gif)
 
-The assets and the large and small buttons are from the MIT-licensed [pixijs/open-games](https://github.com/pixijs/open-games/)
+The sounds are CC0-licensed [Interface Sounds](https://kenney.nl/assets/interface-sounds) by Kenney

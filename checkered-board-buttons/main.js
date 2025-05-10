@@ -16,7 +16,6 @@ import { Tile, TILE_SIZE } from "./Tile";
 
   await Assets.init({ manifest: "./manifest.json" });
   const animalsAssets = await Assets.loadBundle("animals");
-  const uiAssets = await Assets.loadBundle("ui-assets");
 
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
@@ -40,20 +39,29 @@ import { Tile, TILE_SIZE } from "./Tile";
   boardContainer.addChild(label);
 
   const button = new FancyButton({
-    defaultView: "button-large",
-    hoverView: "button-large-hover",
-    pressedView: "button-large-press",
+    defaultView: new Graphics()
+      .roundRect(0, 0, 301, 112, 20)
+      .fill({ color: "BlanchedAlmond" }),
+    hoverView: new Graphics()
+      .roundRect(0, 0, 301, 112, 20)
+      .fill({ color: "LightCoral" }),
+    pressedView: new Graphics()
+      .roundRect(0, 0, 301, 112, 20)
+      .fill({ color: "LightPink" }),
+    disabledView: new Graphics()
+      .roundRect(0, 0, 301, 112, 20)
+      .fill({ color: "LightGray" }),
     width: 301,
     height: 112,
     anchor: 0.5,
-    text: "Click me!"
-    /*
+    text: "Click me!",
+
     animations: {
       hover: {
         props: {
           scale: {
-            x: 1.1,
-            y: 1.1
+            x: 1.05,
+            y: 1.05
           }
         },
         duration: 100
@@ -61,17 +69,17 @@ import { Tile, TILE_SIZE } from "./Tile";
       pressed: {
         props: {
           scale: {
-            x: 0.9,
-            y: 0.9
+            x: 0.95,
+            y: 0.95
           }
         },
         duration: 100
       }
     }
-    */
   });
 
   button.onPress.connect(() => console.log("Button pressed!"));
+  //button.enabled = false;
   app.stage.addChild(button);
 
   console.log("__YES__");

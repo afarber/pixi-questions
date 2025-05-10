@@ -19,3 +19,5 @@ Convert SVG (do not tilt well) to PNG, preserving transparency with:
         png_file="playing-cards-png/${filename%.svg}.png"
         magick -density 75 -background none "$file" "$png_file"
     done
+
+The sounds are CC0-licensed [Casion Audio](https://kenney.nl/assets/casino-audio) by Kenney
