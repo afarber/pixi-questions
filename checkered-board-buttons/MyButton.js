@@ -1,22 +1,27 @@
 import { Graphics } from "pixi.js";
 import { FancyButton } from "@pixi/ui";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
+import {
+  UI_HEIGHT,
+  UI_WIDTH,
+  UI_RADIUS,
+  UI_BACKGROUND_DEFAULT,
+  UI_BACKGROUND_HOVER,
+  UI_BACKGROUND_PRESSED,
+  UI_BACKGROUND_DISABLED
+} from "./Theme";
 
 // Create a shared tween group for all buttons
 export const buttonsTweenGroup = new Group();
-
-export const MY_BUTTON_WIDTH = 200;
-export const MY_BUTTON_HEIGHT = 60;
-export const MY_BUTTON_RADIUS = 20;
 
 // duration of the show/hide animation in milliseconds
 const HIDE_SHOW_DURATION = 200;
 
 const DEFAULT_OPTIONS = {
   text: "",
-  width: MY_BUTTON_WIDTH,
-  height: MY_BUTTON_HEIGHT,
-  radius: MY_BUTTON_RADIUS
+  width: UI_WIDTH,
+  height: UI_HEIGHT,
+  radius: UI_RADIUS
 };
 
 export class MyButton extends FancyButton {
@@ -29,16 +34,16 @@ export class MyButton extends FancyButton {
     super({
       defaultView: new Graphics()
         .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: "SkyBlue" }),
+        .fill({ color: UI_BACKGROUND_DEFAULT }),
       hoverView: new Graphics()
         .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: "LightBlue" }),
+        .fill({ color: UI_BACKGROUND_HOVER }),
       pressedView: new Graphics()
         .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: "LightCoral" }),
+        .fill({ color: UI_BACKGROUND_PRESSED }),
       disabledView: new Graphics()
         .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: "DarkGray" }),
+        .fill({ color: UI_BACKGROUND_DISABLED }),
       width: options.width,
       height: options.height,
       anchor: 0.5,

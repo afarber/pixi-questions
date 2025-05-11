@@ -1,13 +1,16 @@
-import { Application, Assets, Sprite, Text } from "pixi.js";
+import { Application, Assets, Container, Sprite, Text } from "pixi.js";
 import { ScrollBox } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
+import {
+  UI_HEIGHT,
+  UI_WIDTH,
+  UI_RADIUS,
+  UI_PADDING,
+  UI_BACKGROUND
+} from "./Theme";
 
-const PADDING = 8;
-const RADIUS = 20;
-const BUTTON_WIDTH = 200;
-const BUTTON_HEIGHT = 50;
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
 
@@ -47,26 +50,34 @@ const rightButtons = [];
   boardContainer.addChild(label);
 
   const scrollBox = new ScrollBox({
-    background: "BlanchedAlmond",
-    width: BUTTON_WIDTH + 2 * PADDING,
+    background: UI_BACKGROUND,
+    width: UI_WIDTH + 2 * UI_PADDING,
     height: 300,
-    radius: RADIUS,
-    vertPadding: PADDING,
-    elementsMargin: PADDING,
-    padding: PADDING
+    radius: UI_RADIUS,
+    vertPadding: UI_PADDING,
+    elementsMargin: UI_PADDING,
+    padding: UI_PADDING
   });
   app.stage.addChild(scrollBox);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
+    // a parent container for the button,
+    // needed because button anchor is set to 0.5
+    // and thus the scroll box was misplacing it
+    const parentContainer = new Container();
+    parentContainer.width = UI_WIDTH;
+    parentContainer.height = UI_HEIGHT;
+
     const button = new MyButton({
       text: `Game ${i + 1}`
     });
+    button.x = UI_WIDTH / 2;
+    button.y = UI_HEIGHT / 2;
+    button.enabled = i % 4 !== 1;
+    parentContainer.addChild(button);
 
     button.onPress.connect(() => console.log(`Game ${i + 1} pressed!`));
-    button.anchor.set(0);
-    button.animations.hover.props.scale.x = 1;
-    button.animations.hover.props.scale.y = 1;
-    scrollBox.addItem(button);
+    scrollBox.addItem(parentContainer);
   }
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
@@ -94,21 +105,21 @@ const rightButtons = [];
 
   const onResize = () => {
     boardContainer.resize(
-      app.screen.width - BUTTON_WIDTH - 2 * PADDING,
+      app.screen.width - UI_WIDTH - 2 * UI_PADDING,
       app.screen.height
     );
 
-    scrollBox.x = PADDING;
-    scrollBox.y = PADDING;
+    scrollBox.x = UI_PADDING;
+    scrollBox.y = UI_PADDING;
 
     const newButtonHeight =
-      (app.screen.height - PADDING * (RIGHT_BUTTONS_NUM + 1)) /
+      (app.screen.height - UI_PADDING * (RIGHT_BUTTONS_NUM + 1)) /
       RIGHT_BUTTONS_NUM;
 
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
-      button.x = app.screen.width - BUTTON_WIDTH / 2 - PADDING;
-      button.y = PADDING * (i + 1) + newButtonHeight * (i + 0.5);
+      button.x = app.screen.width - UI_WIDTH / 2 - UI_PADDING;
+      button.y = UI_PADDING * (i + 1) + newButtonHeight * (i + 0.5);
       button.hide(false);
       button.show(true, 50);
     }
