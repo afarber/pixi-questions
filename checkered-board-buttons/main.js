@@ -1,5 +1,4 @@
-import { Application, Assets, Container, Sprite, Text } from "pixi.js";
-import { ScrollBox } from "@pixi/ui";
+import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
@@ -10,6 +9,7 @@ import {
   UI_PADDING,
   UI_BACKGROUND
 } from "./Theme";
+import { MyList } from "./MyList";
 
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
@@ -49,36 +49,8 @@ const rightButtons = [];
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const scrollBox = new ScrollBox({
-    background: UI_BACKGROUND,
-    width: UI_WIDTH + 2 * UI_PADDING,
-    height: 300,
-    radius: UI_RADIUS,
-    vertPadding: UI_PADDING,
-    elementsMargin: UI_PADDING,
-    padding: UI_PADDING
-  });
-  app.stage.addChild(scrollBox);
-
-  for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
-    // a parent container for the button,
-    // needed because button anchor is set to 0.5
-    // and thus the scroll box was misplacing it
-    const parentContainer = new Container();
-    parentContainer.width = UI_WIDTH;
-    parentContainer.height = UI_HEIGHT;
-
-    const button = new MyButton({
-      text: `Game ${i + 1}`
-    });
-    button.x = UI_WIDTH / 2;
-    button.y = UI_HEIGHT / 2;
-    button.enabled = i % 4 !== 1;
-    parentContainer.addChild(button);
-
-    button.onPress.connect(() => console.log(`Game ${i + 1} pressed!`));
-    scrollBox.addItem(parentContainer);
-  }
+  const gamesList = new MyList();
+  app.stage.addChild(gamesList);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
@@ -109,8 +81,8 @@ const rightButtons = [];
       app.screen.height
     );
 
-    scrollBox.x = UI_PADDING;
-    scrollBox.y = UI_PADDING;
+    gamesList.x = UI_PADDING;
+    gamesList.y = UI_PADDING;
 
     const newButtonHeight =
       (app.screen.height - UI_PADDING * (RIGHT_BUTTONS_NUM + 1)) /
