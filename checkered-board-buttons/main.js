@@ -9,6 +9,12 @@ import { games } from "./TestData";
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
 
+// TODO: add "New game" button top left
+// TODO: add 4 buttons ("2 letters", "3 letters", etc.) bottom left
+// TODO: add a component to display player avatar in sprite, etc
+// TODO: below such 2 components, add a "Bookmark" text
+// TODO: add "total" (top) and "hint" (bottom) texts
+
 (async () => {
   const app = new Application();
   await app.init({ background: "LightSalmon", resizeTo: window, hello: true });
