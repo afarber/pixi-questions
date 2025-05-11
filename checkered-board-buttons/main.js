@@ -52,6 +52,8 @@ const rightButtons = [];
   const gamesList = new MyList();
   app.stage.addChild(gamesList);
 
+  gamesList.setGames([1, 2, 3], [4, 5], [6, 7, 8, 9]);
+
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
       text: `Button ${i + 1}`

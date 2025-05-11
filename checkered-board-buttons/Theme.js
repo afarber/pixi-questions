@@ -7,3 +7,9 @@ export const UI_BACKGROUND_DEFAULT = "SkyBlue";
 export const UI_BACKGROUND_HOVER = "LightBlue";
 export const UI_BACKGROUND_PRESSED = "LightCoral";
 export const UI_BACKGROUND_DISABLED = "DarkGray";
+export const TITLE_TEXT_STYLE = {
+  fontFamily: "Arial",
+  fontSize: 24,
+  fill: 0xff1010,
+  align: "center"
+};
