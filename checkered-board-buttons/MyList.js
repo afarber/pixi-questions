@@ -1,4 +1,4 @@
-import { Container, Graphics, Text } from "pixi.js";
+import { Container, Text } from "pixi.js";
 import { ScrollBox } from "@pixi/ui";
 import { MyButton } from "./MyButton";
 import {
@@ -58,47 +58,9 @@ export class MyList extends Container {
       }
     }
 
-    if (Array.isArray(yourGames) && yourGames.length > 0) {
-      const sectionTitle = new Text({
-        text: "__YOUR_TURN__",
-        style: TITLE_TEXT_STYLE
-      });
-
-      this.scrollBox.addItem(sectionTitle);
-
-      for (let i = 0; i < yourGames.length; i++) {
-        const parentContainer = this.createParentContainer(yourGames[i]);
-        this.scrollBox.addItem(parentContainer);
-      }
-    }
-
-    if (Array.isArray(opponentGames) && opponentGames.length > 0) {
-      const sectionTitle = new Text({
-        text: "__HIS_TURN__",
-        style: TITLE_TEXT_STYLE
-      });
-
-      this.scrollBox.addItem(sectionTitle);
-
-      for (let i = 0; i < opponentGames.length; i++) {
-        const parentContainer = this.createParentContainer(opponentGames[i]);
-        this.scrollBox.addItem(parentContainer);
-      }
-    }
-
-    if (Array.isArray(finishedGames) && finishedGames.length > 0) {
-      const sectionTitle = new Text({
-        text: "__ARCHIVE__",
-        style: TITLE_TEXT_STYLE
-      });
-
-      this.scrollBox.addItem(sectionTitle);
-
-      for (let i = 0; i < finishedGames.length; i++) {
-        const parentContainer = this.createParentContainer(finishedGames[i]);
-        this.scrollBox.addItem(parentContainer);
-      }
-    }
+    this.createSection("__YOUR_TURN__", yourGames);
+    this.createSection("__HIS_TURN__", opponentGames);
+    this.createSection("__ARCHIVE__", finishedGames);
   }
 
   // Create a parent container for a button.
@@ -118,5 +80,21 @@ export class MyList extends Container {
 
     button.onPress.connect(() => console.log(`Game ${gameId} pressed!`));
     return parentContainer;
+  }
+
+  createSection(title, gameIds) {
+    if (Array.isArray(gameIds) && gameIds.length > 0) {
+      const sectionTitle = new Text({
+        text: title,
+        style: TITLE_TEXT_STYLE
+      });
+
+      this.scrollBox.addItem(sectionTitle);
+
+      for (const gid of gameIds) {
+        const parentContainer = this.createParentContainer(gid);
+        this.scrollBox.addItem(parentContainer);
+      }
+    }
   }
 }
