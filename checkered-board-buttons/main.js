@@ -1,10 +1,13 @@
-import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
+import { Application, Assets, Sprite, Text } from "pixi.js";
 import { ScrollBox } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
-import { MyButton, MY_BUTTON_WIDTH, buttonsTweenGroup } from "./MyButton";
+import { MyButton, buttonsTweenGroup } from "./MyButton";
 
 const PADDING = 8;
+const RADIUS = 20;
+const BUTTON_WIDTH = 200;
+const BUTTON_HEIGHT = 50;
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
 
@@ -44,54 +47,34 @@ const rightButtons = [];
   boardContainer.addChild(label);
 
   const scrollBox = new ScrollBox({
-    background: "LightSalmon",
-    width: 200,
+    background: "BlanchedAlmond",
+    width: BUTTON_WIDTH + 2 * PADDING,
     height: 300,
+    radius: RADIUS,
     vertPadding: PADDING,
     elementsMargin: PADDING,
-    items: [
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray"),
-      new Graphics()
-        .roundRect(0, 0, 200, 50, 20)
-        .fill("SkyBlue")
-        .stroke("DarkGray")
-    ]
+    padding: PADDING
   });
   app.stage.addChild(scrollBox);
+
+  for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
+    const button = new MyButton({
+      text: `Game ${i + 1}`
+    });
+
+    button.onPress.connect(() => console.log(`Game ${i + 1} pressed!`));
+    button.anchor.set(0);
+    button.animations.hover.props.scale.x = 1;
+    button.animations.hover.props.scale.y = 1;
+    scrollBox.addItem(button);
+  }
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
       text: `Button ${i + 1}`
     });
 
-    button.onPress.connect(() => console.log("Button pressed!"));
+    button.onPress.connect(() => console.log(`Button ${i + 1} pressed!`));
     button.enabled = i % 4 !== 1;
     app.stage.addChild(button);
     rightButtons.push(button);
@@ -111,7 +94,7 @@ const rightButtons = [];
 
   const onResize = () => {
     boardContainer.resize(
-      app.screen.width - MY_BUTTON_WIDTH - 2 * PADDING,
+      app.screen.width - BUTTON_WIDTH - 2 * PADDING,
       app.screen.height
     );
 
@@ -124,7 +107,7 @@ const rightButtons = [];
 
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
-      button.x = app.screen.width - MY_BUTTON_WIDTH / 2 - PADDING;
+      button.x = app.screen.width - BUTTON_WIDTH / 2 - PADDING;
       button.y = PADDING * (i + 1) + newButtonHeight * (i + 0.5);
       button.hide(false);
       button.show(true, 50);

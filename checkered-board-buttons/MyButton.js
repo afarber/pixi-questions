@@ -84,7 +84,7 @@ export class MyButton extends FancyButton {
 
   handleUp() {}
 
-  async show(animated = true, delay = 0) {
+  show(animated = true, delay = 0) {
     // Cancel any running tween on this object
     if (this.activeTween) {
       this.activeTween.stop();
@@ -92,52 +92,43 @@ export class MyButton extends FancyButton {
     }
 
     this.visible = true;
-    if (animated) {
-      this.scale.set(0, 0);
 
-      return new Promise((resolve) => {
-        this.activeTween = new Tween(this.scale, buttonsTweenGroup)
-          .delay(delay)
-          .to({ x: 1, y: 1 }, HIDE_SHOW_DURATION)
-          .easing(Easing.Back.Out)
-          .onComplete(() => {
-            this.activeTween = null;
-            resolve();
-          })
-          .start();
-      });
-    } else {
+    if (!animated) {
       this.scale.set(1, 1);
-      return Promise.resolve();
+      return;
     }
+
+    this.scale.set(0, 0);
+
+    this.activeTween = new Tween(this.scale, buttonsTweenGroup)
+      .delay(delay)
+      .to({ x: 1, y: 1 }, HIDE_SHOW_DURATION)
+      .easing(Easing.Back.Out)
+      .start();
   }
 
-  async hide(animated = true) {
+  hide(animated = true) {
     // Cancel any running tween on this object
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
     }
 
-    if (animated) {
-      return new Promise((resolve) => {
-        this.activeTween = new Tween(this.scale, buttonsTweenGroup)
-          .to({ x: 0, y: 0 }, HIDE_SHOW_DURATION)
-          .easing(Easing.Back.In)
-          .onComplete(() => {
-            this.visible = false;
-            this.activeTween = null;
-            resolve();
-          })
-          .start();
-      });
-    } else {
+    if (!animated) {
       this.scale.set(0, 0);
       this.visible = false;
-      return Promise.resolve();
+      return;
     }
+
+    this.activeTween = new Tween(this.scale, buttonsTweenGroup)
+      .to({ x: 0, y: 0 }, HIDE_SHOW_DURATION)
+      .easing(Easing.Back.In)
+      .onComplete(() => {
+        this.visible = false;
+      })
+      .start();
   }
 }
 
-// TODO maybe recreate defaultView, hoverView, pressedView and disabledView
+// TODO maybe recreate defaultView, hoverView, pressedView, disabledView
 // when resizing the button, to have sharper graphics
