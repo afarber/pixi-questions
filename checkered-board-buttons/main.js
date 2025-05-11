@@ -1,4 +1,5 @@
-import { Application, Assets, Sprite, Text } from "pixi.js";
+import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
+import { ScrollBox } from "@pixi/ui";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, MY_BUTTON_WIDTH, buttonsTweenGroup } from "./MyButton";
@@ -42,6 +43,49 @@ const rightButtons = [];
   const label = createLabel();
   boardContainer.addChild(label);
 
+  const scrollBox = new ScrollBox({
+    background: "LightSalmon",
+    width: 200,
+    height: 300,
+    vertPadding: PADDING,
+    elementsMargin: PADDING,
+    items: [
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray"),
+      new Graphics()
+        .roundRect(0, 0, 200, 50, 20)
+        .fill("SkyBlue")
+        .stroke("DarkGray")
+    ]
+  });
+  app.stage.addChild(scrollBox);
+
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
       text: `Button ${i + 1}`
@@ -71,6 +115,9 @@ const rightButtons = [];
       app.screen.height
     );
 
+    scrollBox.x = PADDING;
+    scrollBox.y = PADDING;
+
     const newButtonHeight =
       (app.screen.height - PADDING * (RIGHT_BUTTONS_NUM + 1)) /
       RIGHT_BUTTONS_NUM;
@@ -92,7 +139,7 @@ async function createBunny(textureAlias) {
   const bunny = Sprite.from(textureAlias);
   bunny.anchor.set(0.5);
   bunny.x = TILE_SIZE / 2;
-  bunny.y = TILE_SIZE / 2;
+  bunny.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   return bunny;
 }
 

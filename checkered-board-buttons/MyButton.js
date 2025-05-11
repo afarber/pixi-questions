@@ -38,7 +38,7 @@ export class MyButton extends FancyButton {
         .fill({ color: "LightCoral" }),
       disabledView: new Graphics()
         .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: "LightGray" }),
+        .fill({ color: "DarkGray" }),
       width: options.width,
       height: options.height,
       anchor: 0.5,

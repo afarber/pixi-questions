@@ -19,7 +19,7 @@
     "@tweenjs/tween.js": "^25.0.0",
     "jquery": "^3.7.1",
     "jquery-ui": "^1.14.1",
-    "pixi.js": "^8.9.1"
+    "pixi.js": "^8.9.2"
   },
   "devDependencies": {
     "vite": "^6.3.2"
