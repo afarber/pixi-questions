@@ -50,10 +50,6 @@ const rightButtons = [];
     button.onPress.connect(() => console.log("Button pressed!"));
     button.enabled = i % 4 !== 1;
     app.stage.addChild(button);
-
-    button.hide();
-    button.show();
-
     rightButtons.push(button);
   }
 
@@ -83,6 +79,8 @@ const rightButtons = [];
       const button = rightButtons[i];
       button.x = app.screen.width - MY_BUTTON_WIDTH / 2 - PADDING;
       button.y = PADDING * (i + 1) + newButtonHeight * (i + 0.5);
+      button.hide(false);
+      button.show(true, 50);
     }
   };
 

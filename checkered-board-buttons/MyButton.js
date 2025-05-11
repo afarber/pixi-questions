@@ -9,6 +9,9 @@ export const MY_BUTTON_WIDTH = 200;
 export const MY_BUTTON_HEIGHT = 60;
 export const MY_BUTTON_RADIUS = 20;
 
+// duration of the show/hide animation in milliseconds
+const HIDE_SHOW_DURATION = 200;
+
 const DEFAULT_OPTIONS = {
   text: "",
   width: MY_BUTTON_WIDTH,
@@ -81,7 +84,7 @@ export class MyButton extends FancyButton {
 
   handleUp() {}
 
-  async show(animated = true) {
+  async show(animated = true, delay = 0) {
     // Cancel any running tween on this object
     if (this.activeTween) {
       this.activeTween.stop();
@@ -94,7 +97,8 @@ export class MyButton extends FancyButton {
 
       return new Promise((resolve) => {
         this.activeTween = new Tween(this.scale, buttonsTweenGroup)
-          .to({ x: 1, y: 1 }, 300) // 300ms = 0.3 seconds
+          .delay(delay)
+          .to({ x: 1, y: 1 }, HIDE_SHOW_DURATION)
           .easing(Easing.Back.Out)
           .onComplete(() => {
             this.activeTween = null;
@@ -118,7 +122,7 @@ export class MyButton extends FancyButton {
     if (animated) {
       return new Promise((resolve) => {
         this.activeTween = new Tween(this.scale, buttonsTweenGroup)
-          .to({ x: 0, y: 0 }, 300) // 300ms = 0.3 seconds
+          .to({ x: 0, y: 0 }, HIDE_SHOW_DURATION)
           .easing(Easing.Back.In)
           .onComplete(() => {
             this.visible = false;
