@@ -11,6 +11,7 @@ const localizedStrings = {
     __YOUR_TURN__: "YOUR TURN",
     __HIS_TURN__: "WAITING",
     __ARCHIVE__: "ARCHIVE",
+    __ZERO_GAMES__: "NO GAMES",
     // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
     __VITE_PRELOAD__: "void 0"
   },
@@ -21,6 +22,7 @@ const localizedStrings = {
     __YOUR_TURN__: "IHR ZUG",
     __HIS_TURN__: "WARTEN",
     __ARCHIVE__: "ARCHIV",
+    __ZERO_GAMES__: "KEINE SPIELE",
     // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
     __VITE_PRELOAD__: "void 0"
   },
@@ -31,6 +33,7 @@ const localizedStrings = {
     __YOUR_TURN__: "VOTRE TOUR",
     __HIS_TURN__: "EN ATTENDANT",
     __ARCHIVE__: "ARCHIVE",
+    __ZERO_GAMES__: "PAS DE JEUX",
     // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
     __VITE_PRELOAD__: "void 0"
   }

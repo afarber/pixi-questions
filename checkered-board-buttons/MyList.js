@@ -27,8 +27,36 @@ export class MyList extends Container {
     this.addChild(this.scrollBox);
   }
 
-  setGames(yourGames, opponentGames, finishedGames) {
+  setGames(games) {
     this.scrollBox.removeItems();
+
+    if (!Array.isArray(games) || games.length == 0) {
+      const zeroGames = new Text({
+        text: "__ZERO_GAMES__",
+        style: TITLE_TEXT_STYLE
+      });
+
+      this.scrollBox.addItem(zeroGames);
+      return;
+    }
+
+    const yourGames = [];
+    const opponentGames = [];
+    const finishedGames = [];
+
+    for (const game of games) {
+      const isFinished = game.finished > 0;
+      if (isFinished) {
+        finishedGames.push(game.id);
+      } else {
+        const myTurn = game.played1 <= game.played2;
+        if (myTurn) {
+          yourGames.push(game.id);
+        } else {
+          opponentGames.push(game.id);
+        }
+      }
+    }
 
     if (Array.isArray(yourGames) && yourGames.length > 0) {
       const sectionTitle = new Text({

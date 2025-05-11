@@ -2,14 +2,9 @@ import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
-import {
-  UI_HEIGHT,
-  UI_WIDTH,
-  UI_RADIUS,
-  UI_PADDING,
-  UI_BACKGROUND
-} from "./Theme";
 import { MyList } from "./MyList";
+import { UI_WIDTH, UI_PADDING, UI_BACKGROUND } from "./Theme";
+import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
@@ -52,7 +47,7 @@ const rightButtons = [];
   const gamesList = new MyList();
   app.stage.addChild(gamesList);
 
-  gamesList.setGames([1, 2, 3], [4, 5], [6, 7, 8, 9]);
+  gamesList.setGames(games);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
