@@ -8,23 +8,32 @@ const localizedStrings = {
     __YES__: "Yes",
     __NO__: "No",
     __CANCEL__: "Cancel",
+    __YOUR_TURN__: "YOUR TURN",
+    __HIS_TURN__: "WAITING",
+    __ARCHIVE__: "ARCHIVE",
     // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0",
+    __VITE_PRELOAD__: "void 0"
   },
   de: {
     __YES__: "Ja",
     __NO__: "Nein",
     __CANCEL__: "Abbrechen",
+    __YOUR_TURN__: "IHR ZUG",
+    __HIS_TURN__: "WARTEN",
+    __ARCHIVE__: "ARCHIV",
     // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0",
+    __VITE_PRELOAD__: "void 0"
   },
   fr: {
     __YES__: "Oui",
     __NO__: "Non",
     __CANCEL__: "Annuler",
+    __YOUR_TURN__: "VOTRE TOUR",
+    __HIS_TURN__: "EN ATTENDANT",
+    __ARCHIVE__: "ARCHIVE",
     // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0",
-  },
+    __VITE_PRELOAD__: "void 0"
+  }
 };
 
 function replacePlacesholders(src, lang) {
@@ -63,6 +72,6 @@ export default function localize(isBuildingBundle) {
           );
         }
       }
-    },
+    }
   };
 }
