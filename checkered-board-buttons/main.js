@@ -90,37 +90,63 @@ const rightButtons = [];
       app.screen.height
     );
 
-    newGameButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
-    newGameButton.y = UI_PADDING + UI_HEIGHT / 2;
-
-    gamesList.x = UI_PADDING;
-    gamesList.y = newGameButton.y + newGameButton.height + UI_PADDING;
-
-    twoLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
-    twoLettersButton.y =
-      app.screen.height - (7 * UI_HEIGHT) / 2 - 4 * UI_PADDING;
-
-    threeLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
-    threeLettersButton.y =
-      app.screen.height - (5 * UI_HEIGHT) / 2 - 3 * UI_PADDING;
-
-    rareOneButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
-    rareOneButton.y = app.screen.height - (3 * UI_HEIGHT) / 2 - 2 * UI_PADDING;
-
-    rareTwoButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
-    rareTwoButton.y = app.screen.height - UI_HEIGHT / 2 - UI_PADDING;
-
-    const newButtonHeight =
-      (app.screen.height - UI_PADDING * (RIGHT_BUTTONS_NUM + 1)) /
-      RIGHT_BUTTONS_NUM;
+    const verticalButtonPadding =
+      (app.screen.height - 2 * UI_PADDING - RIGHT_BUTTONS_NUM * UI_HEIGHT) /
+      (RIGHT_BUTTONS_NUM - 1);
 
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
       button.x = app.screen.width - UI_WIDTH / 2 - 2 * UI_PADDING;
-      button.y = UI_PADDING * (i + 1) + newButtonHeight * (i + 0.5);
+      button.y =
+        UI_PADDING + UI_HEIGHT / 2 + (UI_HEIGHT + verticalButtonPadding) * i;
       button.hide(false);
       button.show(true, 50);
     }
+
+    newGameButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    newGameButton.y = UI_PADDING + UI_HEIGHT / 2;
+    newGameButton.hide(false);
+    newGameButton.show(true, 50);
+
+    gamesList.x = UI_PADDING;
+    gamesList.y = newGameButton.y + UI_HEIGHT / 2 + verticalButtonPadding;
+    gamesList.height =
+      app.screen.height -
+      2 * UI_PADDING -
+      5 * UI_HEIGHT -
+      5 * verticalButtonPadding;
+
+    twoLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    twoLettersButton.y =
+      app.screen.height -
+      (7 * UI_HEIGHT) / 2 -
+      3 * verticalButtonPadding -
+      UI_PADDING;
+    twoLettersButton.hide(false);
+    twoLettersButton.show(true, 50);
+
+    threeLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    threeLettersButton.y =
+      app.screen.height -
+      (5 * UI_HEIGHT) / 2 -
+      2 * verticalButtonPadding -
+      UI_PADDING;
+    threeLettersButton.hide(false);
+    threeLettersButton.show(true, 50);
+
+    rareOneButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    rareOneButton.y =
+      app.screen.height -
+      (3 * UI_HEIGHT) / 2 -
+      verticalButtonPadding -
+      UI_PADDING;
+    rareOneButton.hide(false);
+    rareOneButton.show(true, 50);
+
+    rareTwoButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    rareTwoButton.y = app.screen.height - UI_HEIGHT / 2 - UI_PADDING;
+    rareTwoButton.hide(false);
+    rareTwoButton.show(true, 50);
   };
 
   addEventListener("resize", onResize);
