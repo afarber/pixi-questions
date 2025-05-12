@@ -133,7 +133,20 @@ export class MyButton extends FancyButton {
       })
       .start();
   }
-}
 
-// TODO maybe recreate defaultView, hoverView, pressedView, disabledView
-// when resizing the button, to have sharper graphics
+  // for clearer graphics, recreate the views instead of scaling them
+  resize(w, h, r) {
+    this.defaultView = new Graphics()
+      .roundRect(0, 0, w, h, r)
+      .fill({ color: UI_BACKGROUND_DEFAULT });
+    this.hoverView = new Graphics()
+      .roundRect(0, 0, w, h, r)
+      .fill({ color: UI_BACKGROUND_HOVER });
+    this.pressedView = new Graphics()
+      .roundRect(0, 0, w, h, r)
+      .fill({ color: UI_BACKGROUND_PRESSED });
+    this.disabledView = new Graphics()
+      .roundRect(0, 0, w, h, r)
+      .fill({ color: UI_BACKGROUND_DISABLED });
+  }
+}

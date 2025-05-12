@@ -3,7 +3,13 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { UI_WIDTH, UI_PADDING, UI_BACKGROUND, UI_HEIGHT } from "./Theme";
+import {
+  UI_WIDTH,
+  UI_PADDING,
+  UI_BACKGROUND,
+  UI_HEIGHT,
+  UI_RADIUS
+} from "./Theme";
 import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
@@ -51,9 +57,6 @@ const rightButtons = [];
   const newGameButton = new MyButton({ text: "__NEW_GAME__" });
   app.stage.addChild(newGameButton);
 
-  const gamesList = new MyList();
-  app.stage.addChild(gamesList);
-
   const twoLettersButton = new MyButton({ text: "__TWO_LETTERS__" });
   app.stage.addChild(twoLettersButton);
   const threeLettersButton = new MyButton({ text: "__THREE_LETTERS__" });
@@ -62,6 +65,9 @@ const rightButtons = [];
   app.stage.addChild(rareOneButton);
   const rareTwoButton = new MyButton({ text: "__RARE_LETTER_2__" });
   app.stage.addChild(rareTwoButton);
+
+  const gamesList = new MyList();
+  app.stage.addChild(gamesList);
 
   gamesList.setGames(games);
 
@@ -99,6 +105,7 @@ const rightButtons = [];
       button.x = app.screen.width - UI_WIDTH / 2 - 2 * UI_PADDING;
       button.y =
         UI_PADDING + UI_HEIGHT / 2 + (UI_HEIGHT + verticalButtonPadding) * i;
+      button.resize(UI_WIDTH, UI_HEIGHT, UI_RADIUS);
       button.hide(false);
       button.show(true, 50);
     }
