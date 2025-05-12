@@ -9,7 +9,6 @@ import { games } from "./TestData";
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
 
-// TODO: add 4 buttons ("2 letters", "3 letters", etc.) bottom left
 // TODO: add a component to display player avatar in sprite, etc
 // TODO: below such 2 components, add a "Bookmark" text
 // TODO: add "total" (top) and "hint" (bottom) texts
@@ -55,6 +54,15 @@ const rightButtons = [];
   const gamesList = new MyList();
   app.stage.addChild(gamesList);
 
+  const twoLettersButton = new MyButton({ text: "__TWO_LETTERS__" });
+  app.stage.addChild(twoLettersButton);
+  const threeLettersButton = new MyButton({ text: "__THREE_LETTERS__" });
+  app.stage.addChild(threeLettersButton);
+  const rareOneButton = new MyButton({ text: "__RARE_LETTER_1__" });
+  app.stage.addChild(rareOneButton);
+  const rareTwoButton = new MyButton({ text: "__RARE_LETTER_2__" });
+  app.stage.addChild(rareTwoButton);
+
   gamesList.setGames(games);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
@@ -87,6 +95,20 @@ const rightButtons = [];
 
     gamesList.x = UI_PADDING;
     gamesList.y = newGameButton.y + newGameButton.height + UI_PADDING;
+
+    twoLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    twoLettersButton.y =
+      app.screen.height - (7 * UI_HEIGHT) / 2 - 4 * UI_PADDING;
+
+    threeLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    threeLettersButton.y =
+      app.screen.height - (5 * UI_HEIGHT) / 2 - 3 * UI_PADDING;
+
+    rareOneButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    rareOneButton.y = app.screen.height - (3 * UI_HEIGHT) / 2 - 2 * UI_PADDING;
+
+    rareTwoButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    rareTwoButton.y = app.screen.height - UI_HEIGHT / 2 - UI_PADDING;
 
     const newButtonHeight =
       (app.screen.height - UI_PADDING * (RIGHT_BUTTONS_NUM + 1)) /

@@ -10,6 +10,10 @@ const localizedStrings = {
     __CANCEL__: "Cancel",
     __GAME__: "Game",
     __NEW_GAME__: "New game",
+    __TWO_LETTERS__: "2 letters",
+    __THREE_LETTERS__: "3 letters",
+    __RARE_LETTER_1__: "Letter Q",
+    __RARE_LETTER_2__: "Letter X",
     __YOUR_TURN__: "YOUR TURN",
     __HIS_TURN__: "WAITING",
     __ARCHIVE__: "ARCHIVE",
@@ -23,6 +27,10 @@ const localizedStrings = {
     __CANCEL__: "Abbrechen",
     __GAME__: "Spiel",
     __NEW_GAME__: "Neues Spiel",
+    __TWO_LETTERS__: "2 Buchstaben",
+    __THREE_LETTERS__: "3 Buchstaben",
+    __RARE_LETTER_1__: "Buchstabe Q",
+    __RARE_LETTER_2__: "Buchstabe Y",
     __YOUR_TURN__: "IHR ZUG",
     __HIS_TURN__: "WARTEN",
     __ARCHIVE__: "ARCHIV",
@@ -36,6 +44,10 @@ const localizedStrings = {
     __CANCEL__: "Annuler",
     __GAME__: "Jeu",
     __NEW_GAME__: "Nouveau jeu",
+    __TWO_LETTERS__: "2 lettres",
+    __THREE_LETTERS__: "3 lettres",
+    __RARE_LETTER_1__: "Lettre K",
+    __RARE_LETTER_2__: "Lettre W",
     __YOUR_TURN__: "VOTRE TOUR",
     __HIS_TURN__: "EN ATTENDANT",
     __ARCHIVE__: "ARCHIVE",
@@ -46,7 +58,7 @@ const localizedStrings = {
 };
 
 function replacePlacesholders(src, lang) {
-  return src.replaceAll(/__[_A-Z]+__/g, function (match) {
+  return src.replaceAll(/__[_A-Z0-9]+__/g, function (match) {
     return localizedStrings[lang][match] || match;
   });
 }
