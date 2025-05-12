@@ -18,9 +18,8 @@ export class MyList extends Container {
     this.scrollBox = new ScrollBox({
       background: UI_BACKGROUND,
       width: UI_WIDTH + 2 * UI_PADDING,
-      height: 300,
+      height: 5.5 * UI_HEIGHT,
       radius: UI_RADIUS,
-      vertPadding: UI_PADDING,
       elementsMargin: UI_PADDING,
       padding: UI_PADDING
     });
@@ -72,7 +71,7 @@ export class MyList extends Container {
     parentContainer.height = UI_HEIGHT;
 
     const button = new MyButton({
-      text: `Game ${gameId}`
+      text: `__GAME__ ${gameId}`
     });
     button.x = UI_WIDTH / 2;
     button.y = UI_HEIGHT / 2;

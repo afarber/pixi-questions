@@ -3,13 +3,12 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { UI_WIDTH, UI_PADDING, UI_BACKGROUND } from "./Theme";
+import { UI_WIDTH, UI_PADDING, UI_BACKGROUND, UI_HEIGHT } from "./Theme";
 import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
 const rightButtons = [];
 
-// TODO: add "New game" button top left
 // TODO: add 4 buttons ("2 letters", "3 letters", etc.) bottom left
 // TODO: add a component to display player avatar in sprite, etc
 // TODO: below such 2 components, add a "Bookmark" text
@@ -50,6 +49,9 @@ const rightButtons = [];
   const label = createLabel();
   boardContainer.addChild(label);
 
+  const newGameButton = new MyButton({ text: "__NEW_GAME__" });
+  app.stage.addChild(newGameButton);
+
   const gamesList = new MyList();
   app.stage.addChild(gamesList);
 
@@ -66,10 +68,6 @@ const rightButtons = [];
     rightButtons.push(button);
   }
 
-  console.log("__YES__");
-  console.log("__NO__");
-  console.log("__CANCEL__");
-
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
 
@@ -84,8 +82,11 @@ const rightButtons = [];
       app.screen.height
     );
 
+    newGameButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    newGameButton.y = UI_PADDING + UI_HEIGHT / 2;
+
     gamesList.x = UI_PADDING;
-    gamesList.y = UI_PADDING;
+    gamesList.y = newGameButton.y + newGameButton.height + UI_PADDING;
 
     const newButtonHeight =
       (app.screen.height - UI_PADDING * (RIGHT_BUTTONS_NUM + 1)) /
