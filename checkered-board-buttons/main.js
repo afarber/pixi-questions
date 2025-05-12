@@ -110,11 +110,13 @@ const rightButtons = [];
 
     gamesList.x = UI_PADDING;
     gamesList.y = newGameButton.y + UI_HEIGHT / 2 + verticalButtonPadding;
-    gamesList.height =
+    gamesList.resize(
+      UI_WIDTH + 2 * UI_PADDING,
       app.screen.height -
-      2 * UI_PADDING -
-      5 * UI_HEIGHT -
-      5 * verticalButtonPadding;
+        2 * UI_PADDING -
+        5 * UI_HEIGHT -
+        5 * verticalButtonPadding
+    );
 
     twoLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
     twoLettersButton.y =

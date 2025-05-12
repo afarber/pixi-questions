@@ -96,4 +96,9 @@ export class MyList extends Container {
       }
     }
   }
+
+  resize(w, h) {
+    this.scrollBox.width = w;
+    this.scrollBox.height = h;
+  }
 }
