@@ -78,7 +78,7 @@ const rightButtons = [];
 
   const onResize = () => {
     boardContainer.resize(
-      app.screen.width - UI_WIDTH - 2 * UI_PADDING,
+      app.screen.width - 2 * UI_WIDTH - 8 * UI_PADDING,
       app.screen.height
     );
 
@@ -94,7 +94,7 @@ const rightButtons = [];
 
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
-      button.x = app.screen.width - UI_WIDTH / 2 - UI_PADDING;
+      button.x = app.screen.width - UI_WIDTH / 2 - 2 * UI_PADDING;
       button.y = UI_PADDING * (i + 1) + newButtonHeight * (i + 0.5);
       button.hide(false);
       button.show(true, 50);

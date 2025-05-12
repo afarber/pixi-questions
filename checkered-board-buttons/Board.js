@@ -1,5 +1,6 @@
 import { Container, Graphics, Point } from "pixi.js";
 import { TILE_SIZE } from "./Tile.js";
+import { UI_PADDING, UI_WIDTH } from "./Theme.js";
 
 // Number of cells in the board
 export const NUM_CELLS = 8;
@@ -35,7 +36,7 @@ export class Board extends Container {
     this.scale.set(boardScale);
 
     let boardOrigin = new Point();
-    boardOrigin.x = (w - appSize) / 2;
+    boardOrigin.x = (w - appSize) / 2 + 4 * UI_PADDING + UI_WIDTH;
     boardOrigin.y = (h - appSize) / 2;
     this.position.set(boardOrigin.x, boardOrigin.y);
 
