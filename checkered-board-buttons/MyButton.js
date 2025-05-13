@@ -81,11 +81,11 @@ export class MyButton extends FancyButton {
   }
 
   handleHover() {
-    sound.play("click_005");
+    //sound.play("click_005");
   }
 
   handleDown() {
-    sound.play("click_001");
+    sound.play("click_002");
   }
 
   handleUp() {}
@@ -149,5 +149,9 @@ export class MyButton extends FancyButton {
     this.disabledView = new Graphics()
       .roundRect(0, 0, w, h, r)
       .fill({ color: UI_BACKGROUND_DISABLED });
+
+    // workaround for buttons losing disabled appearance
+    this.enabled = !this.enabled;
+    this.enabled = !this.enabled;
   }
 }
