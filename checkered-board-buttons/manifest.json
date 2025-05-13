@@ -8,6 +8,31 @@
           "src": "https://pixijs.com/assets/bunny.png"
         }
       ]
+    },
+    {
+      "name": "sounds",
+      "assets": [
+        {
+          "alias": "click_001",
+          "src": "assets/click_001.ogg"
+        },
+        {
+          "alias": "click_002",
+          "src": "assets/click_002.ogg"
+        },
+        {
+          "alias": "click_003",
+          "src": "assets/click_003.ogg"
+        },
+        {
+          "alias": "click_004",
+          "src": "assets/click_004.ogg"
+        },
+        {
+          "alias": "click_005",
+          "src": "assets/click_005.ogg"
+        }
+      ]
     }
   ]
 }

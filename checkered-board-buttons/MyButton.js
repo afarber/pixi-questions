@@ -1,5 +1,6 @@
 import { Graphics } from "pixi.js";
 import { FancyButton } from "@pixi/ui";
+import { sound } from "@pixi/sound";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import {
   UI_HEIGHT,
@@ -80,11 +81,11 @@ export class MyButton extends FancyButton {
   }
 
   handleHover() {
-    //sfx.play("common/sfx-hover.wav");
+    sound.play("click_005");
   }
 
   handleDown() {
-    //sfx.play("common/sfx-press.wav");
+    sound.play("click_001");
   }
 
   handleUp() {}

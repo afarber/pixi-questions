@@ -32,6 +32,7 @@ const rightButtons = [];
 
   await Assets.init({ manifest: "./manifest.json" });
   await Assets.loadBundle("animals");
+  await Assets.loadBundle("sounds");
 
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
