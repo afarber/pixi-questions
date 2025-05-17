@@ -3,13 +3,8 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import {
-  UI_WIDTH,
-  UI_PADDING,
-  UI_BACKGROUND,
-  UI_HEIGHT,
-  UI_RADIUS
-} from "./Theme";
+import { UI_HEIGHT } from "./Theme";
+import { Layout } from "./Layout";
 import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
@@ -91,83 +86,28 @@ const rightButtons = [];
     label.skew.y += 0.01 * time.deltaTime;
   });
 
+  // Create our UI layout manager
+  const layout = new Layout();
+
+  // Configure the layout with all our UI elements
+  layout.setCenter(boardContainer);
+
+  // Add left side elements
+  layout.addLeft(newGameButton);
+  layout.addLeft(gamesList, { height: 5.5 * UI_HEIGHT });
+  layout.addLeft(twoLettersButton);
+  layout.addLeft(threeLettersButton);
+  layout.addLeft(rareOneButton);
+  layout.addLeft(rareTwoButton);
+
+  // Add right side elements
+  rightButtons.forEach((button) => {
+    layout.addRight(button);
+  });
+
   const onResize = () => {
-    boardContainer.resize(
-      app.screen.width - 2 * UI_WIDTH - 8 * UI_PADDING,
-      app.screen.height
-    );
-
-    const verticalButtonPadding =
-      (app.screen.height - 2 * UI_PADDING - RIGHT_BUTTONS_NUM * UI_HEIGHT) /
-      (RIGHT_BUTTONS_NUM - 1);
-
-    // reduce the button heights, if the screen is not high enough
-    const buttonHeight = verticalButtonPadding > 0 ? UI_HEIGHT : UI_HEIGHT / 2;
-
-    const leftX = 2 * UI_PADDING + UI_WIDTH / 2;
-    const rightX = app.screen.width - leftX;
-
-    for (let i = 0; i < rightButtons.length; i++) {
-      const button = rightButtons[i];
-      button.x = rightX;
-      button.y =
-        UI_PADDING + UI_HEIGHT / 2 + (UI_HEIGHT + verticalButtonPadding) * i;
-      button.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
-      button.hide(false);
-      button.show(true, 50);
-    }
-
-    newGameButton.x = leftX;
-    newGameButton.y = UI_PADDING + UI_HEIGHT / 2;
-    newGameButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
-    newGameButton.hide(false);
-    newGameButton.show(true, 50);
-
-    gamesList.x = UI_PADDING;
-    gamesList.y = newGameButton.y + UI_HEIGHT / 2 + verticalButtonPadding;
-    gamesList.resize(
-      UI_WIDTH + 2 * UI_PADDING,
-      app.screen.height -
-        2 * UI_PADDING -
-        5 * UI_HEIGHT -
-        5 * verticalButtonPadding
-    );
-
-    twoLettersButton.x = leftX;
-    twoLettersButton.y =
-      app.screen.height -
-      (7 * UI_HEIGHT) / 2 -
-      3 * verticalButtonPadding -
-      UI_PADDING;
-    twoLettersButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
-    twoLettersButton.hide(false);
-    twoLettersButton.show(true, 50);
-
-    threeLettersButton.x = leftX;
-    threeLettersButton.y =
-      app.screen.height -
-      (5 * UI_HEIGHT) / 2 -
-      2 * verticalButtonPadding -
-      UI_PADDING;
-    threeLettersButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
-    threeLettersButton.hide(false);
-    threeLettersButton.show(true, 50);
-
-    rareOneButton.x = leftX;
-    rareOneButton.y =
-      app.screen.height -
-      (3 * UI_HEIGHT) / 2 -
-      verticalButtonPadding -
-      UI_PADDING;
-    rareOneButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
-    rareOneButton.hide(false);
-    rareOneButton.show(true, 50);
-
-    rareTwoButton.x = leftX;
-    rareTwoButton.y = app.screen.height - UI_HEIGHT / 2 - UI_PADDING;
-    rareTwoButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
-    rareTwoButton.hide(false);
-    rareTwoButton.show(true, 50);
+    // Let the layout manager handle everything else
+    layout.resize(app.screen.width, app.screen.height);
   };
 
   addEventListener("resize", onResize);
