@@ -104,9 +104,12 @@ const rightButtons = [];
     // reduce the button heights, if the screen is not high enough
     const buttonHeight = verticalButtonPadding > 0 ? UI_HEIGHT : UI_HEIGHT / 2;
 
+    const leftX = 2 * UI_PADDING + UI_WIDTH / 2;
+    const rightX = app.screen.width - leftX;
+
     for (let i = 0; i < rightButtons.length; i++) {
       const button = rightButtons[i];
-      button.x = app.screen.width - UI_WIDTH / 2 - 2 * UI_PADDING;
+      button.x = rightX;
       button.y =
         UI_PADDING + UI_HEIGHT / 2 + (UI_HEIGHT + verticalButtonPadding) * i;
       button.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
@@ -114,7 +117,7 @@ const rightButtons = [];
       button.show(true, 50);
     }
 
-    newGameButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    newGameButton.x = leftX;
     newGameButton.y = UI_PADDING + UI_HEIGHT / 2;
     newGameButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
     newGameButton.hide(false);
@@ -130,7 +133,7 @@ const rightButtons = [];
         5 * verticalButtonPadding
     );
 
-    twoLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    twoLettersButton.x = leftX;
     twoLettersButton.y =
       app.screen.height -
       (7 * UI_HEIGHT) / 2 -
@@ -140,7 +143,7 @@ const rightButtons = [];
     twoLettersButton.hide(false);
     twoLettersButton.show(true, 50);
 
-    threeLettersButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    threeLettersButton.x = leftX;
     threeLettersButton.y =
       app.screen.height -
       (5 * UI_HEIGHT) / 2 -
@@ -150,7 +153,7 @@ const rightButtons = [];
     threeLettersButton.hide(false);
     threeLettersButton.show(true, 50);
 
-    rareOneButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    rareOneButton.x = leftX;
     rareOneButton.y =
       app.screen.height -
       (3 * UI_HEIGHT) / 2 -
@@ -160,7 +163,7 @@ const rightButtons = [];
     rareOneButton.hide(false);
     rareOneButton.show(true, 50);
 
-    rareTwoButton.x = 2 * UI_PADDING + UI_WIDTH / 2;
+    rareTwoButton.x = leftX;
     rareTwoButton.y = app.screen.height - UI_HEIGHT / 2 - UI_PADDING;
     rareTwoButton.resize(UI_WIDTH, buttonHeight, UI_RADIUS);
     rareTwoButton.hide(false);

@@ -33,18 +33,6 @@ export class MyButton extends FancyButton {
     };
 
     super({
-      defaultView: new Graphics()
-        .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: UI_BACKGROUND_DEFAULT }),
-      hoverView: new Graphics()
-        .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: UI_BACKGROUND_HOVER }),
-      pressedView: new Graphics()
-        .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: UI_BACKGROUND_PRESSED }),
-      disabledView: new Graphics()
-        .roundRect(0, 0, options.width, options.height, options.radius)
-        .fill({ color: UI_BACKGROUND_DISABLED }),
       width: options.width,
       height: options.height,
       anchor: 0.5,
@@ -78,6 +66,8 @@ export class MyButton extends FancyButton {
     this.onUp.connect(this.handleUp.bind(this));
     this.on("pointerupoutside", this.handleUp.bind(this));
     this.on("pointerout", this.handleUp.bind(this));
+
+    this.resize(options.width, options.height, options.radius);
   }
 
   handleHover() {
