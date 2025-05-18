@@ -8,7 +8,6 @@ import { Layout } from "./Layout";
 import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
-const rightButtons = [];
 
 // TODO: add a component to display player avatar in sprite, etc
 // TODO: below such 2 components, add a "Bookmark" text
@@ -24,6 +23,9 @@ const rightButtons = [];
   // the app stage will handle the move events
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
+
+  // Create our UI layout manager
+  const layout = new Layout();
 
   await Assets.init({ manifest: "./manifest.json" });
   await Assets.loadBundle("animals");
@@ -75,7 +77,7 @@ const rightButtons = [];
     button.onPress.connect(() => console.log(`Button ${i + 1} pressed!`));
     button.enabled = i % 4 !== 1;
     app.stage.addChild(button);
-    rightButtons.push(button);
+    layout.addRight(button);
   }
 
   app.ticker.add((time) => {
@@ -85,9 +87,6 @@ const rightButtons = [];
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
   });
-
-  // Create our UI layout manager
-  const layout = new Layout();
 
   // Configure the layout with all our UI elements
   layout.setCenter(boardContainer);
@@ -99,11 +98,6 @@ const rightButtons = [];
   layout.addLeft(threeLettersButton);
   layout.addLeft(rareOneButton);
   layout.addLeft(rareTwoButton);
-
-  // Add right side elements
-  rightButtons.forEach((button) => {
-    layout.addRight(button);
-  });
 
   const onResize = () => {
     // Let the layout manager handle everything else
