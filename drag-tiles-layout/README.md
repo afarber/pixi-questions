@@ -9,4 +9,3 @@
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-layout/screenshot.gif)
 
-If `vite build` is failing, create the `dist` folder manually

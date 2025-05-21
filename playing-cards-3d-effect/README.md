@@ -22,4 +22,3 @@ Convert SVG (do not tilt well) to PNG, preserving transparency with:
 
 The sounds are CC0-licensed [Casion Audio](https://kenney.nl/assets/casino-audio) by Kenney
 
-If `vite build` is failing, create the `dist` folder manually

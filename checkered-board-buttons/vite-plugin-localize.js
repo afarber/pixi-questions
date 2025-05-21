@@ -63,6 +63,19 @@ function replacePlacesholders(src, lang) {
   });
 }
 
+// Ensure directory exists, recursively
+function ensureDirectoryExists(filePath) {
+  const dirname = path.dirname(filePath);
+  if (fs.existsSync(dirname)) {
+    // Directory already exists, nothing to do
+    return;
+  }
+  // Ensure parent directory exists
+  ensureDirectoryExists(dirname);
+  // Create this directory
+  fs.mkdirSync(dirname);
+}
+
 export default function localize(isBuildingBundle) {
   return {
     name: "localize-plugin",
@@ -79,6 +92,9 @@ export default function localize(isBuildingBundle) {
         }
         const indexJsPath = path.resolve(outputOptions.dir, fileName);
         console.log("\nReplacing placeholders in", indexJsPath);
+
+        // Ensure the dist directory exists
+        ensureDirectoryExists(indexJsPath);
 
         // create index-XX.js file for each language, in the same folder as index.js
         for (const lang of Object.keys(localizedStrings)) {

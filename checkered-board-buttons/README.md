@@ -11,4 +11,3 @@
 
 The sounds are CC0-licensed [Interface Sounds](https://kenney.nl/assets/interface-sounds) by Kenney
 
-If `vite build` is failing, create the `dist` folder manually
