@@ -1,8 +1,8 @@
 {
   "name": "drag-tiles-layout",
   "version": "1.0.0",
-  "description": "mkdir drag-tiles-layout\r     cd drag-tiles-layout\r     npm init -y\r     npm install pixi.js @pixi/ui @pixi/layout @tweenjs/tween.js\r     npm install vite --save-dev\r     npx vite (or add entries to package.json \"scripts\" and: npm run dev)",
-  "main": "main.js",
+  "description": "A checkered board with 3 draggable tiles and a 3D tilt effect",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

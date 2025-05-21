@@ -5,6 +5,8 @@
     npm init -y
     npm install pixi.js @pixi/ui @tweenjs/tween.js
     npm install vite --save-dev
-    npx vite (or add entries to package.json "scripts" and: npm run dev)
+    npx vite (or add entries to package.json "scripts" and: `npm run dev`)
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-3d-effect/screenshot.gif)
+
+If `vite build` is failing, create the `dist` folder manually

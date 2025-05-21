@@ -17,8 +17,8 @@ export default defineConfig({
         chunkFileNames: `[name].js`,
         assetFileNames: `[name].[ext]`,
         // Ensures all imports are in one file
-        inlineDynamicImports: true,
-      },
-    },
-  },
+        inlineDynamicImports: true
+      }
+    }
+  }
 });

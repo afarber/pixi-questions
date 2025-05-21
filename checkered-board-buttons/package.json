@@ -2,7 +2,7 @@
   "name": "checkered-board-buttons",
   "version": "1.0.0",
   "description": "A checkered board with a bunny and 3 draggable tiles",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

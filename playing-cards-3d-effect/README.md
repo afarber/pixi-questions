@@ -3,7 +3,7 @@
     mkdir playing-cards-3d-effect
     cd playing-cards-3d-effect
     npm init -y
-    npm install pixi.js @pixi/ui @pixi/layout @tweenjs/tween.js
+    npm install pixi.js @pixi/ui @tweenjs/tween.js
     npm install vite --save-dev
     npx vite (or add entries to package.json "scripts" and: npm run dev)
 
@@ -21,3 +21,5 @@ Convert SVG (do not tilt well) to PNG, preserving transparency with:
     done
 
 The sounds are CC0-licensed [Casion Audio](https://kenney.nl/assets/casino-audio) by Kenney
+
+If `vite build` is failing, create the `dist` folder manually
