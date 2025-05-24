@@ -31,7 +31,7 @@ export class MyList extends Container {
 
     if (!Array.isArray(games) || games.length == 0) {
       const zeroGames = new Text({
-        text: "__ZERO_GAMES__",
+        text: "___ZERO_GAMES___",
         style: TITLE_TEXT_STYLE
       });
 
@@ -57,9 +57,9 @@ export class MyList extends Container {
       }
     }
 
-    this.createSection("__YOUR_TURN__", yourGames);
-    this.createSection("__HIS_TURN__", opponentGames);
-    this.createSection("__ARCHIVE__", finishedGames);
+    this.createSection("___YOUR_TURN___", yourGames);
+    this.createSection("___HIS_TURN___", opponentGames);
+    this.createSection("___ARCHIVE___", finishedGames);
   }
 
   // Create a parent container for a button.
@@ -71,7 +71,7 @@ export class MyList extends Container {
     parentContainer.height = UI_HEIGHT;
 
     const button = new MyButton({
-      text: `__GAME__ ${gameId}`
+      text: `___GAME___ ${gameId}`
     });
     button.x = UI_WIDTH / 2;
     button.y = UI_HEIGHT / 2;

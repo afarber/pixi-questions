@@ -5,60 +5,54 @@ import path from "path";
 
 const localizedStrings = {
   en: {
-    __YES__: "Yes",
-    __NO__: "No",
-    __CANCEL__: "Cancel",
-    __GAME__: "Game",
-    __NEW_GAME__: "New game",
-    __TWO_LETTERS__: "2 letters",
-    __THREE_LETTERS__: "3 letters",
-    __RARE_LETTER_1__: "Letter Q",
-    __RARE_LETTER_2__: "Letter X",
-    __YOUR_TURN__: "YOUR TURN",
-    __HIS_TURN__: "WAITING",
-    __ARCHIVE__: "ARCHIVE",
-    __ZERO_GAMES__: "NO GAMES",
-    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0"
+    ___YES___: "Yes",
+    ___NO___: "No",
+    ___CANCEL___: "Cancel",
+    ___GAME___: "Game",
+    ___NEW_GAME___: "New game",
+    ___TWO_LETTERS___: "2 letters",
+    ___THREE_LETTERS___: "3 letters",
+    ___RARE_LETTER_1___: "Letter Q",
+    ___RARE_LETTER_2___: "Letter X",
+    ___YOUR_TURN___: "YOUR TURN",
+    ___HIS_TURN___: "WAITING",
+    ___ARCHIVE___: "ARCHIVE",
+    ___ZERO_GAMES___: "NO GAMES"
   },
   de: {
-    __YES__: "Ja",
-    __NO__: "Nein",
-    __CANCEL__: "Abbrechen",
-    __GAME__: "Spiel",
-    __NEW_GAME__: "Neues Spiel",
-    __TWO_LETTERS__: "2 Buchstaben",
-    __THREE_LETTERS__: "3 Buchstaben",
-    __RARE_LETTER_1__: "Buchstabe Q",
-    __RARE_LETTER_2__: "Buchstabe Y",
-    __YOUR_TURN__: "IHR ZUG",
-    __HIS_TURN__: "WARTEN",
-    __ARCHIVE__: "ARCHIV",
-    __ZERO_GAMES__: "KEINE SPIELE",
-    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0"
+    ___YES___: "Ja",
+    ___NO___: "Nein",
+    ___CANCEL___: "Abbrechen",
+    ___GAME___: "Spiel",
+    ___NEW_GAME___: "Neues Spiel",
+    ___TWO_LETTERS___: "2 Buchstaben",
+    ___THREE_LETTERS___: "3 Buchstaben",
+    ___RARE_LETTER_1___: "Buchstabe Q",
+    ___RARE_LETTER_2___: "Buchstabe Y",
+    ___YOUR_TURN___: "IHR ZUG",
+    ___HIS_TURN___: "WARTEN",
+    ___ARCHIVE___: "ARCHIV",
+    ___ZERO_GAMES___: "KEINE SPIELE"
   },
   fr: {
-    __YES__: "Oui",
-    __NO__: "Non",
-    __CANCEL__: "Annuler",
-    __GAME__: "Jeu",
-    __NEW_GAME__: "Nouveau jeu",
-    __TWO_LETTERS__: "2 lettres",
-    __THREE_LETTERS__: "3 lettres",
-    __RARE_LETTER_1__: "Lettre K",
-    __RARE_LETTER_2__: "Lettre W",
-    __YOUR_TURN__: "VOTRE TOUR",
-    __HIS_TURN__: "EN ATTENDANT",
-    __ARCHIVE__: "ARCHIVE",
-    __ZERO_GAMES__: "PAS DE JEUX",
-    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0"
+    ___YES___: "Oui",
+    ___NO___: "Non",
+    ___CANCEL___: "Annuler",
+    ___GAME___: "Jeu",
+    ___NEW_GAME___: "Nouveau jeu",
+    ___TWO_LETTERS___: "2 lettres",
+    ___THREE_LETTERS___: "3 lettres",
+    ___RARE_LETTER_1___: "Lettre K",
+    ___RARE_LETTER_2___: "Lettre W",
+    ___YOUR_TURN___: "VOTRE TOUR",
+    ___HIS_TURN___: "EN ATTENDANT",
+    ___ARCHIVE___: "ARCHIVE",
+    ___ZERO_GAMES___: "PAS DE JEUX"
   }
 };
 
 function replacePlacesholders(src, lang) {
-  return src.replaceAll(/__[_A-Z0-9]+__/g, function (match) {
+  return src.replaceAll(/___[_A-Z0-9]+___/g, function (match) {
     return localizedStrings[lang][match] || match;
   });
 }
@@ -90,6 +84,7 @@ export default function localize(isBuildingBundle) {
         if (!fileName.endsWith("index.js")) {
           continue;
         }
+
         const indexJsPath = path.resolve(outputOptions.dir, fileName);
         console.log("\nReplacing placeholders in", indexJsPath);
 

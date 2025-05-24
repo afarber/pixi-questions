@@ -8,6 +8,44 @@ import { Layout } from "./Layout";
 import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
+const manifest = {
+  "bundles": [
+    {
+      "name": "animals",
+      "assets": [
+        {
+          "alias": "bunny",
+          "src": "https://pixijs.com/assets/bunny.png"
+        }
+      ]
+    },
+    {
+      "name": "sounds",
+      "assets": [
+        {
+          "alias": "click_001",
+          "src": "assets/click_001.ogg"
+        },
+        {
+          "alias": "click_002",
+          "src": "assets/click_002.ogg"
+        },
+        {
+          "alias": "click_003",
+          "src": "assets/click_003.ogg"
+        },
+        {
+          "alias": "click_004",
+          "src": "assets/click_004.ogg"
+        },
+        {
+          "alias": "click_005",
+          "src": "assets/click_005.ogg"
+        }
+      ]
+    }
+  ]
+};
 
 // TODO: add a component to display player avatar in sprite, etc
 // TODO: below such 2 components, add a "Bookmark" text
@@ -27,7 +65,7 @@ const RIGHT_BUTTONS_NUM = 10;
   // Create our UI layout manager
   const layout = new Layout();
 
-  await Assets.init({ manifest: "./manifest.json" });
+  await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
   await Assets.loadBundle("sounds");
 
@@ -52,16 +90,16 @@ const RIGHT_BUTTONS_NUM = 10;
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const newGameButton = new MyButton({ text: "__NEW_GAME__" });
+  const newGameButton = new MyButton({ text: "___NEW_GAME___" });
   app.stage.addChild(newGameButton);
 
-  const twoLettersButton = new MyButton({ text: "__TWO_LETTERS__" });
+  const twoLettersButton = new MyButton({ text: "___TWO_LETTERS___" });
   app.stage.addChild(twoLettersButton);
-  const threeLettersButton = new MyButton({ text: "__THREE_LETTERS__" });
+  const threeLettersButton = new MyButton({ text: "___THREE_LETTERS___" });
   app.stage.addChild(threeLettersButton);
-  const rareOneButton = new MyButton({ text: "__RARE_LETTER_1__" });
+  const rareOneButton = new MyButton({ text: "___RARE_LETTER_1___" });
   app.stage.addChild(rareOneButton);
-  const rareTwoButton = new MyButton({ text: "__RARE_LETTER_2__" });
+  const rareTwoButton = new MyButton({ text: "___RARE_LETTER_2___" });
   app.stage.addChild(rareTwoButton);
 
   const gamesList = new MyList();
@@ -117,7 +155,7 @@ async function createBunny(textureAlias) {
 }
 
 function createLabel() {
-  const label = new Text({ text: "__NO__" });
+  const label = new Text({ text: "___NO___" });
   label.x = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.anchor.set(0.5);
