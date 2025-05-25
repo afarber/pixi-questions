@@ -10,7 +10,7 @@ export class MyVerticalPanel {
   }
 
   // add a child element
-  addElement(child) {
+  addChild(child) {
     this.children.push(child);
     return this;
   }
@@ -26,60 +26,36 @@ export class MyVerticalPanel {
 
   // Resize children when this panel is resized
   resize(panelX, panelY, panelWidth, panelHeight) {
-    if (panelWidth <= 0 || panelHeight <= 0 || this.children.length === 0) {
-      console.log("MyVerticalPanel.resize called with invalid params");
+    console.log("MyVerticalPanel.resize params", { panelX, panelY, panelWidth, panelHeight });
+
+    if (panelWidth <= 0 || panelHeight <= 0 || !this.children.length) {
+      console.log("MyVerticalPanel.resize called with invalid params or empty children");
       return;
     }
 
     const childWidth = panelWidth - 2 * UI_PADDING;
+    const availableHeight = panelHeight - (this.children.length + 1) * UI_PADDING;
+    const childHeight = Math.max(UI_HEIGHT, availableHeight / this.children.length);
 
-    // Calculate the height available for children
-    const availableHeight = panelHeight - 2 * UI_PADDING;
+    console.log("MyVerticalPanel.resize", { childWidth, childHeight, availableHeight });
 
-    // Determine height available to each child (childHeight) by dividing the availableHeight by (number of children + UI_PADDING#s between them). clamp it at UI_HEIGHT
-    const paddingCount = Math.max(0, this.children.length - 1);
-    const totalPaddingHeight = paddingCount * UI_PADDING;
-    let childHeight = Math.min(
-      UI_HEIGHT,
-      (availableHeight - totalPaddingHeight) / this.children.length
-    );
-
-    // Find a child with "grow" set, there can be 0 or 1 of those
-    const growChild = this.findGrowChild();
-
-    // If a child has "grow", give it max Height and place it without the UI_PADDING left and right (that is its width will be panelWidth)
-    let maxChildHeight = 0;
-    if (growChild) {
-      const regularChildrenCount = this.children.length - 1;
-      const regularChildrenHeight = regularChildrenCount * childHeight;
-      maxChildHeight =
-        availableHeight - regularChildrenHeight - totalPaddingHeight;
-    }
+    // If there is a child with "grow", give it max height
+    const growChildHeight = this.findGrowChild() ? availableHeight - (this.children.length - 1) * childHeight : 0;
 
     // Iterate the list of children and call .resize() on each of them
     let currentY = panelY + UI_PADDING;
 
     for (let child of this.children) {
-      if (child.resize) {
-        if (child.grow === true) {
-          // For the child with "grow" true the call is a bit different: .resize(panelX, y, panelWidth, maxChildHeight, UI_RADIUS)
-          child.resize(panelX, currentY, panelWidth, maxChildHeight, UI_RADIUS);
-          currentY += maxChildHeight;
-        } else {
-          child.resize(
-            panelX + UI_PADDING,
-            currentY,
-            childWidth,
-            childHeight,
-            UI_RADIUS
-          );
-          currentY += childHeight;
-        }
+      if (!child.resize) {
+        continue;
+      }
 
-        // Add padding between children (except after the last one)
-        if (child !== this.children[this.children.length - 1]) {
-          currentY += UI_PADDING;
-        }
+      if (child.grow) {
+        child.resize(panelX, currentY, panelWidth, growChildHeight, UI_RADIUS);
+        currentY += growChildHeight + UI_PADDING;
+      } else {
+        child.resize(panelX + UI_PADDING, currentY, childWidth, childHeight, UI_RADIUS);
+        currentY += childHeight + UI_PADDING;
       }
 
       // Handle show/hide animations if applicable

@@ -3,9 +3,10 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { UI_HEIGHT } from "./Theme";
+import { UI_HEIGHT, UI_PADDING, UI_WIDTH } from "./Theme";
 import { MyLayout } from "./MyLayout";
 import { games } from "./TestData";
+import { MyVerticalPanel } from "./MyVerticalPanel";
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -62,7 +63,9 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const layout = new MyLayout();
+  const leftPanel = new MyVerticalPanel();
+  const midPanel = new MyVerticalPanel();
+  const rightPanel = new MyVerticalPanel();
 
   await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
@@ -91,20 +94,26 @@ const manifest = {
 
   const newGameButton = new MyButton({ text: "___NEW_GAME___" });
   app.stage.addChild(newGameButton);
+  leftPanel.addChild(newGameButton);
+
+  const gamesList = new MyList();
+  gamesList.setGames(games);
+  //gamesList.grow = true;
+  app.stage.addChild(gamesList);
+  leftPanel.addChild(gamesList);
 
   const twoLettersButton = new MyButton({ text: "___TWO_LETTERS___" });
   app.stage.addChild(twoLettersButton);
+  leftPanel.addChild(twoLettersButton);
   const threeLettersButton = new MyButton({ text: "___THREE_LETTERS___" });
   app.stage.addChild(threeLettersButton);
+  leftPanel.addChild(threeLettersButton);
   const rareOneButton = new MyButton({ text: "___RARE_LETTER_1___" });
   app.stage.addChild(rareOneButton);
+  leftPanel.addChild(rareOneButton);
   const rareTwoButton = new MyButton({ text: "___RARE_LETTER_2___" });
   app.stage.addChild(rareTwoButton);
-
-  const gamesList = new MyList();
-  app.stage.addChild(gamesList);
-
-  gamesList.setGames(games);
+  leftPanel.addChild(rareTwoButton);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
@@ -114,7 +123,7 @@ const manifest = {
     button.onPress.connect(() => console.log(`Button ${i + 1} pressed!`));
     button.enabled = i % 4 !== 1;
     app.stage.addChild(button);
-    layout.addRight(button);
+    rightPanel.addChild(button);
   }
 
   app.ticker.add((time) => {
@@ -126,19 +135,17 @@ const manifest = {
   });
 
   // Configure the layout with all our UI elements
-  layout.setCenter(boardContainer);
-
-  // Add left side elements
-  layout.addLeft(newGameButton);
-  layout.addLeft(gamesList, { height: 5.5 * UI_HEIGHT });
-  layout.addLeft(twoLettersButton);
-  layout.addLeft(threeLettersButton);
-  layout.addLeft(rareOneButton);
-  layout.addLeft(rareTwoButton);
+  //layout.setCenter(boardContainer);
 
   const onResize = () => {
+    const panelWidth = UI_WIDTH + 2 * UI_PADDING;
+    console.log("onResize left panel");
+    leftPanel.resize(0, 0, panelWidth, app.screen.height);
+    console.log("onResize right panel");
+    rightPanel.resize(app.screen.width - panelWidth, 0, panelWidth, app.screen.height);
+
     // Let the layout manager handle everything else
-    layout.resize(app.screen.width, app.screen.height);
+    //layout.resize(app.screen.width, app.screen.height);
   };
 
   addEventListener("resize", onResize);
