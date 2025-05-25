@@ -1,6 +1,6 @@
 import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
 
-export class Layout {
+export class MyLayout {
   constructor() {
     this.leftElements = [];
     this.rightElements = [];
@@ -32,7 +32,7 @@ export class Layout {
 
     // Calculate left panel
     const leftX = 2 * UI_PADDING + UI_WIDTH / 2;
-    this._layoutPanel(
+    this.layoutPanel(
       this.leftElements,
       leftX,
       availableHeight,
@@ -42,7 +42,7 @@ export class Layout {
 
     // Calculate right panel
     const rightX = screenWidth - leftX;
-    this._layoutPanel(
+    this.layoutPanel(
       this.rightElements,
       rightX,
       availableHeight,
@@ -57,7 +57,7 @@ export class Layout {
     }
   }
 
-  _layoutPanel(elements, xPosition, availableHeight, startY, width) {
+  layoutPanel(elements, xPosition, availableHeight, startY, width) {
     if (elements.length === 0) return;
 
     // Calculate spacing based on the number of elements

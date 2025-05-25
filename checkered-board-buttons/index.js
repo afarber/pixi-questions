@@ -4,7 +4,7 @@ import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
 import { UI_HEIGHT } from "./Theme";
-import { Layout } from "./Layout";
+import { MyLayout } from "./MyLayout";
 import { games } from "./TestData";
 
 const RIGHT_BUTTONS_NUM = 10;
@@ -62,8 +62,7 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  // Create our UI layout manager
-  const layout = new Layout();
+  const layout = new MyLayout();
 
   await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
