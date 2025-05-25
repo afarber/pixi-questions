@@ -43,7 +43,7 @@ export class MyVerticalPanel {
     const growChildHeight = this.findGrowChild() ? availableHeight - (this.children.length - 1) * childHeight : 0;
 
     // Iterate the list of children and call .resize() on each of them
-    let currentY = panelY + UI_PADDING;
+    let currentY = panelY;
 
     for (let child of this.children) {
       if (!child.resize) {
@@ -54,13 +54,7 @@ export class MyVerticalPanel {
         child.resize(panelX + panelWidth / 2, currentY + growChildHeight / 2, panelWidth, growChildHeight, UI_RADIUS);
         currentY += growChildHeight + UI_PADDING;
       } else {
-        child.resize(
-          panelX + UI_PADDING + childWidth / 2,
-          currentY + childHeight / 2,
-          childWidth,
-          childHeight,
-          UI_RADIUS
-        );
+        child.resize(panelX + childWidth / 2, currentY + childHeight / 2, childWidth, childHeight, UI_RADIUS);
         currentY += childHeight + UI_PADDING;
       }
 

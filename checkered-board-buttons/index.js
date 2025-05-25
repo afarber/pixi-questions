@@ -3,8 +3,7 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { UI_HEIGHT, UI_PADDING, UI_WIDTH } from "./Theme";
-import { MyLayout } from "./MyLayout";
+import { UI_PADDING, UI_WIDTH } from "./Theme";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 
@@ -134,15 +133,11 @@ const manifest = {
     label.skew.y += 0.01 * time.deltaTime;
   });
 
-  // Configure the layout with all our UI elements
-  //layout.setCenter(boardContainer);
-
   const onResize = () => {
-    const panelWidth = UI_WIDTH + 2 * UI_PADDING;
     console.log("onResize left panel");
-    leftPanel.resize(0, 0, panelWidth, app.screen.height);
+    leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
     console.log("onResize right panel");
-    rightPanel.resize(app.screen.width - panelWidth, 0, panelWidth, app.screen.height);
+    rightPanel.resize(app.screen.width - UI_WIDTH - UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height);
 
     // Let the layout manager handle everything else
     //layout.resize(app.screen.width, app.screen.height);
