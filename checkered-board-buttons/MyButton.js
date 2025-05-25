@@ -67,7 +67,7 @@ export class MyButton extends FancyButton {
     this.on("pointerupoutside", this.handleUp.bind(this));
     this.on("pointerout", this.handleUp.bind(this));
 
-    this.resize(options.width, options.height, options.radius);
+    this.resize(0, 0, options.width, options.height, options.radius);
   }
 
   handleHover() {
@@ -126,22 +126,16 @@ export class MyButton extends FancyButton {
   }
 
   // for clearer graphics, recreate the views instead of scaling them
-  resize(w, h, r) {
-    this.defaultView = new Graphics()
-      .roundRect(0, 0, w, h, r)
-      .fill({ color: UI_BACKGROUND_DEFAULT });
-    this.hoverView = new Graphics()
-      .roundRect(0, 0, w, h, r)
-      .fill({ color: UI_BACKGROUND_HOVER });
-    this.pressedView = new Graphics()
-      .roundRect(0, 0, w, h, r)
-      .fill({ color: UI_BACKGROUND_PRESSED });
-    this.disabledView = new Graphics()
-      .roundRect(0, 0, w, h, r)
-      .fill({ color: UI_BACKGROUND_DISABLED });
+  resize(x, y, w, h, r) {
+    this.defaultView = new Graphics().roundRect(0, 0, w, h, r).fill({ color: UI_BACKGROUND_DEFAULT });
+    this.hoverView = new Graphics().roundRect(0, 0, w, h, r).fill({ color: UI_BACKGROUND_HOVER });
+    this.pressedView = new Graphics().roundRect(0, 0, w, h, r).fill({ color: UI_BACKGROUND_PRESSED });
+    this.disabledView = new Graphics().roundRect(0, 0, w, h, r).fill({ color: UI_BACKGROUND_DISABLED });
 
     // workaround for buttons losing disabled appearance
     this.enabled = !this.enabled;
     this.enabled = !this.enabled;
+
+    this.position.set(x, y);
   }
 }
