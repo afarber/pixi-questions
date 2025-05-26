@@ -1,4 +1,5 @@
 import { Board } from "./Board";
+import { MyList } from "./MyList";
 import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
 
 // A class for placing and resizing Pixi Containers.
@@ -19,7 +20,7 @@ export class MyVerticalPanel {
   // Find a ScrollBox or Board, there can be 0 or 1 of those
   findMaximizedChild() {
     for (let child of this.children) {
-      if (child instanceof ScrollBox || child instanceof Board) {
+      if (child instanceof MyList || child instanceof Board) {
         return child;
       }
     }
@@ -34,14 +35,11 @@ export class MyVerticalPanel {
       return;
     }
 
-    const childWidth = panelWidth - 2 * UI_PADDING;
-    const availableHeight = panelHeight - (this.children.length + 1) * UI_PADDING;
+    const childWidth = panelWidth;
+    const availableHeight = panelHeight - (this.children.length - 1) * UI_PADDING;
     const childHeight = Math.min(UI_HEIGHT, availableHeight / this.children.length);
-
-    console.log("MyVerticalPanel.resize", { childWidth, childHeight, availableHeight });
-
-    // If there is a child with "grow", give it max height
     const maxChildHeight = this.findMaximizedChild() ? availableHeight - (this.children.length - 1) * childHeight : 0;
+    console.log("MyVerticalPanel.resize", { childWidth, maxChildHeight, childHeight, availableHeight });
 
     // Iterate the list of children and call .resize() on each of them
     let currentY = panelY;
@@ -51,8 +49,17 @@ export class MyVerticalPanel {
         continue;
       }
 
-      if (child.grow) {
-        child.resize(panelX + panelWidth / 2, currentY + maxChildHeight / 2, panelWidth, maxChildHeight, UI_RADIUS);
+      if (child instanceof MyList) {
+        child.resize(panelX - UI_PADDING, currentY, panelWidth + 2 * UI_PADDING, maxChildHeight, UI_RADIUS);
+        currentY += maxChildHeight + UI_PADDING;
+      } else if (child instanceof Board) {
+        child.resize(
+          panelX + panelWidth / 2,
+          currentY + maxChildHeight / 2,
+          panelWidth + 2 * UI_PADDING,
+          maxChildHeight,
+          UI_RADIUS
+        );
         currentY += maxChildHeight + UI_PADDING;
       } else {
         child.resize(panelX + childWidth / 2, currentY + childHeight / 2, childWidth, childHeight, UI_RADIUS);
