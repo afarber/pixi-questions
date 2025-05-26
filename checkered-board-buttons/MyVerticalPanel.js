@@ -1,8 +1,9 @@
+import { Board } from "./Board";
 import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
 
 // A class for placing and resizing Pixi Containers.
 // They are placed vertically by calling resize() method.
-// A Container with "grow" property is given max height.
+// Instances of ScrollBox or Board are given the max height.
 
 export class MyVerticalPanel {
   constructor() {
@@ -15,10 +16,10 @@ export class MyVerticalPanel {
     return this;
   }
 
-  // Find a child with "grow" set, there can be 0 or 1 of those
-  findGrowChild() {
+  // Find a ScrollBox or Board, there can be 0 or 1 of those
+  findMaximizedChild() {
     for (let child of this.children) {
-      if (child.grow) {
+      if (child instanceof ScrollBox || child instanceof Board) {
         return child;
       }
     }
@@ -40,7 +41,7 @@ export class MyVerticalPanel {
     console.log("MyVerticalPanel.resize", { childWidth, childHeight, availableHeight });
 
     // If there is a child with "grow", give it max height
-    const growChildHeight = this.findGrowChild() ? availableHeight - (this.children.length - 1) * childHeight : 0;
+    const maxChildHeight = this.findMaximizedChild() ? availableHeight - (this.children.length - 1) * childHeight : 0;
 
     // Iterate the list of children and call .resize() on each of them
     let currentY = panelY;
@@ -51,8 +52,8 @@ export class MyVerticalPanel {
       }
 
       if (child.grow) {
-        child.resize(panelX + panelWidth / 2, currentY + growChildHeight / 2, panelWidth, growChildHeight, UI_RADIUS);
-        currentY += growChildHeight + UI_PADDING;
+        child.resize(panelX + panelWidth / 2, currentY + maxChildHeight / 2, panelWidth, maxChildHeight, UI_RADIUS);
+        currentY += maxChildHeight + UI_PADDING;
       } else {
         child.resize(panelX + childWidth / 2, currentY + childHeight / 2, childWidth, childHeight, UI_RADIUS);
         currentY += childHeight + UI_PADDING;
