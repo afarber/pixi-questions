@@ -55,12 +55,7 @@ export class MyVerticalPanel {
         child.resize(panelX - UI_PADDING, currentY, panelWidth + 2 * UI_PADDING, maxChildHeight);
         currentY += maxChildHeight + UI_PADDING;
       } else if (child instanceof Board) {
-        child.resize(
-          panelX + panelWidth / 2,
-          currentY + maxChildHeight / 2,
-          panelWidth + 2 * UI_PADDING,
-          maxChildHeight
-        );
+        child.resize(panelX, currentY, panelWidth, maxChildHeight);
         currentY += maxChildHeight + UI_PADDING;
       } else {
         child.resize(panelX + childWidth / 2, currentY + childHeight / 2, childWidth, childHeight, UI_RADIUS);

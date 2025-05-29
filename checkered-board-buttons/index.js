@@ -142,10 +142,8 @@ const manifest = {
   });
 
   const onResize = () => {
-    console.log("onResize left panel");
     leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
 
-    console.log("onResize mid panel");
     midPanel.resize(
       UI_WIDTH + 2 * UI_PADDING,
       UI_PADDING,
@@ -153,7 +151,6 @@ const manifest = {
       app.screen.height - 2 * UI_PADDING
     );
 
-    console.log("onResize right panel");
     rightPanel.resize(
       app.screen.width - UI_WIDTH - UI_PADDING,
       UI_PADDING,
@@ -167,7 +164,7 @@ const manifest = {
 })();
 
 function createDebugRect() {
-  return new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE).stroke({ color: "red" });
+  return new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE).stroke({ color: "Red" });
 }
 
 async function createBunny(textureAlias) {

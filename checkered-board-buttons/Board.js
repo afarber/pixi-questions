@@ -38,7 +38,7 @@ export class Board extends Container {
     let boardOffset = new Point();
     boardOffset.x = (w - appSize) / 2 + 4 * UI_PADDING + UI_WIDTH;
     boardOffset.y = (h - appSize) / 2;
-    this.position.set(x + boardOffset.x, y + boardOffset.y);
+    this.position.set(boardOffset.x, boardOffset.y);
 
     console.log("Board.resize", { w, h, boardOrigin: boardOffset, boardScale });
   }
