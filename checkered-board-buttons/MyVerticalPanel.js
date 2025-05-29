@@ -30,9 +30,7 @@ export class MyVerticalPanel {
   // Resize children when this panel is resized
   resize(panelX, panelY, panelWidth, panelHeight) {
     console.log("MyVerticalPanel.resize params", { panelX, panelY, panelWidth, panelHeight });
-    this.debugRect.position.set(panelX, panelY);
-    this.debugRect.width = panelWidth;
-    this.debugRect.height = panelHeight;
+    this.debugRect.clear().rect(panelX, panelY, panelWidth, panelHeight).stroke({ color: "red" });
 
     if (panelWidth <= 0 || panelHeight <= 0 || !this.children.length) {
       console.log("MyVerticalPanel.resize called with invalid params or empty children");

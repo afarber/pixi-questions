@@ -94,5 +94,6 @@ export class MyList extends Container {
     this.scrollBox.position.set(x, y);
     this.scrollBox.width = w;
     this.scrollBox.height = h;
+    // TODO resizing height does not work and that is why items disappear
   }
 }

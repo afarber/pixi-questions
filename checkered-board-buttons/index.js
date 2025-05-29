@@ -62,9 +62,9 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const redRect = createDebugRect("red");
-  const greenRect = createDebugRect("green");
-  const blueRect = createDebugRect("blue");
+  const redRect = createDebugRect();
+  const greenRect = createDebugRect();
+  const blueRect = createDebugRect();
 
   app.stage.addChild(redRect);
   app.stage.addChild(greenRect);
@@ -106,7 +106,6 @@ const manifest = {
 
   const gamesList = new MyList();
   gamesList.setGames(games);
-  //gamesList.grow = true;
   app.stage.addChild(gamesList);
   leftPanel.addChild(gamesList);
 
@@ -167,8 +166,8 @@ const manifest = {
   onResize();
 })();
 
-function createDebugRect(color) {
-  return new Graphics().rect(0, 0, 100, 100).fill({ color: color, alpha: 0.5 });
+function createDebugRect() {
+  return new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE).stroke({ color: "red" });
 }
 
 async function createBunny(textureAlias) {
