@@ -11,7 +11,7 @@ export class MyList extends Container {
     this.scrollBox = new ScrollBox({
       background: UI_BACKGROUND,
       width: UI_WIDTH + 2 * UI_PADDING,
-      height: 5.5 * UI_HEIGHT,
+      height: 3.5 * UI_HEIGHT,
       radius: UI_RADIUS,
       elementsMargin: UI_PADDING,
       padding: UI_PADDING
@@ -90,10 +90,12 @@ export class MyList extends Container {
     }
   }
 
-  resize(x, y, w, h, r) {
+  resize(x, y, w, h) {
     this.scrollBox.position.set(x, y);
-    this.scrollBox.width = w;
-    this.scrollBox.height = h;
-    // TODO resizing height does not work and that is why items disappear
+    // both options.height should be updated and setSize() called or items will disappear
+    this.scrollBox.options.width = w;
+    this.scrollBox.options.height = h;
+    this.scrollBox.setSize({ width: w, height: h });
+    console.log(this.scrollBox.options);
   }
 }
