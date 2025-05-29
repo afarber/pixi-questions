@@ -62,9 +62,9 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const redRect = new Graphics().rect(0, 0, 100, 100).fill({ color: "red", alpha: 0.5 });
-  const greenRect = new Graphics().rect(0, 0, 100, 100).fill({ color: "green", alpha: 0.5 });
-  const blueRect = new Graphics().rect(0, 0, 100, 100).fill({ color: "blue", alpha: 0.5 });
+  const redRect = createDebugRect("red");
+  const greenRect = createDebugRect("green");
+  const blueRect = createDebugRect("blue");
 
   app.stage.addChild(redRect);
   app.stage.addChild(greenRect);
@@ -150,7 +150,7 @@ const manifest = {
     midPanel.resize(
       UI_WIDTH + 2 * UI_PADDING,
       UI_PADDING,
-      app.screen.width - 2 * UI_WIDTH - 2 * UI_PADDING,
+      app.screen.width - 2 * UI_WIDTH - 4 * UI_PADDING,
       app.screen.height - 2 * UI_PADDING
     );
 
@@ -166,6 +166,10 @@ const manifest = {
   addEventListener("resize", onResize);
   onResize();
 })();
+
+function createDebugRect(color) {
+  return new Graphics().rect(0, 0, 100, 100).fill({ color: color, alpha: 0.5 });
+}
 
 async function createBunny(textureAlias) {
   const bunny = Sprite.from(textureAlias);
