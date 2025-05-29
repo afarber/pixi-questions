@@ -7,8 +7,9 @@ import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
 // Instances of ScrollBox or Board are given the max height.
 
 export class MyVerticalPanel {
-  constructor() {
+  constructor(debugRect) {
     this.children = [];
+    this.debugRect = debugRect;
   }
 
   // add a child element
@@ -29,6 +30,9 @@ export class MyVerticalPanel {
   // Resize children when this panel is resized
   resize(panelX, panelY, panelWidth, panelHeight) {
     console.log("MyVerticalPanel.resize params", { panelX, panelY, panelWidth, panelHeight });
+    this.debugRect.position.set(panelX, panelY);
+    this.debugRect.width = panelWidth;
+    this.debugRect.height = panelHeight;
 
     if (panelWidth <= 0 || panelHeight <= 0 || !this.children.length) {
       console.log("MyVerticalPanel.resize called with invalid params or empty children");

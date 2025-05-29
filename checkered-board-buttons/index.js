@@ -1,4 +1,4 @@
-import { Application, Assets, Sprite, Text } from "pixi.js";
+import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
@@ -62,9 +62,17 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const leftPanel = new MyVerticalPanel();
-  const midPanel = new MyVerticalPanel();
-  const rightPanel = new MyVerticalPanel();
+  const redRect = new Graphics().rect(0, 0, 100, 100).fill({ color: "red", alpha: 0.5 });
+  const greenRect = new Graphics().rect(0, 0, 100, 100).fill({ color: "green", alpha: 0.5 });
+  const blueRect = new Graphics().rect(0, 0, 100, 100).fill({ color: "blue", alpha: 0.5 });
+
+  app.stage.addChild(redRect);
+  app.stage.addChild(greenRect);
+  app.stage.addChild(blueRect);
+
+  const leftPanel = new MyVerticalPanel(redRect);
+  const midPanel = new MyVerticalPanel(greenRect);
+  const rightPanel = new MyVerticalPanel(blueRect);
 
   await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
@@ -72,6 +80,7 @@ const manifest = {
 
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
+  midPanel.addChild(boardContainer);
 
   // create 3 interactive, draggable Tiles with initial off-screen position
   const r = new Tile("Red", 3, 3, -30, app.stage);
@@ -136,11 +145,22 @@ const manifest = {
   const onResize = () => {
     console.log("onResize left panel");
     leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
-    console.log("onResize right panel");
-    rightPanel.resize(app.screen.width - UI_WIDTH - UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height);
 
-    // Let the layout manager handle everything else
-    //layout.resize(app.screen.width, app.screen.height);
+    console.log("onResize mid panel");
+    midPanel.resize(
+      UI_WIDTH + 2 * UI_PADDING,
+      UI_PADDING,
+      app.screen.width - 2 * UI_WIDTH - 2 * UI_PADDING,
+      app.screen.height - 2 * UI_PADDING
+    );
+
+    console.log("onResize right panel");
+    rightPanel.resize(
+      app.screen.width - UI_WIDTH - UI_PADDING,
+      UI_PADDING,
+      UI_WIDTH,
+      app.screen.height - 2 * UI_PADDING
+    );
   };
 
   addEventListener("resize", onResize);
