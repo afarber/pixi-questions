@@ -132,10 +132,6 @@ export class MyButton extends FancyButton {
     this.pressedView = new Graphics().roundRect(0, 0, w, h, r).fill({ color: UI_BACKGROUND_PRESSED });
     this.disabledView = new Graphics().roundRect(0, 0, w, h, r).fill({ color: UI_BACKGROUND_DISABLED });
 
-    // workaround for buttons losing disabled appearance
-    this.enabled = !this.enabled;
-    this.enabled = !this.enabled;
-
     this.position.set(x, y);
   }
 }

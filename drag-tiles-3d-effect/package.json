@@ -14,7 +14,7 @@
   "license": "Public Domain",
   "dependencies": {
     "@pixi/layout": "^3.0.2",
-    "@pixi/ui": "^2.2.3",
+    "@pixi/ui": "^2.2.4",
     "@tweenjs/tween.js": "^25.0.0",
     "pixi.js": "^8.9.1"
   },
