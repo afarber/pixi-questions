@@ -7,7 +7,7 @@ The files are public domain - unless there is a different note (by their respect
 Screenshots
 ==========
 
-[checkered-board-buttons](https://github.com/afarber/pixi-questions/tree/master/checkered-board-buttons) with draggable rectangles (TODO and a column of buttons on the right), based on [Pixi.js Tutorial for Absolute Beginners](https://youtube.com/watch?v=kkbzL5dXezU&list=PLjcjAqAnHd1ELH6j5RZaT2Ilvwj1sMCi6) by Wael Yasmina:
+[checkered-board-buttons](https://github.com/afarber/pixi-questions/tree/master/checkered-board-buttons) with draggable rectangles, based on [Pixi.js Tutorial for Absolute Beginners](https://youtube.com/watch?v=kkbzL5dXezU&list=PLjcjAqAnHd1ELH6j5RZaT2Ilvwj1sMCi6) by Wael Yasmina:
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/checkered-board-buttons/screenshot.gif)
 
