@@ -4,7 +4,7 @@ import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
 
 // A class for placing and resizing Pixi Containers.
 // They are placed vertically by calling resize() method.
-// Instances of ScrollBox or Board are given the max height.
+// Instances of MyList or Board are given the max height.
 
 export class MyVerticalPanel {
   constructor(debugRect) {
@@ -18,36 +18,31 @@ export class MyVerticalPanel {
     return this;
   }
 
-  // Find a ScrollBox or Board, there can be 0 or 1 of those
-  findMaximizedChild() {
-    for (let child of this.children) {
-      if (child instanceof MyList || child instanceof Board) {
-        return child;
-      }
-    }
-  }
-
   // Resize children when this panel is resized
   resize(panelX, panelY, panelWidth, panelHeight) {
-    console.log("MyVerticalPanel.resize params", { panelX, panelY, panelWidth, panelHeight });
-    this.debugRect.clear().rect(panelX, panelY, panelWidth, panelHeight).stroke({ color: "red" });
-
     if (panelWidth <= 0 || panelHeight <= 0 || !this.children.length) {
-      console.log("MyVerticalPanel.resize called with invalid params or empty children");
+      console.log("MyVerticalPanel.resize called with invalid params or empty children", {
+        panelX,
+        panelY,
+        panelWidth,
+        panelHeight
+      });
       return;
     }
 
-    const childWidth = panelWidth;
+    this.debugRect.clear().rect(panelX, panelY, panelWidth, panelHeight).stroke({ color: "red" });
+
     const availableHeight = panelHeight - (this.children.length - 1) * UI_PADDING;
     const childHeight = Math.min(UI_HEIGHT, availableHeight / this.children.length);
-    const maxChildHeight = this.findMaximizedChild() ? availableHeight - (this.children.length - 1) * childHeight : 0;
-    console.log("MyVerticalPanel.resize", { childWidth, maxChildHeight, childHeight, availableHeight });
+    const maxChildHeight = availableHeight - (this.children.length - 1) * childHeight;
 
     // Iterate the list of children and call .resize() on each of them
+    // For MyList and Board (there can be max 1 of them) use the max height
     let currentY = panelY;
 
     for (let child of this.children) {
       if (!child.resize) {
+        console.log("Skipping a MyVerticalPanel child without resize() method");
         continue;
       }
 
@@ -58,14 +53,13 @@ export class MyVerticalPanel {
         child.resize(panelX, currentY, panelWidth, maxChildHeight);
         currentY += maxChildHeight + UI_PADDING;
       } else {
-        child.resize(panelX + childWidth / 2, currentY + childHeight / 2, childWidth, childHeight, UI_RADIUS);
+        child.resize(panelX + panelWidth / 2, currentY + childHeight / 2, panelWidth, childHeight, UI_RADIUS);
         currentY += childHeight + UI_PADDING;
-      }
 
-      // Handle show/hide animations if applicable
-      if (child.hide && child.show) {
-        child.hide(false);
-        child.show(true, 50);
+        if (child.hide && child.show) {
+          child.hide(false);
+          child.show(true, 50);
+        }
       }
     }
   }
