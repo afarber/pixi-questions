@@ -34,12 +34,12 @@ export class Board extends Container {
     let boardScale = appSize / boardSize;
     this.scale.set(boardScale);
 
-    // calculate an offset to keep the board centered
+    // Calculate an offset to keep the board centered within the given panel area
     let boardOffset = new Point();
-    boardOffset.x = (w - appSize) / 2 + 4 * UI_PADDING + UI_WIDTH;
-    boardOffset.y = (h - appSize) / 2;
+    boardOffset.x = x + (w - appSize) / 2;
+    boardOffset.y = y + (h - appSize) / 2;
     this.position.set(boardOffset.x, boardOffset.y);
 
-    console.log("Board.resize", { w, h, boardOrigin: boardOffset, boardScale });
+    console.log("Board.resize", { x, y, w, h, boardOrigin: boardOffset, boardScale });
   }
 }
