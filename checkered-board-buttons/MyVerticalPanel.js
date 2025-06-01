@@ -18,6 +18,11 @@ export class MyVerticalPanel {
     return this;
   }
 
+  // Find a MyList or Board, there can be 0 or 1 of those
+  hasSpecialChild() {
+    return this.children.some((child) => child instanceof MyList || child instanceof Board);
+  }
+
   // Resize children when this panel is resized
   resize(panelX, panelY, panelWidth, panelHeight) {
     if (panelWidth <= 0 || panelHeight <= 0 || !this.children.length) {
@@ -35,6 +40,9 @@ export class MyVerticalPanel {
     const availableHeight = panelHeight - (this.children.length - 1) * UI_PADDING;
     const childHeight = Math.min(UI_HEIGHT, availableHeight / this.children.length);
     const maxChildHeight = availableHeight - (this.children.length - 1) * childHeight;
+    const paddingY = this.hasSpecialChild()
+      ? UI_PADDING
+      : (panelHeight - childHeight * this.children.length) / (this.children.length - 1);
 
     // Iterate the list of children and call .resize() on each of them
     // For MyList and Board (there can be max 1 of them) use the max height
@@ -54,7 +62,7 @@ export class MyVerticalPanel {
         currentY += maxChildHeight + UI_PADDING;
       } else {
         child.resize(panelX + panelWidth / 2, currentY + childHeight / 2, panelWidth, childHeight, UI_RADIUS);
-        currentY += childHeight + UI_PADDING;
+        currentY += childHeight + paddingY;
 
         if (child.hide && child.show) {
           child.hide(false);
