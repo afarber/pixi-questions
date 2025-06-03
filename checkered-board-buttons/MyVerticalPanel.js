@@ -38,7 +38,7 @@ export class MyVerticalPanel {
     this.debugRect.clear().rect(panelX, panelY, panelWidth, panelHeight).stroke({ color: "red" });
 
     const availableHeight = panelHeight - (this.children.length - 1) * UI_PADDING;
-    const childHeight = Math.min(UI_HEIGHT, availableHeight / this.children.length);
+    const childHeight = Math.min(UI_HEIGHT, availableHeight / 10);
     const maxChildHeight = availableHeight - (this.children.length - 1) * childHeight;
     const paddingY = this.hasSpecialChild()
       ? UI_PADDING
