@@ -3,7 +3,7 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { TITLE_TEXT_STYLE, UI_PADDING, UI_WIDTH } from "./Theme";
+import { UI_PADDING, UI_WIDTH } from "./Theme";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 
@@ -49,7 +49,6 @@ const manifest = {
 
 // TODO: add a component to display player avatar in sprite, etc
 // TODO: below such 2 components, add a "Bookmark" text
-// TODO: add "total" (top) and "hint" (bottom) texts
 
 (async () => {
   const app = new Application();
@@ -62,17 +61,17 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const redRect = createDebugRect();
-  const greenRect = createDebugRect();
-  const blueRect = createDebugRect();
+  const leftDebugRect = createDebugRect();
+  const midDebugRect = createDebugRect();
+  const rightDebugRect = createDebugRect();
 
-  app.stage.addChild(redRect);
-  app.stage.addChild(greenRect);
-  app.stage.addChild(blueRect);
+  app.stage.addChild(leftDebugRect);
+  app.stage.addChild(midDebugRect);
+  app.stage.addChild(rightDebugRect);
 
-  const leftPanel = new MyVerticalPanel(redRect);
-  const midPanel = new MyVerticalPanel(greenRect);
-  const rightPanel = new MyVerticalPanel(blueRect);
+  const leftPanel = new MyVerticalPanel(leftDebugRect);
+  const midPanel = new MyVerticalPanel(midDebugRect);
+  const rightPanel = new MyVerticalPanel(rightDebugRect);
 
   await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
@@ -81,17 +80,14 @@ const manifest = {
   const text1 = new Text({
     text: "Game score 420:360"
   });
-  app.stage.addChild(text1);
   midPanel.addChild(text1);
 
   const boardContainer = new Board();
-  app.stage.addChild(boardContainer);
   midPanel.addChild(boardContainer);
 
   const text2 = new Text({
     text: "A longer game hint about tiles placement..."
   });
-  app.stage.addChild(text2);
   midPanel.addChild(text2);
 
   // create 3 interactive, draggable Tiles with initial off-screen position
@@ -113,25 +109,19 @@ const manifest = {
   boardContainer.addChild(label);
 
   const newGameButton = new MyButton({ text: "___NEW_GAME___" });
-  app.stage.addChild(newGameButton);
   leftPanel.addChild(newGameButton);
 
   const gamesList = new MyList();
   gamesList.setGames(games);
-  app.stage.addChild(gamesList);
   leftPanel.addChild(gamesList);
 
   const twoLettersButton = new MyButton({ text: "___TWO_LETTERS___" });
-  app.stage.addChild(twoLettersButton);
   leftPanel.addChild(twoLettersButton);
   const threeLettersButton = new MyButton({ text: "___THREE_LETTERS___" });
-  app.stage.addChild(threeLettersButton);
   leftPanel.addChild(threeLettersButton);
   const rareOneButton = new MyButton({ text: "___RARE_LETTER_1___" });
-  app.stage.addChild(rareOneButton);
   leftPanel.addChild(rareOneButton);
   const rareTwoButton = new MyButton({ text: "___RARE_LETTER_2___" });
-  app.stage.addChild(rareTwoButton);
   leftPanel.addChild(rareTwoButton);
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
@@ -141,9 +131,12 @@ const manifest = {
 
     button.onPress.connect(() => console.log(`Button ${i + 1} pressed!`));
     button.enabled = i % 4 !== 1;
-    app.stage.addChild(button);
     rightPanel.addChild(button);
   }
+
+  leftPanel.addChildrenToStage(app.stage);
+  midPanel.addChildrenToStage(app.stage);
+  rightPanel.addChildrenToStage(app.stage);
 
   app.ticker.add((time) => {
     buttonsTweenGroup.update();

@@ -1,6 +1,5 @@
 import { Container, Graphics, Point } from "pixi.js";
 import { TILE_SIZE } from "./Tile.js";
-import { UI_PADDING, UI_WIDTH } from "./Theme.js";
 
 // Number of cells in the board
 export const NUM_CELLS = 8;

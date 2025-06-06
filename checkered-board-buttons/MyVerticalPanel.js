@@ -19,6 +19,13 @@ export class MyVerticalPanel {
     return this;
   }
 
+  // add all children elements to stage
+  addChildrenToStage(stage) {
+    for (let child of this.children) {
+      stage.addChild(child);
+    }
+  }
+
   // Find a MyList or Board, there can be 0 or 1 of those
   hasSpecialChild() {
     return this.children.some((child) => child instanceof MyList || child instanceof Board);
