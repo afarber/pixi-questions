@@ -1,7 +1,7 @@
 import { Text } from "pixi.js";
 import { Board } from "./Board";
 import { MyList } from "./MyList";
-import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
+import { UI_HEIGHT, UI_RADIUS, UI_PADDING } from "./Theme";
 
 // A class for placing and resizing Pixi Containers.
 // They are placed vertically by calling resize() method.

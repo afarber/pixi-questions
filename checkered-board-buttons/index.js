@@ -129,7 +129,13 @@ const manifest = {
       text: `Button ${i + 1}`
     });
 
-    button.onPress.connect(() => console.log(`Button ${i + 1} pressed!`));
+    button.onPress.connect(() => {
+      if (i === 0) {
+        toggleFullscreen(app.canvas);
+      }
+      console.log(`Button ${i + 1} pressed!`);
+    });
+
     button.enabled = i % 4 !== 1;
     rightPanel.addChild(button);
   }
@@ -147,6 +153,7 @@ const manifest = {
   });
 
   const onResize = () => {
+    console.log("onResize", app.screen.width, app.screen.height);
     leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
 
     midPanel.resize(
@@ -165,6 +172,7 @@ const manifest = {
   };
 
   addEventListener("resize", onResize);
+  addEventListener("fullscreenchange", onResize);
   onResize();
 })();
 
@@ -186,4 +194,14 @@ function createLabel() {
   label.y = (NUM_CELLS - 0.5) * TILE_SIZE;
   label.anchor.set(0.5);
   return label;
+}
+
+function toggleFullscreen(canvas) {
+  if (!document.fullscreenElement) {
+    canvas.requestFullscreen().catch((err) => {
+      console.log(`Error attempting to enable fullscreen: ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
 }
