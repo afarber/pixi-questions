@@ -1,3 +1,4 @@
+import { Text } from "pixi.js";
 import { Board } from "./Board";
 import { MyList } from "./MyList";
 import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING } from "./Theme";
@@ -51,7 +52,8 @@ export class MyVerticalPanel {
     for (let child of this.children) {
       if (!child.resize) {
         console.log("Skipping a MyVerticalPanel child without resize() method");
-        continue;
+        // TODO
+        //continue;
       }
 
       if (child instanceof MyList) {
@@ -60,6 +62,11 @@ export class MyVerticalPanel {
       } else if (child instanceof Board) {
         child.resize(panelX, currentY, panelWidth, maxChildHeight);
         currentY += maxChildHeight + UI_PADDING;
+      } else if (child instanceof Text) {
+        child.x = panelX + panelWidth / 2;
+        child.y = currentY + childHeight / 2;
+        child.anchor.set(0.5);
+        currentY += childHeight + paddingY;
       } else {
         child.resize(panelX + panelWidth / 2, currentY + childHeight / 2, panelWidth, childHeight, UI_RADIUS);
         currentY += childHeight + paddingY;

@@ -3,7 +3,7 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { UI_PADDING, UI_WIDTH } from "./Theme";
+import { TITLE_TEXT_STYLE, UI_PADDING, UI_WIDTH } from "./Theme";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 
@@ -78,9 +78,21 @@ const manifest = {
   await Assets.loadBundle("animals");
   await Assets.loadBundle("sounds");
 
+  const text1 = new Text({
+    text: "Game score 420:360"
+  });
+  app.stage.addChild(text1);
+  midPanel.addChild(text1);
+
   const boardContainer = new Board();
   app.stage.addChild(boardContainer);
   midPanel.addChild(boardContainer);
+
+  const text2 = new Text({
+    text: "A longer game hint about tiles placement..."
+  });
+  app.stage.addChild(text2);
+  midPanel.addChild(text2);
 
   // create 3 interactive, draggable Tiles with initial off-screen position
   const r = new Tile("Red", 3, 3, -30, app.stage);
