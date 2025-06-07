@@ -52,10 +52,12 @@ const manifest = {
 
 (async () => {
   const app = new Application();
-  await app.init({ background: "LightSalmon", resizeTo: window, hello: true });
-
-  // append the app canvas to the document body
-  document.body.appendChild(app.canvas);
+  await app.init({
+    canvas: document.getElementById("pixiCanvas"),
+    background: "LightSalmon",
+    resizeTo: window,
+    hello: true
+  });
 
   // the app stage will handle the move events
   app.stage.eventMode = "static";
@@ -131,7 +133,8 @@ const manifest = {
 
     button.onPress.connect(() => {
       if (i === 0) {
-        toggleFullscreen(app.canvas);
+        const fullDiv = document.getElementById("fullDiv");
+        toggleFullscreen(fullDiv);
       }
       console.log(`Button ${i + 1} pressed!`);
     });
@@ -196,12 +199,16 @@ function createLabel() {
   return label;
 }
 
-function toggleFullscreen(canvas) {
-  if (!document.fullscreenElement) {
-    canvas.requestFullscreen().catch((err) => {
+function toggleFullscreen(fullDiv) {
+  if (!document.fullscreenEnabled) {
+    return;
+  }
+
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    fullDiv.requestFullscreen().catch((err) => {
       console.log(`Error attempting to enable fullscreen: ${err.message}`);
     });
-  } else {
-    document.exitFullscreen();
   }
 }
