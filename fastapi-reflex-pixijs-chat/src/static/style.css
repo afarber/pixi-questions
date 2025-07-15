@@ -1,0 +1,247 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f5f5f5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Main app container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+}
+
+/* Top Section: Canvas */
+.canvas-section {
+    flex: 1;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.pixi-canvas {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-text {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0.8;
+}
+
+/* Middle Section: Chat Window */
+.chat-section {
+    flex: 1;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #e0e0e0;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.chat-header h3 {
+    font-size: 16px;
+    color: #333;
+}
+
+.user-count {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.chat-window {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: white;
+}
+
+.placeholder-message {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Bottom Section: Input */
+.input-section {
+    background: white;
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.input-container {
+    display: flex;
+    gap: 8px;
+    max-width: 100%;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#messageInput:focus {
+    border-color: #667eea;
+}
+
+#messageInput:disabled {
+    background: #f5f5f5;
+    color: #999;
+}
+
+#sendButton {
+    padding: 12px 24px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#sendButton:hover:not(:disabled) {
+    background: #5a67d8;
+}
+
+#sendButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Bottom Drawer: Name Dialog */
+.name-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.name-drawer.active {
+    transform: translateY(0);
+}
+
+.drawer-content {
+    padding: 24px 16px;
+    text-align: center;
+}
+
+.drawer-content h4 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+#nameInput {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 16px;
+}
+
+#nameInput:focus {
+    border-color: #667eea;
+}
+
+#nameInput.error {
+    border-color: #e53e3e;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+#joinButton {
+    padding: 12px 32px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#joinButton:hover {
+    background: #5a67d8;
+}
+
+.error-message {
+    color: #e53e3e;
+    font-size: 14px;
+    margin-top: 8px;
+    min-height: 20px;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .input-container {
+        gap: 6px;
+    }
+    
+    #messageInput {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    #nameInput {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}
+
+/* Responsive layout adjustments */
+@media (max-height: 600px) {
+    .canvas-section {
+        flex: 0.8;
+    }
+    
+    .chat-section {
+        flex: 1.2;
+    }
+}

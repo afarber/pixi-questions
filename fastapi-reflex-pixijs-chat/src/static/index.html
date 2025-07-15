@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Reflex PixiJS Chat</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Section: Pixi.js Canvas -->
+        <div class="canvas-section">
+            <div id="pixiCanvas" class="pixi-canvas">
+                <div class="placeholder-text">Pixi.js Canvas - User Visualization</div>
+            </div>
+        </div>
+
+        <!-- Middle Section: Chat Window -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <h3>Chat Messages</h3>
+                <div class="user-count">Users: <span id="userCount">0</span></div>
+            </div>
+            <div id="chatWindow" class="chat-window">
+                <div class="placeholder-message">Welcome to the chat! Messages will appear here.</div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Input Field -->
+        <div class="input-section">
+            <div class="input-container">
+                <input type="text" id="messageInput" placeholder="Type your message..." disabled>
+                <button id="sendButton" disabled>Send</button>
+            </div>
+        </div>
+
+        <!-- Bottom Drawer: User Name Dialog (hidden initially) -->
+        <div id="nameDrawer" class="name-drawer">
+            <div class="drawer-content">
+                <h4>Enter Your Name</h4>
+                <input type="text" id="nameInput" placeholder="Your name (max 16 chars)" maxlength="16">
+                <button id="joinButton">Join Chat</button>
+                <div id="nameError" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
