@@ -62,12 +62,90 @@ Based on the README specification, the following commands will be used:
 - Name validation prevents duplicate usernames with red border animation feedback, max name length ist 16
 - The UI follows a three-section layout: canvas (top), chat window (middle), input field (bottom)
 
-## Next Steps for Implementation
+## Step-by-Step Implementation Plan
 
-1. Create the basic FastAPI application structure
-2. Implement WebSocket chat functionality
-3. Add Pixi.js canvas integration for user visualization
-4. Create the mobile-optimized UI layout
-5. Add Docker/Podman deployment configuration
-6. Implement name validation and error handling
+### Phase 1: Basic FastAPI Structure (Runnable)
+**Step 1**: Create minimal FastAPI application with static HTML page
+- Create `src/main.py` with basic FastAPI app
+- Create `requirements.txt` with FastAPI, uvicorn dependencies
+- Create `src/static/index.html` with placeholder UI (3-section layout)
+- Create basic CSS for mobile-optimized layout
+- **Result**: Static webpage accessible at `http://localhost:8000`
+
+### Phase 2: Add Pixi.js Canvas (Runnable)
+**Step 2**: Integrate Pixi.js canvas with placeholder rectangles
+- Add Pixi.js v8 CDN to HTML
+- Create `assets/pixi/canvas.js` with basic canvas setup
+- Display 2-3 static colored rectangles as user placeholders
+- **Result**: Canvas displays with animated floating rectangles
+
+### Phase 3: Basic WebSocket Connection (Runnable)
+**Step 3**: Implement WebSocket endpoint and basic chat UI
+- Add WebSocket endpoint to FastAPI (`/ws`)
+- Create chat message display area in HTML
+- Add basic message input field and send button
+- Implement simple echo WebSocket functionality
+- **Result**: Users can send messages and see echoes
+
+### Phase 4: Multi-User Chat (Runnable)
+**Step 4**: Enable multiple users and message broadcasting
+- Implement user connection management
+- Add message broadcasting to all connected users
+- Display messages in chat window with timestamps
+- **Result**: Multiple users can chat in real-time
+
+### Phase 5: User Names and Validation (Runnable)
+**Step 5**: Add user name system with validation
+- Create bottom drawer dialog for name entry
+- Implement name validation (max 16 chars, no duplicates)
+- Add red border animation for validation errors
+- Store user names and display in messages
+- **Result**: Users must enter unique names to join chat
+
+### Phase 6: Dynamic User Visualization (Runnable)
+**Step 6**: Connect Pixi.js canvas to real users
+- Update canvas to show rectangles for actual connected users
+- Generate random pastel colors for each user
+- Display user names as labels on rectangles
+- Remove/add rectangles when users join/leave
+- **Result**: Canvas shows real-time user representation
+
+### Phase 7: WebSocket Reconnection (Runnable)
+**Step 7**: Add connection resilience
+- Implement WebSocket reconnection with random backoff
+- Add connection status indicators
+- Handle reconnection gracefully
+- **Result**: App handles network interruptions gracefully
+
+### Phase 8: Docker Deployment (Runnable)
+**Step 8**: Create Docker configuration
+- Create `Dockerfile` for Python app
+- Create `docker-compose.yml` for container orchestration
+- Create `run-docker.sh` and `run-podman.sh` scripts
+- **Result**: App runs in containerized environment
+
+### Phase 9: Polish and Optimization (Runnable)
+**Step 9**: Final improvements and mobile optimization
+- Optimize mobile layout and touch interactions
+- Add smooth animations and transitions
+- Implement proper error handling
+- Add loading states and user feedback
+- **Result**: Production-ready chat application
+
+## Development Commands
+
+### Local Development
+```bash
+uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Docker Development
+```bash
+./run-docker.sh
+```
+
+### Podman Development
+```bash
+./run-podman.sh
+```
 
