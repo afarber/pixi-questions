@@ -2,7 +2,7 @@
 
 A real-time WebSocket chat application built with FastAPI, Reflex, and Pixi.js featuring an interactive canvas visualization of chat participants.
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-reflex-pixijs-chat/screenshot.png)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-reflex-pixijs-chat/screenshot.gif)
 
 ## Overview
 

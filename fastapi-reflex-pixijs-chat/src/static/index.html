@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastAPI Reflex PixiJS Chat</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js"></script>
 </head>
 <body>
     <div class="app-container">
         <!-- Top Section: Pixi.js Canvas -->
         <div class="canvas-section">
-            <div id="pixiCanvas" class="pixi-canvas">
-                <div class="placeholder-text">Pixi.js Canvas - User Visualization</div>
-            </div>
+            <div id="pixiCanvas" class="pixi-canvas"></div>
         </div>
 
         <!-- Middle Section: Chat Window -->
@@ -45,6 +44,7 @@
         </div>
     </div>
 
+    <script src="/assets/pixi/canvas.js"></script>
     <script src="/static/script.js"></script>
 </body>
 </html>

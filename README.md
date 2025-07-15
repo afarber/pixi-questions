@@ -25,7 +25,7 @@ Screenshots
 
 [fastapi-reflex-pixijs-chat](https://github.com/afarber/pixi-questions/tree/master/fastapi-reflex-pixijs-chat) a FastAPI, Reflex based Websockets chat
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-reflex-pixijs-chat/screenshot.png)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-reflex-pixijs-chat/screenshot.gif)
 
 ![StackOverflow](http://stackoverflow.com/users/flair/165071.png)
 
