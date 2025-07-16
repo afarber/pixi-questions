@@ -91,6 +91,12 @@ body {
     border-radius: 8px;
 }
 
+.timestamp {
+    color: #666;
+    font-size: 12px;
+    margin-right: 8px;
+}
+
 /* Bottom Section: Input */
 .input-section {
     background: white;

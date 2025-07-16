@@ -28,7 +28,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         websocket.onmessage = function(event) {
-            addMessage('Server', event.data);
+            try {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'chat_message') {
+                    addMessage(data.user, data.message, data.timestamp);
+                } else if (data.type === 'user_count') {
+                    document.getElementById('userCount').textContent = data.count;
+                } else {
+                    addMessage('Server', event.data);
+                }
+            } catch (e) {
+                // Handle non-JSON messages
+                addMessage('Server', event.data);
+            }
         };
         
         websocket.onclose = function() {
@@ -65,9 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Connect to WebSocket
         connectWebSocket();
-        
-        // Update user count placeholder
-        document.getElementById('userCount').textContent = '1';
     });
     
     // WebSocket send message functionality
@@ -82,17 +92,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const message = messageInput.value.trim();
         if (message === '' || !websocket || websocket.readyState !== WebSocket.OPEN) return;
         
-        // Send message via WebSocket
-        websocket.send(message);
+        // Send message as JSON with user name
+        const messageData = {
+            type: 'chat_message',
+            user: userName,
+            message: message
+        };
+        
+        websocket.send(JSON.stringify(messageData));
         messageInput.value = '';
     }
     
-    function addMessage(sender, message) {
+    function addMessage(sender, message, timestamp) {
         const chatWindow = document.getElementById('chatWindow');
         const messageElement = document.createElement('div');
         messageElement.className = 'message';
-        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
         
+        // Format message with timestamp if provided
+        if (timestamp) {
+            messageElement.innerHTML = `<span class="timestamp">[${timestamp}]</span> <strong>${sender}:</strong> ${message}`;
+        } else {
+            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+        }
         
         // Remove placeholder message if it exists
         const placeholder = chatWindow.querySelector('.placeholder-message');
