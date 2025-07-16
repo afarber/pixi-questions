@@ -1,6 +1,6 @@
 // Basic JavaScript for Phase 1 - Placeholder functionality
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('FastAPI Reflex PixiJS Chat - Phase 1 loaded');
+    console.log('FastAPI PixiJS Websockets Chat - loaded');
     
     // Show name drawer on page load
     const nameDrawer = document.getElementById('nameDrawer');
@@ -60,10 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageElement = document.createElement('div');
         messageElement.className = 'message';
         messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-        messageElement.style.marginBottom = '8px';
-        messageElement.style.padding = '8px';
-        messageElement.style.background = '#f8f9fa';
-        messageElement.style.borderRadius = '8px';
+        
         
         // Remove placeholder message if it exists
         const placeholder = chatWindow.querySelector('.placeholder-message');
