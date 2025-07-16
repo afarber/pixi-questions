@@ -1,8 +1,8 @@
-# FastAPI Reflex PixiJS Chat
+# FastAPI PixiJS Chat
 
-A real-time WebSocket chat application built with FastAPI, Reflex, and Pixi.js featuring an interactive canvas visualization of chat participants.
+A real-time WebSockets chat application built with FastAPI and Pixi.js featuring an interactive canvas visualization of chat participants.
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-reflex-pixijs-chat/screenshot.gif)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-websockets-chat/screenshot.gif)
 
 ## Overview
 
@@ -33,11 +33,12 @@ The interface follows a simple, vertical layout optimized for mobile use:
 
 ### Backend
 - **FastAPI**: Modern Python web framework for APIs
-- **Python Reflex**: Full-stack Python framework
 - **uvicorn**: ASGI server for FastAPI
+- **WebSockets**: Real-time communication protocol
 
 ### Frontend
-- **Pixi.js v8**: 2D rendering library for canvas animations
+- **Vanilla Javascript**: Plain Javascript for the UI
+- **Pixi.js v8**: 2D rendering library for canvas animations loaded via CDN https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js
 - **WebSockets**: Real-time communication protocol
 
 ### Deployment
@@ -48,7 +49,7 @@ The interface follows a simple, vertical layout optimized for mobile use:
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3
 - Docker or Podman
 - Modern web browser with WebSocket support
 
@@ -74,7 +75,7 @@ The interface follows a simple, vertical layout optimized for mobile use:
 ## Project Structure
 
 ```
-fastapi-reflex-pixijs-chat/
+fastapi-websockets-chat/
 ├── README.md
 ├── run-docker.sh      # Docker deployment script
 ├── run-podman.sh      # Podman deployment script
@@ -89,14 +90,7 @@ fastapi-reflex-pixijs-chat/
     └── pixi/          # Pixi.js components
 ```
 
-## API Documentation
-
-Once running, API documentation is available at:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
 ## License
 
 This project is open source and available under the Public Domain License.
-
 

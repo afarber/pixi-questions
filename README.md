@@ -15,7 +15,7 @@ Screenshots
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-3d-effect/screenshot.gif)
 
-[drag-tiles-layout](https://github.com/afarber/pixi-questions/tree/master/drag-tiles-layout) same as above, but using PixiJS layout
+[drag-tiles-layout](https://github.com/afarber/pixi-questions/tree/master/drag-tiles-layout) same as above, but using PixiJs layout
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-layout/screenshot.gif)
 
@@ -23,9 +23,9 @@ Screenshots
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
 
-[fastapi-reflex-pixijs-chat](https://github.com/afarber/pixi-questions/tree/master/fastapi-reflex-pixijs-chat) a FastAPI, Reflex based Websockets chat
+[fastapi-websockets-chat](https://github.com/afarber/pixi-questions/tree/master/fastapi-websockets-chat) a FastAPI, PixiJs, Websockets chat
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-reflex-pixijs-chat/screenshot.gif)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/fastapi-websockets-chat/screenshot.gif)
 
 ![StackOverflow](http://stackoverflow.com/users/flair/165071.png)
 

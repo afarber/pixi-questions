@@ -9,19 +9,19 @@ This is a real-time WebSocket chat application with the following architecture:
 ### Backend Stack
 
 - **FastAPI**: Python web framework for API endpoints
-- **Python Reflex**: Full-stack Python framework
 - **uvicorn**: ASGI server for FastAPI
-- **WebSockets**: Real-time communication
+- **WebSockets**: Real-time communication protocol
 
 ### Frontend Stack
 
-- **Pixi.js v8**: 2D rendering library for canvas animations
+- **Vanilla Javascript**: Plain Javascript for the UI
+- **Pixi.js v8**: 2D rendering library for canvas animations loaded via CDN https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js
 - **WebSockets**: Real-time communication protocol
 
 ### Expected Project Structure
 
 ```
-fastapi-reflex-pixijs-chat/
+fastapi-websockets-chat/
 ├── src/
 │   ├── main.py        # FastAPI application entry point
 │   ├── chat/          # Chat logic modules
@@ -37,7 +37,7 @@ fastapi-reflex-pixijs-chat/
 
 ## Key Features to Implement
 
-1. **Real-time Chat**: WebSocket-based messaging system
+1. **Real-time Chat**: WebSocket API based messaging system
 2. **Visual User Representation**: Animated colorful rectangles for each user on Pixi.js canvas
 3. **Mobile-Friendly UI**: Optimized for single-thumb usage with vertical layout
 4. **Name Validation**: Prevents duplicate usernames with visual feedback
@@ -177,3 +177,4 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 ```bash
 ./run-podman.sh
 ```
+
