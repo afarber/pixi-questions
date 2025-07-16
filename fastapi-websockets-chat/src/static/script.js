@@ -1,6 +1,9 @@
-// Basic JavaScript for Phase 1 - Placeholder functionality
+// WebSocket Chat - Phase 3 Implementation
 document.addEventListener('DOMContentLoaded', function() {
     console.log('FastAPI PixiJS Websockets Chat - loaded');
+    
+    let websocket = null;
+    let userName = '';
     
     // Show name drawer on page load
     const nameDrawer = document.getElementById('nameDrawer');
@@ -12,7 +15,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     
-    // Placeholder join functionality
+    // WebSocket connection functionality
+    function connectWebSocket() {
+        const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${location.host}/ws`;
+        
+        websocket = new WebSocket(wsUrl);
+        
+        websocket.onopen = function() {
+            console.log('WebSocket connected');
+            addMessage('System', 'Connected to chat server');
+        };
+        
+        websocket.onmessage = function(event) {
+            addMessage('Server', event.data);
+        };
+        
+        websocket.onclose = function() {
+            console.log('WebSocket disconnected');
+            addMessage('System', 'Disconnected from chat server');
+        };
+        
+        websocket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+            addMessage('System', 'Connection error');
+        };
+    }
+    
+    // Join chat functionality
     joinButton.addEventListener('click', function() {
         const name = nameInput.value.trim();
         
@@ -26,19 +56,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Hide drawer and enable chat (placeholder)
+        userName = name;
+        
+        // Hide drawer and enable chat
         nameDrawer.classList.remove('active');
         messageInput.disabled = false;
         sendButton.disabled = false;
         
+        // Connect to WebSocket
+        connectWebSocket();
+        
         // Update user count placeholder
         document.getElementById('userCount').textContent = '1';
-        
-        // Add welcome message
-        addMessage('System', `Welcome ${name}! You can start chatting.`);
     });
     
-    // Placeholder send message functionality
+    // WebSocket send message functionality
     sendButton.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -48,10 +80,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function sendMessage() {
         const message = messageInput.value.trim();
-        if (message === '') return;
+        if (message === '' || !websocket || websocket.readyState !== WebSocket.OPEN) return;
         
-        // Add message to chat (placeholder echo)
-        addMessage('You', message);
+        // Send message via WebSocket
+        websocket.send(message);
         messageInput.value = '';
     }
     

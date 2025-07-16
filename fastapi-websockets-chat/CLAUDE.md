@@ -178,3 +178,8 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 ./run-podman.sh
 ```
 
+## Additional Development Notes
+
+- **Commit Practice**:
+  - After each change display a 1 line commit message for me to copy
+  - Stop and wait for smoke testing after each major phase
