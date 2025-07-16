@@ -11,17 +11,26 @@ app = FastAPI(title="FastAPI Reflex PixiJS Chat")
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
+        self.user_names: dict[WebSocket, str] = {}
         self.user_count = 0
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
-        self.user_count += 1
-        await self.broadcast_user_count()
 
     def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-        self.user_count -= 1
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+        if websocket in self.user_names:
+            del self.user_names[websocket]
+        self.user_count = len(self.user_names)
+
+    def is_name_taken(self, name: str) -> bool:
+        return name.lower() in [n.lower() for n in self.user_names.values()]
+
+    def add_user(self, websocket: WebSocket, name: str):
+        self.user_names[websocket] = name
+        self.user_count = len(self.user_names)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
@@ -57,6 +66,8 @@ async def read_root():
 async def websocket_endpoint(websocket: WebSocket):
     """WebSocket endpoint for chat messages"""
     await manager.connect(websocket)
+    user_joined = False
+    
     try:
         while True:
             data = await websocket.receive_text()
@@ -64,31 +75,100 @@ async def websocket_endpoint(websocket: WebSocket):
             # Try to parse as JSON, fallback to plain text
             try:
                 message_data = json.loads(data)
-                if message_data.get("type") == "chat_message":
-                    # Create message with timestamp
+                message_type = message_data.get("type")
+                
+                if message_type == "join_request":
+                    # Handle user join request with name validation
+                    name = message_data.get("name", "").strip()
+                    
+                    # Validate name
+                    if not name:
+                        await manager.send_personal_message(json.dumps({
+                            "type": "join_response",
+                            "success": False,
+                            "error": "Name cannot be empty"
+                        }), websocket)
+                        continue
+                    
+                    if len(name) > 16:
+                        await manager.send_personal_message(json.dumps({
+                            "type": "join_response",
+                            "success": False,
+                            "error": "Name must be 16 characters or less"
+                        }), websocket)
+                        continue
+                    
+                    if manager.is_name_taken(name):
+                        await manager.send_personal_message(json.dumps({
+                            "type": "join_response",
+                            "success": False,
+                            "error": "Name is already taken"
+                        }), websocket)
+                        continue
+                    
+                    # Name is valid, add user
+                    manager.add_user(websocket, name)
+                    user_joined = True
+                    
+                    # Send success response
+                    await manager.send_personal_message(json.dumps({
+                        "type": "join_response",
+                        "success": True,
+                        "name": name
+                    }), websocket)
+                    
+                    # Broadcast user count update
+                    await manager.broadcast_user_count()
+                    
+                    # Broadcast join notification
+                    join_message = {
+                        "type": "chat_message",
+                        "user": "System",
+                        "message": f"{name} joined the chat",
+                        "timestamp": datetime.now().strftime("%H:%M:%S")
+                    }
+                    await manager.broadcast(json.dumps(join_message))
+                    
+                elif message_type == "chat_message" and user_joined:
+                    # Handle chat message (only if user has joined)
+                    user_name = manager.user_names.get(websocket, "Anonymous")
                     chat_message = {
                         "type": "chat_message",
-                        "user": message_data.get("user", "Anonymous"),
+                        "user": user_name,
                         "message": message_data.get("message", ""),
                         "timestamp": datetime.now().strftime("%H:%M:%S")
                     }
                     await manager.broadcast(json.dumps(chat_message))
-                else:
-                    # Handle other message types
-                    await manager.broadcast(data)
+                    
             except json.JSONDecodeError:
                 # Handle plain text messages (backward compatibility)
-                chat_message = {
-                    "type": "chat_message",
-                    "user": "Anonymous",
-                    "message": data,
-                    "timestamp": datetime.now().strftime("%H:%M:%S")
-                }
-                await manager.broadcast(json.dumps(chat_message))
+                if user_joined:
+                    user_name = manager.user_names.get(websocket, "Anonymous")
+                    chat_message = {
+                        "type": "chat_message",
+                        "user": user_name,
+                        "message": data,
+                        "timestamp": datetime.now().strftime("%H:%M:%S")
+                    }
+                    await manager.broadcast(json.dumps(chat_message))
                 
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast_user_count()
+        if user_joined:
+            user_name = manager.user_names.get(websocket, "Anonymous")
+            manager.disconnect(websocket)
+            await manager.broadcast_user_count()
+            
+            # Broadcast leave notification
+            leave_message = {
+                "type": "chat_message",
+                "user": "System",
+                "message": f"{user_name} left the chat",
+                "timestamp": datetime.now().strftime("%H:%M:%S")
+            }
+            await manager.broadcast(json.dumps(leave_message))
+        else:
+            manager.disconnect(websocket)
+            
     except Exception as e:
         print(f"WebSocket error: {e}")
         manager.disconnect(websocket)

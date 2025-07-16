@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendButton = document.getElementById('sendButton');
     
     // WebSocket connection functionality
-    function connectWebSocket() {
+    function connectWebSocket(nameToJoin) {
         const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${protocol}//${location.host}/ws`;
         
@@ -25,6 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
         websocket.onopen = function() {
             console.log('WebSocket connected');
             addMessage('System', 'Connected to chat server');
+            
+            // Send join request if name provided
+            if (nameToJoin) {
+                const joinRequest = {
+                    type: 'join_request',
+                    name: nameToJoin
+                };
+                websocket.send(JSON.stringify(joinRequest));
+            }
         };
         
         websocket.onmessage = function(event) {
@@ -35,6 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     addMessage(data.user, data.message, data.timestamp);
                 } else if (data.type === 'user_count') {
                     document.getElementById('userCount').textContent = data.count;
+                } else if (data.type === 'join_response') {
+                    handleJoinResponse(data);
                 } else {
                     addMessage('Server', event.data);
                 }
@@ -69,16 +80,29 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        userName = name;
-        
-        // Hide drawer and enable chat
-        nameDrawer.classList.remove('active');
-        messageInput.disabled = false;
-        sendButton.disabled = false;
-        
-        // Connect to WebSocket
-        connectWebSocket();
+        // Connect to WebSocket and send join request on open
+        connectWebSocket(name);
     });
+    
+    // Handle join response from server
+    function handleJoinResponse(data) {
+        if (data.success) {
+            userName = data.name;
+            
+            // Hide drawer and enable chat
+            nameDrawer.classList.remove('active');
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            
+            // Clear any error messages
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('nameInput').classList.remove('error');
+            
+        } else {
+            // Show error message with red border animation
+            showError(data.error);
+        }
+    }
     
     // WebSocket send message functionality
     sendButton.addEventListener('click', sendMessage);
