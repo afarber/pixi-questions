@@ -101,6 +101,12 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Show error message with red border animation
             showError(data.error);
+            
+            // Close the WebSocket connection since join failed
+            if (websocket) {
+                websocket.close();
+                websocket = null;
+            }
         }
     }
     
