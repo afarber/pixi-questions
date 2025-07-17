@@ -60,7 +60,6 @@ manager = ConnectionManager()
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
-app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():

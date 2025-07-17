@@ -24,10 +24,7 @@ This is a real-time WebSocket chat application with the following architecture:
 fastapi-websockets-chat/
 ├── src/
 │   ├── main.py        # FastAPI application entry point
-│   ├── chat/          # Chat logic modules
-│   └── static/        # Static assets
-├── assets/
-│   └── pixi/          # Pixi.js components
+│   └── static/        # Static assets (HTML, CSS, JS)
 ├── requirements.txt   # Python dependencies
 ├── docker-compose.yml # Container orchestration
 ├── Dockerfile         # Container definition
@@ -117,15 +114,16 @@ Based on the README specification, the following commands will be used:
 - ✅ Store user names and display in messages
 - **Result**: Users must enter unique names to join chat
 
-### Phase 6: Dynamic User Visualization (Runnable) ⏳
+### Phase 6: Dynamic User Visualization (Runnable) ✅
 
 **Step 6**: Connect Pixi.js canvas to real users
 
-- ⏳ Update canvas to show rectangles for actual connected users
-- ⏳ Generate random pastel colors for each user
-- ⏳ Display user names as labels on rectangles
-- ⏳ Remove/add rectangles when users join/leave
-- **Result**: Canvas shows real-time user representation
+- ✅ Update canvas to show rectangles for actual connected users
+- ✅ Generate random pastel colors for each user
+- ✅ Display user names as labels on rectangles
+- ✅ Remove/add rectangles when users join/leave
+- ✅ Consolidated canvas and chat logic into single script file
+- **Result**: Canvas shows real-time user representation with cleaner code structure
 
 ### Phase 7: WebSocket Reconnection (Runnable) ⏳
 
@@ -163,7 +161,7 @@ Based on the README specification, the following commands will be used:
 python3 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
-uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn src.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 ### Docker Development

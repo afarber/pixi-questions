@@ -7,6 +7,7 @@ A real-time WebSockets chat application built with FastAPI and Pixi.js featuring
 ## Overview
 
 This application provides a real-time chat experience where users can:
+
 - Enter their name and join a common chat channel
 - See visual representations of all chat participants as colorful floating rectangles on a Pixi.js canvas
 - Send and receive messages in real-time through WebSockets
@@ -32,16 +33,19 @@ The interface follows a simple, vertical layout optimized for mobile use:
 ## Technology Stack
 
 ### Backend
+
 - **FastAPI**: Modern Python web framework for APIs
 - **uvicorn**: ASGI server for FastAPI
 - **WebSockets**: Real-time communication protocol
 
 ### Frontend
+
 - **Vanilla Javascript**: Plain Javascript for the UI
 - **Pixi.js v8**: 2D rendering library for canvas animations loaded via CDN https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js
 - **WebSockets**: Real-time communication protocol
 
 ### Deployment
+
 - **Docker Compose**: Container orchestration
 - **Podman/Docker Desktop**: Container runtime options
 
@@ -56,11 +60,13 @@ The interface follows a simple, vertical layout optimized for mobile use:
 ### Installation & Setup
 
 #### Using Docker
+
 ```bash
 ./run-docker.sh
 ```
 
 #### Using Podman
+
 ```bash
 ./run-podman.sh
 ```
@@ -86,11 +92,9 @@ fastapi-websockets-chat/
 │   ├── main.py        # FastAPI application
 │   ├── chat/          # Chat logic
 │   └── static/        # Static assets
-└── assets/            # Frontend assets
     └── pixi/          # Pixi.js components
 ```
 
 ## License
 
 This project is open source and available under the Public Domain License.
-
