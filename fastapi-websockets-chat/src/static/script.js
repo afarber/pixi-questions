@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let websocket = null;
     let userName = '';
     let pixiCanvas = null;
+    let reconnectAttempts = 0;
+    let maxReconnectAttempts = 10;
+    let reconnectTimeout = null;
     
     // Show name drawer on page load
     const nameDrawer = document.getElementById('nameDrawer');
@@ -19,16 +22,89 @@ document.addEventListener('DOMContentLoaded', function() {
     // Focus name input field on page load
     nameInput.focus();
     
+    // Connection status management using websocket as SSOT
+    function updateConnectionStatus() {
+        const statusElement = document.getElementById('connectionStatus');
+        const isConnected = websocket && websocket.readyState === WebSocket.OPEN;
+        
+        if (!websocket) {
+            statusElement.className = 'status-disconnected';
+            statusElement.textContent = 'Disconnected';
+        } else if (websocket.readyState === WebSocket.CONNECTING) {
+            statusElement.className = 'status-connecting';
+            statusElement.textContent = reconnectAttempts > 0 ? 
+                `Reconnecting... (${reconnectAttempts}/${maxReconnectAttempts})` : 
+                'Connecting...';
+        } else if (websocket.readyState === WebSocket.OPEN) {
+            statusElement.className = 'status-connected';
+            statusElement.textContent = 'Connected';
+        } else {
+            statusElement.className = 'status-disconnected';
+            statusElement.textContent = 'Disconnected';
+        }
+        
+        // Update input/button states based on connection and user status
+        const hasUser = !!userName;
+        messageInput.disabled = !hasUser || !isConnected;
+        sendButton.disabled = !hasUser || !isConnected;
+    }
+    
+    // Generate random reconnect delay (1-5 seconds) with exponential backoff
+    function getReconnectDelay() {
+        const baseDelay = Math.floor(Math.random() * 4000) + 1000;
+        return baseDelay * Math.pow(2, reconnectAttempts);
+    }
+    
+    // Attempt to reconnect
+    function attemptReconnect() {
+        if (reconnectTimeout || !userName || reconnectAttempts >= maxReconnectAttempts) {
+            return;
+        }
+        
+        reconnectAttempts++;
+        const delay = getReconnectDelay();
+        
+        reconnectTimeout = setTimeout(() => {
+            console.log(`Reconnection attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            connectWebSocket(userName, true);
+            reconnectTimeout = null;
+        }, delay);
+        
+        updateConnectionStatus();
+    }
+    
+    // Reset reconnection state on successful connection
+    function resetReconnection() {
+        reconnectAttempts = 0;
+        if (reconnectTimeout) {
+            clearTimeout(reconnectTimeout);
+            reconnectTimeout = null;
+        }
+    }
+    
     // WebSocket connection functionality
-    function connectWebSocket(nameToJoin) {
+    function connectWebSocket(nameToJoin, isReconnection = false) {
+        // Don't create new connection if already connecting or connected
+        if (websocket && (websocket.readyState === WebSocket.CONNECTING || websocket.readyState === WebSocket.OPEN)) {
+            return;
+        }
+        
         const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${protocol}//${location.host}/ws`;
         
         websocket = new WebSocket(wsUrl);
+        updateConnectionStatus();
         
         websocket.onopen = function() {
             console.log('WebSocket connected');
-            addMessage('System', 'Connected to chat server');
+            resetReconnection();
+            updateConnectionStatus();
+            
+            if (!isReconnection) {
+                addMessage('System', 'Connected to chat server');
+            } else {
+                addMessage('System', 'Reconnected to chat server');
+            }
             
             // Send join request if name provided
             if (nameToJoin) {
@@ -64,14 +140,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        websocket.onclose = function() {
+        websocket.onclose = function(event) {
             console.log('WebSocket disconnected');
-            addMessage('System', 'Disconnected from chat server');
+            updateConnectionStatus();
+            
+            if (!isReconnection) {
+                addMessage('System', 'Disconnected from chat server');
+            }
+            
+            // Attempt reconnection if user is joined and it wasn't a clean close
+            if (userName && !event.wasClean) {
+                attemptReconnect();
+            }
         };
         
         websocket.onerror = function(error) {
             console.error('WebSocket error:', error);
-            addMessage('System', 'Connection error');
+            updateConnectionStatus();
+            
+            if (!isReconnection) {
+                addMessage('System', 'Connection error');
+            }
         };
     }
     
@@ -105,10 +194,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.success) {
             userName = data.name;
             
-            // Hide drawer and enable chat
+            // Hide drawer and update UI state
             nameDrawer.classList.remove('active');
-            messageInput.disabled = false;
-            sendButton.disabled = false;
+            updateConnectionStatus();
             
             // Focus message input field after joining
             messageInput.focus();
@@ -139,7 +227,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function sendMessage() {
         const message = messageInput.value.trim();
-        if (message === '' || !websocket || websocket.readyState !== WebSocket.OPEN) return;
+        if (message === '' || !userName) return;
+        
+        // Check connection state and attempt reconnection if needed
+        if (!websocket || websocket.readyState !== WebSocket.OPEN) {
+            addMessage('System', 'Not connected. Attempting to reconnect...');
+            attemptReconnect();
+            return;
+        }
         
         // Send message as JSON with user name
         const messageData = {

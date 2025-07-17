@@ -64,10 +64,37 @@ body {
     color: #333;
 }
 
+.header-info {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
 .user-count {
     font-size: 14px;
     color: #666;
     font-weight: 500;
+}
+
+.connection-status {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.status-connected {
+    color: #38a169;
+}
+
+.status-connecting {
+    color: #f6ad55;
+}
+
+.status-disconnected {
+    color: #e53e3e;
+}
+
+.status-reconnecting {
+    color: #3182ce;
 }
 
 .chat-window {

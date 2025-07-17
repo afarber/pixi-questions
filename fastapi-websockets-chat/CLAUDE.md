@@ -64,6 +64,14 @@ Based on the README specification, the following commands will be used:
 - Name validation prevents duplicate usernames with red border animation feedback, max name length ist 16
 - The UI follows a three-section layout: canvas (top), chat window (middle), input field (bottom)
 
+## Architecture Principles
+
+### Single Source of Truth (SSOT)
+- **WebSocket State**: The `websocket` variable and its `readyState` property serve as the single source of truth for connection status
+- **User State**: The `userName` variable controls user-specific functionality and permissions
+- **UI State Management**: All UI elements (connection status, input/button states) derive their state from these core variables
+- **No Redundant State**: Eliminated separate connection tracking variables in favor of querying websocket.readyState directly
+
 ## Step-by-Step Implementation Plan
 
 ### Phase 1: Basic FastAPI Structure (Runnable) ✅
@@ -125,23 +133,25 @@ Based on the README specification, the following commands will be used:
 - ✅ Consolidated canvas and chat logic into single script file
 - **Result**: Canvas shows real-time user representation with cleaner code structure
 
-### Phase 7: WebSocket Reconnection (Runnable) ⏳
+### Phase 7: WebSocket Reconnection (Runnable) ✅
 
 **Step 7**: Add connection resilience
 
-- ⏳ Implement WebSocket reconnection with random backoff
-- ⏳ Add connection status indicators
-- ⏳ Handle reconnection gracefully
-- **Result**: App handles network interruptions gracefully
+- ✅ Implement WebSocket reconnection with random backoff and exponential delay
+- ✅ Add connection status indicators with color-coded states
+- ✅ Handle reconnection gracefully with single source of truth (websocket state)
+- ✅ Update UI state management to use websocket as SSOT
+- **Result**: App handles network interruptions gracefully with visual feedback
 
-### Phase 8: Docker Deployment (Runnable) ⏳
+### Phase 8: Docker Deployment (Runnable) ✅
 
 **Step 8**: Create Docker configuration
 
-- ⏳ Create `Dockerfile` for Python app
-- ⏳ Create `docker-compose.yml` for container orchestration
-- ⏳ Create `run-docker.sh` and `run-podman.sh` scripts
-- **Result**: App runs in containerized environment
+- ✅ Create `Dockerfile` for Python app with security best practices
+- ✅ Create `docker-compose.yml` for container orchestration with health checks
+- ✅ Create `run-docker.sh` and `run-podman.sh` scripts with status monitoring
+- ✅ Add proper health checks and non-root user configuration
+- **Result**: App runs in containerized environment with production-ready setup
 
 ### Phase 9: Polish and Optimization (Runnable) ⏳
 
