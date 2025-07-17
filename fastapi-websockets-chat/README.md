@@ -95,19 +95,23 @@ The interface follows a simple, vertical layout optimized for mobile use:
 ```
 fastapi-websockets-chat/
 ├── README.md
-├── run-docker.sh      # Docker deployment (bash)
-├── run-docker.ps1     # Docker deployment (PowerShell)
-├── run-podman.sh      # Podman deployment (bash)
-├── run-podman.ps1     # Podman deployment (PowerShell)
+├── .dockerignore
+├── CLAUDE.md
 ├── docker-compose.yml
 ├── Dockerfile
+├── GEMINI.md
 ├── requirements.txt
+├── run-docker.ps1
+├── run-docker.sh
+├── run-podman.ps1
+├── run-podman.sh
+├── screenshot.gif
 ├── backend/
 │   └── main.py        # FastAPI application
-├── frontend/
-│   ├── index.html     # Main HTML file
-│   ├── script.js      # Frontend JavaScript (WebSocket + Pixi.js)
-│   └── style.css      # CSS styles
+└── frontend/
+    ├── index.html     # Main HTML file
+    ├── script.js      # Frontend JavaScript (WebSocket + Pixi.js)
+    └── style.css      # CSS styles
 ```
 
 ## License

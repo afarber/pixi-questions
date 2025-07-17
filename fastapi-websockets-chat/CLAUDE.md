@@ -22,19 +22,24 @@ This is a real-time WebSocket chat application with the following architecture:
 
 ```
 fastapi-websockets-chat/
+├── README.md
+├── .dockerignore
+├── CLAUDE.md
+├── docker-compose.yml
+├── Dockerfile
+├── GEMINI.md
+├── requirements.txt
+├── run-docker.ps1
+├── run-docker.sh
+├── run-podman.ps1
+├── run-podman.sh
+├── screenshot.gif
 ├── backend/
-│   └── main.py        # FastAPI application entry point
-├── frontend/
-│   ├── index.html     # Main HTML page
-│   ├── script.js      # JavaScript (WebSocket + Pixi.js)
-│   └── style.css      # Styling
-├── requirements.txt   # Python dependencies
-├── docker-compose.yml # Container orchestration
-├── Dockerfile         # Container definition
-├── run-docker.sh      # Docker deployment script (bash)
-├── run-docker.ps1     # Docker deployment script (PowerShell)
-├── run-podman.sh      # Podman deployment script (bash)
-└── run-podman.ps1     # Podman deployment script (PowerShell)
+│   └── main.py        # FastAPI application
+└── frontend/
+    ├── index.html     # Main HTML file
+    ├── script.js      # Frontend JavaScript (WebSocket + Pixi.js)
+    └── style.css      # CSS styles
 ```
 
 ## Key Features to Implement
@@ -155,13 +160,14 @@ fastapi-websockets-chat/
 
 ## Development Commands
 
-### Local Development
+### Local Development (without Docker)
 
 ```bash
 python3 -m venv venv
 . ./venv/bin/activate
-pip install -r requirements.txt
-uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+pip3 install -r requirements.txt
+# Run "python3 -m uvicorn" and not just "uvicorn" to use the venv version
+python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 ### Docker Development

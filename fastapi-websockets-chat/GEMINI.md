@@ -22,24 +22,23 @@ The application allows users to join a chat room, send messages, and see other u
   - CSS3
 - **Dependencies**:
   - Python dependencies are listed in `requirements.txt`.
-  - Pixi.js is loaded from a CDN in `src/static/index.html`.
+  - Pixi.js is loaded from a CDN in `frontend/index.html`.
 
 ## Project Structure
 
-- `src/main.py`: The main FastAPI application file containing the server logic and WebSocket handling.
-- `src/static/`: Contains all frontend files.
-  - `src/static/index.html`: The main HTML file.
-  - `src/static/script.js`: The core JavaScript logic for the chat client, WebSocket connection, and Pixi.js canvas.
-  - `src/static/style.css`: CSS styles for the application.
+- `backend/main.py`: The main FastAPI application file containing the server logic and WebSocket handling.
+- `frontend/`: Contains all frontend files.
+  - `frontend/index.html`: The main HTML file.
+  - `frontend/script.js`: The core JavaScript logic for the chat client, WebSocket connection, and Pixi.js canvas.
+  - `frontend/style.css`: CSS styles for the application.
 - `requirements.txt`: Lists the Python packages required for the project.
 
 ## Common Commands
 
-- **Install dependencies**:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Run the development server**:
-  ```bash
-  uvicorn src.main:app --reload
-  ```
+```bash
+python3 -m venv venv
+. ./venv/bin/activate
+pip3 install -r requirements.txt
+# Run "python3 -m uvicorn" and not just "uvicorn" to use the venv version
+python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
