@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -eu
 
 # FastAPI WebSocket Chat - Docker Deployment Script
-set -e
-
 echo "🚀 Starting FastAPI WebSocket Chat with Docker..."
 
 # Check if Docker is installed

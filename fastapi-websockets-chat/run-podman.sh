@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -eu
 
 # FastAPI WebSocket Chat - Podman Deployment Script
-set -e
-
 echo "🚀 Starting FastAPI WebSocket Chat with Podman..."
 
 # Check if Podman is installed

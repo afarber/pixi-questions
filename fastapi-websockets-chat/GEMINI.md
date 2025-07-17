@@ -29,9 +29,8 @@ The application allows users to join a chat room, send messages, and see other u
 - `src/main.py`: The main FastAPI application file containing the server logic and WebSocket handling.
 - `src/static/`: Contains all frontend files.
   - `src/static/index.html`: The main HTML file.
-  - `src/static/script.js`: The core JavaScript logic for the chat client, WebSocket connection, and UI interactions.
+  - `src/static/script.js`: The core JavaScript logic for the chat client, WebSocket connection, and Pixi.js canvas.
   - `src/static/style.css`: CSS styles for the application.
-- `assets/pixi/canvas.js`: Contains the Pixi.js logic for the canvas animations.
 - `requirements.txt`: Lists the Python packages required for the project.
 
 ## Common Commands

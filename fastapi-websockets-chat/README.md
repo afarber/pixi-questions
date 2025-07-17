@@ -83,16 +83,17 @@ The interface follows a simple, vertical layout optimized for mobile use:
 ```
 fastapi-websockets-chat/
 ├── README.md
-├── run-docker.sh      # Docker deployment script
-├── run-podman.sh      # Podman deployment script
-├── docker-compose.yml # Container orchestration
-├── Dockerfile         # Container definition
-├── requirements.txt   # Python dependencies
-├── src/               # Source code
+├── run-docker.sh
+├── run-podman.sh
+├── docker-compose.yml
+├── Dockerfile
+├── requirements.txt
+├── src/
 │   ├── main.py        # FastAPI application
-│   ├── chat/          # Chat logic
-│   └── static/        # Static assets
-    └── pixi/          # Pixi.js components
+│   └── static/
+│       ├── index.html # Main HTML file
+│       ├── script.js  # Frontend JavaScript
+│       └── style.css  # CSS styles
 ```
 
 ## License
