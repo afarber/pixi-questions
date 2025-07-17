@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Join chat functionality
-    joinButton.addEventListener('click', function() {
+    function joinChat() {
         const name = nameInput.value.trim();
         
         if (name === '') {
@@ -88,6 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Connect to WebSocket and send join request on open
         connectWebSocket(name);
+    }
+    
+    joinButton.addEventListener('click', joinChat);
+    nameInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            joinChat();
+        }
     });
     
     // Handle join response from server
