@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     
+    // Focus name input field on page load
+    nameInput.focus();
+    
     // WebSocket connection functionality
     function connectWebSocket(nameToJoin) {
         const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -107,6 +110,9 @@ document.addEventListener('DOMContentLoaded', function() {
             messageInput.disabled = false;
             sendButton.disabled = false;
             
+            // Focus message input field after joining
+            messageInput.focus();
+            
             // Clear any error messages
             document.getElementById('nameError').textContent = '';
             document.getElementById('nameInput').classList.remove('error');
@@ -144,6 +150,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         websocket.send(JSON.stringify(messageData));
         messageInput.value = '';
+        
+        // Keep focus on message input after sending
+        messageInput.focus();
     }
     
     function addMessage(sender, message, timestamp) {
