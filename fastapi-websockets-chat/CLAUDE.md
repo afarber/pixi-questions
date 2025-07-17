@@ -31,8 +31,10 @@ fastapi-websockets-chat/
 ├── requirements.txt   # Python dependencies
 ├── docker-compose.yml # Container orchestration
 ├── Dockerfile         # Container definition
-├── run-docker.sh      # Docker deployment script
-└── run-podman.sh      # Podman deployment script
+├── run-docker.sh      # Docker deployment script (bash)
+├── run-docker.ps1     # Docker deployment script (PowerShell)
+├── run-podman.sh      # Podman deployment script (bash)
+└── run-podman.ps1     # Podman deployment script (PowerShell)
 ```
 
 ## Key Features to Implement
@@ -164,18 +166,35 @@ uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 
 ### Docker Development
 
+**Bash/Linux/macOS:**
+
 ```bash
 ./run-docker.sh
 ```
 
+**PowerShell/Windows:**
+
+```powershell
+.\run-docker.ps1
+```
+
 ### Podman Development
+
+**Bash/Linux/macOS:**
 
 ```bash
 ./run-podman.sh
 ```
 
+**PowerShell/Windows:**
+
+```powershell
+.\run-podman.ps1
+```
+
 ## Additional Development Notes
 
 - **Commit Practice**:
-  - After each change display a 1 line commit message for me to copy
+  - After each change display a 1 line commit message for me to copy and a detailed message below
   - Stop and wait for smoke testing after each major phase
+  - Do not use emoji

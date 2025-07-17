@@ -61,14 +61,26 @@ The interface follows a simple, vertical layout optimized for mobile use:
 
 #### Using Docker
 
+**Bash/Linux/macOS:**
 ```bash
 ./run-docker.sh
 ```
 
+**PowerShell/Windows:**
+```powershell
+.\run-docker.ps1
+```
+
 #### Using Podman
 
+**Bash/Linux/macOS:**
 ```bash
 ./run-podman.sh
+```
+
+**PowerShell/Windows:**
+```powershell
+.\run-podman.ps1
 ```
 
 ### Development
@@ -83,8 +95,10 @@ The interface follows a simple, vertical layout optimized for mobile use:
 ```
 fastapi-websockets-chat/
 ├── README.md
-├── run-docker.sh
-├── run-podman.sh
+├── run-docker.sh      # Docker deployment (bash)
+├── run-docker.ps1     # Docker deployment (PowerShell)
+├── run-podman.sh      # Podman deployment (bash)
+├── run-podman.ps1     # Podman deployment (PowerShell)
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
