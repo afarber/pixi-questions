@@ -22,9 +22,12 @@ This is a real-time WebSocket chat application with the following architecture:
 
 ```
 fastapi-websockets-chat/
-├── src/
-│   ├── main.py        # FastAPI application entry point
-│   └── static/        # Static assets (HTML, CSS, JS)
+├── backend/
+│   └── main.py        # FastAPI application entry point
+├── frontend/
+│   ├── index.html     # Main HTML page
+│   ├── script.js      # JavaScript (WebSocket + Pixi.js)
+│   └── style.css      # Styling
 ├── requirements.txt   # Python dependencies
 ├── docker-compose.yml # Container orchestration
 ├── Dockerfile         # Container definition
@@ -40,22 +43,6 @@ fastapi-websockets-chat/
 4. **Name Validation**: Prevents duplicate usernames with visual feedback
 5. **Responsive Design**: Three-section layout (canvas, chat, input), bottom drawer for the user name dialog
 
-## Development Commands (When Implemented)
-
-Based on the README specification, the following commands will be used:
-
-### Docker Development
-
-```bash
-./run-docker.sh
-```
-
-### Podman Development
-
-```bash
-./run-podman.sh
-```
-
 ## Implementation Notes
 
 - The application uses a vertical layout optimized for mobile devices
@@ -67,6 +54,7 @@ Based on the README specification, the following commands will be used:
 ## Architecture Principles
 
 ### Single Source of Truth (SSOT)
+
 - **WebSocket State**: The `websocket` variable and its `readyState` property serve as the single source of truth for connection status
 - **User State**: The `userName` variable controls user-specific functionality and permissions
 - **UI State Management**: All UI elements (connection status, input/button states) derive their state from these core variables
@@ -171,7 +159,7 @@ Based on the README specification, the following commands will be used:
 python3 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
-uvicorn src.main:app --reload --host 127.0.0.1 --port 8000
+uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 ### Docker Development

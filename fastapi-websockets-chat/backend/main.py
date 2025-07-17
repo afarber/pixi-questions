@@ -59,12 +59,12 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="src/static"), name="static")
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     """Serve the main HTML page"""
-    static_path = os.path.join("src", "static", "index.html")
+    static_path = os.path.join("frontend", "index.html")
     with open(static_path, "r") as f:
         return HTMLResponse(content=f.read(), status_code=200)
 
@@ -185,3 +185,12 @@ async def websocket_endpoint(websocket: WebSocket):
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "backend.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )

@@ -88,12 +88,12 @@ fastapi-websockets-chat/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
-├── src/
-│   ├── main.py        # FastAPI application
-│   └── static/
-│       ├── index.html # Main HTML file
-│       ├── script.js  # Frontend JavaScript
-│       └── style.css  # CSS styles
+├── backend/
+│   └── main.py        # FastAPI application
+├── frontend/
+│   ├── index.html     # Main HTML file
+│   ├── script.js      # Frontend JavaScript (WebSocket + Pixi.js)
+│   └── style.css      # CSS styles
 ```
 
 ## License
