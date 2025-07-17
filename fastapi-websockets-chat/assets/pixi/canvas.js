@@ -1,9 +1,11 @@
-// Pixi.js Canvas Setup for Phase 2
+// Pixi.js Canvas Setup for Phase 6 - Dynamic User Visualization
 class PixiCanvas {
     constructor() {
         this.app = null;
         this.userRectangles = [];
         this.container = null;
+        // Track connected users
+        this.users = new Map();
         this.init();
     }
 
@@ -25,25 +27,36 @@ class PixiCanvas {
         this.container = new PIXI.Container();
         this.app.stage.addChild(this.container);
 
-        // Create placeholder user rectangles
-        this.createPlaceholderUsers();
-
         // Start animation loop
         this.animate();
 
         console.log('Pixi.js canvas initialized');
     }
 
-    createPlaceholderUsers() {
-        const users = [
-            { name: 'Alice', color: 0xFFB6C1, x: 150, y: 100 },
-            { name: 'Bob', color: 0x98FB98, x: 400, y: 200 },
-            { name: 'Charlie', color: 0xF0E68C, x: 600, y: 150 }
-        ];
-
-        users.forEach((user, index) => {
-            this.createUserRectangle(user.name, user.color, user.x, user.y, index);
-        });
+    // Generate random pastel color for user
+    generatePastelColor() {
+        const hue = Math.random() * 360;
+        const saturation = 40 + Math.random() * 30;
+        const lightness = 70 + Math.random() * 20;
+        
+        // Convert HSL to RGB
+        const c = (1 - Math.abs(2 * lightness/100 - 1)) * saturation/100;
+        const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
+        const m = lightness/100 - c/2;
+        
+        let r, g, b;
+        if (hue < 60) { r = c; g = x; b = 0; }
+        else if (hue < 120) { r = x; g = c; b = 0; }
+        else if (hue < 180) { r = 0; g = c; b = x; }
+        else if (hue < 240) { r = 0; g = x; b = c; }
+        else if (hue < 300) { r = x; g = 0; b = c; }
+        else { r = c; g = 0; b = x; }
+        
+        r = Math.round((r + m) * 255);
+        g = Math.round((g + m) * 255);
+        b = Math.round((b + m) * 255);
+        
+        return (r << 16) | (g << 8) | b;
     }
 
     createUserRectangle(name, color, x, y, index) {
@@ -89,6 +102,9 @@ class PixiCanvas {
         // Add to container and tracking array
         this.container.addChild(rect);
         this.userRectangles.push(rect);
+        
+        // Store in users map
+        this.users.set(name, rect);
     }
 
     animate() {
@@ -120,19 +136,56 @@ class PixiCanvas {
         requestAnimationFrame(() => this.animate());
     }
 
-    // Method to add new user (for future phases)
-    addUser(name, color) {
+    // Add new user to canvas
+    addUser(name) {
+        // Don't add if user already exists
+        if (this.users.has(name)) {
+            return;
+        }
+        
+        // Generate random pastel color and position
+        const color = this.generatePastelColor();
         const x = Math.random() * (this.app.screen.width - 80);
         const y = Math.random() * (this.app.screen.height - 40);
+        
         this.createUserRectangle(name, color, x, y, this.userRectangles.length);
     }
 
-    // Method to remove user (for future phases)
+    // Remove user from canvas
     removeUser(name) {
-        const index = this.userRectangles.findIndex(rect => rect.userData.name === name);
-        if (index !== -1) {
-            this.container.removeChild(this.userRectangles[index]);
-            this.userRectangles.splice(index, 1);
+        const rect = this.users.get(name);
+        if (rect) {
+            // Remove from container
+            this.container.removeChild(rect);
+            
+            // Remove from tracking arrays
+            const index = this.userRectangles.indexOf(rect);
+            if (index !== -1) {
+                this.userRectangles.splice(index, 1);
+            }
+            
+            // Remove from users map
+            this.users.delete(name);
+        }
+    }
+    
+    // Update user list from server
+    updateUsers(userList) {
+        // Remove users no longer in the list
+        const currentUsers = new Set(this.users.keys());
+        const newUsers = new Set(userList);
+        
+        for (const user of currentUsers) {
+            if (!newUsers.has(user)) {
+                this.removeUser(user);
+            }
+        }
+        
+        // Add new users
+        for (const user of userList) {
+            if (!this.users.has(user)) {
+                this.addUser(user);
+            }
         }
     }
 }
@@ -147,3 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Pixi.js not loaded');
     }
 });
+
+// Global function to update canvas users (called from script.js)
+function updateCanvasUsers(userList) {
+    if (pixiCanvas) {
+        pixiCanvas.updateUsers(userList);
+    }
+}

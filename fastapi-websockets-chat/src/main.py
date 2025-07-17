@@ -48,6 +48,13 @@ class ConnectionManager:
             "count": self.user_count
         })
         await self.broadcast(count_message)
+    
+    async def broadcast_user_list(self):
+        user_list_message = json.dumps({
+            "type": "user_list",
+            "users": list(self.user_names.values())
+        })
+        await self.broadcast(user_list_message)
 
 manager = ConnectionManager()
 
@@ -117,8 +124,9 @@ async def websocket_endpoint(websocket: WebSocket):
                         "name": name
                     }), websocket)
                     
-                    # Broadcast user count update
+                    # Broadcast user count and user list updates
                     await manager.broadcast_user_count()
+                    await manager.broadcast_user_list()
                     
                     # Broadcast join notification
                     join_message = {
@@ -157,6 +165,7 @@ async def websocket_endpoint(websocket: WebSocket):
             user_name = manager.user_names.get(websocket, "Anonymous")
             manager.disconnect(websocket)
             await manager.broadcast_user_count()
+            await manager.broadcast_user_list()
             
             # Broadcast leave notification
             leave_message = {

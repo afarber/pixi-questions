@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     addMessage(data.user, data.message, data.timestamp);
                 } else if (data.type === 'user_count') {
                     document.getElementById('userCount').textContent = data.count;
+                } else if (data.type === 'user_list') {
+                    // Update canvas with current user list
+                    updateCanvasUsers(data.users);
                 } else if (data.type === 'join_response') {
                     handleJoinResponse(data);
                 } else {
