@@ -1,5 +1,5 @@
 // Pixi.js Canvas for Dynamic User Visualization
-class PixiCanvas {
+export class PixiCanvas {
     constructor() {
         this.app = null;
         this.userRectangles = [];

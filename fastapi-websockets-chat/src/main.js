@@ -1,4 +1,11 @@
-// WebSocket Chat with Pixi.js Canvas - Phase 6 Implementation
+import * as PIXI from 'pixi.js';
+import './main.css';
+import { PixiCanvas } from './pixi-canvas.js';
+
+// Make PIXI globally available for compatibility
+window.PIXI = PIXI;
+
+// Initialize the chat application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('FastAPI PixiJS Websockets Chat - loaded');
     
@@ -289,8 +296,6 @@ document.addEventListener('DOMContentLoaded', function() {
             errorElement.textContent = '';
         }, 3000);
     }
-    
-    // Canvas initialization moved to separate file
     
     // Initialize canvas when Pixi.js is available
     if (typeof PIXI !== 'undefined') {
