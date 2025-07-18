@@ -18,7 +18,7 @@ COPY vite.config.js ./
 RUN npm run build
 
 # Python backend stage
-FROM python:3.13-slim
+FROM python:3.13-alpine
 
 WORKDIR /app
 

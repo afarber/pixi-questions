@@ -27,8 +27,8 @@ export class PixiCanvas {
         this.container = new PIXI.Container();
         this.app.stage.addChild(this.container);
 
-        // Start animation loop
-        this.animate();
+        // Start animation loop using Pixi.js ticker
+        this.app.ticker.add(this.animate, this);
 
         console.log('Pixi.js canvas initialized');
     }
@@ -107,14 +107,14 @@ export class PixiCanvas {
         this.users.set(name, rect);
     }
 
-    animate() {
+    animate(ticker) {
         // Animate user rectangles
         this.userRectangles.forEach(rect => {
             const userData = rect.userData;
             
-            // Update position
-            rect.x += userData.velocityX;
-            rect.y += userData.velocityY;
+            // Update position using ticker deltaTime for frame-rate independent animation
+            rect.x += userData.velocityX * ticker.deltaTime;
+            rect.y += userData.velocityY * ticker.deltaTime;
 
             // Bounce off edges
             const bounds = this.app.screen;
@@ -127,13 +127,18 @@ export class PixiCanvas {
                 rect.y = Math.max(0, Math.min(bounds.height - rect.height, rect.y));
             }
 
-            // Add subtle floating effect
-            rect.x += Math.sin(Date.now() * 0.001 + userData.index) * 0.5;
-            rect.y += Math.cos(Date.now() * 0.001 + userData.index) * 0.3;
+            // Add subtle floating effect using ticker elapsed time
+            const time = ticker.lastTime * 0.001;
+            rect.x += Math.sin(time + userData.index) * 0.5 * ticker.deltaTime;
+            rect.y += Math.cos(time + userData.index) * 0.3 * ticker.deltaTime;
         });
+    }
 
-        // Continue animation
-        requestAnimationFrame(() => this.animate());
+    // Clean up animation loop
+    destroy() {
+        if (this.app && this.app.ticker) {
+            this.app.ticker.remove(this.animate, this);
+        }
     }
 
     // Add new user to canvas

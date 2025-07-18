@@ -6,15 +6,28 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "pixi.js": "^8.11.0"
   },
   "devDependencies": {
-    "vite": "^7.0.5"
+    "@vitest/ui": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "vite": "^7.0.5",
+    "vitest": "^3.2.4",
+    "vitest-canvas-mock": "^0.3.3"
   },
-  "keywords": ["fastapi", "websockets", "pixi.js", "chat", "real-time"],
+  "keywords": [
+    "fastapi",
+    "websockets",
+    "pixi.js",
+    "chat",
+    "real-time"
+  ],
   "author": "Alexander Farber",
   "license": "Public domain"
 }
