@@ -106,11 +106,14 @@ fastapi-websockets-chat/
 ├── run-podman.ps1
 ├── run-podman.sh
 ├── screenshot.gif
-├── - `backend/main.py`: The main FastAPI application file containing the server logic and WebSocket handling.
-- `backend/connection_manager.py`: Manages active WebSocket connections.
-- `frontend/`: Contains all frontend files.
-    ├── script.js      # Frontend JavaScript (WebSocket + Pixi.js)
-    └── style.css      # CSS styles
+├── backend/
+│   ├── main.py               # FastAPI application
+│   └── connection_manager.py # WebSocket connection management
+└── frontend/
+    ├── index.html            # Main HTML file
+    ├── script.js             # Frontend JavaScript (WebSocket + Chat)
+    ├── pixi-canvas.js        # Pixi.js canvas rendering
+    └── style.css             # CSS styles
 ```
 
 ## License

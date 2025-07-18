@@ -27,9 +27,11 @@ The application allows users to join a chat room, send messages, and see other u
 ## Project Structure
 
 - `backend/main.py`: The main FastAPI application file containing the server logic and WebSocket handling.
+- `backend/connection_manager.py`: Manages active WebSocket connections and user state.
 - `frontend/`: Contains all frontend files.
   - `frontend/index.html`: The main HTML file.
-  - `frontend/script.js`: The core JavaScript logic for the chat client, WebSocket connection, and Pixi.js canvas.
+  - `frontend/script.js`: The core JavaScript logic for the chat client and WebSocket connection.
+  - `frontend/pixi-canvas.js`: Pixi.js canvas rendering and user visualization.
   - `frontend/style.css`: CSS styles for the application.
 - `requirements.txt`: Lists the Python packages required for the project.
 

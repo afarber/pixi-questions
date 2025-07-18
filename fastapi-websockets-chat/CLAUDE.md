@@ -35,11 +35,13 @@ fastapi-websockets-chat/
 ├── run-podman.sh
 ├── screenshot.gif
 ├── backend/
-│   └── main.py        # FastAPI application
+│   ├── main.py               # FastAPI application
+│   └── connection_manager.py # WebSocket connection management
 └── frontend/
-    ├── index.html     # Main HTML file
-    ├── script.js      # Frontend JavaScript (WebSocket + Pixi.js)
-    └── style.css      # CSS styles
+    ├── index.html            # Main HTML file
+    ├── script.js             # Frontend JavaScript (WebSocket + Chat)
+    ├── pixi-canvas.js        # Pixi.js canvas rendering
+    └── style.css             # CSS styles
 ```
 
 ## Key Features to Implement
@@ -84,7 +86,7 @@ fastapi-websockets-chat/
 **Step 2**: Integrate Pixi.js canvas with placeholder rectangles
 
 - ✅ Add Pixi.js v8 CDN to HTML
-- ✅ Create `assets/pixi/canvas.js` with basic canvas setup
+- ✅ Create `frontend/pixi-canvas.js` with basic canvas setup
 - ✅ Display 2-3 static colored rectangles as user placeholders
 - **Result**: Canvas displays with animated floating rectangles
 
@@ -125,7 +127,7 @@ fastapi-websockets-chat/
 - ✅ Generate random pastel colors for each user
 - ✅ Display user names as labels on rectangles
 - ✅ Remove/add rectangles when users join/leave
-- ✅ Consolidated canvas and chat logic into single script file
+- ✅ Separated canvas logic into `pixi-canvas.js` and chat logic in `script.js`
 - **Result**: Canvas shows real-time user representation with cleaner code structure
 
 ### Phase 7: WebSocket Reconnection (Runnable) ✅
