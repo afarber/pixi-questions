@@ -11,13 +11,14 @@ app = FastAPI(title="FastAPI Reflex PixiJS Chat")
 
 manager = ConnectionManager()
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+# Mount static files (Vite build output)
+app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
+app.mount("/static", StaticFiles(directory="dist"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     """Serve the main HTML page"""
-    static_path = os.path.join("frontend", "index.html")
+    static_path = os.path.join("dist", "index.html")
     with open(static_path, "r") as f:
         return HTMLResponse(content=f.read(), status_code=200)
 

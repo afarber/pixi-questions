@@ -16,31 +16,55 @@ The application allows users to join a chat room, send messages, and see other u
   - `uvicorn` (ASGI server)
   - `websockets`
 - **Frontend**:
-  - Vanilla JavaScript (ES6)
-  - Pixi.js v8
+  - Vite (build tool)
+  - Modern JavaScript (ES6 modules)
+  - Pixi.js v8 (npm package)
   - HTML5
   - CSS3
 - **Dependencies**:
   - Python dependencies are listed in `requirements.txt`.
-  - Pixi.js is loaded from a CDN in `frontend/index.html`.
+  - Node.js dependencies are listed in `package.json`.
 
 ## Project Structure
 
 - `backend/main.py`: The main FastAPI application file containing the server logic and WebSocket handling.
 - `backend/connection_manager.py`: Manages active WebSocket connections and user state.
-- `frontend/`: Contains all frontend files.
-  - `frontend/index.html`: The main HTML file.
-  - `frontend/script.js`: The core JavaScript logic for the chat client and WebSocket connection.
-  - `frontend/pixi-canvas.js`: Pixi.js canvas rendering and user visualization.
-  - `frontend/style.css`: CSS styles for the application.
+- `package.json`: Node.js dependencies and build scripts.
+- `vite.config.js`: Vite configuration for frontend build process.
+- `index.html`: The main HTML file.
+- `src/`: Contains all frontend source files.
+  - `src/main.js`: The main JavaScript entry point with chat client and WebSocket connection.
+  - `src/pixi-canvas.js`: Pixi.js canvas rendering and user visualization.
+  - `src/main.css`: CSS styles for the application.
+- `dist/`: Vite build output (generated).
 - `requirements.txt`: Lists the Python packages required for the project.
 
 ## Common Commands
 
+### Local Development
+
 ```bash
+# Quick start
+./run-local.sh
+
+# Manual steps
+npm install
+npm run build
 python3 -m venv venv
 . ./venv/bin/activate
 pip3 install -r requirements.txt
-# Run "python3 -m uvicorn" and not just "uvicorn" to use the venv version
 python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+### Frontend Development
+
+```bash
+# Install dependencies
+npm install
+
+# Development server (frontend only)
+npm run dev
+
+# Build for production
+npm run build
 ```

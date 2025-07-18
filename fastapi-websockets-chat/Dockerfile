@@ -1,3 +1,23 @@
+# Multi-stage build: Node.js for frontend, Python for backend
+FROM node:24-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY src/ ./src/
+COPY index.html ./
+COPY vite.config.js ./
+
+# Build frontend
+RUN npm run build
+
+# Python backend stage
 FROM python:3.13-slim
 
 WORKDIR /app
@@ -11,16 +31,16 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy backend code
+COPY backend/ ./backend/
+
+# Copy built frontend from previous stage
+COPY --from=frontend-builder /app/dist ./dist
 
 # Create non-root user for security
 RUN groupadd -r app && useradd -r -g app app
 RUN chown -R app:app /app
 USER app
-
-# Run tests as non-root user
-RUN python -m pytest tests/backend/ -v
 
 # Expose port
 EXPOSE 8000

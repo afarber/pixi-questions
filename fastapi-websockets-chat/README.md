@@ -40,8 +40,9 @@ The interface follows a simple, vertical layout optimized for mobile use:
 
 ### Frontend
 
-- **Vanilla Javascript**: Plain Javascript for the UI
-- **Pixi.js v8**: 2D rendering library for canvas animations loaded via CDN https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js
+- **Vite**: Modern build tool for frontend development
+- **Pixi.js v8**: 2D rendering library for canvas animations (npm package)
+- **Vanilla Javascript**: ES modules for the UI
 - **WebSockets**: Real-time communication protocol
 
 ### Deployment
@@ -53,8 +54,9 @@ The interface follows a simple, vertical layout optimized for mobile use:
 
 ### Prerequisites
 
-- Python 3
-- Docker or Podman
+- Python 3.13+
+- Node.js 18+
+- Docker or Podman (for containerized deployment)
 - Modern web browser with WebSocket support
 
 ### Installation & Setup
@@ -83,12 +85,29 @@ The interface follows a simple, vertical layout optimized for mobile use:
 .\run-podman.ps1
 ```
 
-### Development
+### Local Development
+
+**Quick Start:**
+
+**Bash/Linux/macOS:**
+```bash
+./run-local.sh
+```
+
+**PowerShell/Windows:**
+```powershell
+.\run-local.ps1
+```
+
+**Manual Steps:**
 
 1. Clone the repository
-2. Install dependencies
-3. Run the development server
-4. Open your browser to the application URL
+2. Install frontend dependencies: `npm install`
+3. Build frontend: `npm run build`
+4. Set up Python environment: `python3 -m venv venv && source venv/bin/activate`
+5. Install backend dependencies: `pip install -r requirements.txt`
+6. Run the development server: `python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000`
+7. Open your browser to http://localhost:8000
 
 ## Project Structure
 
@@ -101,19 +120,24 @@ fastapi-websockets-chat/
 ├── Dockerfile
 ├── GEMINI.md
 ├── requirements.txt
+├── package.json              # Node.js dependencies
+├── vite.config.js           # Vite configuration
+├── index.html               # Main HTML file
 ├── run-docker.ps1
 ├── run-docker.sh
 ├── run-podman.ps1
 ├── run-podman.sh
+├── run-local.ps1            # Local development (Windows)
+├── run-local.sh             # Local development (Unix)
 ├── screenshot.gif
 ├── backend/
 │   ├── main.py               # FastAPI application
 │   └── connection_manager.py # WebSocket connection management
-└── frontend/
-    ├── index.html            # Main HTML file
-    ├── script.js             # Frontend JavaScript (WebSocket + Chat)
-    ├── pixi-canvas.js        # Pixi.js canvas rendering
-    └── style.css             # CSS styles
+├── src/
+│   ├── main.js               # Vite entry point
+│   ├── pixi-canvas.js        # Pixi.js canvas rendering
+│   └── main.css              # CSS styles
+└── dist/                     # Vite build output (generated)
 ```
 
 ## License

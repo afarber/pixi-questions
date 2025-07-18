@@ -14,8 +14,9 @@ This is a real-time WebSocket chat application with the following architecture:
 
 ### Frontend Stack
 
-- **Vanilla Javascript**: Plain Javascript for the UI
-- **Pixi.js v8**: 2D rendering library for canvas animations loaded via CDN https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js
+- **Vite**: Modern build tool for frontend development
+- **Pixi.js v8**: 2D rendering library for canvas animations (npm package)
+- **Vanilla Javascript**: ES modules for the UI
 - **WebSockets**: Real-time communication protocol
 
 ### Expected Project Structure
@@ -29,19 +30,24 @@ fastapi-websockets-chat/
 ├── Dockerfile
 ├── GEMINI.md
 ├── requirements.txt
+├── package.json              # Node.js dependencies
+├── vite.config.js           # Vite configuration
+├── index.html               # Main HTML file
 ├── run-docker.ps1
 ├── run-docker.sh
 ├── run-podman.ps1
 ├── run-podman.sh
+├── run-local.ps1            # Local development (Windows)
+├── run-local.sh             # Local development (Unix)
 ├── screenshot.gif
 ├── backend/
 │   ├── main.py               # FastAPI application
 │   └── connection_manager.py # WebSocket connection management
-└── frontend/
-    ├── index.html            # Main HTML file
-    ├── script.js             # Frontend JavaScript (WebSocket + Chat)
-    ├── pixi-canvas.js        # Pixi.js canvas rendering
-    └── style.css             # CSS styles
+├── src/
+│   ├── main.js               # Vite entry point
+│   ├── pixi-canvas.js        # Pixi.js canvas rendering
+│   └── main.css              # CSS styles
+└── dist/                     # Vite build output (generated)
 ```
 
 ## Key Features to Implement
@@ -85,8 +91,8 @@ fastapi-websockets-chat/
 
 **Step 2**: Integrate Pixi.js canvas with placeholder rectangles
 
-- ✅ Add Pixi.js v8 CDN to HTML
-- ✅ Create `frontend/pixi-canvas.js` with basic canvas setup
+- ✅ Add Pixi.js v8 npm package with Vite build
+- ✅ Create `src/pixi-canvas.js` with basic canvas setup
 - ✅ Display 2-3 static colored rectangles as user placeholders
 - **Result**: Canvas displays with animated floating rectangles
 
@@ -127,7 +133,7 @@ fastapi-websockets-chat/
 - ✅ Generate random pastel colors for each user
 - ✅ Display user names as labels on rectangles
 - ✅ Remove/add rectangles when users join/leave
-- ✅ Separated canvas logic into `pixi-canvas.js` and chat logic in `script.js`
+- ✅ Separated canvas logic into `src/pixi-canvas.js` and chat logic in `src/main.js`
 - **Result**: Canvas shows real-time user representation with cleaner code structure
 
 ### Phase 7: WebSocket Reconnection (Runnable) ✅
@@ -164,11 +170,33 @@ fastapi-websockets-chat/
 
 ### Local Development (without Docker)
 
+**Bash/Linux/macOS:**
+
 ```bash
+./run-local.sh
+```
+
+**PowerShell/Windows:**
+
+```powershell
+.\run-local.ps1
+```
+
+**Manual Steps:**
+
+```bash
+# Install frontend dependencies
+npm install
+
+# Build frontend
+npm run build
+
+# Setup Python environment
 python3 -m venv venv
 . ./venv/bin/activate
 pip3 install -r requirements.txt
-# Run "python3 -m uvicorn" and not just "uvicorn" to use the venv version
+
+# Run FastAPI server
 python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
