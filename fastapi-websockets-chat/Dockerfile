@@ -19,6 +19,9 @@ RUN groupadd -r app && useradd -r -g app app
 RUN chown -R app:app /app
 USER app
 
+# Run tests as non-root user
+RUN python -m pytest tests/backend/ -v
+
 # Expose port
 EXPOSE 8000
 
