@@ -12,7 +12,6 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
         self.user_names: dict[WebSocket, str] = {}
-        self.user_count = 0
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
@@ -23,14 +22,12 @@ class ConnectionManager:
             self.active_connections.remove(websocket)
         if websocket in self.user_names:
             del self.user_names[websocket]
-        self.user_count = len(self.user_names)
 
     def is_name_taken(self, name: str) -> bool:
         return name.lower() in [n.lower() for n in self.user_names.values()]
 
     def add_user(self, websocket: WebSocket, name: str):
         self.user_names[websocket] = name
-        self.user_count = len(self.user_names)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
@@ -45,7 +42,7 @@ class ConnectionManager:
     async def broadcast_user_count(self):
         count_message = json.dumps({
             "type": "user_count",
-            "count": self.user_count
+            "count": len(self.user_names)
         })
         await self.broadcast(count_message)
     
