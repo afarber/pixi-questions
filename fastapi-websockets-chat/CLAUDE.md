@@ -87,8 +87,6 @@ fastapi-websockets-chat/
 
 ### Phase 1: Basic FastAPI Structure (Runnable) [x]
 
-**Step 1**: Create minimal FastAPI application with static HTML page
-
 - [x] Create `src/main.py` with basic FastAPI app
 - [x] Create `requirements.txt` with FastAPI, uvicorn dependencies
 - [x] Create `src/static/index.html` with placeholder UI (3-section layout)
@@ -97,16 +95,12 @@ fastapi-websockets-chat/
 
 ### Phase 2: Add Pixi.js Canvas (Runnable) [x]
 
-**Step 2**: Integrate Pixi.js canvas with placeholder rectangles
-
 - [x] Add Pixi.js v8 npm package with Vite build
 - [x] Create `src/pixi-canvas.js` with basic canvas setup
 - [x] Display 2-3 static colored rectangles as user placeholders
 - **Result**: Canvas displays with animated floating rectangles
 
 ### Phase 3: Basic WebSocket Connection (Runnable) [x]
-
-**Step 3**: Implement WebSocket endpoint and basic chat UI
 
 - [x] Add WebSocket endpoint to FastAPI (`/ws`)
 - [x] Create chat message display area in HTML
@@ -116,16 +110,12 @@ fastapi-websockets-chat/
 
 ### Phase 4: Multi-User Chat (Runnable) [x]
 
-**Step 4**: Enable multiple users and message broadcasting
-
 - [x] Implement user connection management
 - [x] Add message broadcasting to all connected users
 - [x] Display messages in chat window with timestamps
 - **Result**: Multiple users can chat in real-time
 
 ### Phase 5: User Names and Validation (Runnable) [x]
-
-**Step 5**: Add user name system with validation
 
 - [x] Create bottom drawer dialog for name entry
 - [x] Implement name validation (max 16 chars, no duplicates)
@@ -134,8 +124,6 @@ fastapi-websockets-chat/
 - **Result**: Users must enter unique names to join chat
 
 ### Phase 6: Dynamic User Visualization (Runnable) [x]
-
-**Step 6**: Connect Pixi.js canvas to real users
 
 - [x] Update canvas to show rectangles for actual connected users
 - [x] Generate random pastel colors for each user
@@ -146,8 +134,6 @@ fastapi-websockets-chat/
 
 ### Phase 7: WebSocket Reconnection (Runnable) [x]
 
-**Step 7**: Add connection resilience
-
 - [x] Implement WebSocket reconnection with random backoff and exponential delay
 - [x] Add connection status indicators with color-coded states
 - [x] Handle reconnection gracefully with single source of truth (websocket state)
@@ -156,8 +142,6 @@ fastapi-websockets-chat/
 
 ### Phase 8: Docker Deployment (Runnable) [x]
 
-**Step 8**: Create Docker configuration
-
 - [x] Create `Dockerfile` for Python app with security best practices
 - [x] Create `docker-compose.yml` for container orchestration with health checks
 - [x] Create `run-docker.sh` and `run-podman.sh` scripts with status monitoring
@@ -165,8 +149,6 @@ fastapi-websockets-chat/
 - **Result**: App runs in containerized environment with production-ready setup
 
 ### Phase 9: Setup Playwright for Integration Testing [ ]
-
-**Step 9**: Add end-to-end testing with Playwright
 
 Tasks remaining:
 - [ ] Add Playwright dependencies (@playwright/test)
@@ -180,16 +162,12 @@ Tasks remaining:
 
 ### Phase 10: Update Documentation (Final) [ ]
 
-**Step 10**: Complete documentation with testing setup
-
 - [ ] Update all markdown files with complete testing setup
 - [ ] Add testing section to README with both unit and E2E instructions
 - [ ] Document the full development workflow
 - **Result**: Complete documentation for development and testing workflows
 
 ### Phase 11: Polish and Optimization (Runnable) [ ]
-
-**Step 11**: Final improvements and mobile optimization
 
 - [ ] Optimize mobile layout and touch interactions
 - [ ] Add smooth animations and transitions
@@ -264,4 +242,5 @@ python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 - **Commit Practice**:
   - After each change display a 1 line commit message for me to copy and a detailed message below
   - Stop and wait for smoke testing after each major phase
-  - Do not use emoji
+  - Do not use emoji and keep comments on separate lines
+
