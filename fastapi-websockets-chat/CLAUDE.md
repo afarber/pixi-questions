@@ -43,7 +43,8 @@ fastapi-websockets-chat/
 ├── screenshot.gif
 ├── backend/
 │   ├── main.py               # FastAPI application
-│   └── connection_manager.py # WebSocket connection management
+│   ├── connection_manager.py # WebSocket connection management
+│   └── message_types.py      # WebSocket message type enums
 ├── src/
 │   ├── main.js               # Vite entry point
 │   ├── pixi-canvas.js        # Pixi.js canvas rendering
@@ -82,6 +83,42 @@ fastapi-websockets-chat/
 - **User State**: The `userName` variable controls user-specific functionality and permissions
 - **UI State Management**: All UI elements (connection status, input/button states) derive their state from these core variables
 - **No Redundant State**: Eliminated separate connection tracking variables in favor of querying websocket.readyState directly
+
+## WebSocket Message Protocol
+
+The application uses a structured JSON message protocol for WebSocket communication. Message types are defined using Python enums for type safety:
+
+```
+MessageType (backend/message_types.py)
+├── JOIN_REQUEST     = "join_request"     # Client requests to join with username
+├── JOIN_RESPONSE    = "join_response"    # Server response to join request  
+└── CHAT_MESSAGE     = "chat_message"     # Chat messages and system notifications
+```
+
+### Message Flow Diagram
+
+```
+Client                           Server
+  │                               │
+  ├─ JOIN_REQUEST ────────────────>│
+  │  { type: "join_request",       │
+  │    name: "username" }          │
+  │                               │
+  │<──────────────── JOIN_RESPONSE─┤
+  │  { type: "join_response",       │
+  │    success: true/false,         │
+  │    error: "message" }           │
+  │                               │
+  ├─ CHAT_MESSAGE ────────────────>│
+  │  { type: "chat_message",        │
+  │    message: "text" }            │
+  │                               │
+  │<────────────── CHAT_MESSAGE ───┤ (broadcast to all)
+  │  { type: "chat_message",        │
+  │    user: "username",            │
+  │    message: "text",             │
+  │    timestamp: "HH:MM:SS" }      │
+```
 
 ## Step-by-Step Implementation Plan
 
