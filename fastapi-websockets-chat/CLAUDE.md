@@ -101,7 +101,7 @@ The application uses a structured JSON message protocol for WebSocket communicat
 ```
 MessageType (backend/message_types.py)
 ├── JOIN_REQUEST     = "join_request"     # Client requests to join with username
-├── JOIN_RESPONSE    = "join_response"    # Server response to join request  
+├── JOIN_RESPONSE    = "join_response"    # Server response to join request
 └── CHAT_MESSAGE     = "chat_message"     # Chat messages and system notifications
 ```
 
@@ -130,98 +130,6 @@ Client                           Server
   │    timestamp: "HH:MM:SS" }      │
 ```
 
-## Step-by-Step Implementation Plan
-
-### Phase 1: Basic FastAPI Structure (Runnable) [x]
-
-- [x] Create `src/main.py` with basic FastAPI app
-- [x] Create `requirements.txt` with FastAPI, uvicorn dependencies
-- [x] Create `src/static/index.html` with placeholder UI (3-section layout)
-- [x] Create basic CSS for mobile-optimized layout
-- **Result**: Static webpage accessible at `http://localhost:8000`
-
-### Phase 2: Add Pixi.js Canvas (Runnable) [x]
-
-- [x] Add Pixi.js v8 npm package with Vite build
-- [x] Create `src/pixi-canvas.js` with basic canvas setup
-- [x] Display 2-3 static colored rectangles as user placeholders
-- **Result**: Canvas displays with animated floating rectangles
-
-### Phase 3: Basic WebSocket Connection (Runnable) [x]
-
-- [x] Add WebSocket endpoint to FastAPI (`/ws`)
-- [x] Create chat message display area in HTML
-- [x] Add basic message input field and send button
-- [x] Implement simple echo WebSocket functionality
-- **Result**: Users can send messages and see echoes
-
-### Phase 4: Multi-User Chat (Runnable) [x]
-
-- [x] Implement user connection management
-- [x] Add message broadcasting to all connected users
-- [x] Display messages in chat window with timestamps
-- **Result**: Multiple users can chat in real-time
-
-### Phase 5: User Names and Validation (Runnable) [x]
-
-- [x] Create bottom drawer dialog for name entry
-- [x] Implement name validation (max 16 chars, no duplicates)
-- [x] Add red border animation for validation errors
-- [x] Store user names and display in messages
-- **Result**: Users must enter unique names to join chat
-
-### Phase 6: Dynamic User Visualization (Runnable) [x]
-
-- [x] Update canvas to show rectangles for actual connected users
-- [x] Generate random pastel colors for each user
-- [x] Display user names as labels on rectangles
-- [x] Remove/add rectangles when users join/leave
-- [x] Separated canvas logic into `src/pixi-canvas.js` and chat logic in `src/main.js`
-- **Result**: Canvas shows real-time user representation with cleaner code structure
-
-### Phase 7: WebSocket Reconnection (Runnable) [x]
-
-- [x] Implement WebSocket reconnection with random backoff and exponential delay
-- [x] Add connection status indicators with color-coded states
-- [x] Handle reconnection gracefully with single source of truth (websocket state)
-- [x] Update UI state management to use websocket as SSOT
-- **Result**: App handles network interruptions gracefully with visual feedback
-
-### Phase 8: Docker Deployment (Runnable) [x]
-
-- [x] Create `Dockerfile` for Python app with security best practices
-- [x] Create `docker-compose.yml` for container orchestration with health checks
-- [x] Create `run-docker.sh` and `run-podman.sh` scripts with status monitoring
-- [x] Add proper health checks and non-root user configuration
-- **Result**: App runs in containerized environment with production-ready setup
-
-### Phase 9: Setup Playwright for Integration Testing (Runnable) [x]
-
-- [x] Add Playwright dependencies (@playwright/test)
-- [x] Create playwright.config.js for E2E testing
-- [x] Create integration test files:
-  - tests/integration/chat-flow.spec.js - Full user journey testing
-  - tests/integration/canvas-interaction.spec.js - Real browser canvas testing
-- [x] Add Playwright scripts to package.json
-- [x] Integrate E2E tests into GitHub Actions CI/CD pipeline
-- **Result**: Comprehensive testing coverage with both unit and E2E tests
-
-### Phase 10: Update Documentation (Final) [x]
-
-- [x] Update all markdown files with complete testing setup
-- [x] Add testing section to README with both unit and E2E instructions
-- [x] Document the full development workflow
-- [x] Update CLAUDE.md with comprehensive testing guidance
-- **Result**: Complete documentation for development and testing workflows
-
-### Phase 11: Polish and Optimization (Runnable) [ ]
-
-- [ ] Optimize mobile layout and touch interactions
-- [ ] Add smooth animations and transitions
-- [ ] Implement proper error handling
-- [ ] Add loading states and user feedback
-- **Result**: Production-ready chat application
-
 ## Testing Framework
 
 This project includes comprehensive testing coverage with multiple test types:
@@ -229,22 +137,26 @@ This project includes comprehensive testing coverage with multiple test types:
 ### Unit Tests
 
 **Frontend Unit Tests (JavaScript/Vitest):**
+
 - `tests/unit/chat.test.js` - Chat message handling and validation
 - `tests/unit/pixi-canvas.test.js` - Canvas user visualization
 - `tests/unit/websocket.test.js` - WebSocket connection management
 
 **Backend Unit Tests (Python/pytest):**
+
 - `tests/backend/test_connection_manager.py` - WebSocket connection management
 
 ### End-to-End (E2E) Tests
 
 **Playwright Browser Tests:**
+
 - `tests/integration/chat-flow.spec.js` - Complete user journey testing
 - `tests/integration/canvas-interaction.spec.js` - Real browser canvas testing
 
 ### Testing Commands
 
 **Unit Tests:**
+
 ```bash
 # Frontend tests
 npm test               # Watch mode
@@ -256,6 +168,7 @@ python -m pytest tests/backend/ -v
 ```
 
 **E2E Tests:**
+
 ```bash
 npm run playwright:install  # Install browsers (first time)
 npm run build               # Build frontend (required)
@@ -268,18 +181,20 @@ npm run test:e2e:ui         # Interactive mode
 **Important**: Do not create or add WebSocket reconnection tests (both unit and integration tests). These tests are inherently flaky because:
 
 - Network simulation via `page.route()` blocking doesn't work reliably with WebSockets across browsers
-- Reconnection logic involves random delays and exponential backoff that make tests non-deterministic  
+- Reconnection logic involves random delays and exponential backoff that make tests non-deterministic
 - Browser WebSocket implementations vary in how they handle connection failures
 - The actual reconnection functionality works fine in practice, but is difficult to test reliably
 
 Previously removed tests:
+
 - `tests/integration/websocket-reconnect.spec.js` (entire file removed)
 - Unit tests for exponential backoff delay calculations
 - Unit tests for reconnection attempt limits
 
 Focus testing efforts on:
+
 - Chat flow functionality (message sending, user validation)
-- Canvas interaction (visual elements, user representation)  
+- Canvas interaction (visual elements, user representation)
 - Basic connection status indicators
 
 ### Continuous Integration
@@ -287,12 +202,14 @@ Focus testing efforts on:
 The project includes automated testing via GitHub Actions:
 
 **Test Pipeline (.github/workflows/fastapi-websockets-chat.yml):**
+
 1. **Frontend Unit Tests** - Validate JavaScript components
-2. **Backend Unit Tests** - Validate Python backend logic  
+2. **Backend Unit Tests** - Validate Python backend logic
 3. **End-to-End Tests** - Validate complete application workflows
 4. **Docker Build** - Ensure deployment readiness
 
 **Supported Browsers (E2E):**
+
 - Chrome/Chromium (Desktop & Mobile)
 - Firefox (Desktop)
 - Safari/WebKit (Desktop & Mobile)
@@ -314,18 +231,21 @@ Before committing changes, ensure:
 ### Code Quality Standards
 
 **Frontend:**
+
 - JavaScript ES modules with Vite bundling
 - Vitest for unit testing with JSDOM environment
 - Playwright for browser automation testing
 - Clean, readable code with proper error handling
 
 **Backend:**
+
 - Python 3.13+ with FastAPI framework
 - Type hints and proper async/await patterns
 - Pytest for unit testing with proper mocking
 - WebSocket connection management with graceful error handling
 
 **Testing Standards:**
+
 - Unit tests focus on individual component behavior
 - E2E tests validate complete user workflows
 - Tests use realistic data and edge cases
@@ -400,7 +320,8 @@ python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 - Do not use emoji and keep comments on separate lines
 
 # important-instruction-reminders
+
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
-NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.

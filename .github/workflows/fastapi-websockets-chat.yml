@@ -90,12 +90,6 @@ jobs:
       
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
-      
-    - name: Start backend server
-      run: |
-        python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 &
-        sleep 5
-        curl -f http://127.0.0.1:8000/health || exit 1
         
     - name: Run E2E tests
       run: npm run test:e2e
