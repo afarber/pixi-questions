@@ -125,8 +125,8 @@ test.describe('Chat Flow Integration Tests', () => {
   });
 
   test('multiple users can chat simultaneously', async ({ page, context }) => {
-    const user1Name = `User1_${Date.now()}`;
-    const user2Name = `User2_${Date.now()}`;
+    const user1Name = `U1${Date.now() % 10000}`;
+    const user2Name = `U2${Date.now() % 10000}`;
     
     // First user joins
     await page.goto('/');
@@ -137,7 +137,6 @@ test.describe('Chat Flow Integration Tests', () => {
     // Second user joins
     const secondPage = await context.newPage();
     await secondPage.goto('/');
-    await secondPage.locator('#nameDrawer').click();
     await secondPage.locator('#nameInput').fill(user2Name);
     await secondPage.locator('#joinButton').click();
     await expect(secondPage.locator('#connectionStatus')).toHaveText('Connected');
