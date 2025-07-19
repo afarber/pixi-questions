@@ -30,8 +30,9 @@ fastapi-websockets-chat/
 ├── Dockerfile
 ├── GEMINI.md
 ├── requirements.txt
-├── package.json              # Node.js dependencies
+├── package.json             # Node.js dependencies
 ├── vite.config.js           # Vite configuration
+├── vitest.config.js         # Vitest configuration
 ├── index.html               # Main HTML file
 ├── run-docker.ps1
 ├── run-docker.sh
@@ -47,6 +48,13 @@ fastapi-websockets-chat/
 │   ├── main.js               # Vite entry point
 │   ├── pixi-canvas.js        # Pixi.js canvas rendering
 │   └── main.css              # CSS styles
+├── tests/
+│   ├── backend/
+│   │   └── test_connection_manager.py
+│   └── unit/
+│       ├── chat.test.js
+│       ├── pixi-canvas.test.js
+│       └── websocket.test.js
 └── dist/                     # Vite build output (generated)
 ```
 

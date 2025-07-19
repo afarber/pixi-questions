@@ -64,11 +64,13 @@ The interface follows a simple, vertical layout optimized for mobile use:
 #### Using Docker
 
 **Bash/Linux/macOS:**
+
 ```bash
 ./run-docker.sh
 ```
 
 **PowerShell/Windows:**
+
 ```powershell
 .\run-docker.ps1
 ```
@@ -76,11 +78,13 @@ The interface follows a simple, vertical layout optimized for mobile use:
 #### Using Podman
 
 **Bash/Linux/macOS:**
+
 ```bash
 ./run-podman.sh
 ```
 
 **PowerShell/Windows:**
+
 ```powershell
 .\run-podman.ps1
 ```
@@ -90,11 +94,13 @@ The interface follows a simple, vertical layout optimized for mobile use:
 **Quick Start:**
 
 **Bash/Linux/macOS:**
+
 ```bash
 ./run-local.sh
 ```
 
 **PowerShell/Windows:**
+
 ```powershell
 .\run-local.ps1
 ```
@@ -120,8 +126,9 @@ fastapi-websockets-chat/
 ├── Dockerfile
 ├── GEMINI.md
 ├── requirements.txt
-├── package.json              # Node.js dependencies
+├── package.json             # Node.js dependencies
 ├── vite.config.js           # Vite configuration
+├── vitest.config.js         # Vitest configuration
 ├── index.html               # Main HTML file
 ├── run-docker.ps1
 ├── run-docker.sh
@@ -137,6 +144,13 @@ fastapi-websockets-chat/
 │   ├── main.js               # Vite entry point
 │   ├── pixi-canvas.js        # Pixi.js canvas rendering
 │   └── main.css              # CSS styles
+├── tests/
+│   ├── backend/
+│   │   └── test_connection_manager.py
+│   └── unit/
+│       ├── chat.test.js
+│       ├── pixi-canvas.test.js
+│       └── websocket.test.js
 └── dist/                     # Vite build output (generated)
 ```
 
