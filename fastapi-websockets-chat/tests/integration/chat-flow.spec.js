@@ -89,15 +89,19 @@ test.describe('Chat Flow Integration Tests', () => {
   test('name validation shows error for long name', async ({ page }) => {
     await page.goto('/');
     
-    // Try to join with name too long (should show error)
-    await page.locator('#nameInput').fill('ThisNameIsWayTooLongAndShouldFail');
+    // Set a long name by bypassing HTML maxlength attribute
+    await page.evaluate(() => {
+      const input = document.getElementById('nameInput');
+      input.value = 'ThisNameIsWayTooLongAndShouldFailValidation';
+    });
+    
     await page.locator('#joinButton').click();
     await expect(page.locator('#nameInput')).toHaveClass(/error/);
     await expect(page.locator('#nameDrawer')).toHaveClass(/active/);
   });
 
   test('user can rejoin after page refresh', async ({ page }) => {
-    const testUsername = `RefreshTest${Date.now()}`;
+    const testUsername = `Ref${Date.now() % 10000}`;
     
     // Join and send message
     await page.goto('/');
