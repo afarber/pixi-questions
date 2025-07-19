@@ -85,93 +85,116 @@ fastapi-websockets-chat/
 
 ## Step-by-Step Implementation Plan
 
-### Phase 1: Basic FastAPI Structure (Runnable) ✅
+### Phase 1: Basic FastAPI Structure (Runnable) [x]
 
 **Step 1**: Create minimal FastAPI application with static HTML page
 
-- ✅ Create `src/main.py` with basic FastAPI app
-- ✅ Create `requirements.txt` with FastAPI, uvicorn dependencies
-- ✅ Create `src/static/index.html` with placeholder UI (3-section layout)
-- ✅ Create basic CSS for mobile-optimized layout
+- [x] Create `src/main.py` with basic FastAPI app
+- [x] Create `requirements.txt` with FastAPI, uvicorn dependencies
+- [x] Create `src/static/index.html` with placeholder UI (3-section layout)
+- [x] Create basic CSS for mobile-optimized layout
 - **Result**: Static webpage accessible at `http://localhost:8000`
 
-### Phase 2: Add Pixi.js Canvas (Runnable) ✅
+### Phase 2: Add Pixi.js Canvas (Runnable) [x]
 
 **Step 2**: Integrate Pixi.js canvas with placeholder rectangles
 
-- ✅ Add Pixi.js v8 npm package with Vite build
-- ✅ Create `src/pixi-canvas.js` with basic canvas setup
-- ✅ Display 2-3 static colored rectangles as user placeholders
+- [x] Add Pixi.js v8 npm package with Vite build
+- [x] Create `src/pixi-canvas.js` with basic canvas setup
+- [x] Display 2-3 static colored rectangles as user placeholders
 - **Result**: Canvas displays with animated floating rectangles
 
-### Phase 3: Basic WebSocket Connection (Runnable) ✅
+### Phase 3: Basic WebSocket Connection (Runnable) [x]
 
 **Step 3**: Implement WebSocket endpoint and basic chat UI
 
-- ✅ Add WebSocket endpoint to FastAPI (`/ws`)
-- ✅ Create chat message display area in HTML
-- ✅ Add basic message input field and send button
-- ✅ Implement simple echo WebSocket functionality
+- [x] Add WebSocket endpoint to FastAPI (`/ws`)
+- [x] Create chat message display area in HTML
+- [x] Add basic message input field and send button
+- [x] Implement simple echo WebSocket functionality
 - **Result**: Users can send messages and see echoes
 
-### Phase 4: Multi-User Chat (Runnable) ✅
+### Phase 4: Multi-User Chat (Runnable) [x]
 
 **Step 4**: Enable multiple users and message broadcasting
 
-- ✅ Implement user connection management
-- ✅ Add message broadcasting to all connected users
-- ✅ Display messages in chat window with timestamps
+- [x] Implement user connection management
+- [x] Add message broadcasting to all connected users
+- [x] Display messages in chat window with timestamps
 - **Result**: Multiple users can chat in real-time
 
-### Phase 5: User Names and Validation (Runnable) ✅
+### Phase 5: User Names and Validation (Runnable) [x]
 
 **Step 5**: Add user name system with validation
 
-- ✅ Create bottom drawer dialog for name entry
-- ✅ Implement name validation (max 16 chars, no duplicates)
-- ✅ Add red border animation for validation errors
-- ✅ Store user names and display in messages
+- [x] Create bottom drawer dialog for name entry
+- [x] Implement name validation (max 16 chars, no duplicates)
+- [x] Add red border animation for validation errors
+- [x] Store user names and display in messages
 - **Result**: Users must enter unique names to join chat
 
-### Phase 6: Dynamic User Visualization (Runnable) ✅
+### Phase 6: Dynamic User Visualization (Runnable) [x]
 
 **Step 6**: Connect Pixi.js canvas to real users
 
-- ✅ Update canvas to show rectangles for actual connected users
-- ✅ Generate random pastel colors for each user
-- ✅ Display user names as labels on rectangles
-- ✅ Remove/add rectangles when users join/leave
-- ✅ Separated canvas logic into `src/pixi-canvas.js` and chat logic in `src/main.js`
+- [x] Update canvas to show rectangles for actual connected users
+- [x] Generate random pastel colors for each user
+- [x] Display user names as labels on rectangles
+- [x] Remove/add rectangles when users join/leave
+- [x] Separated canvas logic into `src/pixi-canvas.js` and chat logic in `src/main.js`
 - **Result**: Canvas shows real-time user representation with cleaner code structure
 
-### Phase 7: WebSocket Reconnection (Runnable) ✅
+### Phase 7: WebSocket Reconnection (Runnable) [x]
 
 **Step 7**: Add connection resilience
 
-- ✅ Implement WebSocket reconnection with random backoff and exponential delay
-- ✅ Add connection status indicators with color-coded states
-- ✅ Handle reconnection gracefully with single source of truth (websocket state)
-- ✅ Update UI state management to use websocket as SSOT
+- [x] Implement WebSocket reconnection with random backoff and exponential delay
+- [x] Add connection status indicators with color-coded states
+- [x] Handle reconnection gracefully with single source of truth (websocket state)
+- [x] Update UI state management to use websocket as SSOT
 - **Result**: App handles network interruptions gracefully with visual feedback
 
-### Phase 8: Docker Deployment (Runnable) ✅
+### Phase 8: Docker Deployment (Runnable) [x]
 
 **Step 8**: Create Docker configuration
 
-- ✅ Create `Dockerfile` for Python app with security best practices
-- ✅ Create `docker-compose.yml` for container orchestration with health checks
-- ✅ Create `run-docker.sh` and `run-podman.sh` scripts with status monitoring
-- ✅ Add proper health checks and non-root user configuration
+- [x] Create `Dockerfile` for Python app with security best practices
+- [x] Create `docker-compose.yml` for container orchestration with health checks
+- [x] Create `run-docker.sh` and `run-podman.sh` scripts with status monitoring
+- [x] Add proper health checks and non-root user configuration
 - **Result**: App runs in containerized environment with production-ready setup
 
-### Phase 9: Polish and Optimization (Runnable) ⏳
+### Phase 9: Setup Playwright for Integration Testing [ ]
 
-**Step 9**: Final improvements and mobile optimization
+**Step 9**: Add end-to-end testing with Playwright
 
-- ⏳ Optimize mobile layout and touch interactions
-- ⏳ Add smooth animations and transitions
-- ⏳ Implement proper error handling
-- ⏳ Add loading states and user feedback
+Tasks remaining:
+- [ ] Add Playwright dependencies (@playwright/test)
+- [ ] Create playwright.config.js for E2E testing
+- [ ] Create integration test files:
+  - tests/integration/chat-flow.spec.js - Full user journey testing
+  - tests/integration/canvas-interaction.spec.js - Real browser canvas testing
+  - tests/integration/websocket-reconnect.spec.js - Connection resilience testing
+- [ ] Add Playwright scripts to package.json
+- **Result**: Comprehensive testing coverage with both unit and E2E tests
+
+### Phase 10: Update Documentation (Final) [ ]
+
+**Step 10**: Complete documentation with testing setup
+
+- [ ] Update all markdown files with complete testing setup
+- [ ] Add testing section to README with both unit and E2E instructions
+- [ ] Document the full development workflow
+- **Result**: Complete documentation for development and testing workflows
+
+### Phase 11: Polish and Optimization (Runnable) [ ]
+
+**Step 11**: Final improvements and mobile optimization
+
+- [ ] Optimize mobile layout and touch interactions
+- [ ] Add smooth animations and transitions
+- [ ] Implement proper error handling
+- [ ] Add loading states and user feedback
 - **Result**: Production-ready chat application
 
 ## Development Commands
