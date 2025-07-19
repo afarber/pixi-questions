@@ -31,11 +31,15 @@ The application allows users to join a chat room, send messages, and see other u
 - `backend/connection_manager.py`: Manages active WebSocket connections and user state.
 - `package.json`: Node.js dependencies and build scripts.
 - `vite.config.js`: Vite configuration for frontend build process.
+- `vitest.config.js`: Vitest configuration for frontend testing.
 - `index.html`: The main HTML file.
 - `src/`: Contains all frontend source files.
   - `src/main.js`: The main JavaScript entry point with chat client and WebSocket connection.
   - `src/pixi-canvas.js`: Pixi.js canvas rendering and user visualization.
   - `src/main.css`: CSS styles for the application.
+- `tests/`: Contains automated tests.
+  - `backend/`: Python tests for the backend API.
+  - `unit/`: Javascript tests for the frontend UI.
 - `dist/`: Vite build output (generated).
 - `requirements.txt`: Lists the Python packages required for the project.
 
