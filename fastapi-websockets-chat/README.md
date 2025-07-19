@@ -109,11 +109,34 @@ The interface follows a simple, vertical layout optimized for mobile use:
 
 1. Clone the repository
 2. Install frontend dependencies: `npm install`
-3. Build frontend: `npm run build`
-4. Set up Python environment: `python3 -m venv venv && source venv/bin/activate`
-5. Install backend dependencies: `pip install -r requirements.txt`
-6. Run the development server: `python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000`
-7. Open your browser to http://localhost:8000
+3. Run tests: `npm run test:run`
+4. Build frontend: `npm run build`
+5. Set up Python environment: `python3 -m venv venv && source venv/bin/activate`
+6. Install backend dependencies: `pip install -r requirements.txt`
+7. Run the development server: `python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000`
+8. Open your browser to http://localhost:8000
+
+### Testing
+
+**Run Frontend Tests:**
+```bash
+npm test              # Watch mode
+npm run test:run      # Single run
+npm run test:ui       # UI mode
+```
+
+**Run Backend Tests:**
+```bash
+python -m pytest tests/backend/ -v
+```
+
+### Continuous Integration
+
+The project includes automated testing via GitHub Actions:
+- **Frontend tests** run on every push/PR
+- **Backend tests** validate Python code
+- **Docker build** ensures deployment readiness
+- All tests must pass before code can be merged
 
 ## Project Structure
 
@@ -145,12 +168,15 @@ fastapi-websockets-chat/
 │   ├── pixi-canvas.js        # Pixi.js canvas rendering
 │   └── main.css              # CSS styles
 ├── tests/
-│   ├── backend/
+│   ├── backend/              # Python backend tests
 │   │   └── test_connection_manager.py
-│   └── unit/
+│   └── unit/                 # JavaScript frontend tests
 │       ├── chat.test.js
 │       ├── pixi-canvas.test.js
 │       └── websocket.test.js
+├── .github/
+│   └── workflows/
+│       └── ci.yml            # GitHub Actions CI/CD pipeline
 └── dist/                     # Vite build output (generated)
 ```
 

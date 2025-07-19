@@ -7,12 +7,17 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci
 
-# Copy source code
+# Copy source code and test files
 COPY src/ ./src/
+COPY tests/ ./tests/
 COPY index.html ./
 COPY vite.config.js ./
+COPY vitest.config.js ./
+
+# Run tests to ensure code quality
+RUN npm run test:run
 
 # Build frontend
 RUN npm run build

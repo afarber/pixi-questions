@@ -28,6 +28,10 @@ else
     echo "Frontend dependencies already installed"
 fi
 
+# Run tests to ensure code quality
+echo "Running frontend tests..."
+npm run test:run
+
 # Build frontend
 echo "Building frontend..."
 npm run build

@@ -24,6 +24,10 @@ if (-not (Test-Path "node_modules")) {
     Write-Host "Frontend dependencies already installed" -ForegroundColor Green
 }
 
+# Run tests to ensure code quality
+Write-Host "Running frontend tests..." -ForegroundColor Yellow
+npm run test:run
+
 # Build frontend
 Write-Host "Building frontend..." -ForegroundColor Yellow
 npm run build
