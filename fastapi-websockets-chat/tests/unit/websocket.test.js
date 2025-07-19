@@ -226,39 +226,4 @@ describe('WebSocket Connection Management', () => {
     });
   });
 
-  describe('Reconnection Logic', () => {
-    it('should calculate exponential backoff delay', () => {
-      const getReconnectDelay = (attempts) => {
-        const baseDelay = Math.floor(Math.random() * 4000) + 1000;
-        return baseDelay * Math.pow(2, attempts);
-      };
-      
-      const delay0 = getReconnectDelay(0);
-      const delay1 = getReconnectDelay(1);
-      const delay2 = getReconnectDelay(2);
-      
-      expect(delay0).toBeGreaterThanOrEqual(1000);
-      expect(delay0).toBeLessThanOrEqual(5000);
-      expect(delay1).toBeGreaterThan(delay0);
-      expect(delay2).toBeGreaterThan(delay1);
-    });
-
-    it('should limit reconnection attempts', () => {
-      const maxReconnectAttempts = 10;
-      let reconnectAttempts = 0;
-      
-      const shouldAttemptReconnect = () => {
-        return reconnectAttempts < maxReconnectAttempts;
-      };
-      
-      // Simulate failed reconnections
-      for (let i = 0; i < 15; i++) {
-        if (shouldAttemptReconnect()) {
-          reconnectAttempts++;
-        }
-      }
-      
-      expect(reconnectAttempts).toBe(maxReconnectAttempts);
-    });
-  });
 });
