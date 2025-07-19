@@ -28,7 +28,7 @@ FROM python:3.13-alpine
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
 # Copy requirements first for better caching
 COPY requirements.txt .
@@ -43,7 +43,7 @@ COPY backend/ ./backend/
 COPY --from=frontend-builder /app/dist ./dist
 
 # Create non-root user for security
-RUN groupadd -r app && useradd -r -g app app
+RUN addgroup -S app && adduser -S -G app app
 RUN chown -R app:app /app
 USER app
 
