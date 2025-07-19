@@ -5,6 +5,7 @@ import os
 import json
 from datetime import datetime
 from backend.connection_manager import ConnectionManager
+from backend.message_types import MessageType
 
 app = FastAPI(title="FastAPI Reflex PixiJS Chat")
 
@@ -37,14 +38,14 @@ async def websocket_endpoint(websocket: WebSocket):
                 message_data = json.loads(data)
                 message_type = message_data.get("type")
                 
-                if message_type == "join_request":
+                if message_type == MessageType.JOIN_REQUEST:
                     # Handle user join request with name validation
                     name = message_data.get("name", "").strip()
                     
                     # Validate name
                     if not name:
                         await manager.send_personal_message(json.dumps({
-                            "type": "join_response",
+                            "type": MessageType.JOIN_RESPONSE,
                             "success": False,
                             "error": "Name cannot be empty"
                         }), websocket)
@@ -52,7 +53,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     
                     if len(name) > 16:
                         await manager.send_personal_message(json.dumps({
-                            "type": "join_response",
+                            "type": MessageType.JOIN_RESPONSE,
                             "success": False,
                             "error": "Name must be 16 characters or less"
                         }), websocket)
@@ -60,7 +61,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     
                     if manager.is_name_taken(name):
                         await manager.send_personal_message(json.dumps({
-                            "type": "join_response",
+                            "type": MessageType.JOIN_RESPONSE,
                             "success": False,
                             "error": "Name is already taken"
                         }), websocket)
@@ -72,7 +73,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     
                     # Send success response
                     await manager.send_personal_message(json.dumps({
-                        "type": "join_response",
+                        "type": MessageType.JOIN_RESPONSE,
                         "success": True,
                         "name": name
                     }), websocket)
@@ -83,18 +84,18 @@ async def websocket_endpoint(websocket: WebSocket):
                     
                     # Broadcast join notification
                     join_message = {
-                        "type": "chat_message",
+                        "type": MessageType.CHAT_MESSAGE,
                         "user": "System",
                         "message": f"{name} joined the chat",
                         "timestamp": datetime.now().strftime("%H:%M:%S")
                     }
                     await manager.broadcast(json.dumps(join_message))
                     
-                elif message_type == "chat_message" and user_joined:
+                elif message_type == MessageType.CHAT_MESSAGE and user_joined:
                     # Handle chat message (only if user has joined)
                     user_name = manager.user_names.get(websocket, "Anonymous")
                     chat_message = {
-                        "type": "chat_message",
+                        "type": MessageType.CHAT_MESSAGE,
                         "user": user_name,
                         "message": message_data.get("message", ""),
                         "timestamp": datetime.now().strftime("%H:%M:%S")
@@ -106,7 +107,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 if user_joined:
                     user_name = manager.user_names.get(websocket, "Anonymous")
                     chat_message = {
-                        "type": "chat_message",
+                        "type": MessageType.CHAT_MESSAGE,
                         "user": user_name,
                         "message": data,
                         "timestamp": datetime.now().strftime("%H:%M:%S")
@@ -122,7 +123,7 @@ async def websocket_endpoint(websocket: WebSocket):
             
             # Broadcast leave notification
             leave_message = {
-                "type": "chat_message",
+                "type": MessageType.CHAT_MESSAGE,
                 "user": "System",
                 "message": f"{user_name} left the chat",
                 "timestamp": datetime.now().strftime("%H:%M:%S")

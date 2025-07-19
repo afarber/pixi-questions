@@ -151,6 +151,7 @@ fastapi-websockets-chat/
 ### Phase 9: Setup Playwright for Integration Testing [ ]
 
 Tasks remaining:
+
 - [ ] Add Playwright dependencies (@playwright/test)
 - [ ] Create playwright.config.js for E2E testing
 - [ ] Create integration test files:
@@ -239,8 +240,6 @@ python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 
 ## Additional Development Notes
 
-- **Commit Practice**:
-  - After each change display a 1 line commit message for me to copy and a detailed message below
-  - Stop and wait for smoke testing after each major phase
-  - Do not use emoji and keep comments on separate lines
-
+- After each change display a 1 line commit message for me to copy and a detailed message below
+- After each change print testing instructions for me, then stop and wait for my smoke testing results
+- Do not use emoji and keep comments on separate lines
