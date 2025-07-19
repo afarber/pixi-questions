@@ -60,15 +60,16 @@ export class PixiCanvas {
     }
 
     createUserRectangle(name, color, x, y, index) {
+        // Create container to hold rectangle and text
+        const userContainer = new PIXI.Container();
+        userContainer.x = x;
+        userContainer.y = y;
+
         // Create rectangle
         const rect = new PIXI.Graphics();
         rect.rect(0, 0, 80, 40);
         rect.fill(color);
         rect.stroke({ width: 2, color: 0xFFFFFF });
-        
-        // Set position
-        rect.x = x;
-        rect.y = y;
 
         // Create text label
         const text = new PIXI.Text({
@@ -86,11 +87,12 @@ export class PixiCanvas {
         text.x = rect.width / 2;
         text.y = rect.height / 2;
 
-        // Add text to rectangle
-        rect.addChild(text);
+        // Add rectangle and text to container
+        userContainer.addChild(rect);
+        userContainer.addChild(text);
 
-        // Add animation properties
-        rect.userData = {
+        // Add animation properties to container
+        userContainer.userData = {
             originalX: x,
             originalY: y,
             velocityX: (Math.random() - 0.5) * 2,
@@ -99,38 +101,42 @@ export class PixiCanvas {
             index: index
         };
 
+        // Store width/height for collision detection
+        userContainer.width = 80;
+        userContainer.height = 40;
+
         // Add to container and tracking array
-        this.container.addChild(rect);
-        this.userRectangles.push(rect);
+        this.container.addChild(userContainer);
+        this.userRectangles.push(userContainer);
         
         // Store in users map
-        this.users.set(name, rect);
+        this.users.set(name, userContainer);
     }
 
     animate(ticker) {
-        // Animate user rectangles
-        this.userRectangles.forEach(rect => {
-            const userData = rect.userData;
+        // Animate user rectangles (now containers)
+        this.userRectangles.forEach(userContainer => {
+            const userData = userContainer.userData;
             
             // Update position using ticker deltaTime for frame-rate independent animation
-            rect.x += userData.velocityX * ticker.deltaTime;
-            rect.y += userData.velocityY * ticker.deltaTime;
+            userContainer.x += userData.velocityX * ticker.deltaTime;
+            userContainer.y += userData.velocityY * ticker.deltaTime;
 
             // Bounce off edges
             const bounds = this.app.screen;
-            if (rect.x <= 0 || rect.x >= bounds.width - rect.width) {
+            if (userContainer.x <= 0 || userContainer.x >= bounds.width - userContainer.width) {
                 userData.velocityX *= -1;
-                rect.x = Math.max(0, Math.min(bounds.width - rect.width, rect.x));
+                userContainer.x = Math.max(0, Math.min(bounds.width - userContainer.width, userContainer.x));
             }
-            if (rect.y <= 0 || rect.y >= bounds.height - rect.height) {
+            if (userContainer.y <= 0 || userContainer.y >= bounds.height - userContainer.height) {
                 userData.velocityY *= -1;
-                rect.y = Math.max(0, Math.min(bounds.height - rect.height, rect.y));
+                userContainer.y = Math.max(0, Math.min(bounds.height - userContainer.height, userContainer.y));
             }
 
             // Add subtle floating effect using ticker elapsed time
             const time = ticker.lastTime * 0.001;
-            rect.x += Math.sin(time + userData.index) * 0.5 * ticker.deltaTime;
-            rect.y += Math.cos(time + userData.index) * 0.3 * ticker.deltaTime;
+            userContainer.x += Math.sin(time + userData.index) * 0.5 * ticker.deltaTime;
+            userContainer.y += Math.cos(time + userData.index) * 0.3 * ticker.deltaTime;
         });
     }
 
@@ -158,13 +164,13 @@ export class PixiCanvas {
 
     // Remove user from canvas
     removeUser(name) {
-        const rect = this.users.get(name);
-        if (rect) {
+        const userContainer = this.users.get(name);
+        if (userContainer) {
             // Remove from container
-            this.container.removeChild(rect);
+            this.container.removeChild(userContainer);
             
             // Remove from tracking arrays
-            const index = this.userRectangles.indexOf(rect);
+            const index = this.userRectangles.indexOf(userContainer);
             if (index !== -1) {
                 this.userRectangles.splice(index, 1);
             }

@@ -1,9 +1,7 @@
-#!/bin/bash
+#!/bin/bash -eu
 
 # Local development script for FastAPI PixiJS Chat
 # Builds frontend and runs FastAPI backend locally
-
-set -e
 
 echo "Starting FastAPI PixiJS Chat - Local Development"
 echo "================================================"
