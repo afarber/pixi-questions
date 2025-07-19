@@ -15,23 +15,14 @@ test.describe('Chat Flow Integration Tests', () => {
     // Name drawer dialog is automatically displayed on page load
     await expect(page.locator('#nameDrawer')).toBeVisible();
     
-    // Try to join with empty name (should show error)
-    await page.locator('#joinButton').click();
-    await expect(page.locator('#nameInput')).toHaveClass(/error/);
-    
-    // Try to join with name too long (should show error)
-    await page.locator('#nameInput').fill('ThisNameIsWayTooLongAndShouldFail');
-    await page.locator('#joinButton').click();
-    await expect(page.locator('#nameInput')).toHaveClass(/error/);
-    
-    // Join with valid name
-    const testUsername = `TestUser${Date.now()}`;
+    // Join with valid name directly (keep under 16 chars due to input maxlength)
+    const testUsername = `User${Date.now() % 100000}`;
     await page.locator('#nameInput').fill(testUsername);
     await page.locator('#joinButton').click();
     
-    // Name dialog should close (remove 'active' class) and connection should be established
-    await expect(page.locator('#nameDrawer')).not.toHaveClass(/active/);
+    // Wait for successful join - connection should be established
     await expect(page.locator('#connectionStatus')).toHaveText('Connected');
+    await expect(page.locator('#nameDrawer')).not.toHaveClass(/active/);
     await expect(page.locator('#sendButton')).toBeEnabled();
     
     // User should see join notification in chat
@@ -61,7 +52,7 @@ test.describe('Chat Flow Integration Tests', () => {
   });
 
   test('name validation prevents duplicate usernames', async ({ page, context }) => {
-    const testUsername = `DuplicateTest${Date.now()}`;
+    const testUsername = `Dup${Date.now() % 10000}`;
     
     // First user joins - name drawer is automatically shown on page load
     await page.goto('/');
@@ -72,7 +63,6 @@ test.describe('Chat Flow Integration Tests', () => {
     // Second user tries to join with same name
     const secondPage = await context.newPage();
     await secondPage.goto('/');
-    await secondPage.locator('#nameDrawer').click();
     await secondPage.locator('#nameInput').fill(testUsername);
     await secondPage.locator('#joinButton').click();
     
@@ -81,9 +71,29 @@ test.describe('Chat Flow Integration Tests', () => {
     await expect(secondPage.locator('#nameDrawer')).toHaveClass(/active/);
     
     // Second user can join with different name
-    await secondPage.locator('#nameInput').fill(`${testUsername}_2`);
+    await secondPage.locator('#nameInput').clear();
+    await secondPage.locator('#nameInput').fill(`${testUsername}2`);
     await secondPage.locator('#joinButton').click();
     await expect(secondPage.locator('#connectionStatus')).toHaveText('Connected');
+  });
+
+  test('name validation shows error for empty name', async ({ page }) => {
+    await page.goto('/');
+    
+    // Try to join with empty name (should show error)
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#nameInput')).toHaveClass(/error/);
+    await expect(page.locator('#nameDrawer')).toHaveClass(/active/);
+  });
+
+  test('name validation shows error for long name', async ({ page }) => {
+    await page.goto('/');
+    
+    // Try to join with name too long (should show error)
+    await page.locator('#nameInput').fill('ThisNameIsWayTooLongAndShouldFail');
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#nameInput')).toHaveClass(/error/);
+    await expect(page.locator('#nameDrawer')).toHaveClass(/active/);
   });
 
   test('user can rejoin after page refresh', async ({ page }) => {
