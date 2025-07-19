@@ -7,48 +7,47 @@ test.describe('Chat Flow Integration Tests', () => {
     
     // Wait for the page to load completely
     await expect(page.locator('canvas')).toBeVisible();
-    await expect(page.locator('#chat-messages')).toBeVisible();
+    await expect(page.locator('#chatWindow')).toBeVisible();
     
     // Initially, the send button should be disabled (user not joined)
-    await expect(page.locator('#send-button')).toBeDisabled();
+    await expect(page.locator('#sendButton')).toBeDisabled();
     
-    // Open the name dialog
-    await page.locator('#name-button').click();
-    await expect(page.locator('#name-dialog')).toBeVisible();
+    // Name drawer dialog is automatically displayed on page load
+    await expect(page.locator('#nameDrawer')).toBeVisible();
     
     // Try to join with empty name (should show error)
-    await page.locator('#join-button').click();
-    await expect(page.locator('#name-input')).toHaveClass(/error/);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#nameInput')).toHaveClass(/error/);
     
     // Try to join with name too long (should show error)
-    await page.locator('#name-input').fill('ThisNameIsWayTooLongAndShouldFail');
-    await page.locator('#join-button').click();
-    await expect(page.locator('#name-input')).toHaveClass(/error/);
+    await page.locator('#nameInput').fill('ThisNameIsWayTooLongAndShouldFail');
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#nameInput')).toHaveClass(/error/);
     
     // Join with valid name
     const testUsername = `TestUser${Date.now()}`;
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
     
-    // Name dialog should close and connection should be established
-    await expect(page.locator('#name-dialog')).toBeHidden();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
-    await expect(page.locator('#send-button')).toBeEnabled();
+    // Name dialog should close (remove 'active' class) and connection should be established
+    await expect(page.locator('#nameDrawer')).not.toHaveClass(/active/);
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
+    await expect(page.locator('#sendButton')).toBeEnabled();
     
     // User should see join notification in chat
-    await expect(page.locator('#chat-messages')).toContainText(`${testUsername} joined the chat`);
+    await expect(page.locator('#chatWindow')).toContainText(`${testUsername} joined the chat`);
     
     // Send a chat message
     const testMessage = `Hello from ${testUsername}!`;
-    await page.locator('#message-input').fill(testMessage);
-    await page.locator('#send-button').click();
+    await page.locator('#messageInput').fill(testMessage);
+    await page.locator('#sendButton').click();
     
     // Message should appear in chat
-    await expect(page.locator('#chat-messages')).toContainText(testMessage);
-    await expect(page.locator('#chat-messages')).toContainText(testUsername);
+    await expect(page.locator('#chatWindow')).toContainText(testMessage);
+    await expect(page.locator('#chatWindow')).toContainText(testUsername);
     
     // Input should be cleared after sending
-    await expect(page.locator('#message-input')).toHaveValue('');
+    await expect(page.locator('#messageInput')).toHaveValue('');
     
     // Check that user appears on canvas
     const canvas = page.locator('canvas');
@@ -56,36 +55,35 @@ test.describe('Chat Flow Integration Tests', () => {
     
     // Send message using Enter key
     const secondMessage = 'Sent with Enter key';
-    await page.locator('#message-input').fill(secondMessage);
-    await page.locator('#message-input').press('Enter');
-    await expect(page.locator('#chat-messages')).toContainText(secondMessage);
+    await page.locator('#messageInput').fill(secondMessage);
+    await page.locator('#messageInput').press('Enter');
+    await expect(page.locator('#chatWindow')).toContainText(secondMessage);
   });
 
   test('name validation prevents duplicate usernames', async ({ page, context }) => {
     const testUsername = `DuplicateTest${Date.now()}`;
     
-    // First user joins
+    // First user joins - name drawer is automatically shown on page load
     await page.goto('/');
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Second user tries to join with same name
     const secondPage = await context.newPage();
     await secondPage.goto('/');
-    await secondPage.locator('#name-button').click();
-    await secondPage.locator('#name-input').fill(testUsername);
-    await secondPage.locator('#join-button').click();
+    await secondPage.locator('#nameDrawer').click();
+    await secondPage.locator('#nameInput').fill(testUsername);
+    await secondPage.locator('#joinButton').click();
     
     // Should show error for duplicate name
-    await expect(secondPage.locator('#name-input')).toHaveClass(/error/);
-    await expect(secondPage.locator('#name-dialog')).toBeVisible();
+    await expect(secondPage.locator('#nameInput')).toHaveClass(/error/);
+    await expect(secondPage.locator('#nameDrawer')).toHaveClass(/active/);
     
     // Second user can join with different name
-    await secondPage.locator('#name-input').fill(`${testUsername}_2`);
-    await secondPage.locator('#join-button').click();
-    await expect(secondPage.locator('#connection-status')).toHaveText('Connected');
+    await secondPage.locator('#nameInput').fill(`${testUsername}_2`);
+    await secondPage.locator('#joinButton').click();
+    await expect(secondPage.locator('#connectionStatus')).toHaveText('Connected');
   });
 
   test('user can rejoin after page refresh', async ({ page }) => {
@@ -93,25 +91,23 @@ test.describe('Chat Flow Integration Tests', () => {
     
     // Join and send message
     await page.goto('/');
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
-    await page.locator('#message-input').fill('Message before refresh');
-    await page.locator('#send-button').click();
+    await page.locator('#messageInput').fill('Message before refresh');
+    await page.locator('#sendButton').click();
     
     // Refresh page
     await page.reload();
     
     // Should be able to rejoin (previous user should have disconnected)
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Should see fresh chat (no previous messages)
-    await expect(page.locator('#chat-messages')).toContainText(`${testUsername} joined the chat`);
+    await expect(page.locator('#chatWindow')).toContainText(`${testUsername} joined the chat`);
   });
 
   test('multiple users can chat simultaneously', async ({ page, context }) => {
@@ -120,43 +116,42 @@ test.describe('Chat Flow Integration Tests', () => {
     
     // First user joins
     await page.goto('/');
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(user1Name);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(user1Name);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Second user joins
     const secondPage = await context.newPage();
     await secondPage.goto('/');
-    await secondPage.locator('#name-button').click();
-    await secondPage.locator('#name-input').fill(user2Name);
-    await secondPage.locator('#join-button').click();
-    await expect(secondPage.locator('#connection-status')).toHaveText('Connected');
+    await secondPage.locator('#nameDrawer').click();
+    await secondPage.locator('#nameInput').fill(user2Name);
+    await secondPage.locator('#joinButton').click();
+    await expect(secondPage.locator('#connectionStatus')).toHaveText('Connected');
     
     // Both users should see join notifications
-    await expect(page.locator('#chat-messages')).toContainText(`${user2Name} joined the chat`);
-    await expect(secondPage.locator('#chat-messages')).toContainText(`${user1Name} joined the chat`);
+    await expect(page.locator('#chatWindow')).toContainText(`${user2Name} joined the chat`);
+    await expect(secondPage.locator('#chatWindow')).toContainText(`${user1Name} joined the chat`);
     
     // User 1 sends message
-    await page.locator('#message-input').fill('Hello from User 1');
-    await page.locator('#send-button').click();
+    await page.locator('#messageInput').fill('Hello from User 1');
+    await page.locator('#sendButton').click();
     
     // Both users should see the message
-    await expect(page.locator('#chat-messages')).toContainText('Hello from User 1');
-    await expect(secondPage.locator('#chat-messages')).toContainText('Hello from User 1');
+    await expect(page.locator('#chatWindow')).toContainText('Hello from User 1');
+    await expect(secondPage.locator('#chatWindow')).toContainText('Hello from User 1');
     
     // User 2 responds
-    await secondPage.locator('#message-input').fill('Hello from User 2');
-    await secondPage.locator('#send-button').click();
+    await secondPage.locator('#messageInput').fill('Hello from User 2');
+    await secondPage.locator('#sendButton').click();
     
     // Both users should see the response
-    await expect(page.locator('#chat-messages')).toContainText('Hello from User 2');
-    await expect(secondPage.locator('#chat-messages')).toContainText('Hello from User 2');
+    await expect(page.locator('#chatWindow')).toContainText('Hello from User 2');
+    await expect(secondPage.locator('#chatWindow')).toContainText('Hello from User 2');
     
     // Close first user's tab (simulate leaving)
     await page.close();
     
     // Second user should see leave notification
-    await expect(secondPage.locator('#chat-messages')).toContainText(`${user1Name} left the chat`);
+    await expect(secondPage.locator('#chatWindow')).toContainText(`${user1Name} left the chat`);
   });
 });

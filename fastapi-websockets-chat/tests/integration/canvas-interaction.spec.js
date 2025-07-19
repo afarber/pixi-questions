@@ -13,12 +13,11 @@ test.describe('Canvas Interaction Tests', () => {
     expect(canvasBox.width).toBeGreaterThan(0);
     expect(canvasBox.height).toBeGreaterThan(0);
     
-    // Join as a user
+    // Join as a user - name drawer is automatically shown on page load
     const testUsername = `CanvasUser${Date.now()}`;
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Wait a moment for canvas to update
     await page.waitForTimeout(1000);
@@ -51,10 +50,9 @@ test.describe('Canvas Interaction Tests', () => {
     
     // First user joins
     await page.goto('/');
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(user1Name);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(user1Name);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Wait for canvas to update
     await page.waitForTimeout(1000);
@@ -72,10 +70,10 @@ test.describe('Canvas Interaction Tests', () => {
     // Second user joins
     const secondPage = await context.newPage();
     await secondPage.goto('/');
-    await secondPage.locator('#name-button').click();
-    await secondPage.locator('#name-input').fill(user2Name);
-    await secondPage.locator('#join-button').click();
-    await expect(secondPage.locator('#connection-status')).toHaveText('Connected');
+    await secondPage.locator('#nameDrawer').click();
+    await secondPage.locator('#nameInput').fill(user2Name);
+    await secondPage.locator('#joinButton').click();
+    await expect(secondPage.locator('#connectionStatus')).toHaveText('Connected');
     
     // Wait for canvas updates on both pages
     await page.waitForTimeout(1000);
@@ -137,10 +135,9 @@ test.describe('Canvas Interaction Tests', () => {
     
     // Join user to test canvas functionality on mobile
     const testUsername = `MobileUser${Date.now()}`;
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Canvas should still work after resize
     const canvasWorking = await page.evaluate(() => {
@@ -167,10 +164,10 @@ test.describe('Canvas Interaction Tests', () => {
     // All users join
     for (let i = 0; i < users.length; i++) {
       await pages[i].goto('/');
-      await pages[i].locator('#name-button').click();
-      await pages[i].locator('#name-input').fill(users[i]);
-      await pages[i].locator('#join-button').click();
-      await expect(pages[i].locator('#connection-status')).toHaveText('Connected');
+      await pages[i].locator('#nameDrawer').click();
+      await pages[i].locator('#nameInput').fill(users[i]);
+      await pages[i].locator('#joinButton').click();
+      await expect(pages[i].locator('#connectionStatus')).toHaveText('Connected');
       await pages[i].waitForTimeout(500);
     }
     
@@ -205,10 +202,9 @@ test.describe('Canvas Interaction Tests', () => {
     await page.goto('/');
     
     const testUsername = `PerfTest${Date.now()}`;
-    await page.locator('#name-button').click();
-    await page.locator('#name-input').fill(testUsername);
-    await page.locator('#join-button').click();
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await page.locator('#nameInput').fill(testUsername);
+    await page.locator('#joinButton').click();
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Create and quickly close multiple user sessions
     const rapidPages = [];
@@ -217,10 +213,10 @@ test.describe('Canvas Interaction Tests', () => {
       rapidPages.push(newPage);
       
       await newPage.goto('/');
-      await newPage.locator('#name-button').click();
-      await newPage.locator('#name-input').fill(`Rapid${i}_${Date.now()}`);
-      await newPage.locator('#join-button').click();
-      await expect(newPage.locator('#connection-status')).toHaveText('Connected');
+      await newPage.locator('#nameDrawer').click();
+      await newPage.locator('#nameInput').fill(`Rapid${i}_${Date.now()}`);
+      await newPage.locator('#joinButton').click();
+      await expect(newPage.locator('#connectionStatus')).toHaveText('Connected');
       
       // Close immediately after joining
       setTimeout(() => newPage.close(), 100 * i);
@@ -230,7 +226,7 @@ test.describe('Canvas Interaction Tests', () => {
     await page.waitForTimeout(2000);
     
     // Original page should still be functional
-    await expect(page.locator('#connection-status')).toHaveText('Connected');
+    await expect(page.locator('#connectionStatus')).toHaveText('Connected');
     
     // Canvas should still be responsive
     const canvasHealthy = await page.evaluate(() => {
@@ -246,8 +242,8 @@ test.describe('Canvas Interaction Tests', () => {
     expect(canvasHealthy.stageExists).toBe(true);
     
     // Should be able to send message after rapid changes
-    await page.locator('#message-input').fill('Canvas still works after rapid changes');
-    await page.locator('#send-button').click();
-    await expect(page.locator('#chat-messages')).toContainText('Canvas still works after rapid changes');
+    await page.locator('#messageInput').fill('Canvas still works after rapid changes');
+    await page.locator('#sendButton').click();
+    await expect(page.locator('#chatWindow')).toContainText('Canvas still works after rapid changes');
   });
 });
