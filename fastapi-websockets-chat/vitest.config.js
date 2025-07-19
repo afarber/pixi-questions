@@ -5,6 +5,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./tests/setup.js'],
     globals: true,
-    pool: 'forks'
+    pool: 'forks',
+    include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    exclude: ['tests/integration/**/*', 'node_modules/**/*']
   }
 })
