@@ -93,3 +93,11 @@ yarn-error.log*
 *.temp
 temp/
 tmp/
+
+# Playwright Test Results
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Vitest
+coverage/
