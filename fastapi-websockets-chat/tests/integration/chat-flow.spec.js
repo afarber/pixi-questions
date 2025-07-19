@@ -141,9 +141,11 @@ test.describe('Chat Flow Integration Tests', () => {
     await secondPage.locator('#joinButton').click();
     await expect(secondPage.locator('#connectionStatus')).toHaveText('Connected');
     
-    // Both users should see join notifications
+    // First user should see second user join
     await expect(page.locator('#chatWindow')).toContainText(`${user2Name} joined the chat`);
-    await expect(secondPage.locator('#chatWindow')).toContainText(`${user1Name} joined the chat`);
+    
+    // Second user should see they are connected (won't see first user's join message since they joined later)
+    await expect(secondPage.locator('#chatWindow')).toContainText(`${user2Name} joined the chat`);
     
     // User 1 sends message
     await page.locator('#messageInput').fill('Hello from User 1');
