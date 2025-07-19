@@ -30,9 +30,10 @@ fastapi-websockets-chat/
 ├── Dockerfile
 ├── GEMINI.md
 ├── requirements.txt
-├── package.json             # Node.js dependencies
+├── package.json             # Node.js dependencies and test scripts
 ├── vite.config.js           # Vite configuration
-├── vitest.config.js         # Vitest configuration
+├── vitest.config.js         # Vitest configuration (unit tests)
+├── playwright.config.js     # Playwright configuration (E2E tests)
 ├── index.html               # Main HTML file
 ├── run-docker.ps1
 ├── run-docker.sh
@@ -50,12 +51,21 @@ fastapi-websockets-chat/
 │   ├── pixi-canvas.js        # Pixi.js canvas rendering
 │   └── main.css              # CSS styles
 ├── tests/
-│   ├── backend/
+│   ├── __init__.py
+│   ├── setup.js              # Vitest test setup
+│   ├── backend/              # Python backend tests
+│   │   ├── __init__.py
 │   │   └── test_connection_manager.py
-│   └── unit/
-│       ├── chat.test.js
-│       ├── pixi-canvas.test.js
-│       └── websocket.test.js
+│   ├── unit/                 # JavaScript frontend tests
+│   │   ├── chat.test.js
+│   │   ├── pixi-canvas.test.js
+│   │   └── websocket.test.js
+│   └── integration/          # Playwright E2E tests
+│       ├── chat-flow.spec.js
+│       └── canvas-interaction.spec.js
+├── .github/
+│   └── workflows/
+│       └── fastapi-websockets-chat.yml  # CI/CD pipeline
 └── dist/                     # Vite build output (generated)
 ```
 
@@ -192,15 +202,16 @@ Client                           Server
 - [x] Create integration test files:
   - tests/integration/chat-flow.spec.js - Full user journey testing
   - tests/integration/canvas-interaction.spec.js - Real browser canvas testing
-  - tests/integration/websocket-reconnect.spec.js - Connection resilience testing
 - [x] Add Playwright scripts to package.json
+- [x] Integrate E2E tests into GitHub Actions CI/CD pipeline
 - **Result**: Comprehensive testing coverage with both unit and E2E tests
 
-### Phase 10: Update Documentation (Final) [ ]
+### Phase 10: Update Documentation (Final) [x]
 
-- [ ] Update all markdown files with complete testing setup
-- [ ] Add testing section to README with both unit and E2E instructions
-- [ ] Document the full development workflow
+- [x] Update all markdown files with complete testing setup
+- [x] Add testing section to README with both unit and E2E instructions
+- [x] Document the full development workflow
+- [x] Update CLAUDE.md with comprehensive testing guidance
 - **Result**: Complete documentation for development and testing workflows
 
 ### Phase 11: Polish and Optimization (Runnable) [ ]
@@ -211,7 +222,46 @@ Client                           Server
 - [ ] Add loading states and user feedback
 - **Result**: Production-ready chat application
 
-## Testing Notes
+## Testing Framework
+
+This project includes comprehensive testing coverage with multiple test types:
+
+### Unit Tests
+
+**Frontend Unit Tests (JavaScript/Vitest):**
+- `tests/unit/chat.test.js` - Chat message handling and validation
+- `tests/unit/pixi-canvas.test.js` - Canvas user visualization
+- `tests/unit/websocket.test.js` - WebSocket connection management
+
+**Backend Unit Tests (Python/pytest):**
+- `tests/backend/test_connection_manager.py` - WebSocket connection management
+
+### End-to-End (E2E) Tests
+
+**Playwright Browser Tests:**
+- `tests/integration/chat-flow.spec.js` - Complete user journey testing
+- `tests/integration/canvas-interaction.spec.js` - Real browser canvas testing
+
+### Testing Commands
+
+**Unit Tests:**
+```bash
+# Frontend tests
+npm test               # Watch mode
+npm run test:run       # CI mode
+npm run test:ui        # UI interface
+
+# Backend tests
+python -m pytest tests/backend/ -v
+```
+
+**E2E Tests:**
+```bash
+npm run playwright:install  # Install browsers (first time)
+npm run build               # Build frontend (required)
+npm run test:e2e            # Run E2E tests
+npm run test:e2e:ui         # Interactive mode
+```
 
 ### WebSocket Reconnection Tests - DO NOT ADD
 
@@ -231,6 +281,55 @@ Focus testing efforts on:
 - Chat flow functionality (message sending, user validation)
 - Canvas interaction (visual elements, user representation)  
 - Basic connection status indicators
+
+### Continuous Integration
+
+The project includes automated testing via GitHub Actions:
+
+**Test Pipeline (.github/workflows/fastapi-websockets-chat.yml):**
+1. **Frontend Unit Tests** - Validate JavaScript components
+2. **Backend Unit Tests** - Validate Python backend logic  
+3. **End-to-End Tests** - Validate complete application workflows
+4. **Docker Build** - Ensure deployment readiness
+
+**Supported Browsers (E2E):**
+- Chrome/Chromium (Desktop & Mobile)
+- Firefox (Desktop)
+- Safari/WebKit (Desktop & Mobile)
+
+All tests must pass before code can be merged to main branch.
+
+## Development Workflow
+
+### Pre-Commit Checklist
+
+Before committing changes, ensure:
+
+- [ ] All unit tests pass: `npm run test:run`
+- [ ] Backend tests pass: `python -m pytest tests/backend/ -v`
+- [ ] Frontend builds successfully: `npm run build`
+- [ ] E2E tests pass: `npm run test:e2e`
+- [ ] Application runs locally: `./run-local.sh`
+
+### Code Quality Standards
+
+**Frontend:**
+- JavaScript ES modules with Vite bundling
+- Vitest for unit testing with JSDOM environment
+- Playwright for browser automation testing
+- Clean, readable code with proper error handling
+
+**Backend:**
+- Python 3.13+ with FastAPI framework
+- Type hints and proper async/await patterns
+- Pytest for unit testing with proper mocking
+- WebSocket connection management with graceful error handling
+
+**Testing Standards:**
+- Unit tests focus on individual component behavior
+- E2E tests validate complete user workflows
+- Tests use realistic data and edge cases
+- All tests must be deterministic and reliable
 
 ## Development Commands
 
@@ -299,3 +398,9 @@ python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 - After each change display a 1 line commit message for me to copy and a detailed message below
 - After each change print testing instructions for me, then stop and wait for my smoke testing results
 - Do not use emoji and keep comments on separate lines
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
