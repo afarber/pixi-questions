@@ -5,8 +5,6 @@ import { describe, test, expect, vi } from 'vitest';
 import { MyVerticalPanel } from '../MyVerticalPanel.js';
 import { Board } from '../Board.js';
 import { MyList } from '../MyList.js';
-import { MyButton } from '../MyButton.js';
-import { UI_HEIGHT, UI_PADDING } from '../Theme.js';
 
 describe('MyVerticalPanel', () => {
   

@@ -3,9 +3,9 @@ import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
-import { UI_PADDING, UI_WIDTH } from "./Theme";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
+import { LayoutManager } from "./LayoutManager";
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -160,6 +160,10 @@ const manifest = {
   midPanel.addChildrenToStage(app.stage);
   rightPanel.addChildrenToStage(app.stage);
 
+  // Initialize layout manager and setup event listeners
+  const layoutManager = new LayoutManager(app, leftPanel, midPanel, rightPanel);
+  layoutManager.setupEventListeners();
+
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
 
@@ -167,32 +171,6 @@ const manifest = {
     label.skew.x += 0.02 * time.deltaTime;
     label.skew.y += 0.01 * time.deltaTime;
   });
-
-  const onResize = () => {
-    // Use a small delay to ensure screen dimensions are properly updated
-    setTimeout(() => {
-      console.log("onResize", app.screen.width, app.screen.height);
-      leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
-
-      midPanel.resize(
-        UI_WIDTH + 2 * UI_PADDING,
-        UI_PADDING,
-        app.screen.width - 2 * UI_WIDTH - 4 * UI_PADDING,
-        app.screen.height - 2 * UI_PADDING
-      );
-
-      rightPanel.resize(
-        app.screen.width - UI_WIDTH - UI_PADDING,
-        UI_PADDING,
-        UI_WIDTH,
-        app.screen.height - 2 * UI_PADDING
-      );
-    }, 100);
-  };
-
-  addEventListener("resize", onResize);
-  addEventListener("fullscreenchange", onResize);
-  onResize();
 })();
 
 function createDebugRect() {

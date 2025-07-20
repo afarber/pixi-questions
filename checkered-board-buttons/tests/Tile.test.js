@@ -1,7 +1,7 @@
 // Tests for Tile.js component
 // Tests our tile positioning, drag setup, and grid snapping logic
 
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { Tile, TILE_SIZE } from '../Tile.js';
 
 describe('Tile', () => {

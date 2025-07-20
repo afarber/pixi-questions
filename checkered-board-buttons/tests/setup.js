@@ -98,8 +98,6 @@ vi.mock('pixi.js', () => {
     // Fake addChild - just add to our children array
     addChild(child) {
       this.children.push(child);
-      // Set parent reference like real PixiJS
-      child.parent = this;
       return child;
     }
     
@@ -124,7 +122,7 @@ vi.mock('pixi.js', () => {
       return { x: this.x, y: this.y };
     }
     
-    getLocalPosition(parent) {
+    getLocalPosition() {
       return { x: this.x, y: this.y };
     }
     
@@ -158,7 +156,7 @@ vi.mock('pixi.js', () => {
       this.anchor = { set: (x, y) => { this.anchor.x = x; this.anchor.y = y; } };
     }
     
-    static from(texture) {
+    static from() {
       return new MockSprite();
     }
   }
