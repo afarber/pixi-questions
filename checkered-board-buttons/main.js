@@ -169,22 +169,25 @@ const manifest = {
   });
 
   const onResize = () => {
-    console.log("onResize", app.screen.width, app.screen.height);
-    leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
+    // Use a small delay to ensure screen dimensions are properly updated
+    setTimeout(() => {
+      console.log("onResize", app.screen.width, app.screen.height);
+      leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, app.screen.height - 2 * UI_PADDING);
 
-    midPanel.resize(
-      UI_WIDTH + 2 * UI_PADDING,
-      UI_PADDING,
-      app.screen.width - 2 * UI_WIDTH - 4 * UI_PADDING,
-      app.screen.height - 2 * UI_PADDING
-    );
+      midPanel.resize(
+        UI_WIDTH + 2 * UI_PADDING,
+        UI_PADDING,
+        app.screen.width - 2 * UI_WIDTH - 4 * UI_PADDING,
+        app.screen.height - 2 * UI_PADDING
+      );
 
-    rightPanel.resize(
-      app.screen.width - UI_WIDTH - UI_PADDING,
-      UI_PADDING,
-      UI_WIDTH,
-      app.screen.height - 2 * UI_PADDING
-    );
+      rightPanel.resize(
+        app.screen.width - UI_WIDTH - UI_PADDING,
+        UI_PADDING,
+        UI_WIDTH,
+        app.screen.height - 2 * UI_PADDING
+      );
+    }, 100);
   };
 
   addEventListener("resize", onResize);
@@ -213,6 +216,8 @@ function createLabel() {
 }
 
 function toggleFullscreen(fullDiv) {
+  console.log("document.fullscreenEnabled", document.fullscreenEnabled);
+
   if (!document.fullscreenEnabled) {
     return;
   }
