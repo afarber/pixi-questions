@@ -13,8 +13,10 @@ export default defineConfig({
     
     // Enable canvas mocking for PixiJS graphics operations
     // vitest-canvas-mock provides fake Canvas API implementations
-    deps: {
-      inline: ['vitest-canvas-mock']
+    server: {
+      deps: {
+        inline: ['vitest-canvas-mock']
+      }
     },
     
     // Global test settings

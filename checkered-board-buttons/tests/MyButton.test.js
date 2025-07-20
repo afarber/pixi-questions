@@ -209,7 +209,7 @@ describe('MyButton', () => {
     // Should use default values from Theme
     expect(button.options.width).toBe(UI_WIDTH);
     expect(button.options.height).toBe(UI_HEIGHT);
-    expect(button.options.radius).toBe(UI_RADIUS);
+    // Note: radius is passed to resize method, not stored in options
     expect(button.options.text).toBe('');
   });
   
@@ -220,7 +220,7 @@ describe('MyButton', () => {
     const button = new MyButton({
       text: customText,
       width: customWidth
-      // height and radius should use defaults
+      // height should use defaults
     });
     
     // Should use custom values where provided
@@ -229,7 +229,6 @@ describe('MyButton', () => {
     
     // Should use defaults for non-specified options
     expect(button.options.height).toBe(UI_HEIGHT);
-    expect(button.options.radius).toBe(UI_RADIUS);
   });
   
   // Test button with empty options object
@@ -241,7 +240,6 @@ describe('MyButton', () => {
     expect(button.options.text).toBe('');
     expect(button.options.width).toBe(UI_WIDTH);
     expect(button.options.height).toBe(UI_HEIGHT);
-    expect(button.options.radius).toBe(UI_RADIUS);
   });
 
 });

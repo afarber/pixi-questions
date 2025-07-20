@@ -63,9 +63,29 @@ vi.mock('pixi.js', () => {
       // Position properties
       this.x = 0;
       this.y = 0;
-      // Scale properties
-      this.scale = { x: 1, y: 1 };
-      this.position = { x: 0, y: 0 };
+      // Scale properties with set method
+      this.scale = { 
+        x: 1, 
+        y: 1,
+        set: (x, y) => {
+          if (typeof x === 'number' && typeof y === 'number') {
+            this.scale.x = x;
+            this.scale.y = y;
+          } else if (typeof x === 'number') {
+            this.scale.x = x;
+            this.scale.y = x;
+          }
+        }
+      };
+      // Position properties with set method
+      this.position = { 
+        x: 0, 
+        y: 0,
+        set: (x, y) => {
+          this.position.x = x;
+          this.position.y = y;
+        }
+      };
       this.anchor = { x: 0, y: 0 };
       this.rotation = 0;
       this.alpha = 1;
@@ -119,6 +139,15 @@ vi.mock('pixi.js', () => {
       super();
       this.text = options.text || '';
       this.style = options.style || {};
+      // Text objects have anchor property with set method
+      this.anchor = { 
+        x: 0, 
+        y: 0,
+        set: vi.fn((x, y) => {
+          this.anchor.x = x;
+          this.anchor.y = y || x;
+        })
+      };
     }
   }
   
@@ -193,8 +222,29 @@ vi.mock('@pixi/ui', () => ({
       this.options = options;
       this.enabled = true;
       this.visible = true;
-      this.scale = { x: 1, y: 1 };
-      this.position = { x: 0, y: 0 };
+      // Scale properties with set method
+      this.scale = { 
+        x: 1, 
+        y: 1,
+        set: (x, y) => {
+          if (typeof x === 'number' && typeof y === 'number') {
+            this.scale.x = x;
+            this.scale.y = y;
+          } else if (typeof x === 'number') {
+            this.scale.x = x;
+            this.scale.y = x;
+          }
+        }
+      };
+      // Position properties with set method
+      this.position = { 
+        x: 0, 
+        y: 0,
+        set: (x, y) => {
+          this.position.x = x;
+          this.position.y = y;
+        }
+      };
       
       // Mock signal objects for events
       this.onPress = { connect: vi.fn() };
@@ -211,6 +261,15 @@ vi.mock('@pixi/ui', () => ({
     constructor(options) {
       this.options = options;
       this.items = [];
+      // Position properties with set method
+      this.position = { 
+        x: 0, 
+        y: 0,
+        set: (x, y) => {
+          this.position.x = x;
+          this.position.y = y;
+        }
+      };
     }
     
     addItem(item) {
