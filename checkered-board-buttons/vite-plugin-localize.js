@@ -17,7 +17,17 @@ const localizedStrings = {
     ___YOUR_TURN___: "YOUR TURN",
     ___HIS_TURN___: "WAITING",
     ___ARCHIVE___: "ARCHIVE",
-    ___ZERO_GAMES___: "NO GAMES"
+    ___ZERO_GAMES___: "NO GAMES",
+    ___FULL_SCREEN___: "Full screen",
+    ___SWAP___: "Swap",
+    ___SKIP___: "Skip",
+    ___RESIGN___: "Resign",
+    ___PILE___: "Pile: 86",
+    ___MOVES_HISTORY___: "Moves history",
+    ___SETTINGS___: "Settings",
+    ___SHARE___: "Share",
+    ___PLAY___: "Play",
+    ___SHUFFLE___: "Shuffle"
   },
   de: {
     ___YES___: "Ja",
@@ -32,7 +42,17 @@ const localizedStrings = {
     ___YOUR_TURN___: "IHR ZUG",
     ___HIS_TURN___: "WARTEN",
     ___ARCHIVE___: "ARCHIV",
-    ___ZERO_GAMES___: "KEINE SPIELE"
+    ___ZERO_GAMES___: "KEINE SPIELE",
+    ___FULL_SCREEN___: "Vollbild",
+    ___SWAP___: "Wechseln",
+    ___SKIP___: "Aussetzen",
+    ___RESIGN___: "Aufgeben",
+    ___PILE___: "Beutel: 86",
+    ___MOVES_HISTORY___: "Züge",
+    ___SETTINGS___: "Einstellungen",
+    ___SHARE___: "Teilen",
+    ___PLAY___: "Spielen",
+    ___SHUFFLE___: "Mischen"
   },
   fr: {
     ___YES___: "Oui",
@@ -47,7 +67,17 @@ const localizedStrings = {
     ___YOUR_TURN___: "VOTRE TOUR",
     ___HIS_TURN___: "EN ATTENDANT",
     ___ARCHIVE___: "ARCHIVE",
-    ___ZERO_GAMES___: "PAS DE JEUX"
+    ___ZERO_GAMES___: "PAS DE JEUX",
+    ___FULL_SCREEN___: "Plein écran",
+    ___SWAP___: "Échange",
+    ___SKIP___: "Sauter",
+    ___RESIGN___: "Démissionner",
+    ___PILE___: "Pile: 86",
+    ___MOVES_HISTORY___: "Déplacer l'histoire",
+    ___SETTINGS___: "Réglages",
+    ___SHARE___: "Partager",
+    ___PLAY___: "Jouer à",
+    ___SHUFFLE___: "Mélange"
   }
 };
 

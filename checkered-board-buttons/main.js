@@ -126,9 +126,22 @@ const manifest = {
   const rareTwoButton = new MyButton({ text: "___RARE_LETTER_2___" });
   leftPanel.addChild(rareTwoButton);
 
+  const rightButtonKeys = [
+    "___FULL_SCREEN___",
+    "___SWAP___",
+    "___SKIP___",
+    "___RESIGN___",
+    "___PILE___",
+    "___MOVES_HISTORY___",
+    "___SETTINGS___",
+    "___SHARE___",
+    "___PLAY___",
+    "___SHUFFLE___"
+  ];
+
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
     const button = new MyButton({
-      text: `Button ${i + 1}`
+      text: rightButtonKeys[i]
     });
 
     button.onPress.connect(() => {
@@ -136,7 +149,7 @@ const manifest = {
         const fullDiv = document.getElementById("fullDiv");
         toggleFullscreen(fullDiv);
       }
-      console.log(`Button ${i + 1} pressed!`);
+      console.log(`${rightButtonKeys[i]} pressed!`);
     });
 
     button.enabled = i % 4 !== 1;
