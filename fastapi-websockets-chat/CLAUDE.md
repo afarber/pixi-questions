@@ -211,7 +211,6 @@ The project includes automated testing via GitHub Actions:
 **Supported Browsers (E2E):**
 
 - Chrome/Chromium (Desktop & Mobile)
-- Firefox (Desktop)
 - Safari/WebKit (Desktop & Mobile)
 
 All tests must pass before code can be merged to main branch.
@@ -313,15 +312,11 @@ python3 -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 .\run-podman.ps1
 ```
 
-## Additional Development Notes
-
-- After each change display a 1 line commit message for me to copy and a detailed message below
-- After each change print testing instructions for me, then stop and wait for my smoke testing results
-- Do not use emoji and keep comments on separate lines
-
 # important-instruction-reminders
 
 Do what has been asked; nothing more, nothing less.
+After each change display the following output for the User: 1 line commit message followed by detailed list of changes
+NEVER use emoji and ALWAYS keep comments on separate lines
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
