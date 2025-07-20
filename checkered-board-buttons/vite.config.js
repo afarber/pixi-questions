@@ -7,11 +7,14 @@ const isBuildingBundle =
 
 export default defineConfig({
   plugins: [localize(isBuildingBundle)],
-  // index.html includes ./index.css and ./index.js
+  // index.html includes ./main.css and ./main.js
   base: "./",
   build: {
     target: "es2015",
     rollupOptions: {
+      input: {
+        main: './main.js'
+      },
       output: {
         entryFileNames: `[name].js`,
         chunkFileNames: `[name].js`,

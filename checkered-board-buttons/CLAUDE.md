@@ -15,7 +15,7 @@ This is a PixiJS-based interactive game featuring a checkered board with draggab
 
 ### Core Components
 
-- **index.js** - Main application entry point that initializes PixiJS app, loads assets, and sets up the three-panel layout
+- **main.js** - Main application entry point that initializes PixiJS app, loads assets, and sets up the three-panel layout
 - **Board.js** - Creates an 8x8 checkered board background with scaling and positioning logic
 - **Tile.js** - Draggable game pieces with shadow effects, snap-to-grid functionality, and pointer event handling
 - **MyButton.js** - Custom button component extending @pixi/ui FancyButton with animations and sound effects
