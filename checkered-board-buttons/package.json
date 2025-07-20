@@ -2,6 +2,7 @@
   "name": "checkered-board-buttons",
   "version": "1.0.0",
   "description": "A checkered board with a bunny and 3 draggable tiles",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
@@ -9,17 +10,23 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "Alexander Farber",
-  "license": "Public Domain",
-  "type": "commonjs",
   "dependencies": {
     "@pixi/sound": "^6.0.1",
     "@pixi/ui": "^2.2.4",
     "@tweenjs/tween.js": "^25.0.0",
-    "pixi.js": "^8.9.2"
+    "pixi.js": "^8.11.0"
   },
   "devDependencies": {
-    "vite": "^6.3.2"
-  }
+    "@playwright/test": "^1.54.1",
+    "@vitest/ui": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "vite": "^7.0.5",
+    "vitest": "^3.2.4",
+    "vitest-canvas-mock": "^0.3.3"
+  },
+  "keywords": [
+    "pixi.js"
+  ],
+  "author": "Alexander Farber",
+  "license": "Public Domain"
 }

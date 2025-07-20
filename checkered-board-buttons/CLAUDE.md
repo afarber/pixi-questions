@@ -25,15 +25,16 @@ This is a PixiJS-based interactive game featuring a checkered board with draggab
 
 ### Key Dependencies
 
-- **pixi.js** (v8.9.2) - Main rendering engine
+- **pixi.js** (v8.11.0) - Main rendering engine
 - **@pixi/ui** (v2.2.4) - UI components including FancyButton
 - **@pixi/sound** (v6.0.1) - Audio playback for button clicks
 - **@tweenjs/tween.js** (v25.0.0) - Animation library for smooth transitions
-- **vite** (v6.3.2) - Build tool and development server
+- **vite** (v7.0.5) - Build tool and development server
 
 ### Layout System
 
 The app uses a three-panel responsive layout:
+
 - **Left Panel**: Game controls and lists
 - **Middle Panel**: Game board with score display and tiles
 - **Right Panel**: Additional buttons (10 buttons with different states)
@@ -43,6 +44,7 @@ Panels automatically resize based on screen dimensions using the `onResize` hand
 ### Asset Loading
 
 Assets are loaded using PixiJS Assets API with a manifest system:
+
 - **animals bundle**: Bunny sprite from external URL
 - **sounds bundle**: Click sound effects (.ogg files) from local assets folder
 
@@ -55,7 +57,16 @@ Assets are loaded using PixiJS Assets API with a manifest system:
 
 ### Development Notes
 
-- Uses CommonJS module format (`"type": "commonjs"` in package.json)
-- No test framework is configured
-- Vite is used for development and building
-- Sound files are CC0-licensed from Kenney's Interface Sounds pack
+- Uses ES module format (`"type": "module"` in package.json)
+- Testing configured with Vitest (unit tests) and Playwright (E2E tests)
+- Vite is used for development and building with custom localize plugin
+- Build output bundles everything into single files for deployment
+
+# important-instruction-reminders
+
+Do what has been asked; nothing more, nothing less.
+After each change display the following output for the User: 1 line commit message followed by detailed list of changes
+NEVER use emoji and ALWAYS keep comments on separate lines
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.

@@ -69,7 +69,7 @@ fastapi-websockets-chat/
 └── dist/                     # Vite build output (generated)
 ```
 
-## Key Features to Implement
+## Implemented Key Features
 
 1. **Real-time Chat**: WebSocket API based messaging system
 2. **Visual User Representation**: Animated colorful rectangles for each user on Pixi.js canvas
@@ -178,18 +178,7 @@ npm run test:e2e:ui         # Interactive mode
 
 ### WebSocket Reconnection Tests - DO NOT ADD
 
-**Important**: Do not create or add WebSocket reconnection tests (both unit and integration tests). These tests are inherently flaky because:
-
-- Network simulation via `page.route()` blocking doesn't work reliably with WebSockets across browsers
-- Reconnection logic involves random delays and exponential backoff that make tests non-deterministic
-- Browser WebSocket implementations vary in how they handle connection failures
-- The actual reconnection functionality works fine in practice, but is difficult to test reliably
-
-Previously removed tests:
-
-- `tests/integration/websocket-reconnect.spec.js` (entire file removed)
-- Unit tests for exponential backoff delay calculations
-- Unit tests for reconnection attempt limits
+**Important**: Do not create or add WebSocket reconnection tests (both unit and integration tests).
 
 Focus testing efforts on:
 
