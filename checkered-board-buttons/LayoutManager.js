@@ -25,7 +25,7 @@ export class LayoutManager {
     
     this.#resizeTimeout = setTimeout(() => {
       this.#performLayout();
-    }, 100);
+    }, 200);
   }
 
   /**
