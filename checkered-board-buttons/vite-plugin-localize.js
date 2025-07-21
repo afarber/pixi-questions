@@ -12,6 +12,7 @@ const localizedStrings = {
   fr
 };
 
+// replace the placeholders surrounded by triple underscores
 function replacePlacesholders(src, lang) {
   return src.replaceAll(/___[_A-Z0-9]+___/g, function (match) {
     return localizedStrings[lang][match] || match;
@@ -36,9 +37,7 @@ export default function localize(isBuildingBundle) {
     name: "localize-plugin",
     transform(src, id) {
       // replace placeholders in .js files, when not building the bundle
-      return id.endsWith(".js") && !isBuildingBundle
-        ? replacePlacesholders(src, "de")
-        : src;
+      return id.endsWith(".js") && !isBuildingBundle ? replacePlacesholders(src, "de") : src;
     },
     generateBundle(outputOptions, bundle) {
       for (const [fileName, bundleValue] of Object.entries(bundle)) {
@@ -54,15 +53,9 @@ export default function localize(isBuildingBundle) {
 
         // create main-XX.js file for each language, in the same folder as main.js
         for (const lang of Object.keys(localizedStrings)) {
-          const mainLangPath = path.resolve(
-            outputOptions.dir,
-            `main-${lang}.js`
-          );
+          const mainLangPath = path.resolve(outputOptions.dir, `main-${lang}.js`);
           console.log("Creating localized file", mainLangPath);
-          fs.writeFileSync(
-            mainLangPath,
-            replacePlacesholders(bundleValue.code, lang)
-          );
+          fs.writeFileSync(mainLangPath, replacePlacesholders(bundleValue.code, lang));
         }
       }
     }
