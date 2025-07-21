@@ -8,6 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` - Build production bundle
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint on the codebase
+- `npm run test` - Run tests with Vitest in watch mode
+- `npm run test:run` - Run tests once without watch mode
+- `npm run test:ui` - Run tests with Vitest UI interface
 
 ## Architecture Overview
 
