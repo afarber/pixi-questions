@@ -5,7 +5,7 @@ import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
-import { LayoutManager } from "./LayoutManager";
+import { MyLayoutManager } from "./MyLayoutManager";
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -161,7 +161,7 @@ const manifest = {
   rightPanel.addChildrenToStage(app.stage);
 
   // Initialize layout manager and setup event listeners
-  const layoutManager = new LayoutManager(app, leftPanel, midPanel, rightPanel);
+  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel);
   layoutManager.setupEventListeners();
 
   app.ticker.add((time) => {

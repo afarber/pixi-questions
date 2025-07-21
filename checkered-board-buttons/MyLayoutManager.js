@@ -4,7 +4,7 @@ import { UI_PADDING, UI_WIDTH } from "./Theme.js";
  * Manages the three-column layout system for the application.
  * Handles responsive resizing and fullscreen transitions.
  */
-export class LayoutManager {
+export class MyLayoutManager {
   #resizeTimeout = null;
 
   constructor(app, leftPanel, midPanel, rightPanel) {
@@ -22,7 +22,7 @@ export class LayoutManager {
     if (this.#resizeTimeout) {
       clearTimeout(this.#resizeTimeout);
     }
-    
+
     this.#resizeTimeout = setTimeout(() => {
       this.#performLayout();
     }, 200);
@@ -34,33 +34,18 @@ export class LayoutManager {
   #performLayout() {
     const screenWidth = this.app.screen.width;
     const screenHeight = this.app.screen.height;
-    
-    console.log("LayoutManager: updateLayout", screenWidth, screenHeight);
+
+    console.log("MyLayoutManager: updateLayout", screenWidth, screenHeight);
 
     // Left panel: Fixed width, full height with padding
-    this.leftPanel.resize(
-      UI_PADDING, 
-      UI_PADDING, 
-      UI_WIDTH, 
-      screenHeight - 2 * UI_PADDING
-    );
+    this.leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, screenHeight - 2 * UI_PADDING);
 
     // Middle panel: Flexible width between fixed panels
     const middleWidth = screenWidth - 2 * UI_WIDTH - 4 * UI_PADDING;
-    this.midPanel.resize(
-      UI_WIDTH + 2 * UI_PADDING,
-      UI_PADDING,
-      middleWidth,
-      screenHeight - 2 * UI_PADDING
-    );
+    this.midPanel.resize(UI_WIDTH + 2 * UI_PADDING, UI_PADDING, middleWidth, screenHeight - 2 * UI_PADDING);
 
     // Right panel: Fixed width, positioned at right edge
-    this.rightPanel.resize(
-      screenWidth - UI_WIDTH - UI_PADDING,
-      UI_PADDING,
-      UI_WIDTH,
-      screenHeight - 2 * UI_PADDING
-    );
+    this.rightPanel.resize(screenWidth - UI_WIDTH - UI_PADDING, UI_PADDING, UI_WIDTH, screenHeight - 2 * UI_PADDING);
   }
 
   /**
@@ -68,13 +53,13 @@ export class LayoutManager {
    */
   setupEventListeners() {
     const handleResize = () => this.updateLayout();
-    
+
     addEventListener("resize", handleResize);
     addEventListener("fullscreenchange", handleResize);
-    
+
     // Initial layout
     this.updateLayout();
-    
+
     return () => {
       removeEventListener("resize", handleResize);
       removeEventListener("fullscreenchange", handleResize);
