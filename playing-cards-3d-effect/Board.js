@@ -10,11 +10,11 @@ export class Board extends Container {
 
     this.stage = stage;
 
-    const background = this.createBackground();
+    const background = this.#createBackground();
     this.addChild(background);
   }
 
-  createBackground() {
+  #createBackground() {
     const radialGradient = new FillGradient({
       type: "radial",
       center: { x: 0.5, y: 0.5 },

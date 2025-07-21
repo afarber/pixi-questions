@@ -21,4 +21,3 @@ Convert SVG (do not tilt well) to PNG, preserving transparency with:
     done
 
 The sounds are CC0-licensed [Casion Audio](https://kenney.nl/assets/casino-audio) by Kenney
-

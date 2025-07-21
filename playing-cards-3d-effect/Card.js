@@ -34,9 +34,9 @@ export class Card extends Container {
     const texture = spriteSheet.textures[textureKey];
 
     if (stage instanceof Container) {
-      this.setupDraggable(stage, texture);
+      this.#setupDraggable(stage, texture);
     } else {
-      this.setupStatic();
+      this.#setupStatic();
     }
 
     this.mesh = new PerspectiveMesh({
@@ -57,13 +57,13 @@ export class Card extends Container {
   }
 
   // Setup static, non-draggable Tile
-  setupStatic() {
+  #setupStatic() {
     this.eventMode = "none";
     this.cursor = null;
   }
 
   // Setup interactive, draggable Card and add shadow
-  setupDraggable(stage, texture) {
+  #setupDraggable(stage, texture) {
     this.eventMode = "static";
     this.cursor = "pointer";
 
@@ -115,7 +115,7 @@ export class Card extends Container {
   onDragStart(e) {
     this.scale.x = CARD_SCALE;
     this.scale.y = CARD_SCALE;
-    this.setLocalShadowPosition();
+    this.#setLocalShadowPosition();
     this.shadow.visible = true;
 
     // Calculate offset between the pointer position and the tile position
@@ -133,7 +133,7 @@ export class Card extends Container {
     const angleY = normalizedGrabX * TILT_ANGLE;
 
     // Get the projected corner points
-    const projectedCornerPoints = this.rotate3D(
+    const projectedCornerPoints = this.#rotate3D(
       this.flatCornerPoints,
       angleX,
       angleY,
@@ -177,7 +177,7 @@ export class Card extends Container {
     parent.addChild(this);
   }
 
-  onDragEnd(e) {
+  onDragEnd() {
     this.scale.x = 1;
     this.scale.y = 1;
     this.shadow.visible = false;
@@ -214,7 +214,7 @@ export class Card extends Container {
 
   // At the screen, the shadow should always be southeast of the tile,
   // but the tile can be rotated and thus this calculation is needed
-  setLocalShadowPosition() {
+  #setLocalShadowPosition() {
     // Find where the tile actually is on the screen (the global position)
     // (it differs from this.x, this.y - which are in the parent's coordinate system)
     const cardGlobalPos = this.getGlobalPosition();
@@ -234,7 +234,7 @@ export class Card extends Container {
   }
 
   // Function to apply 3D rotation to the corner points and return projected points
-  rotate3D(cornerPoints, angleX, angleY, perspective) {
+  #rotate3D(cornerPoints, angleX, angleY, perspective) {
     const radX = (angleX * Math.PI) / 180;
     const radY = (angleY * Math.PI) / 180;
     const cosX = Math.cos(radX);

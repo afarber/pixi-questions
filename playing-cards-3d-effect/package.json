@@ -2,7 +2,8 @@
   "name": "playing-cards-3d-effect",
   "version": "1.0.0",
   "description": "Draggable playing cards with a 3D tilt effect",
-  "main": "index.js",
+  "type": "module",
+  "main": "main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

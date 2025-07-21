@@ -16,8 +16,8 @@ This is a PixiJS-based interactive playing cards application that demonstrates 3
 ### Core Components
 
 **Application Structure:**
-- `index.js` - Main application entry point that initializes PixiJS app, loads sprite sheet, and creates the board
-- `Board.js` - Container class that manages the game board, background gradient, and card creation
+- `main.js` - Main application entry point that initializes PixiJS app, loads sprite sheet, and creates the board
+- `Board.js` - Container class that manages the game board, background gradient, and card creation  
 - `Card.js` - Individual card component with 3D perspective effects and drag interaction
 
 **Key Architecture Patterns:**
@@ -51,10 +51,12 @@ The application implements a sophisticated 3D tilt effect:
 - Custom `vite-plugin-localize.js` for internationalization
 - ES2015 target with inline dynamic imports
 - Asset name patterns without hashing for consistent output
+- ES modules enabled with "type": "module" in package.json
 
 **Localization:**
 - Custom Vite plugin supports English, German, and French
-- Generates separate `index-{lang}.js` files during build
+- Localization strings organized in separate files under `locales/` directory (de.js, en.js, fr.js)
+- Generates separate `main-{lang}.js` files during build
 - Placeholder replacement system using `__PLACEHOLDER__` format
 
 ### Key Constants and Configuration
