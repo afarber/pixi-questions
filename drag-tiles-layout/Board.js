@@ -8,11 +8,11 @@ export class Board extends Container {
   constructor() {
     super();
 
-    const background = this.createBackground();
+    const background = this.#createBackground();
     this.addChild(background);
   }
 
-  createBackground() {
+  #createBackground() {
     const g = new Graphics();
     g.setFillStyle({ color: "BlanchedAlmond" });
 

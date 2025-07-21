@@ -18,15 +18,17 @@ This is a PixiJS-based drag-and-drop tile game with 3D visual effects. The appli
 
 ### Core Components
 
-**index.js** - Main entry point that initializes the PixiJS application, sets up the stage layout system, and creates the board and tiles.
+**main.js** - Main entry point that initializes the PixiJS application, sets up the stage layout system, and creates the board and tiles.
 
 **Board.js** - Creates an 8x8 checkered board background using PixiJS Graphics. Handles board scaling and positioning to fit the screen while maintaining aspect ratio.
 
 **Tile.js** - Complex tile implementation with two modes:
+
 - Static tiles (non-interactive)
 - Draggable tiles with 3D perspective effects using PerspectiveMesh
 
 Key tile features:
+
 - Drag-and-drop with pointer event handling
 - 3D tilt effect based on grab point position
 - Drop shadows with proper coordinate transformations
@@ -36,6 +38,7 @@ Key tile features:
 ### 3D Perspective System
 
 The tile 3D effect uses:
+
 - `PerspectiveMesh` from PixiJS for corner-based perspective transformation
 - Custom `rotate3D()` method applying rotation matrices around X and Y axes
 - Perspective projection with configurable depth (PERSPECTIVE constant)
@@ -44,6 +47,7 @@ The tile 3D effect uses:
 ### Layout System
 
 Uses `@pixi/layout` for responsive design:
+
 - Stage layout centers content and fills screen
 - Board container maintains 1:1 aspect ratio
 - Automatic resize handling for responsive behavior

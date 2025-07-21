@@ -33,9 +33,9 @@ export class Tile extends Container {
     this.cacheAsTexture = true;
 
     if (stage instanceof Container) {
-      this.setupDraggable(stage);
+      this.#setupDraggable(stage);
     } else {
-      this.setupStatic();
+      this.#setupStatic();
     }
 
     this.mesh = new PerspectiveMesh({
@@ -57,13 +57,13 @@ export class Tile extends Container {
   }
 
   // Setup static, non-draggable Tile
-  setupStatic() {
+  #setupStatic() {
     this.eventMode = "none";
     this.cursor = null;
   }
 
   // Setup interactive, draggable Tile and add shadow
-  setupDraggable(stage) {
+  #setupDraggable(stage) {
     this.eventMode = "static";
     this.cursor = "pointer";
 
@@ -109,14 +109,14 @@ export class Tile extends Container {
     this.shadow.visible = false;
     this.addChild(this.shadow);
 
-    this.onpointerdown = (e) => this.onDragStart(e);
+    this.onpointerdown = (e) => this.#onDragStart(e);
   }
 
-  onDragStart(e) {
+  #onDragStart(e) {
     this.scale.x = TILE_SCALE;
     this.scale.y = TILE_SCALE;
     this.alpha = TILE_ALPHA;
-    this.setLocalShadowPosition();
+    this.#setLocalShadowPosition();
     this.shadow.visible = true;
 
     // Calculate offset between the pointer position and the tile position
@@ -134,7 +134,7 @@ export class Tile extends Container {
     const angleY = normalizedGrabX * TILT_ANGLE;
 
     // Get the projected corner points
-    const projectedCornerPoints = this.rotate3D(
+    const projectedCornerPoints = this.#rotate3D(
       this.flatCornerPoints,
       angleX,
       angleY,
@@ -165,12 +165,12 @@ export class Tile extends Container {
 
     this.onpointerdown = null;
 
-    this.stage.onpointermove = (e) => this.onDragMove(e);
+    this.stage.onpointermove = (e) => this.#onDragMove(e);
 
-    this.stage.onpointerup = (e) => this.onDragEnd(e);
-    this.stage.onpointercancel = (e) => this.onDragEnd(e);
-    this.stage.onpointerupoutside = (e) => this.onDragEnd(e);
-    this.stage.onpointercanceloutside = (e) => this.onDragEnd(e);
+    this.stage.onpointerup = (e) => this.#onDragEnd(e);
+    this.stage.onpointercancel = (e) => this.#onDragEnd(e);
+    this.stage.onpointerupoutside = (e) => this.#onDragEnd(e);
+    this.stage.onpointercanceloutside = (e) => this.#onDragEnd(e);
 
     // put the dragged tile on the top
     let parent = this.parent;
@@ -178,7 +178,7 @@ export class Tile extends Container {
     parent.addChild(this);
   }
 
-  onDragEnd(e) {
+  #onDragEnd() {
     this.scale.x = 1;
     this.scale.y = 1;
     this.alpha = 1;
@@ -197,7 +197,7 @@ export class Tile extends Container {
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
 
-    this.onpointerdown = (e) => this.onDragStart(e);
+    this.onpointerdown = (e) => this.#onDragStart(e);
 
     this.stage.onpointermove = null;
 
@@ -219,7 +219,7 @@ export class Tile extends Container {
     );
   }
 
-  onDragMove(e) {
+  #onDragMove(e) {
     // Set the new tile position, but maintain the offset to the pointer
     // Both positions are in the parent's coordinate system
     const pointerParentPos = e.getLocalPosition(this.parent);
@@ -229,7 +229,7 @@ export class Tile extends Container {
 
   // At the screen, the shadow should always be southeast of the tile,
   // but the tile can be rotated and thus this calculation is needed
-  setLocalShadowPosition() {
+  #setLocalShadowPosition() {
     // Find where the tile actually is on the screen (the global position)
     // (it differs from this.x, this.y - which are in the parent's coordinate system)
     const tileGlobalPos = this.getGlobalPosition();
@@ -249,7 +249,7 @@ export class Tile extends Container {
   }
 
   // Function to apply 3D rotation to the corner points and return projected points
-  rotate3D(cornerPoints, angleX, angleY, perspective) {
+  #rotate3D(cornerPoints, angleX, angleY, perspective) {
     const radX = (angleX * Math.PI) / 180;
     const radY = (angleY * Math.PI) / 180;
     const cosX = Math.cos(radX);
