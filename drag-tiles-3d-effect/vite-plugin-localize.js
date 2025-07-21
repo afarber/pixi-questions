@@ -2,29 +2,14 @@
 
 import fs from "fs";
 import path from "path";
+import de from "./locales/de.js";
+import en from "./locales/en.js";
+import fr from "./locales/fr.js";
 
 const localizedStrings = {
-  en: {
-    __YES__: "Yes",
-    __NO__: "No",
-    __CANCEL__: "Cancel",
-    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0",
-  },
-  de: {
-    __YES__: "Ja",
-    __NO__: "Nein",
-    __CANCEL__: "Abbrechen",
-    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0",
-  },
-  fr: {
-    __YES__: "Oui",
-    __NO__: "Non",
-    __CANCEL__: "Annuler",
-    // workaround for ReferenceError: __VITE_PRELOAD__ is not defined
-    __VITE_PRELOAD__: "void 0",
-  },
+  de,
+  en,
+  fr,
 };
 
 function replacePlacesholders(src, lang) {
@@ -57,24 +42,24 @@ export default function localize(isBuildingBundle) {
     },
     generateBundle(outputOptions, bundle) {
       for (const [fileName, bundleValue] of Object.entries(bundle)) {
-        if (!fileName.endsWith("index.js")) {
+        if (!fileName.endsWith("main.js")) {
           continue;
         }
-        const indexJsPath = path.resolve(outputOptions.dir, fileName);
-        console.log("\nReplacing placeholders in", indexJsPath);
+        const mainJsPath = path.resolve(outputOptions.dir, fileName);
+        console.log("\nReplacing placeholders in", mainJsPath);
 
         // Ensure the dist directory exists
-        ensureDirectoryExists(indexJsPath);
+        ensureDirectoryExists(mainJsPath);
 
-        // create index-XX.js file for each language, in the same folder as index.js
+        // create main-XX.js file for each language, in the same folder as main.js
         for (const lang of Object.keys(localizedStrings)) {
-          const indexLangPath = path.resolve(
+          const mainLangPath = path.resolve(
             outputOptions.dir,
-            `index-${lang}.js`
+            `main-${lang}.js`
           );
-          console.log("Creating localized file", indexLangPath);
+          console.log("Creating localized file", mainLangPath);
           fs.writeFileSync(
-            indexLangPath,
+            mainLangPath,
             replacePlacesholders(bundleValue.code, lang)
           );
         }

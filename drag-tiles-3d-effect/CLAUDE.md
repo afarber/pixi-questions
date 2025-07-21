@@ -15,19 +15,19 @@ This is a PixiJS application that creates a checkered board with 3D draggable ti
 
 ### Core Files
 
-- **index.js** - Main application entry point that initializes the PixiJS Application and creates the game objects
+- **main.js** - Main application entry point that initializes the PixiJS Application and creates the game objects
 - **Board.js** - Creates the checkered board background with 8x8 grid using Graphics
 - **Tile.js** - Complex draggable tile component with 3D tilt effects using PerspectiveMesh
 
 ### Key Architecture Concepts
 
-**3D Perspective System**: The application uses PixiJS PerspectiveMesh to create 3D tilt effects when dragging tiles. The `rotate3D()` method in Tile.js applies perspective projection with configurable angles and depth.
+**3D Perspective System**: The application uses PixiJS PerspectiveMesh to create 3D tilt effects when dragging tiles. The `#rotate3D()` private method in Tile.js applies perspective projection with configurable angles and depth.
 
 **Drag System**: Tiles use pointer events with custom hit areas and coordinate system conversions. The drag system maintains proper parent-child coordinate relationships and includes shadow effects during dragging.
 
 **Responsive Layout**: The Board component automatically scales and centers itself based on window size, maintaining aspect ratio.
 
-**Custom Vite Plugin**: The `vite-plugin-localize.js` creates localized versions of the bundle for different languages (en/de/fr) by replacing placeholder strings.
+**Custom Vite Plugin**: The `vite-plugin-localize.js` creates localized versions of the bundle for different languages (en/de/fr) by replacing placeholder strings. Localization strings are now organized in separate files within the `locales/` directory.
 
 ### Dependencies
 

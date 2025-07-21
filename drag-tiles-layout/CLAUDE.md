@@ -40,7 +40,7 @@ Key tile features:
 The tile 3D effect uses:
 
 - `PerspectiveMesh` from PixiJS for corner-based perspective transformation
-- Custom `rotate3D()` method applying rotation matrices around X and Y axes
+- Custom `#rotate3D()` private method applying rotation matrices around X and Y axes
 - Perspective projection with configurable depth (PERSPECTIVE constant)
 - Dynamic corner point calculation based on grab position
 
@@ -54,10 +54,17 @@ Uses `@pixi/layout` for responsive design:
 
 ### Build System
 
-- **Vite** for development and bundling
+- **Vite** for development and bundling with ES modules support
 - **Custom localization plugin** (`vite-plugin-localize.js`) creates multiple language versions
-- Build outputs single bundled file with inlined imports
+- **Modular localization** - Separate files in `locales/` directory (de.js, en.js, fr.js)
+- Build outputs `main-XX.js` files for each language with inlined imports
 - Localization supports EN, DE, FR with placeholder replacement
+
+### Code Organization
+
+- **ES Modules** - Project uses `"type": "module"` in package.json
+- **Private Methods** - Classes use `#` prefix for private methods (e.g., `#setupDraggable`, `#onDragStart`)
+- **ESLint** - Configured for ES modules with zero-warning policy
 
 ### Key Constants
 

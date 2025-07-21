@@ -1,3 +1,7 @@
+# Ignore AI settings
+.claude/
+.gemini/
+
 # Git
 .git
 .gitignore
