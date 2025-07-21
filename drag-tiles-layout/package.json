@@ -2,7 +2,6 @@
   "name": "drag-tiles-layout",
   "version": "1.0.0",
   "description": "A checkered board with 3 draggable tiles and a 3D tilt effect",
-  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
