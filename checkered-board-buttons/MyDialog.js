@@ -1,11 +1,21 @@
-import { Container, Graphics, Texture, Sprite } from "pixi.js";
+import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Easing, Tween, Group } from "@tweenjs/tween.js";
+import {
+  UI_WIDTH,
+  UI_HEIGHT,
+  UI_RADIUS,
+  UI_BACKGROUND,
+  TITLE_TEXT_STYLE
+} from "./Theme";
 
 export const dialogTweenGroup = new Group();
 
 const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
 const BACKGROUND_COLOR = 0x000000;
+const PANEL_WIDTH = UI_WIDTH * 2;
+const PANEL_HEIGHT = UI_HEIGHT * 3;
+const PANEL_PADDING = 20;
 
 export class MyDialog extends Container {
   constructor(app, screenWidth, screenHeight) {
@@ -17,6 +27,9 @@ export class MyDialog extends Container {
     
     this.bg = null;
     this.panel = null;
+    this.panelBackground = null;
+    this.questionText = null;
+    this.buttonsContainer = null;
     this.activeTween = null;
     
     this.visible = false;
@@ -36,6 +49,30 @@ export class MyDialog extends Container {
   #setupPanel() {
     this.panel = new Container();
     this.panel.pivot.set(0, 0);
+    
+    this.panelBackground = new Graphics()
+      .roundRect(-PANEL_WIDTH / 2, -PANEL_HEIGHT / 2, PANEL_WIDTH, PANEL_HEIGHT, UI_RADIUS)
+      .fill({ color: UI_BACKGROUND });
+    
+    this.questionText = new Text({
+      text: "Sample question text",
+      style: {
+        ...TITLE_TEXT_STYLE,
+        fontSize: 18,
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: PANEL_WIDTH - PANEL_PADDING * 2
+      }
+    });
+    this.questionText.anchor.set(0.5, 0.5);
+    this.questionText.y = -PANEL_HEIGHT / 4;
+    
+    this.buttonsContainer = new Container();
+    this.buttonsContainer.y = PANEL_HEIGHT / 4;
+    
+    this.panel.addChild(this.panelBackground);
+    this.panel.addChild(this.questionText);
+    this.panel.addChild(this.buttonsContainer);
     this.addChild(this.panel);
   }
 
