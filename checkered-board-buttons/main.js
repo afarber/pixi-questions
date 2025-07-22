@@ -6,6 +6,7 @@ import { MyList } from "./MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 import { MyLayoutManager } from "./MyLayoutManager";
+import { MyDrawer } from "./MyDrawer";
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -148,8 +149,26 @@ const manifest = {
       if (i === 0) {
         const fullDiv = document.getElementById("fullDiv");
         toggleFullscreen(fullDiv);
+      } else if (rightButtonKeys[i] === "___SWAP___" || 
+                 rightButtonKeys[i] === "___SKIP___" || 
+                 rightButtonKeys[i] === "___RESIGN___" || 
+                 rightButtonKeys[i] === "___SHARE___" || 
+                 rightButtonKeys[i] === "___PLAY___") {
+        
+        drawer.show(
+          rightButtonKeys[i],
+          () => {
+            // YES callback - execute the original action
+            console.log(`${rightButtonKeys[i]} confirmed and executed!`);
+          },
+          () => {
+            // NO callback - cancel the action
+            console.log(`${rightButtonKeys[i]} cancelled!`);
+          }
+        );
+      } else {
+        console.log(`${rightButtonKeys[i]} pressed!`);
       }
-      console.log(`${rightButtonKeys[i]} pressed!`);
     });
 
     button.enabled = i % 4 !== 1;
@@ -160,9 +179,20 @@ const manifest = {
   midPanel.addChildrenToStage(app.stage);
   rightPanel.addChildrenToStage(app.stage);
 
+  // Create drawer instance
+  const drawer = new MyDrawer(app, app.screen.width, app.screen.height);
+  app.stage.addChild(drawer);
+
   // Initialize layout manager and setup event listeners
   const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel);
   layoutManager.setupEventListeners();
+
+  // Add drawer resize handling to existing resize events
+  const handleDrawerResize = () => {
+    drawer.resize(app.screen.width, app.screen.height);
+  };
+  addEventListener("resize", handleDrawerResize);
+  addEventListener("fullscreenchange", handleDrawerResize);
 
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
