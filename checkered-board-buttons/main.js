@@ -6,7 +6,7 @@ import { MyList } from "./MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 import { MyLayoutManager } from "./MyLayoutManager";
-import { MyDrawer } from "./MyDrawer";
+import { MyDialog, dialogTweenGroup } from "./MyDialog";
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -155,7 +155,7 @@ const manifest = {
                  rightButtonKeys[i] === "___SHARE___" || 
                  rightButtonKeys[i] === "___PLAY___") {
         
-        drawer.show(
+        dialog.show(
           rightButtonKeys[i],
           () => {
             // YES callback - execute the original action
@@ -179,23 +179,24 @@ const manifest = {
   midPanel.addChildrenToStage(app.stage);
   rightPanel.addChildrenToStage(app.stage);
 
-  // Create drawer instance
-  const drawer = new MyDrawer(app, app.screen.width, app.screen.height);
-  app.stage.addChild(drawer);
+  // Create dialog instance
+  const dialog = new MyDialog(app, app.screen.width, app.screen.height);
+  app.stage.addChild(dialog);
 
   // Initialize layout manager and setup event listeners
   const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel);
   layoutManager.setupEventListeners();
 
-  // Add drawer resize handling to existing resize events
-  const handleDrawerResize = () => {
-    drawer.resize(app.screen.width, app.screen.height);
+  // Add dialog resize handling to existing resize events
+  const handleDialogResize = () => {
+    dialog.resize(app.screen.width, app.screen.height);
   };
-  addEventListener("resize", handleDrawerResize);
-  addEventListener("fullscreenchange", handleDrawerResize);
+  addEventListener("resize", handleDialogResize);
+  addEventListener("fullscreenchange", handleDialogResize);
 
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
+    dialogTweenGroup.update();
 
     bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
