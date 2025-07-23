@@ -142,21 +142,24 @@ export class MyDialog extends Container {
     this.resize(this.screenWidth, this.screenHeight);
     
     this.bg.alpha = 0;
+    // Set pivot.y to -400 to position panel above screen, then animate to 0 for slide-down effect
     this.panel.pivot.y = -400;
     
     // Show buttons with slight delay for visual appeal
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.bg, dialogTweenGroup)
+    this.activeTween = new Tween(this.bg)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
+    dialogTweenGroup.add(this.activeTween);
 
-    new Tween(this.panel.pivot, dialogTweenGroup)
+    const panelTween = new Tween(this.panel.pivot)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
+    dialogTweenGroup.add(panelTween);
   }
 
   hide() {
@@ -169,27 +172,31 @@ export class MyDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.bg, dialogTweenGroup)
+    this.activeTween = new Tween(this.bg)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
         this.visible = false;
       })
       .start();
+    dialogTweenGroup.add(this.activeTween);
 
-    new Tween(this.panel.pivot, dialogTweenGroup)
+    const panelTween = new Tween(this.panel.pivot)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();
+    dialogTweenGroup.add(panelTween);
   }
 
   resize(width, height) {
     this.screenWidth = width;
     this.screenHeight = height;
     
+    // Update background to cover full screen
     this.bg.width = width;
     this.bg.height = height;
     
+    // Keep panel centered
     this.panel.x = width * 0.5;
     this.panel.y = height * 0.5;
   }
