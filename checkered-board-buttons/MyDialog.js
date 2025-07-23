@@ -85,7 +85,7 @@ export class MyDialog extends Container {
   }
 
   #updateQuestion(questionKey) {
-    const questionText = QUESTION_MAP[questionKey] || "___QUESTION_SWAP___";
+    const questionText = QUESTION_MAP[questionKey] || "___QUESTION_DEFAULT___";
     this.questionText.text = questionText;
   }
 

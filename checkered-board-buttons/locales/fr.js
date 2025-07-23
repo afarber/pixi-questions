@@ -22,6 +22,7 @@ export default {
   ___YES___: "Oui",
   ___YOUR_TURN___: "VOTRE TOUR",
   ___ZERO_GAMES___: "PAS DE JEUX",
+  ___QUESTION_DEFAULT___: "Êtes-vous sûr?",
   ___QUESTION_SWAP___: "Voulez-vous vraiment échanger?",
   ___QUESTION_SKIP___: "Voulez-vous vraiment passer?",
   ___QUESTION_RESIGN___: "Voulez-vous vraiment démissionner?",
