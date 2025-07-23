@@ -7,6 +7,7 @@ import {
   UI_BACKGROUND,
   TITLE_TEXT_STYLE
 } from "./Theme";
+import { MyButton } from "./MyButton";
 
 export const dialogTweenGroup = new Group();
 
@@ -16,6 +17,7 @@ const BACKGROUND_COLOR = 0x000000;
 const PANEL_WIDTH = UI_WIDTH * 2;
 const PANEL_HEIGHT = UI_HEIGHT * 3;
 const PANEL_PADDING = 20;
+const BUTTON_SPACING = 20;
 
 const QUESTION_MAP = {
   "___SWAP___": "___QUESTION_SWAP___",
@@ -38,6 +40,8 @@ export class MyDialog extends Container {
     this.panelBackground = null;
     this.questionText = null;
     this.buttonsContainer = null;
+    this.yesButton = null;
+    this.noButton = null;
     this.activeTween = null;
     
     this.visible = false;
@@ -78,6 +82,15 @@ export class MyDialog extends Container {
     this.buttonsContainer = new Container();
     this.buttonsContainer.y = PANEL_HEIGHT / 4;
     
+    this.yesButton = new MyButton({ text: "___YES___" });
+    this.noButton = new MyButton({ text: "___NO___" });
+    
+    this.yesButton.x = -UI_WIDTH / 2 - BUTTON_SPACING / 2;
+    this.noButton.x = UI_WIDTH / 2 + BUTTON_SPACING / 2;
+    
+    this.buttonsContainer.addChild(this.yesButton);
+    this.buttonsContainer.addChild(this.noButton);
+    
     this.panel.addChild(this.panelBackground);
     this.panel.addChild(this.questionText);
     this.panel.addChild(this.buttonsContainer);
@@ -89,8 +102,24 @@ export class MyDialog extends Container {
     this.questionText.text = questionText;
   }
 
+  #setupCallbacks(onYes, onNo) {
+    this.yesButton.onPress.disconnectAll();
+    this.noButton.onPress.disconnectAll();
+    
+    this.yesButton.onPress.connect(() => {
+      if (onYes) onYes();
+      this.hide();
+    });
+    
+    this.noButton.onPress.connect(() => {
+      if (onNo) onNo();
+      this.hide();
+    });
+  }
+
   show(questionKey, onYes = null, onNo = null) {
     this.#updateQuestion(questionKey);
+    this.#setupCallbacks(onYes, onNo);
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
