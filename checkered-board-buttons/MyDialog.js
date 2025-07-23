@@ -17,6 +17,14 @@ const PANEL_WIDTH = UI_WIDTH * 2;
 const PANEL_HEIGHT = UI_HEIGHT * 3;
 const PANEL_PADDING = 20;
 
+const QUESTION_MAP = {
+  "___SWAP___": "___QUESTION_SWAP___",
+  "___SKIP___": "___QUESTION_SKIP___",
+  "___RESIGN___": "___QUESTION_RESIGN___",
+  "___SHARE___": "___QUESTION_SHARE___",
+  "___PLAY___": "___QUESTION_PLAY___"
+};
+
 export class MyDialog extends Container {
   constructor(app, screenWidth, screenHeight) {
     super();
@@ -55,7 +63,7 @@ export class MyDialog extends Container {
       .fill({ color: UI_BACKGROUND });
     
     this.questionText = new Text({
-      text: "Sample question text",
+      text: "___QUESTION_SWAP___",
       style: {
         ...TITLE_TEXT_STYLE,
         fontSize: 18,
@@ -76,7 +84,13 @@ export class MyDialog extends Container {
     this.addChild(this.panel);
   }
 
-  show() {
+  #updateQuestion(questionKey) {
+    const questionText = QUESTION_MAP[questionKey] || "___QUESTION_SWAP___";
+    this.questionText.text = questionText;
+  }
+
+  show(questionKey, onYes = null, onNo = null) {
+    this.#updateQuestion(questionKey);
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
