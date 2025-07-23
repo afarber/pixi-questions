@@ -183,16 +183,9 @@ const manifest = {
   const dialog = new MyDialog(app, app.screen.width, app.screen.height);
   app.stage.addChild(dialog);
 
-  // Initialize layout manager and setup event listeners
-  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel);
+  // Initialize layout manager with dialog and setup event listeners
+  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel, dialog);
   layoutManager.setupEventListeners();
-
-  // Add dialog resize handling to existing resize events
-  const handleDialogResize = () => {
-    dialog.resize(app.screen.width, app.screen.height);
-  };
-  addEventListener("resize", handleDialogResize);
-  addEventListener("fullscreenchange", handleDialogResize);
 
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
