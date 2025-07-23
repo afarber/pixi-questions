@@ -13,7 +13,6 @@ const PANEL_HEIGHT = UI_HEIGHT * 3;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
 
-
 export class MyConfirmDialog extends Container {
   constructor(app) {
     super();
@@ -186,22 +185,18 @@ export class MyConfirmDialog extends Container {
 
   #setupKeyHandler() {
     this.keydownHandler = (event) => {
-      if (event.key === 'Escape') {
-        // Prevent browser from handling ESC (which would exit fullscreen)
-        event.preventDefault();
-        event.stopPropagation();
-        
+      if (event.key === "Escape") {
         // Close dialog (acts like clicking NO button)
         this.hide();
       }
     };
-    
-    document.addEventListener('keydown', this.keydownHandler, true);
+
+    document.addEventListener("keydown", this.keydownHandler, true);
   }
 
   #removeKeyHandler() {
     if (this.keydownHandler) {
-      document.removeEventListener('keydown', this.keydownHandler, true);
+      document.removeEventListener("keydown", this.keydownHandler, true);
       this.keydownHandler = null;
     }
   }

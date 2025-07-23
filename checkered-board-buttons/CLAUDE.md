@@ -21,7 +21,7 @@ This is a PixiJS-based interactive game featuring a checkered board with draggab
 - **MyButton.js** - Custom button component extending @pixi/ui FancyButton with animations and sound effects
 - **MyVerticalPanel.js** - Layout manager for vertical arrangement of UI elements with responsive sizing
 - **MyList.js** - Scrollable list component for displaying game data
-- **MyDialog.js** - Modal dialog with dark overlay, centered panel, and Yes/No buttons for confirmations
+- **MyConfirmDialog.js** - Modal dialog with dark overlay, centered panel, and Yes/No buttons for confirmations
 - **MyLayoutManager.js** - Centralized layout system that handles responsive resizing for all panels and dialog
 - **Theme.js** - Central theme configuration with UI dimensions, colors, and styling constants
 
