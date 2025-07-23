@@ -1,7 +1,7 @@
 import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
-import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "./Theme";
-import { MyButton } from "./MyButton";
+import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
+import { MyButton } from "../MyButton.js";
 
 export const dialogTweenGroup = new Group();
 
@@ -13,15 +13,8 @@ const PANEL_HEIGHT = UI_HEIGHT * 3;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
 
-const QUESTION_MAP = {
-  "___SWAP___": "___QUESTION_SWAP___",
-  "___SKIP___": "___QUESTION_SKIP___",
-  "___RESIGN___": "___QUESTION_RESIGN___",
-  "___SHARE___": "___QUESTION_SHARE___",
-  "___PLAY___": "___QUESTION_PLAY___"
-};
 
-export class MyDialog extends Container {
+export class MyConfirmDialog extends Container {
   constructor(app) {
     super();
 
@@ -36,6 +29,7 @@ export class MyDialog extends Container {
     this.yesButton = null;
     this.noButton = null;
     this.activeTween = null;
+    this.keydownHandler = null;
 
     this.visible = false;
     this.#setupBackground();
@@ -72,7 +66,7 @@ export class MyDialog extends Container {
       .fill({ color: UI_BACKGROUND });
 
     this.questionText = new Text({
-      text: "___QUESTION_DEFAULT___",
+      text: "",
       style: {
         ...TITLE_TEXT_STYLE,
         fontSize: 18,
@@ -102,9 +96,8 @@ export class MyDialog extends Container {
     this.addChild(this.panelContainer);
   }
 
-  #updateQuestion(questionKey) {
-    const questionText = QUESTION_MAP[questionKey] || "___QUESTION_DEFAULT___";
-    this.questionText.text = questionText;
+  #updateQuestion(text) {
+    this.questionText.text = text;
   }
 
   #setupCallbacks(onYes, onNo) {
@@ -122,9 +115,10 @@ export class MyDialog extends Container {
     });
   }
 
-  show(questionKey, onYes = null, onNo = null) {
-    this.#updateQuestion(questionKey);
+  show(text, onYes = null, onNo = null) {
+    this.#updateQuestion(text);
     this.#setupCallbacks(onYes, onNo);
+    this.#setupKeyHandler();
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
@@ -153,6 +147,7 @@ export class MyDialog extends Container {
   }
 
   hide() {
+    this.#removeKeyHandler();
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
@@ -187,5 +182,27 @@ export class MyDialog extends Container {
     // Keep panel centered
     this.panelContainer.x = width * 0.5;
     this.panelContainer.y = height * 0.5;
+  }
+
+  #setupKeyHandler() {
+    this.keydownHandler = (event) => {
+      if (event.key === 'Escape') {
+        // Prevent browser from handling ESC (which would exit fullscreen)
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Close dialog (acts like clicking NO button)
+        this.hide();
+      }
+    };
+    
+    document.addEventListener('keydown', this.keydownHandler, true);
+  }
+
+  #removeKeyHandler() {
+    if (this.keydownHandler) {
+      document.removeEventListener('keydown', this.keydownHandler, true);
+      this.keydownHandler = null;
+    }
   }
 }

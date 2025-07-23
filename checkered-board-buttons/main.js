@@ -6,7 +6,15 @@ import { MyList } from "./MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 import { MyLayoutManager } from "./MyLayoutManager";
-import { MyDialog, dialogTweenGroup } from "./MyDialog";
+import { MyConfirmDialog, dialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
+
+const QUESTION_MAP = {
+  "___SWAP___": "___QUESTION_SWAP___",
+  "___SKIP___": "___QUESTION_SKIP___",
+  "___RESIGN___": "___QUESTION_RESIGN___",
+  "___SHARE___": "___QUESTION_SHARE___",
+  "___PLAY___": "___QUESTION_PLAY___"
+};
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -155,8 +163,8 @@ const manifest = {
                  rightButtonKeys[i] === "___SHARE___" || 
                  rightButtonKeys[i] === "___PLAY___") {
         
-        dialog.show(
-          rightButtonKeys[i],
+        confirmDialog.show(
+          QUESTION_MAP[rightButtonKeys[i]] || rightButtonKeys[i],
           () => {
             // YES callback - execute the original action
             console.log(`${rightButtonKeys[i]} confirmed and executed!`);
@@ -180,11 +188,11 @@ const manifest = {
   rightPanel.addChildrenToStage(app.stage);
 
   // Create dialog instance
-  const dialog = new MyDialog(app);
-  app.stage.addChild(dialog);
+  const confirmDialog = new MyConfirmDialog(app);
+  app.stage.addChild(confirmDialog);
 
   // Initialize layout manager with dialog and setup event listeners
-  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel, dialog);
+  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel, [confirmDialog]);
   layoutManager.setupEventListeners();
 
   app.ticker.add((time) => {

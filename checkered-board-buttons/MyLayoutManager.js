@@ -7,12 +7,12 @@ import { UI_PADDING, UI_WIDTH } from "./Theme.js";
 export class MyLayoutManager {
   #resizeTimeout = null;
 
-  constructor(app, leftPanel, midPanel, rightPanel, dialog = null) {
+  constructor(app, leftPanel, midPanel, rightPanel, dialogs = []) {
     this.app = app;
     this.leftPanel = leftPanel;
     this.midPanel = midPanel;
     this.rightPanel = rightPanel;
-    this.dialog = dialog;
+    this.dialogs = dialogs;
   }
 
   /**
@@ -48,10 +48,12 @@ export class MyLayoutManager {
     // Right panel: Fixed width, positioned at right edge
     this.rightPanel.resize(screenWidth - UI_WIDTH - UI_PADDING, UI_PADDING, UI_WIDTH, screenHeight - 2 * UI_PADDING);
 
-    // Update dialog if present
-    if (this.dialog) {
-      this.dialog.resize();
-    }
+    // Update all dialogs
+    this.dialogs.forEach(dialog => {
+      if (dialog && dialog.resize && typeof dialog.resize === 'function') {
+        dialog.resize();
+      }
+    });
   }
 
   /**
