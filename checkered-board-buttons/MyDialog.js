@@ -36,8 +36,8 @@ export class MyDialog extends Container {
     this.screenHeight = screenHeight;
     this.zIndex = 1000;
     
-    this.bg = null;
-    this.panel = null;
+    this.darkOverlay = null;
+    this.panelContainer = null;
     this.panelBackground = null;
     this.questionText = null;
     this.buttonsContainer = null;
@@ -51,27 +51,27 @@ export class MyDialog extends Container {
   }
 
   #setupBackground() {
-    this.bg = new Sprite(Texture.WHITE);
-    this.bg.tint = BACKGROUND_COLOR;
-    this.bg.alpha = 0;
-    this.bg.eventMode = 'static';
-    this.bg.cursor = 'default';
+    this.darkOverlay = new Sprite(Texture.WHITE);
+    this.darkOverlay.tint = BACKGROUND_COLOR;
+    this.darkOverlay.alpha = 0;
+    this.darkOverlay.eventMode = 'static';
+    this.darkOverlay.cursor = 'default';
     
     // Add click handler to background to close dialog on outside click
-    this.bg.on('pointerdown', () => {
+    this.darkOverlay.on('pointerdown', () => {
       this.hide();
     });
     
-    this.addChild(this.bg);
+    this.addChild(this.darkOverlay);
   }
 
   #setupPanel() {
-    this.panel = new Container();
-    this.panel.pivot.set(0, 0);
-    this.panel.eventMode = 'static';
+    this.panelContainer = new Container();
+    this.panelContainer.pivot.set(0, 0);
+    this.panelContainer.eventMode = 'static';
     
     // Prevent clicks on panel from bubbling to background
-    this.panel.on('pointerdown', (event) => {
+    this.panelContainer.on('pointerdown', (event) => {
       event.stopPropagation();
     });
     
@@ -104,10 +104,10 @@ export class MyDialog extends Container {
     this.buttonsContainer.addChild(this.yesButton);
     this.buttonsContainer.addChild(this.noButton);
     
-    this.panel.addChild(this.panelBackground);
-    this.panel.addChild(this.questionText);
-    this.panel.addChild(this.buttonsContainer);
-    this.addChild(this.panel);
+    this.panelContainer.addChild(this.panelBackground);
+    this.panelContainer.addChild(this.questionText);
+    this.panelContainer.addChild(this.buttonsContainer);
+    this.addChild(this.panelContainer);
   }
 
   #updateQuestion(questionKey) {
@@ -141,20 +141,20 @@ export class MyDialog extends Container {
     this.visible = true;
     this.resize(this.screenWidth, this.screenHeight);
     
-    this.bg.alpha = 0;
+    this.darkOverlay.alpha = 0;
     // Set pivot.y to -400 to position panel above screen, then animate to 0 for slide-down effect
-    this.panel.pivot.y = -400;
+    this.panelContainer.pivot.y = -400;
     
     // Show buttons with slight delay for visual appeal
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.bg, dialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
 
-    const panelTween = new Tween(this.panel.pivot, dialogTweenGroup)
+    const panelTween = new Tween(this.panelContainer.pivot, dialogTweenGroup)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
@@ -170,7 +170,7 @@ export class MyDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.bg, dialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
@@ -178,7 +178,7 @@ export class MyDialog extends Container {
       })
       .start();
 
-    const panelTween = new Tween(this.panel.pivot, dialogTweenGroup)
+    const panelTween = new Tween(this.panelContainer.pivot, dialogTweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();
@@ -189,11 +189,11 @@ export class MyDialog extends Container {
     this.screenHeight = height;
     
     // Update background to cover full screen
-    this.bg.width = width;
-    this.bg.height = height;
+    this.darkOverlay.width = width;
+    this.darkOverlay.height = height;
     
     // Keep panel centered
-    this.panel.x = width * 0.5;
-    this.panel.y = height * 0.5;
+    this.panelContainer.x = width * 0.5;
+    this.panelContainer.y = height * 0.5;
   }
 }
