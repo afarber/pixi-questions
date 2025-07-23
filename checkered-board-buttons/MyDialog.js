@@ -1,5 +1,5 @@
 import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
-import { Easing, Tween, Group } from "@tweenjs/tween.js";
+import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import {
   UI_WIDTH,
   UI_HEIGHT,
@@ -149,17 +149,15 @@ export class MyDialog extends Container {
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.bg)
+    this.activeTween = new Tween(this.bg, dialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
-    dialogTweenGroup.add(this.activeTween);
 
-    const panelTween = new Tween(this.panel.pivot)
+    const panelTween = new Tween(this.panel.pivot, dialogTweenGroup)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
-    dialogTweenGroup.add(panelTween);
   }
 
   hide() {
@@ -172,20 +170,18 @@ export class MyDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.bg)
+    this.activeTween = new Tween(this.bg, dialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
         this.visible = false;
       })
       .start();
-    dialogTweenGroup.add(this.activeTween);
 
-    const panelTween = new Tween(this.panel.pivot)
+    const panelTween = new Tween(this.panel.pivot, dialogTweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();
-    dialogTweenGroup.add(panelTween);
   }
 
   resize(width, height) {
