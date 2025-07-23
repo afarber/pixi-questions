@@ -50,7 +50,7 @@ export class MyLayoutManager {
 
     // Update dialog if present
     if (this.dialog) {
-      this.dialog.resize(screenWidth, screenHeight);
+      this.dialog.resize();
     }
   }
 

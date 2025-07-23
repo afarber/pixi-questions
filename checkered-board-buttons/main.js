@@ -180,7 +180,7 @@ const manifest = {
   rightPanel.addChildrenToStage(app.stage);
 
   // Create dialog instance
-  const dialog = new MyDialog(app, app.screen.width, app.screen.height);
+  const dialog = new MyDialog(app);
   app.stage.addChild(dialog);
 
   // Initialize layout manager with dialog and setup event listeners

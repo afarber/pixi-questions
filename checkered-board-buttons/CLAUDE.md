@@ -21,6 +21,8 @@ This is a PixiJS-based interactive game featuring a checkered board with draggab
 - **MyButton.js** - Custom button component extending @pixi/ui FancyButton with animations and sound effects
 - **MyVerticalPanel.js** - Layout manager for vertical arrangement of UI elements with responsive sizing
 - **MyList.js** - Scrollable list component for displaying game data
+- **MyDialog.js** - Modal dialog with dark overlay, centered panel, and Yes/No buttons for confirmations
+- **MyLayoutManager.js** - Centralized layout system that handles responsive resizing for all panels and dialog
 - **Theme.js** - Central theme configuration with UI dimensions, colors, and styling constants
 
 ### Key Dependencies
@@ -39,7 +41,7 @@ The app uses a three-panel responsive layout:
 - **Middle Panel**: Game board with score display and tiles
 - **Right Panel**: Additional buttons (10 buttons with different states)
 
-Panels automatically resize based on screen dimensions using the `onResize` handler that responds to both window resize and fullscreen events.
+Panels automatically resize based on screen dimensions using MyLayoutManager which handles window resize and fullscreen events centrally.
 
 ### Asset Loading
 
@@ -54,6 +56,7 @@ Assets are loaded using PixiJS Assets API with a manifest system:
 - **Grid Snapping**: Tiles automatically snap to board grid positions when released
 - **Button Animations**: Hover, press, and show/hide animations with sound effects
 - **Fullscreen Toggle**: Button 1 toggles fullscreen mode for the entire application
+- **Modal Dialogs**: Confirmation dialogs with dark overlay for destructive actions like resign, skip, etc.
 
 ### Development Notes
 
