@@ -164,7 +164,7 @@ export class MyConfirmDialog extends Container {
       })
       .start();
 
-    const panelTween = new Tween(this.panelContainer.pivot, dialogTweenGroup)
+    new Tween(this.panelContainer.pivot, dialogTweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();
