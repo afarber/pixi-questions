@@ -34,6 +34,7 @@ export class MyDialog extends Container {
     this.app = app;
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
+    this.zIndex = 1000;
     
     this.bg = null;
     this.panel = null;
@@ -55,12 +56,24 @@ export class MyDialog extends Container {
     this.bg.alpha = 0;
     this.bg.eventMode = 'static';
     this.bg.cursor = 'default';
+    
+    // Add click handler to background to close dialog on outside click
+    this.bg.on('pointerdown', () => {
+      this.hide();
+    });
+    
     this.addChild(this.bg);
   }
 
   #setupPanel() {
     this.panel = new Container();
     this.panel.pivot.set(0, 0);
+    this.panel.eventMode = 'static';
+    
+    // Prevent clicks on panel from bubbling to background
+    this.panel.on('pointerdown', (event) => {
+      event.stopPropagation();
+    });
     
     this.panelBackground = new Graphics()
       .roundRect(-PANEL_WIDTH / 2, -PANEL_HEIGHT / 2, PANEL_WIDTH, PANEL_HEIGHT, UI_RADIUS)
@@ -130,6 +143,10 @@ export class MyDialog extends Container {
     
     this.bg.alpha = 0;
     this.panel.pivot.y = -400;
+    
+    // Show buttons with slight delay for visual appeal
+    this.yesButton.show(true, 100);
+    this.noButton.show(true, 200);
 
     this.activeTween = new Tween(this.bg, dialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
@@ -147,6 +164,10 @@ export class MyDialog extends Container {
       this.activeTween.stop();
       this.activeTween = null;
     }
+
+    // Hide buttons first
+    this.yesButton.hide(true);
+    this.noButton.hide(true);
 
     this.activeTween = new Tween(this.bg, dialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
