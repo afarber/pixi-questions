@@ -21,5 +21,11 @@ export default {
   ___TWO_LETTERS___: "2 Buchstaben",
   ___YES___: "Ja",
   ___YOUR_TURN___: "IHR ZUG",
-  ___ZERO_GAMES___: "KEINE SPIELE"
+  ___ZERO_GAMES___: "KEINE SPIELE",
+  ___QUESTION_DEFAULT___: "Sind Sie sicher?",
+  ___QUESTION_SWAP___: "Möchten Sie wirklich wechseln?",
+  ___QUESTION_SKIP___: "Möchten Sie wirklich aussetzen?",
+  ___QUESTION_RESIGN___: "Möchten Sie wirklich aufgeben?",
+  ___QUESTION_SHARE___: "Möchten Sie wirklich teilen?",
+  ___QUESTION_PLAY___: "Möchten Sie wirklich spielen?"
 };
