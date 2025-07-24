@@ -8,14 +8,6 @@ import { MyVerticalPanel } from "./MyVerticalPanel";
 import { MyLayoutManager } from "./MyLayoutManager";
 import { MyConfirmDialog, dialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
 
-const QUESTION_MAP = {
-  "___SWAP___": "___QUESTION_SWAP___",
-  "___SKIP___": "___QUESTION_SKIP___",
-  "___RESIGN___": "___QUESTION_RESIGN___",
-  "___SHARE___": "___QUESTION_SHARE___",
-  "___PLAY___": "___QUESTION_PLAY___"
-};
-
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
   "bundles": [
@@ -135,47 +127,97 @@ const manifest = {
   const rareTwoButton = new MyButton({ text: "___RARE_LETTER_2___" });
   leftPanel.addChild(rareTwoButton);
 
-  const rightButtonKeys = [
-    "___FULL_SCREEN___",
-    "___SWAP___",
-    "___SKIP___",
-    "___RESIGN___",
-    "___PILE___",
-    "___MOVES_HISTORY___",
-    "___SETTINGS___",
-    "___SHARE___",
-    "___PLAY___",
-    "___SHUFFLE___"
+  const rightButtons = [
+    {
+      "label": "___FULL_SCREEN___",
+      "text": null,
+      "onpress": () => {
+        const fullDiv = document.getElementById("fullDiv");
+        toggleFullscreen(fullDiv);
+      }
+    },
+    {
+      "label": "___SWAP___",
+      "text": "___QUESTION_SWAP___",
+      "onpress": () => {
+        console.log("___SWAP___ confirmed and executed!");
+      }
+    },
+    {
+      "label": "___SKIP___",
+      "text": "___QUESTION_SKIP___",
+      "onpress": () => {
+        console.log("___SKIP___ confirmed and executed!");
+      }
+    },
+    {
+      "label": "___RESIGN___",
+      "text": "___QUESTION_RESIGN___",
+      "onpress": () => {
+        console.log("___RESIGN___ confirmed and executed!");
+      }
+    },
+    {
+      "label": "___PILE___",
+      "text": null,
+      "onpress": () => {
+        console.log("___PILE___ pressed!");
+      }
+    },
+    {
+      "label": "___MOVES_HISTORY___",
+      "text": null,
+      "onpress": () => {
+        console.log("___MOVES_HISTORY___ pressed!");
+      }
+    },
+    {
+      "label": "___SETTINGS___",
+      "text": null,
+      "onpress": () => {
+        console.log("___SETTINGS___ pressed!");
+      }
+    },
+    {
+      "label": "___SHARE___",
+      "text": "___QUESTION_SHARE___",
+      "onpress": () => {
+        console.log("___SHARE___ confirmed and executed!");
+      }
+    },
+    {
+      "label": "___PLAY___",
+      "text": "___QUESTION_PLAY___",
+      "onpress": () => {
+        console.log("___PLAY___ confirmed and executed!");
+      }
+    },
+    {
+      "label": "___SHUFFLE___",
+      "text": null,
+      "onpress": () => {
+        console.log("___SHUFFLE___ pressed!");
+      }
+    }
   ];
 
   for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
+    const buttonConfig = rightButtons[i];
     const button = new MyButton({
-      text: rightButtonKeys[i]
+      text: buttonConfig.label
     });
 
     button.onPress.connect(() => {
-      if (i === 0) {
-        const fullDiv = document.getElementById("fullDiv");
-        toggleFullscreen(fullDiv);
-      } else if (rightButtonKeys[i] === "___SWAP___" || 
-                 rightButtonKeys[i] === "___SKIP___" || 
-                 rightButtonKeys[i] === "___RESIGN___" || 
-                 rightButtonKeys[i] === "___SHARE___" || 
-                 rightButtonKeys[i] === "___PLAY___") {
-        
+      if (buttonConfig.text) {
         confirmDialog.show(
-          QUESTION_MAP[rightButtonKeys[i]] || rightButtonKeys[i],
+          buttonConfig.text,
+          buttonConfig.onpress,
           () => {
-            // YES callback - execute the original action
-            console.log(`${rightButtonKeys[i]} confirmed and executed!`);
-          },
-          () => {
-            // NO callback - cancel the action
-            console.log(`${rightButtonKeys[i]} cancelled!`);
+            console.log(`${buttonConfig.label} cancelled!`);
           }
         );
       } else {
-        console.log(`${rightButtonKeys[i]} pressed!`);
+        buttonConfig.onpress();
       }
     });
 
