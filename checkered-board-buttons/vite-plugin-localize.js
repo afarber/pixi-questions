@@ -47,10 +47,11 @@ export default function localize(isBuildingBundle) {
     transformIndexHtml(html, ctx) {
       if (!isBuildingBundle) {
         console.log("Transforming index.html in development mode");
-        return html.replace(
-          '<script type="module" src="main.js"></script>',
-          '<script src="https://wordsbyfarber.com/Consts-de.js"></script>\n    <script type="module" src="main.js"></script>'
-        );
+        // In development, keep main.js but add the external dictionary
+        return html
+          .replace('___LANG___', 'de')
+          .replace('___CONSTS_URL___', 'https://wordsbyfarber.com/Consts-de.js')
+          .replace('___MAIN_JS___', 'main.js');
       }
       return html;
     },
@@ -74,10 +75,13 @@ export default function localize(isBuildingBundle) {
         }
 
         // create index-XX.html file for each language
+        const indexHtmlPath = path.resolve(process.cwd(), "index.html");
+        const originalHtml = fs.readFileSync(indexHtmlPath, "utf-8");
+        
         for (const lang of Object.keys(localizedStrings)) {
           const indexLangPath = path.resolve(outputOptions.dir, `index-${lang}.html`);
           console.log("Creating localized HTML file", indexLangPath);
-          const htmlContent = createLocalizedHtml(lang);
+          const htmlContent = replacePlacesholders(originalHtml, lang);
           fs.writeFileSync(indexLangPath, htmlContent);
         }
       }
@@ -85,21 +89,3 @@ export default function localize(isBuildingBundle) {
   };
 }
 
-function createLocalizedHtml(lang) {
-  return `<!DOCTYPE html>
-<html lang="${lang}">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="https://pixijs.com/assets/bunny.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Alexander Farber" />
-    <title>checkered-board-buttons</title>
-    <link rel="stylesheet" href="main.css" />
-    <script src="https://wordsbyfarber.com/Consts-${lang}.js"></script>
-    <script type="module" src="main-${lang}.js"></script>
-  </head>
-  <body>
-    <div id="fullDiv"><canvas id="pixiCanvas"></canvas></div>
-  </body>
-</html>`;
-}

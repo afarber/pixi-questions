@@ -27,5 +27,8 @@ export default {
   ___QUESTION_SKIP___: "Voulez-vous vraiment passer?",
   ___QUESTION_RESIGN___: "Voulez-vous vraiment démissionner?",
   ___QUESTION_SHARE___: "Voulez-vous vraiment partager?",
-  ___QUESTION_PLAY___: "Voulez-vous vraiment jouer?"
+  ___QUESTION_PLAY___: "Voulez-vous vraiment jouer?",
+  ___LANG___: "fr",
+  ___CONSTS_URL___: "https://wordsbyfarber.com/Consts-fr.js",
+  ___MAIN_JS___: "main-fr.js"
 };
