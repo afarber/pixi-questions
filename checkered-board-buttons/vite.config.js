@@ -10,14 +10,6 @@ export default defineConfig({
   base: "./",
   build: {
     target: "es2015",
-    // keep quotes around object properties when minifying
-    minify: "terser",
-    terserOptions: {
-      format: {
-        quote_keys: true,
-        quote_style: 2
-      }
-    },
     rollupOptions: {
       input: {
         main: "./main.js"
