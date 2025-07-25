@@ -28,7 +28,5 @@ export default {
   ___QUESTION_RESIGN___: "Möchten Sie wirklich aufgeben?",
   ___QUESTION_SHARE___: "Möchten Sie wirklich teilen?",
   ___QUESTION_PLAY___: "Möchten Sie wirklich spielen?",
-  ___LANG___: "de",
-  ___CONSTS_URL___: "https://wordsbyfarber.com/Consts-de.js",
-  ___MAIN_JS___: "main-de.js"
+  ___LANG___: "de"
 };

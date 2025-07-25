@@ -28,7 +28,5 @@ export default {
   ___QUESTION_RESIGN___: "Do you really want to resign?",
   ___QUESTION_SHARE___: "Do you really want to share?",
   ___QUESTION_PLAY___: "Do you really want to play?",
-  ___LANG___: "en",
-  ___CONSTS_URL___: "https://wordsbyfarber.com/Consts-en.js",
-  ___MAIN_JS___: "main-en.js"
+  ___LANG___: "en"
 };

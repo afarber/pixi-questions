@@ -48,10 +48,7 @@ export default function localize(isBuildingBundle) {
       if (!isBuildingBundle) {
         console.log("Transforming index.html in development mode");
         // In development, keep main.js but add the external dictionary
-        return html
-          .replace('___LANG___', 'de')
-          .replace('___CONSTS_URL___', 'https://wordsbyfarber.com/Consts-de.js')
-          .replace('___MAIN_JS___', 'main.js');
+        return html.replaceAll("___LANG___", "de");
       }
       return html;
     },
@@ -77,7 +74,7 @@ export default function localize(isBuildingBundle) {
         // create index-XX.html file for each language
         const indexHtmlPath = path.resolve(process.cwd(), "index.html");
         const originalHtml = fs.readFileSync(indexHtmlPath, "utf-8");
-        
+
         for (const lang of Object.keys(localizedStrings)) {
           const indexLangPath = path.resolve(outputOptions.dir, `index-${lang}.html`);
           console.log("Creating localized HTML file", indexLangPath);
@@ -88,4 +85,3 @@ export default function localize(isBuildingBundle) {
     }
   };
 }
-
