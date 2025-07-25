@@ -58,6 +58,29 @@ Assets are loaded using PixiJS Assets API with a manifest system:
 - **Fullscreen Toggle**: Button 1 toggles fullscreen mode for the entire application
 - **Modal Dialogs**: Confirmation dialogs with dark overlay for destructive actions like resign, skip, etc.
 
+### Internationalization System
+
+The project uses a custom localization system with triple underscore placeholders:
+
+- **Placeholders**: Use `___LANG___`, `___PLACEHOLDER_NAME___` format in source files
+- **Locale Files**: `locales/en.js`, `locales/de.js`, `locales/fr.js` contain translation mappings
+- **External Dictionaries**: Loads `https://wordsbyfarber.com/Consts-{lang}.js` for additional constants, like `LETTERS` array and `HASHED` map
+
+#### Development Mode
+
+- Uses German (`de`) as default language
+- Transforms placeholders in `.js` files and `index.html` on-the-fly
+- References `main.js` directly (placeholders get replaced in memory)
+
+#### Build Mode
+
+- **vite-plugin-localize.js** generates separate files for each language:
+  - `main-en.js`, `main-de.js`, `main-fr.js` (localized JavaScript bundles)
+  - `index-en.html`, `index-de.html`, `index-fr.html` (localized HTML files)
+- Each HTML file references its corresponding `main-{lang}.js` and `Consts-{lang}.js`
+
+The plugin handles both development convenience (single file) and production deployment (multiple localized versions).
+
 ### Development Notes
 
 - Uses ES module format (`"type": "module"` in package.json)
