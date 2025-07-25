@@ -7,6 +7,7 @@ import { games } from "./TestData";
 import { MyVerticalPanel } from "./MyVerticalPanel";
 import { MyLayoutManager } from "./MyLayoutManager";
 import { MyConfirmDialog, dialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
+import { MySwapDialog } from "./dialogs/MySwapDialog.js";
 
 const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
@@ -138,9 +139,16 @@ const manifest = {
     },
     {
       "label": "___SWAP___",
-      "text": "___QUESTION_SWAP___",
+      "text": null,
       "onpress": () => {
-        console.log("___SWAP___ confirmed and executed!");
+        swapDialog.show(
+          (selectedLetters) => {
+            console.log("Selected letters:", selectedLetters);
+          },
+          () => {
+            console.log("Swap cancelled");
+          }
+        );
       }
     },
     {
@@ -221,7 +229,7 @@ const manifest = {
       }
     });
 
-    button.enabled = i % 4 !== 1;
+    button.enabled = i !== 7;
     rightPanel.addChild(button);
   }
 
@@ -229,12 +237,14 @@ const manifest = {
   midPanel.addChildrenToStage(app.stage);
   rightPanel.addChildrenToStage(app.stage);
 
-  // Create dialog instance
+  // Create dialog instances
   const confirmDialog = new MyConfirmDialog(app);
+  const swapDialog = new MySwapDialog(app);
   app.stage.addChild(confirmDialog);
+  app.stage.addChild(swapDialog);
 
   // Initialize layout manager with dialog and setup event listeners
-  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel, [confirmDialog]);
+  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel, [confirmDialog, swapDialog]);
   layoutManager.setupEventListeners();
 
   app.ticker.add((time) => {
