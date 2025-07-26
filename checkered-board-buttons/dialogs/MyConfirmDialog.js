@@ -3,7 +3,7 @@ import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
 import { MyButton } from "../MyButton.js";
 
-export const dialogTweenGroup = new Group();
+export const confirmDialogTweenGroup = new Group();
 
 const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
@@ -134,12 +134,12 @@ export class MyConfirmDialog extends Container {
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, confirmDialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
 
-    new Tween(this.panelContainer.pivot, dialogTweenGroup)
+    new Tween(this.panelContainer.pivot, confirmDialogTweenGroup)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
@@ -156,7 +156,7 @@ export class MyConfirmDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, confirmDialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
@@ -164,7 +164,7 @@ export class MyConfirmDialog extends Container {
       })
       .start();
 
-    new Tween(this.panelContainer.pivot, dialogTweenGroup)
+    new Tween(this.panelContainer.pivot, confirmDialogTweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();

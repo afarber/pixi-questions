@@ -2,8 +2,9 @@ import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
 import { MyButton } from "../MyButton.js";
+import { CheckBox } from "@pixi/ui";
 
-export const dialogTweenGroup = new Group();
+export const swapDialogTweenGroup = new Group();
 
 const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
@@ -136,12 +137,12 @@ export class MySwapDialog extends Container {
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, swapDialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
 
-    new Tween(this.panelContainer.pivot, dialogTweenGroup)
+    new Tween(this.panelContainer.pivot, swapDialogTweenGroup)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
@@ -158,7 +159,7 @@ export class MySwapDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, swapDialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
@@ -166,7 +167,7 @@ export class MySwapDialog extends Container {
       })
       .start();
 
-    new Tween(this.panelContainer.pivot, dialogTweenGroup)
+    new Tween(this.panelContainer.pivot, swapDialogTweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();

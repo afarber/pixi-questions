@@ -6,8 +6,8 @@ import { MyList } from "./MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./layout/MyVerticalPanel";
 import { MyLayoutManager } from "./layout/MyLayoutManager";
-import { MyConfirmDialog, dialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
-import { MySwapDialog } from "./dialogs/MySwapDialog.js";
+import { MyConfirmDialog, confirmDialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
+import { MySwapDialog, swapDialogTweenGroup } from "./dialogs/MySwapDialog.js";
 
 const manifest = {
   "bundles": [
@@ -202,9 +202,15 @@ const manifest = {
 
     button.onPress.connect(() => {
       if (buttonConfig.text) {
-        confirmDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
-          console.log(`${buttonConfig.label} cancelled!`);
-        });
+        if (buttonConfig.label === "___SWAP___") {
+          swapDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
+            console.log(`${buttonConfig.label} cancelled!`);
+          });
+        } else {
+          confirmDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
+            console.log(`${buttonConfig.label} cancelled!`);
+          });
+        }
       } else {
         buttonConfig.onpress();
       }
@@ -230,7 +236,8 @@ const manifest = {
 
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
-    dialogTweenGroup.update();
+    confirmDialogTweenGroup.update();
+    swapDialogTweenGroup.update();
 
     bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
