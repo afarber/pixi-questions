@@ -9,7 +9,6 @@ import { MyLayoutManager } from "./layout/MyLayoutManager";
 import { MyConfirmDialog, dialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
 import { MySwapDialog } from "./dialogs/MySwapDialog.js";
 
-const RIGHT_BUTTONS_NUM = 10;
 const manifest = {
   "bundles": [
     {
@@ -201,7 +200,7 @@ const manifest = {
     }
   ];
 
-  for (let i = 0; i < RIGHT_BUTTONS_NUM; i++) {
+  for (let i = 0; i < rightButtons.length; i++) {
     const buttonConfig = rightButtons[i];
     const button = new MyButton({
       text: buttonConfig.label
