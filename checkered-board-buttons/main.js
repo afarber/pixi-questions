@@ -131,15 +131,9 @@ const manifest = {
     {
       "label": "___SWAP___",
       "text": null,
+      "text": "___QUESTION_SWAP___",
       "onpress": () => {
-        swapDialog.show(
-          (selectedLetters) => {
-            console.log("Selected letters:", selectedLetters);
-          },
-          () => {
-            console.log("Swap cancelled");
-          }
-        );
+        console.log("___SWAP___ confirmed and executed!");
       }
     },
     {

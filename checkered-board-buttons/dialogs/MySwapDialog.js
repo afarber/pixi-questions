@@ -8,13 +8,10 @@ export const dialogTweenGroup = new Group();
 const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
 const BACKGROUND_COLOR = 0x000000;
-const PANEL_WIDTH = UI_WIDTH * 2.5;
-const PANEL_HEIGHT = UI_HEIGHT * 4;
+const PANEL_WIDTH = UI_WIDTH * 2;
+const PANEL_HEIGHT = UI_HEIGHT * 3;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
-const CHECKBOX_SIZE = 20;
-const CHECKBOX_SPACING = 10;
-const LETTER_SPACING = 40;
 
 export class MySwapDialog extends Container {
   constructor(app) {
@@ -26,18 +23,12 @@ export class MySwapDialog extends Container {
     this.darkOverlay = null;
     this.panelContainer = null;
     this.panelBackground = null;
-    this.titleText = null;
-    this.instructionText = null;
-    this.checkboxContainer = null;
+    this.questionText = null;
     this.buttonsContainer = null;
-    this.swapButton = null;
-    this.cancelButton = null;
+    this.yesButton = null;
+    this.noButton = null;
     this.activeTween = null;
     this.keydownHandler = null;
-
-    this.randomLetters = [];
-    this.checkboxes = [];
-    this.selectedLetters = new Set();
 
     this.visible = false;
     this.#setupBackground();
@@ -73,159 +64,62 @@ export class MySwapDialog extends Container {
       .roundRect(-PANEL_WIDTH / 2, -PANEL_HEIGHT / 2, PANEL_WIDTH, PANEL_HEIGHT, UI_RADIUS)
       .fill({ color: UI_BACKGROUND });
 
-    this.titleText = new Text({
-      text: "___SWAP___",
+    this.questionText = new Text({
+      text: "",
       style: {
         ...TITLE_TEXT_STYLE,
-        fontSize: 24,
-        align: "center"
-      }
-    });
-    this.titleText.anchor.set(0.5, 0.5);
-    this.titleText.y = -PANEL_HEIGHT / 2 + 40;
-
-    this.instructionText = new Text({
-      text: "___QUESTION_SWAP___",
-      style: {
-        ...TITLE_TEXT_STYLE,
-        fontSize: 16,
+        fontSize: 18,
         align: "center",
         wordWrap: true,
         wordWrapWidth: PANEL_WIDTH - PANEL_PADDING * 2
       }
     });
-    this.instructionText.anchor.set(0.5, 0.5);
-    this.instructionText.y = -PANEL_HEIGHT / 2 + 90;
+    this.questionText.anchor.set(0.5, 0.5);
+    this.questionText.y = -PANEL_HEIGHT / 4;
 
-    this.checkboxContainer = new Container();
-    this.checkboxContainer.y = -50;
+    // TODO display 7 random letters from the global LETTERS list (do not have to be unique) and pixi UI checkboxes
 
     this.buttonsContainer = new Container();
-    this.buttonsContainer.y = PANEL_HEIGHT / 2 - 60;
+    this.buttonsContainer.y = PANEL_HEIGHT / 4;
 
-    this.swapButton = new MyButton({ text: "___SWAP___" });
-    this.cancelButton = new MyButton({ text: "___CANCEL___" });
+    this.yesButton = new MyButton({ text: "___SWAP___" });
+    this.noButton = new MyButton({ text: "___CANCEL___" });
 
-    this.swapButton.x = -UI_WIDTH / 2 - BUTTON_SPACING / 2;
-    this.cancelButton.x = UI_WIDTH / 2 + BUTTON_SPACING / 2;
+    this.yesButton.x = -UI_WIDTH / 2 - BUTTON_SPACING / 2;
+    this.noButton.x = UI_WIDTH / 2 + BUTTON_SPACING / 2;
 
-    this.buttonsContainer.addChild(this.swapButton);
-    this.buttonsContainer.addChild(this.cancelButton);
+    this.buttonsContainer.addChild(this.yesButton);
+    this.buttonsContainer.addChild(this.noButton);
 
     this.panelContainer.addChild(this.panelBackground);
-    this.panelContainer.addChild(this.titleText);
-    this.panelContainer.addChild(this.instructionText);
-    this.panelContainer.addChild(this.checkboxContainer);
+    this.panelContainer.addChild(this.questionText);
     this.panelContainer.addChild(this.buttonsContainer);
     this.addChild(this.panelContainer);
   }
 
-  #generateRandomLetters() {
-    // Check if LETTERS global array is available
-    if (typeof LETTERS === 'undefined' || !Array.isArray(LETTERS)) {
-      console.warn('LETTERS array not available, using fallback letters');
-      this.randomLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-      return;
-    }
-
-    this.randomLetters = [];
-    for (let i = 0; i < 7; i++) {
-      const randomIndex = Math.floor(Math.random() * LETTERS.length);
-      this.randomLetters.push(LETTERS[randomIndex]);
-    }
+  #updateQuestion(text) {
+    this.questionText.text = text;
   }
 
-  #createCheckboxes() {
-    // Clear existing checkboxes
-    this.checkboxContainer.removeChildren();
-    this.checkboxes = [];
-    this.selectedLetters.clear();
+  #setupCallbacks(onYes, onNo) {
+    this.yesButton.onPress.disconnectAll();
+    this.noButton.onPress.disconnectAll();
 
-    const startY = -80;
-    
-    this.randomLetters.forEach((letter, index) => {
-      const checkboxItem = new Container();
-      checkboxItem.y = startY + index * LETTER_SPACING;
-
-      // Checkbox background
-      const checkboxBg = new Graphics()
-        .roundRect(-CHECKBOX_SIZE / 2, -CHECKBOX_SIZE / 2, CHECKBOX_SIZE, CHECKBOX_SIZE, 3)
-        .stroke({ color: 0x666666, width: 2 })
-        .fill({ color: 0xffffff });
-
-      // Checkmark (initially hidden)
-      const checkmark = new Graphics()
-        .moveTo(-6, -2)
-        .lineTo(-2, 2)
-        .lineTo(6, -6)
-        .stroke({ color: 0x0066cc, width: 3 });
-      checkmark.visible = false;
-
-      // Letter text
-      const letterText = new Text({
-        text: letter,
-        style: {
-          ...TITLE_TEXT_STYLE,
-          fontSize: 20,
-          align: "left"
-        }
-      });
-      letterText.anchor.set(0, 0.5);
-      letterText.x = CHECKBOX_SIZE / 2 + CHECKBOX_SPACING;
-
-      // Make checkbox interactive
-      checkboxItem.eventMode = "static";
-      checkboxItem.cursor = "pointer";
-
-      checkboxItem.on("pointerdown", () => {
-        const isSelected = this.selectedLetters.has(index);
-        if (isSelected) {
-          this.selectedLetters.delete(index);
-          checkmark.visible = false;
-        } else {
-          this.selectedLetters.add(index);
-          checkmark.visible = true;
-        }
-      });
-
-      checkboxItem.addChild(checkboxBg);
-      checkboxItem.addChild(checkmark);
-      checkboxItem.addChild(letterText);
-
-      this.checkboxContainer.addChild(checkboxItem);
-      this.checkboxes.push({ checkboxItem, checkmark, letter, index });
-    });
-  }
-
-  #setupCallbacks(onSwap, onCancel) {
-    this.swapButton.onPress.disconnectAll();
-    this.cancelButton.onPress.disconnectAll();
-
-    this.swapButton.onPress.connect(() => {
-      if (onSwap) {
-        // Get selected letters in order and concatenate them
-        const selectedLetterArray = Array.from(this.selectedLetters)
-          .sort((a, b) => a - b)
-          .map(index => this.randomLetters[index]);
-        const selectedString = selectedLetterArray.join('');
-        console.log('Selected letters:', selectedString);
-        onSwap(selectedString);
-      }
+    this.yesButton.onPress.connect(() => {
+      if (onYes) onYes();
       this.hide();
     });
 
-    this.cancelButton.onPress.connect(() => {
-      if (onCancel) onCancel();
+    this.noButton.onPress.connect(() => {
+      if (onNo) onNo();
       this.hide();
     });
   }
 
-  show(onSwap = null, onCancel = null) {
-    this.#generateRandomLetters();
-    this.#createCheckboxes();
-    this.#setupCallbacks(onSwap, onCancel);
+  show(text, onYes = null, onNo = null) {
+    this.#updateQuestion(text);
+    this.#setupCallbacks(onYes, onNo);
     this.#setupKeyHandler();
-    
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
@@ -239,8 +133,8 @@ export class MySwapDialog extends Container {
     this.panelContainer.pivot.y = -400;
 
     // Show buttons with slight delay for visual appeal
-    this.swapButton.show(true, 100);
-    this.cancelButton.show(true, 200);
+    this.yesButton.show(true, 100);
+    this.noButton.show(true, 200);
 
     this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
@@ -261,8 +155,8 @@ export class MySwapDialog extends Container {
     }
 
     // Hide buttons first
-    this.swapButton.hide(true);
-    this.cancelButton.hide(true);
+    this.yesButton.hide(true);
+    this.noButton.hide(true);
 
     this.activeTween = new Tween(this.darkOverlay, dialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
@@ -294,7 +188,7 @@ export class MySwapDialog extends Container {
   #setupKeyHandler() {
     this.keydownHandler = (event) => {
       if (event.key === "Escape") {
-        // Close dialog (acts like clicking Cancel button)
+        // Close dialog (acts like clicking NO button)
         this.hide();
       }
     };
@@ -306,6 +200,21 @@ export class MySwapDialog extends Container {
     if (this.keydownHandler) {
       document.removeEventListener("keydown", this.keydownHandler, true);
       this.keydownHandler = null;
+    }
+  }
+
+  #generateRandomLetters() {
+    // Check if LETTERS global array is available
+    if (typeof LETTERS === "undefined" || !Array.isArray(LETTERS)) {
+      console.warn("LETTERS array not available, using fallback letters");
+      this.randomLetters = ["A", "B", "C", "D", "E", "F", "G"];
+      return;
+    }
+
+    this.randomLetters = [];
+    for (let i = 0; i < 7; i++) {
+      const randomIndex = Math.floor(Math.random() * LETTERS.length);
+      this.randomLetters.push(LETTERS[randomIndex]);
     }
   }
 }
