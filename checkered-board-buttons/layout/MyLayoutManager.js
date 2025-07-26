@@ -1,4 +1,4 @@
-import { UI_PADDING, UI_WIDTH } from "./Theme.js";
+import { UI_PADDING, UI_WIDTH } from "../Theme.js";
 
 /**
  * Manages the three-column layout system for the application.

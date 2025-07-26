@@ -2,7 +2,7 @@
 // Tests our layout manager for vertical arrangement of UI elements
 
 import { describe, test, expect, vi } from "vitest";
-import { MyVerticalPanel } from "../MyVerticalPanel.js";
+import { MyVerticalPanel } from "../layout/MyVerticalPanel.js";
 import { Board } from "../Board.js";
 import { MyList } from "../MyList.js";
 

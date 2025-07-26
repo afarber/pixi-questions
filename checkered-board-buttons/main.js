@@ -1,11 +1,11 @@
-import { Application, Assets, Graphics, Sprite, Text } from "pixi.js";
+import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./MyButton";
 import { MyList } from "./MyList";
 import { games } from "./TestData";
-import { MyVerticalPanel } from "./MyVerticalPanel";
-import { MyLayoutManager } from "./MyLayoutManager";
+import { MyVerticalPanel } from "./layout/MyVerticalPanel";
+import { MyLayoutManager } from "./layout/MyLayoutManager";
 import { MyConfirmDialog, dialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
 import { MySwapDialog } from "./dialogs/MySwapDialog.js";
 
@@ -209,13 +209,9 @@ const manifest = {
 
     button.onPress.connect(() => {
       if (buttonConfig.text) {
-        confirmDialog.show(
-          buttonConfig.text,
-          buttonConfig.onpress,
-          () => {
-            console.log(`${buttonConfig.label} cancelled!`);
-          }
-        );
+        confirmDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
+          console.log(`${buttonConfig.label} cancelled!`);
+        });
       } else {
         buttonConfig.onpress();
       }
@@ -248,7 +244,6 @@ const manifest = {
     label.skew.y += 0.01 * time.deltaTime;
   });
 })();
-
 
 async function createBunny(textureAlias) {
   const bunny = Sprite.from(textureAlias);
