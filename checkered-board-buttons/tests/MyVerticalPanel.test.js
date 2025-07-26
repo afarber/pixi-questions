@@ -8,31 +8,30 @@ import { MyList } from '../MyList.js';
 
 describe('MyVerticalPanel', () => {
   
-  // Helper function to create a mock debug rect
-  function createMockDebugRect() {
+  // Helper function to create a mock stage
+  function createMockStage() {
     return {
-      clear: vi.fn().mockReturnThis(),
-      rect: vi.fn().mockReturnThis(),
-      stroke: vi.fn().mockReturnThis()
+      addChild: vi.fn()
     };
   }
   
   // Test basic panel creation
   test('creates panel successfully', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     
     // Panel should be created with empty children array
     expect(panel).toBeDefined();
     expect(Array.isArray(panel.children)).toBe(true);
     expect(panel.children).toHaveLength(0);
-    expect(panel.debugRect).toBe(mockDebugRect);
+    expect(panel.debugRect).toBeDefined();
+    expect(mockStage.addChild).toHaveBeenCalledWith(panel.debugRect);
   });
   
   // Test adding children
   test('adds children correctly', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const mockChild = { resize: vi.fn() };
     
     // Add child should return the panel for chaining
@@ -46,8 +45,8 @@ describe('MyVerticalPanel', () => {
   
   // Test adding multiple children
   test('adds multiple children correctly', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const child1 = { resize: vi.fn() };
     const child2 = { resize: vi.fn() };
     const child3 = { resize: vi.fn() };
@@ -64,27 +63,27 @@ describe('MyVerticalPanel', () => {
   
   // Test addChildrenToStage method
   test('adds children to stage correctly', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
-    const mockStage = { addChild: vi.fn() };
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
+    const anotherMockStage = { addChild: vi.fn() };
     const child1 = { resize: vi.fn() };
     const child2 = { resize: vi.fn() };
     
     panel.addChild(child1).addChild(child2);
     
     // Add children to stage
-    panel.addChildrenToStage(mockStage);
+    panel.addChildrenToStage(anotherMockStage);
     
     // Stage addChild should be called for each child
-    expect(mockStage.addChild).toHaveBeenCalledTimes(2);
-    expect(mockStage.addChild).toHaveBeenCalledWith(child1);
-    expect(mockStage.addChild).toHaveBeenCalledWith(child2);
+    expect(anotherMockStage.addChild).toHaveBeenCalledTimes(2);
+    expect(anotherMockStage.addChild).toHaveBeenCalledWith(child1);
+    expect(anotherMockStage.addChild).toHaveBeenCalledWith(child2);
   });
   
   // Test hasSpecialChild method with no special children
   test('hasSpecialChild returns false with regular children', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const regularChild = { resize: vi.fn() };
     
     panel.addChild(regularChild);
@@ -95,8 +94,8 @@ describe('MyVerticalPanel', () => {
   
   // Test hasSpecialChild method with MyList
   test('hasSpecialChild returns true with MyList', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const myList = new MyList();
     
     panel.addChild(myList);
@@ -107,8 +106,8 @@ describe('MyVerticalPanel', () => {
   
   // Test hasSpecialChild method with Board
   test('hasSpecialChild returns true with Board', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const board = new Board();
     
     panel.addChild(board);
@@ -119,8 +118,8 @@ describe('MyVerticalPanel', () => {
   
   // Test resize with invalid parameters
   test('handles invalid resize parameters', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     
     // Should handle zero or negative dimensions gracefully
     expect(() => panel.resize(0, 0, 0, 0)).not.toThrow();
@@ -130,8 +129,8 @@ describe('MyVerticalPanel', () => {
   
   // Test resize with empty children
   test('handles resize with empty children', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     
     // Should handle empty children array gracefully
     expect(() => panel.resize(0, 0, 200, 400)).not.toThrow();
@@ -139,8 +138,8 @@ describe('MyVerticalPanel', () => {
   
   // Test resize with valid parameters
   test('calls resize on children with valid parameters', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const child1 = { resize: vi.fn() };
     const child2 = { resize: vi.fn() };
     
@@ -161,8 +160,8 @@ describe('MyVerticalPanel', () => {
   
   // Test MyList special handling in resize
   test('handles MyList specially in resize', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const myList = new MyList();
     
     // Mock the resize method
@@ -181,8 +180,8 @@ describe('MyVerticalPanel', () => {
   
   // Test Board special handling in resize
   test('handles Board specially in resize', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     const board = new Board();
     
     // Mock the resize method
@@ -201,8 +200,8 @@ describe('MyVerticalPanel', () => {
   
   // Test Text object handling in resize
   test('handles Text objects in resize', async () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     
     // Import Text from our mocked pixi.js
     const { Text } = await import('pixi.js');
@@ -219,8 +218,8 @@ describe('MyVerticalPanel', () => {
   
   // Test button animation handling
   test('handles button show/hide animations', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     
     // Create mock button with show/hide methods
     const mockButton = {
@@ -239,8 +238,8 @@ describe('MyVerticalPanel', () => {
   
   // Test child without resize method
   test('handles children without resize method', () => {
-    const mockDebugRect = createMockDebugRect();
-    const panel = new MyVerticalPanel(mockDebugRect);
+    const mockStage = createMockStage();
+    const panel = new MyVerticalPanel(mockStage);
     
     // Child without resize method
     const childWithoutResize = {};

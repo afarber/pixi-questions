@@ -1,16 +1,18 @@
-import { Text } from "pixi.js";
+import { Graphics, Text } from "pixi.js";
 import { Board } from "./Board";
 import { MyList } from "./MyList";
 import { UI_HEIGHT, UI_RADIUS, UI_PADDING } from "./Theme";
+import { TILE_SIZE } from "./Tile";
 
 // A class for placing and resizing Pixi Containers.
 // They are placed vertically by calling resize() method.
 // Instances of MyList or Board are given the max height.
 
 export class MyVerticalPanel {
-  constructor(debugRect) {
+  constructor(stage) {
     this.children = [];
-    this.debugRect = debugRect;
+    this.debugRect = new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE).stroke({ color: "Red" });
+    stage.addChild(this.debugRect);
   }
 
   // add a child element

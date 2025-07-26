@@ -65,17 +65,9 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const leftDebugRect = createDebugRect();
-  const midDebugRect = createDebugRect();
-  const rightDebugRect = createDebugRect();
-
-  app.stage.addChild(leftDebugRect);
-  app.stage.addChild(midDebugRect);
-  app.stage.addChild(rightDebugRect);
-
-  const leftPanel = new MyVerticalPanel(leftDebugRect);
-  const midPanel = new MyVerticalPanel(midDebugRect);
-  const rightPanel = new MyVerticalPanel(rightDebugRect);
+  const leftPanel = new MyVerticalPanel(app.stage);
+  const midPanel = new MyVerticalPanel(app.stage);
+  const rightPanel = new MyVerticalPanel(app.stage);
 
   await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
@@ -257,9 +249,6 @@ const manifest = {
   });
 })();
 
-function createDebugRect() {
-  return new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE).stroke({ color: "Red" });
-}
 
 async function createBunny(textureAlias) {
   const bunny = Sprite.from(textureAlias);
