@@ -10,7 +10,7 @@ const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
 const BACKGROUND_COLOR = 0x000000;
 const PANEL_WIDTH = UI_WIDTH * 2;
-const PANEL_HEIGHT = UI_HEIGHT * 3;
+const PANEL_HEIGHT = UI_HEIGHT * 5;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
 
@@ -76,12 +76,37 @@ export class MySwapDialog extends Container {
       }
     });
     this.questionText.anchor.set(0.5, 0.5);
-    this.questionText.y = -PANEL_HEIGHT / 4;
+    this.questionText.y = -PANEL_HEIGHT / 2 + PANEL_PADDING + 20;
 
-    // TODO display 7 random letters from the global LETTERS list (do not have to be unique) and pixi UI checkboxes
+    this.checkboxesContainer = new Container();
+    this.checkboxes = [];
+
+    for (let i = 0; i < 7; i++) {
+      const unchecked = new Graphics().roundRect(0, 0, 24, 24, 4).fill("White");
+      const checked = new Graphics().roundRect(0, 0, 24, 24, 4).fill("LightGreen");
+
+      const checkbox = new CheckBox({
+        text: "",
+        style: {
+          unchecked: unchecked,
+          checked: checked,
+          text: {
+            ...TITLE_TEXT_STYLE,
+            fontSize: 18,
+            align: "left"
+          }
+        }
+      });
+      checkbox.y = i * 50;
+      this.checkboxesContainer.addChild(checkbox);
+      this.checkboxes.push(checkbox);
+    }
+
+    this.checkboxesContainer.x = -PANEL_WIDTH / 2 + PANEL_PADDING;
+    this.checkboxesContainer.y = this.questionText.y + this.questionText.height + PANEL_PADDING;
 
     this.buttonsContainer = new Container();
-    this.buttonsContainer.y = PANEL_HEIGHT / 4;
+    this.buttonsContainer.y = PANEL_HEIGHT / 2 - PANEL_PADDING - 20;
 
     this.yesButton = new MyButton({ text: "___SWAP___" });
     this.noButton = new MyButton({ text: "___CANCEL___" });
@@ -94,6 +119,7 @@ export class MySwapDialog extends Container {
 
     this.panelContainer.addChild(this.panelBackground);
     this.panelContainer.addChild(this.questionText);
+    this.panelContainer.addChild(this.checkboxesContainer);
     this.panelContainer.addChild(this.buttonsContainer);
     this.addChild(this.panelContainer);
   }
@@ -118,6 +144,12 @@ export class MySwapDialog extends Container {
   }
 
   show(text, onYes = null, onNo = null) {
+    this.#generateRandomLetters();
+    for (let i = 0; i < 7; i++) {
+      this.checkboxes[i].text = this.randomLetters[i];
+      this.checkboxes[i].checked = false;
+    }
+
     this.#updateQuestion(text);
     this.#setupCallbacks(onYes, onNo);
     this.#setupKeyHandler();
