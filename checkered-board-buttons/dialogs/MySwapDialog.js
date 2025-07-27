@@ -30,6 +30,7 @@ export class MySwapDialog extends Container {
     this.noButton = null;
     this.activeTween = null;
     this.keydownHandler = null;
+    this.randomLetters = [];
 
     this.visible = false;
     this.#setupBackground();
@@ -83,10 +84,17 @@ export class MySwapDialog extends Container {
 
     for (let i = 0; i < 7; i++) {
       const unchecked = new Graphics().roundRect(0, 0, 24, 24, 4).fill("White");
-      const checked = new Graphics().roundRect(0, 0, 24, 24, 4).fill("LightGreen");
+      const checked = new Graphics()
+        .roundRect(0, 0, 24, 24, 4)
+        .fill("LightGreen")
+        .moveTo(6, 12)
+        .lineTo(10, 16)
+        .lineTo(18, 8)
+        .stroke({ width: 4, color: "DarkGreen" });
 
       const checkbox = new CheckBox({
-        text: "",
+        // Workaround a bug in Pixi UI Checkbox and set placeholder text
+        text: "XX",
         style: {
           unchecked: unchecked,
           checked: checked,
@@ -144,7 +152,7 @@ export class MySwapDialog extends Container {
 
   show(text, onYes = null, onNo = null) {
     this.#generateRandomLetters();
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < this.randomLetters.length; i++) {
       this.checkboxes[i].text = this.randomLetters[i];
       this.checkboxes[i].checked = false;
     }
@@ -236,14 +244,7 @@ export class MySwapDialog extends Container {
   }
 
   #generateRandomLetters() {
-    // Check if LETTERS global array has already been loaded from Consts-XX.js
-    if (typeof LETTERS === "undefined" || !Array.isArray(LETTERS)) {
-      console.warn("LETTERS array not available, using fallback letters");
-      this.randomLetters = ["A", "B", "C", "D", "E", "F", "G"];
-      return;
-    }
-
-    this.randomLetters = [];
+    this.randomLetters.length = 0;
     for (let i = 0; i < 7; i++) {
       const randomIndex = Math.floor(Math.random() * LETTERS.length);
       this.randomLetters.push(LETTERS[randomIndex]);
