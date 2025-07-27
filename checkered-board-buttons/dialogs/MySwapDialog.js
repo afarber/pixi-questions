@@ -92,8 +92,7 @@ export class MySwapDialog extends Container {
           checked: checked,
           text: {
             ...TITLE_TEXT_STYLE,
-            fontSize: 18,
-            align: "left"
+            fontSize: 18
           }
         }
       });
