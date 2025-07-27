@@ -52,7 +52,7 @@ export default function localize(isBuildingBundle) {
       return src;
     },
     // Transform index.html during development and build
-    transformIndexHtml(html, ctx) {
+    transformIndexHtml(html) {
       if (!isBuildingBundle) {
         console.log("Transforming index.html in development mode");
         // In development mode, replace placeholders with German strings

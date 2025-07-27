@@ -10,7 +10,7 @@ const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
 const BACKGROUND_COLOR = 0x000000;
 const PANEL_WIDTH = UI_WIDTH * 2;
-const PANEL_HEIGHT = UI_HEIGHT * 5;
+const PANEL_HEIGHT = UI_HEIGHT * 8;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
 
@@ -237,7 +237,7 @@ export class MySwapDialog extends Container {
   }
 
   #generateRandomLetters() {
-    // Check if LETTERS global array is available
+    // Check if LETTERS global array has already been loaded from Consts-XX.js
     if (typeof LETTERS === "undefined" || !Array.isArray(LETTERS)) {
       console.warn("LETTERS array not available, using fallback letters");
       this.randomLetters = ["A", "B", "C", "D", "E", "F", "G"];
