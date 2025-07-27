@@ -14,19 +14,22 @@ An interactive PixiJS-based game featuring a checkered board with draggable tile
 
 # Key Classes
 
+- **`main.js`**: The main entry point of the application. It initializes the PixiJS application, loads assets, and sets up the layout.
 - **`Board.js`**: Creates the 8x8 checkered game board.
-- **`MyLayoutManager.js`**: Manages the three-column layout and handles responsive resizing.
+- **`Tile.js`**: Represents the draggable tiles on the board.
 - **`MyButton.js`**: A custom, animatable button component.
 - **`MyList.js`**: A scrollable list component used to display game data.
+- **`MyLayoutManager.js`**: Manages the three-column layout and handles responsive resizing.
 - **`MyVerticalPanel.js`**: A layout container that arranges its children vertically.
+- **`MyConfirmDialog.js`**: A modal dialog for user confirmations.
+- **`MySwapDialog.js`**: A modal dialog for swapping tiles, featuring checkboxes.
 - **`TestData.js`**: Provides mock data for the game list.
 - **`Theme.js`**: Defines the visual theme and UI constants.
-- **`Tile.js`**: Represents the draggable tiles on the board.
 
 # Tests
 
-- **`Board.test.js`**: Tests the board creation, including the checkered pattern and resizing logic.
-- **`MyButton.test.js`**: Tests the button creation, animations, and state management.
-- **`MyList.test.js`**: Tests the game list creation, scrolling, and game categorization.
-- **`MyVerticalPanel.test.js`**: Tests the vertical layout panel and its resizing logic.
-- **`Tile.test.js`**: Tests tile creation, positioning, and drag-and-drop setup.
+- **`tests/Board.test.js`**: Tests the board creation, including the checkered pattern and resizing logic.
+- **`tests/MyButton.test.js`**: Tests the button creation, animations, and state management.
+- **`tests/MyList.test.js`**: Tests the game list creation, scrolling, and game categorization.
+- **`tests/MyVerticalPanel.test.js`**: Tests the vertical layout panel and its resizing logic.
+- **`tests/Tile.test.js`**: Tests tile creation, positioning, and drag-and-drop setup.
