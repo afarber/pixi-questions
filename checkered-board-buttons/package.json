@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@pixi/sound": "^6.0.1",
-    "@pixi/ui": "^2.2.4",
+    "@pixi/ui": "^2.2.6",
     "@tweenjs/tween.js": "^25.0.0",
     "pixi.js": "^8.11.0"
   },

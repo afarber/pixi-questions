@@ -93,8 +93,6 @@ export class MySwapDialog extends Container {
         .stroke({ width: 4, color: "DarkGreen" });
 
       const checkbox = new CheckBox({
-        // Workaround a bug in Pixi UI Checkbox and set placeholder text
-        text: "XX",
         style: {
           unchecked: unchecked,
           checked: checked,
