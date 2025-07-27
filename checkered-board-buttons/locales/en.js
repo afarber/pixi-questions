@@ -23,7 +23,7 @@ export default {
   ___YOUR_TURN___: "YOUR TURN",
   ___ZERO_GAMES___: "NO GAMES",
   ___QUESTION_DEFAULT___: "Are you sure?",
-  ___QUESTION_SWAP___: "Do you really want to swap?",
+  ___QUESTION_SWAP___: "Select letters for exchange!",
   ___QUESTION_SKIP___: "Do you really want to skip?",
   ___QUESTION_RESIGN___: "Do you really want to resign?",
   ___QUESTION_SHARE___: "Do you really want to share?",
