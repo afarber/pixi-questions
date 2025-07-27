@@ -1,7 +1,7 @@
 import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
-import { MyButton } from "../MyButton.js";
+import { MyButton } from "../ui/MyButton.js";
 import { CheckBox } from "@pixi/ui";
 
 export const swapDialogTweenGroup = new Group();

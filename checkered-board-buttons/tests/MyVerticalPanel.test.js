@@ -4,7 +4,7 @@
 import { describe, test, expect, vi } from "vitest";
 import { MyVerticalPanel } from "../layout/MyVerticalPanel.js";
 import { Board } from "../Board.js";
-import { MyList } from "../MyList.js";
+import { MyList } from "../ui/MyList.js";
 
 describe("MyVerticalPanel", () => {
   // Helper function to create a mock stage

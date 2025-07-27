@@ -1,7 +1,7 @@
 import { Container, Text } from "pixi.js";
 import { ScrollBox } from "@pixi/ui";
 import { MyButton } from "./MyButton";
-import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING, UI_BACKGROUND, TITLE_TEXT_STYLE } from "./Theme";
+import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme";
 
 // A list with 3 sections
 export class MyList extends Container {

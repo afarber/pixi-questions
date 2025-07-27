@@ -1,8 +1,8 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
-import { MyButton, buttonsTweenGroup } from "./MyButton";
-import { MyList } from "./MyList";
+import { MyButton, buttonsTweenGroup } from "./ui/MyButton";
+import { MyList } from "./ui/MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./layout/MyVerticalPanel";
 import { MyLayoutManager } from "./layout/MyLayoutManager";

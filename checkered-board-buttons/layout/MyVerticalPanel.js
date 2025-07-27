@@ -1,6 +1,6 @@
 import { Graphics, Text } from "pixi.js";
 import { Board } from "../Board";
-import { MyList } from "../MyList";
+import { MyList } from "../ui/MyList.js";
 import { UI_HEIGHT, UI_RADIUS, UI_PADDING } from "../Theme";
 import { TILE_SIZE } from "../Tile";
 

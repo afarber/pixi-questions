@@ -10,7 +10,7 @@ import {
   UI_BACKGROUND_HOVER,
   UI_BACKGROUND_PRESSED,
   UI_BACKGROUND_DISABLED
-} from "./Theme";
+} from "../Theme";
 
 // Create a shared tween group for all buttons
 export const buttonsTweenGroup = new Group();
