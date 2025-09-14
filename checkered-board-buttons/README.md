@@ -14,17 +14,24 @@ An interactive PixiJS-based game featuring a checkered board with draggable tile
 ## Installation
 
 ```bash
-# Clone or create the project directory
-mkdir checkered-board-buttons
-cd checkered-board-buttons
-
-# Initialize and install dependencies
-npm init -y
-npm install pixi.js @pixi/ui @pixi/sound @tweenjs/tween.js
-npm install vite @playwright/test @vitest/ui jsdom vitest vitest-canvas-mock --save-dev
+# Install dependencies
+npm install
 
 # Start development server
 npm run dev
+```
+
+## Project Setup
+
+If you want to recreate this project from scratch:
+
+```bash
+# Initialize project
+npm init -y
+
+# Install dependencies
+npm install pixi.js @pixi/ui @pixi/sound @tweenjs/tween.js
+npm install vite @playwright/test @vitest/ui jsdom vitest vitest-canvas-mock --save-dev
 ```
 
 ## Available Scripts

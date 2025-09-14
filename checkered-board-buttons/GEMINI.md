@@ -1,6 +1,6 @@
 # Project Overview
 
-An interactive PixiJS-based game featuring a checkered board with draggable tiles and responsive UI panels. The application demonstrates modern web game development with smooth animations, drag-and-drop functionality, and audio feedback.
+An interactive PixiJS-based game featuring a checkered board with draggable tiles and responsive UI panels. The application demonstrates modern web game development with smooth animations, drag-and-drop functionality, audio feedback, and localization support for multiple languages.
 
 # Usage Commands
 
@@ -25,6 +25,8 @@ An interactive PixiJS-based game featuring a checkered board with draggable tile
 - **`MySwapDialog.js`**: A modal dialog for swapping tiles, featuring checkboxes.
 - **`TestData.js`**: Provides mock data for the game list.
 - **`Theme.js`**: Defines the visual theme and UI constants.
+- **`vite-plugin-localize.js`**: A custom Vite plugin to handle localization by replacing placeholders in the code with translated strings.
+- **`locales/`**: Directory containing language files (`en.js`, `de.js`, `fr.js`) for localization.
 
 # Tests
 
@@ -33,3 +35,4 @@ An interactive PixiJS-based game featuring a checkered board with draggable tile
 - **`tests/MyList.test.js`**: Tests the game list creation, scrolling, and game categorization.
 - **`tests/MyVerticalPanel.test.js`**: Tests the vertical layout panel and its resizing logic.
 - **`tests/Tile.test.js`**: Tests tile creation, positioning, and drag-and-drop setup.
+

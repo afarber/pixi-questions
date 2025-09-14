@@ -1,11 +1,27 @@
-# Creating the playing-cards-3d-effect app
+# Playing Cards 3D Effect
 
-    mkdir playing-cards-3d-effect
-    cd playing-cards-3d-effect
-    npm init -y
-    npm install pixi.js @pixi/ui @tweenjs/tween.js
-    npm install vite --save-dev
-    npx vite (or add entries to package.json "scripts" and: npm run dev)
+A PixiJS-based interactive playing cards application that demonstrates 3D visual effects and drag-and-drop functionality.
+
+## Installation
+
+```bash
+npm install
+npm run dev
+```
+
+## How the Project Was Set Up
+
+This project was created from scratch using the following commands:
+
+```bash
+mkdir playing-cards-3d-effect
+cd playing-cards-3d-effect
+npm init -y
+npm install pixi.js @pixi/ui @pixi/sound @tweenjs/tween.js
+npm install vite --save-dev
+```
+
+Then scripts were added to package.json and the development server was started with `npm run dev`.
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
 
@@ -20,4 +36,4 @@ Convert SVG (do not tilt well) to PNG, preserving transparency with:
         magick -density 75 -background none "$file" "$png_file"
     done
 
-The sounds are CC0-licensed [Casion Audio](https://kenney.nl/assets/casino-audio) by Kenney
+The sounds are CC0-licensed [Casino Audio](https://kenney.nl/assets/casino-audio) by Kenney.

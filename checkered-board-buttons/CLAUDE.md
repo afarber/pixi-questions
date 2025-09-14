@@ -27,11 +27,11 @@ This is a PixiJS-based interactive game featuring a checkered board with draggab
 
 ### Key Dependencies
 
-- **pixi.js** (v8.11.0) - Main rendering engine
-- **@pixi/ui** (v2.2.4) - UI components including FancyButton
-- **@pixi/sound** (v6.0.1) - Audio playback for button clicks
-- **@tweenjs/tween.js** (v25.0.0) - Animation library for smooth transitions
-- **vite** (v7.0.5) - Build tool and development server
+- **pixi.js** - Main rendering engine
+- **@pixi/ui** - UI components including FancyButton
+- **@pixi/sound** - Audio playback for button clicks
+- **@tweenjs/tween.js** - Animation library for smooth transitions
+- **vite** - Build tool and development server
 
 ### Layout System
 

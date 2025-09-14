@@ -21,7 +21,7 @@ This is a PixiJS-based interactive playing cards application that demonstrates 3
 - `Card.js` - Individual card component with 3D perspective effects and drag interaction
 
 **Key Architecture Patterns:**
-- Uses PixiJS v8 with ES modules
+- Uses PixiJS with ES modules
 - Component-based architecture with Container classes
 - Event-driven drag and drop system using pointer events
 - 3D perspective effects using PerspectiveMesh with custom corner projection
