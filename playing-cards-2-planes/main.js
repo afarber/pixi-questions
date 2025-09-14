@@ -1,5 +1,6 @@
 import { Application, Assets, TexturePool } from "pixi.js";
-import { Board } from "./Board";
+import { PlaneHand } from "./PlaneHand.js";
+import { PlaneTable } from "./PlaneTable.js";
 
 (async () => {
   const app = new Application();
@@ -21,16 +22,26 @@ import { Board } from "./Board";
 
   const spriteSheet = await Assets.load("playing-cards.json");
 
-  const boardContainer = new Board(app.stage);
-  app.stage.addChild(boardContainer);
+  // Create the two planes
+  const planeTable = new PlaneTable(app);
+  const planeHand = new PlaneHand(app);
 
-  // Create interactive, draggable cards with random positions and angle
-  for (const textureKey of Object.keys(spriteSheet.textures)) {
-    boardContainer.createRandomCard(spriteSheet, textureKey);
+  app.stage.addChild(planeTable);
+  app.stage.addChild(planeHand);
+
+  // Get all available card texture keys and select 20 random ones
+  const allTextureKeys = Object.keys(spriteSheet.textures);
+  const selectedKeys = allTextureKeys.slice(0, 20); // Take first 20 cards for now
+
+  // Add 10 cards to each plane
+  for (let i = 0; i < 10; i++) {
+    planeTable.addCard(spriteSheet, selectedKeys[i]);
+    planeHand.addCard(spriteSheet, selectedKeys[i + 10]);
   }
 
   const onResize = () => {
-    boardContainer.resize(app.screen.width, app.screen.height);
+    planeTable.resize();
+    planeHand.resize();
   };
 
   addEventListener("resize", onResize);
