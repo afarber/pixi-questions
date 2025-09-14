@@ -19,7 +19,11 @@ Screenshots
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-layout/screenshot.gif)
 
-[playing-cards-3d-effect](https://github.com/afarber/pixi-questions/tree/master/playing-cards-3d-effect) with draggable SVG cards created by [Adrian Kennard](https://www.me.uk/cards/)
+[playing-cards-2-planes](https://github.com/afarber/pixi-questions/tree/master/playing-cards-2-planes) playing cards created by [Adrian Kennard](https://www.me.uk/cards/) displayed on 2 planes: UI and the table
+
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-2-planes/screenshot.png)
+
+[playing-cards-3d-effect](https://github.com/afarber/pixi-questions/tree/master/playing-cards-3d-effect) with draggable PNG cards created by [Adrian Kennard](https://www.me.uk/cards/)
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
 

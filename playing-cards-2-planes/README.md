@@ -1,6 +1,6 @@
-# Playing cards 3D effect
+# Playing cards displayed on 2 planes: UI and table
 
-A PixiJS-based interactive playing cards application that demonstrates 3D visual effects and drag-and-drop functionality.
+A PixiJS-based interactive playing cards application that demonstrates 3D visual effects
 
 ## Installation
 
@@ -14,8 +14,8 @@ npm run dev
 This project was created from scratch using the following commands:
 
 ```bash
-mkdir playing-cards-3d-effect
-cd playing-cards-3d-effect
+mkdir playing-cards-2-planes
+cd playing-cards-2-planes
 npm init -y
 npm install pixi.js @pixi/ui @pixi/sound @tweenjs/tween.js
 npm install vite --save-dev
@@ -23,7 +23,7 @@ npm install vite --save-dev
 
 Then scripts were added to package.json and the development server was started with `npm run dev`.
 
-![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-2-planes/screenshot.png)
 
 Using [Copyright free SVG and print ready playing cards](https://www.me.uk/cards/) by Adrian Kennard.
 
@@ -37,4 +37,3 @@ Convert SVG (do not tilt well) to PNG, preserving transparency with:
     done
 
 The sounds are CC0-licensed [Casino Audio](https://kenney.nl/assets/casino-audio) by Kenney.
-
