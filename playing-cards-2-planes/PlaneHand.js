@@ -32,14 +32,31 @@ export class PlaneHand extends Container {
   }
 
   repositionCards() {
-    const totalCards = Math.max(this.children.length, 1);
-    const cardSpacing = CARD_WIDTH * 0.8;
-    const totalWidth = (totalCards - 1) * cardSpacing + CARD_WIDTH;
-    const startX = (this.app.screen.width - totalWidth) / 2;
+    const totalCards = this.children.length;
+    if (totalCards === 0) return;
+
+    // We want padding of CARD_WIDTH / 2 on both sides
+    const availableWidth = this.app.screen.width - CARD_WIDTH;
+
+    // Calculate spacing between cards (max 0.8 * CARD_WIDTH)
+    let cardSpacing = Math.min(0.8 * CARD_WIDTH, availableWidth / (totalCards - 1 || 1));
+
+    // If cards don't fit, use minimum spacing that fits
+    if (totalCards > 1) {
+      const totalNeededWidth = (totalCards - 1) * cardSpacing + CARD_WIDTH;
+      if (totalNeededWidth > availableWidth) {
+        cardSpacing = (availableWidth - CARD_WIDTH) / (totalCards - 1);
+      }
+    }
+
+    // Calculate starting position (left padding + half card width since pivot is at center)
+    const startX = CARD_WIDTH;
 
     this.children.forEach((card, index) => {
-      card.x = startX + index * cardSpacing + CARD_WIDTH / 2;
-      card.y = this.app.screen.height - CARD_HEIGHT / 2;
+      card.x = startX + index * cardSpacing;
+      // Position so only 60% of card height is visible from the top
+      // Card pivot is at center, so bottom of visible area should be at screen bottom
+      card.y = this.app.screen.height - 0.3 * CARD_HEIGHT;
     });
   }
 }
