@@ -17,8 +17,8 @@ export class PlaneHand extends Container {
     this.repositionCards();
   }
 
-  addCard(spriteSheet, textureKey) {
-    const card = new Card(spriteSheet, textureKey);
+  addCard(spriteSheet, textureKey, clickHandler = null) {
+    const card = new Card(spriteSheet, textureKey, clickHandler);
 
     this.addChild(card);
     this.repositionCards();

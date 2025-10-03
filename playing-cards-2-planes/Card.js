@@ -4,12 +4,13 @@ export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
 
 export class Card extends Container {
-  constructor(spriteSheet, textureKey, cardX = 0, cardY = 0, cardAngle = 0, clickHandler = null) {
+  constructor(spriteSheet, textureKey, clickHandler = null, cardX = 0, cardY = 0, cardAngle = 0) {
     super();
 
     this.x = cardX;
     this.y = cardY;
     this.angle = cardAngle;
+    this.textureKey = textureKey;
 
     this.interactiveChildren = false;
     this.cacheAsTexture = true;

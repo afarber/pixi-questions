@@ -29,14 +29,25 @@ import { PlaneTable } from "./PlaneTable.js";
   app.stage.addChild(planeTable);
   app.stage.addChild(planeHand);
 
+  // Click handler to switch card between planes
+  const onCardClick = (card) => {
+    if (card.parent === planeTable) {
+      planeTable.removeCard(card);
+      planeHand.addCard(spriteSheet, card.textureKey, onCardClick);
+    } else if (card.parent === planeHand) {
+      planeHand.removeCard(card);
+      planeTable.addCard(spriteSheet, card.textureKey, onCardClick);
+    }
+  };
+
   // Get all available card texture keys and select 20 random ones
   const allTextureKeys = Object.keys(spriteSheet.textures);
   const selectedKeys = allTextureKeys.slice(0, 20); // Take first 20 cards for now
 
   // Add 10 cards to each plane
   for (let i = 0; i < 10; i++) {
-    planeTable.addCard(spriteSheet, selectedKeys[i]);
-    planeHand.addCard(spriteSheet, selectedKeys[i + 10]);
+    planeTable.addCard(spriteSheet, selectedKeys[i], onCardClick);
+    planeHand.addCard(spriteSheet, selectedKeys[i + 10], onCardClick);
   }
 
   const onResize = () => {

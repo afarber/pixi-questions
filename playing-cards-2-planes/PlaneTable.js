@@ -15,9 +15,23 @@ export class PlaneTable extends Container {
     // PlaneTable positioned to account for perspective transform
     this.x = 0;
     this.y = 0;
+
+    // Reposition all cards within new screen bounds
+    this.repositionCards();
   }
 
-  addCard(spriteSheet, textureKey) {
+  repositionCards() {
+    const margin = 50;
+    const handAreaHeight = CARD_HEIGHT / 2;
+
+    this.children.forEach((card) => {
+      // Keep cards within bounds after resize
+      card.x = Math.min(Math.max(card.x, margin + CARD_WIDTH / 2), this.app.screen.width - margin - CARD_WIDTH / 2);
+      card.y = Math.min(Math.max(card.y, margin + CARD_HEIGHT / 2), this.app.screen.height - handAreaHeight - margin - CARD_HEIGHT / 2);
+    });
+  }
+
+  addCard(spriteSheet, textureKey, clickHandler = null) {
     // Random position within the screen bounds, avoiding the bottom area where hand cards are
     const margin = 50;
     const handAreaHeight = CARD_HEIGHT / 2;
@@ -31,7 +45,7 @@ export class PlaneTable extends Container {
     const angle = Math.random() * 120 - 60;
 
     // Cards stay flat - the container provides the 3D perspective
-    const card = new Card(spriteSheet, textureKey, x, y, angle);
+    const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
 
     this.addChild(card);
 
