@@ -6,10 +6,16 @@ export class PlaneTable extends Container {
     super();
 
     this.app = app;
+
+    // Apply perspective transform: compress vertically to simulate viewing from above
+    this.scale.y = 0.75;
+
+    // Move pivot to bottom center for proper perspective
+    this.pivot.y = 0;
   }
 
   resize() {
-    // PlaneTable occupies the whole screen
+    // PlaneTable positioned to account for perspective transform
     this.x = 0;
     this.y = 0;
   }
@@ -27,12 +33,8 @@ export class PlaneTable extends Container {
     // Random angle between -60 and +60 degrees
     const angle = Math.random() * 120 - 60;
 
+    // Cards stay flat - the container provides the 3D perspective
     const card = new Card(spriteSheet, textureKey, x, y, angle, null);
-
-    // Apply random 3D tilt effect
-    const tiltX = Math.random() * 30 - 15;
-    const tiltY = Math.random() * 30 - 15;
-    card.apply3DTilt(tiltX, tiltY);
 
     this.addChild(card);
 

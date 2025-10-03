@@ -35,31 +35,41 @@ export class PlaneHand extends Container {
     const totalCards = this.children.length;
     if (totalCards === 0) return;
 
-    // We want padding of CARD_WIDTH / 2 on both sides
-    const availableWidth = this.app.screen.width - CARD_WIDTH;
+    // Requirements:
+    // 1. Cards centered at bottom of screen
+    // 2. CARD_WIDTH/2 minimum padding on sides (accounting for pivot at center)
+    // 3. Max spacing between cards is CARD_WIDTH/2
 
-    // Calculate spacing between cards (max 0.5 * CARD_WIDTH)
-    let cardSpacing = Math.min(0.5 * CARD_WIDTH, availableWidth / (totalCards - 1 || 1));
+    const minPadding = CARD_WIDTH / 2;
+    const maxSpacing = CARD_WIDTH / 2;
 
-    // If cards don't fit, use minimum spacing that fits
+    // Available width for card spacing (excluding padding for card edges)
+    const availableWidth = this.app.screen.width - 2 * minPadding;
+
+    // Calculate spacing between cards
+    let cardSpacing = maxSpacing;
+
     if (totalCards > 1) {
-      const totalNeededWidth = (totalCards - 1) * cardSpacing + CARD_WIDTH;
-      if (totalNeededWidth > availableWidth) {
-        cardSpacing = (availableWidth - CARD_WIDTH) / (totalCards - 1);
+      // Total width needed with max spacing
+      const neededWidth = (totalCards - 1) * maxSpacing;
+
+      // If doesn't fit, reduce spacing
+      if (neededWidth > availableWidth) {
+        cardSpacing = availableWidth / (totalCards - 1);
       }
     }
 
-    // Calculate starting position (left padding + half card width since pivot is at center)
-    const startX = CARD_WIDTH;
+    // Center the cards
+    const totalWidth = totalCards > 1 ? (totalCards - 1) * cardSpacing : 0;
+    const firstCardX = this.app.screen.width / 2 - totalWidth / 2;
 
     this.children.forEach((card, index) => {
       // Random jitter of +/- 4 pixels
       const jitterX = Math.random() * 8 - 4;
       const jitterY = Math.random() * 8 - 4;
 
-      card.x = startX + index * cardSpacing + jitterX;
+      card.x = firstCardX + index * cardSpacing + jitterX;
       // Position so only 60% of card height is visible from the top
-      // Card pivot is at center, so bottom of visible area should be at screen bottom
       card.y = this.app.screen.height - 0.3 * CARD_HEIGHT + jitterY;
     });
   }
