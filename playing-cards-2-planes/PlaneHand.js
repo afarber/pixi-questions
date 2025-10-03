@@ -53,9 +53,9 @@ export class PlaneHand extends Container {
     const startX = CARD_WIDTH;
 
     this.children.forEach((card, index) => {
-      // Random jitter of +/- 2 pixels
-      const jitterX = Math.random() * 4 - 2;
-      const jitterY = Math.random() * 4 - 2;
+      // Random jitter of +/- 4 pixels
+      const jitterX = Math.random() * 8 - 4;
+      const jitterY = Math.random() * 8 - 4;
 
       card.x = startX + index * cardSpacing + jitterX;
       // Position so only 60% of card height is visible from the top
