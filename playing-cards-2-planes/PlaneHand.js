@@ -38,8 +38,8 @@ export class PlaneHand extends Container {
     // We want padding of CARD_WIDTH / 2 on both sides
     const availableWidth = this.app.screen.width - CARD_WIDTH;
 
-    // Calculate spacing between cards (max 0.8 * CARD_WIDTH)
-    let cardSpacing = Math.min(0.8 * CARD_WIDTH, availableWidth / (totalCards - 1 || 1));
+    // Calculate spacing between cards (max 0.5 * CARD_WIDTH)
+    let cardSpacing = Math.min(0.5 * CARD_WIDTH, availableWidth / (totalCards - 1 || 1));
 
     // If cards don't fit, use minimum spacing that fits
     if (totalCards > 1) {
@@ -53,10 +53,14 @@ export class PlaneHand extends Container {
     const startX = CARD_WIDTH;
 
     this.children.forEach((card, index) => {
-      card.x = startX + index * cardSpacing;
+      // Random jitter of +/- 2 pixels
+      const jitterX = Math.random() * 4 - 2;
+      const jitterY = Math.random() * 4 - 2;
+
+      card.x = startX + index * cardSpacing + jitterX;
       // Position so only 60% of card height is visible from the top
       // Card pivot is at center, so bottom of visible area should be at screen bottom
-      card.y = this.app.screen.height - 0.3 * CARD_HEIGHT;
+      card.y = this.app.screen.height - 0.3 * CARD_HEIGHT + jitterY;
     });
   }
 }
