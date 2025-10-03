@@ -29,6 +29,13 @@ import { PlaneTable } from "./PlaneTable.js";
   app.stage.addChild(planeTable);
   app.stage.addChild(planeHand);
 
+  // Check if a card key is valid (7-A of C/D/H/S)
+  const isValidCard = (key) => {
+    const validRanks = ["7", "8", "9", "T", "J", "Q", "K", "A"];
+    const validSuits = ["C", "D", "H", "S"];
+    return validRanks.some((rank) => key.startsWith(rank)) && validSuits.some((suit) => key.endsWith(suit));
+  };
+
   // Click handler to switch card between planes
   const onCardClick = (card) => {
     if (card.parent === planeTable) {
@@ -40,14 +47,18 @@ import { PlaneTable } from "./PlaneTable.js";
     }
   };
 
-  // Get all available card texture keys and select 20 random ones
-  const allTextureKeys = Object.keys(spriteSheet.textures);
-  const selectedKeys = allTextureKeys.slice(0, 20); // Take first 20 cards for now
+  // Get all available card texture keys, filtering with isValidCard
+  const allTextureKeys = Object.keys(spriteSheet.textures).filter(isValidCard);
 
-  // Add 10 cards to each plane
+  // Shuffle the cards
+  const shuffled = allTextureKeys.sort(() => Math.random() - 0.5);
+
+  // Add 10 random cards to hand and 22 to table
   for (let i = 0; i < 10; i++) {
-    planeTable.addCard(spriteSheet, selectedKeys[i], onCardClick);
-    planeHand.addCard(spriteSheet, selectedKeys[i + 10], onCardClick);
+    planeHand.addCard(spriteSheet, shuffled[i], onCardClick);
+  }
+  for (let i = 10; i < 32; i++) {
+    planeTable.addCard(spriteSheet, shuffled[i], onCardClick);
   }
 
   const onResize = () => {
