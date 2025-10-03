@@ -1,4 +1,5 @@
 import { Application, Assets, TexturePool } from "pixi.js";
+import { Group, Tween, Easing } from "tweedle.js";
 import { PlaneHand } from "./PlaneHand.js";
 import { PlaneTable } from "./PlaneTable.js";
 
@@ -36,14 +37,49 @@ import { PlaneTable } from "./PlaneTable.js";
     return validRanks.some((rank) => key.startsWith(rank)) && validSuits.some((suit) => key.endsWith(suit));
   };
 
-  // Click handler to switch card between planes
+  // Click handler to switch card between planes with animation
   const onCardClick = (card) => {
+    const oldX = card.x;
+    const oldY = card.y;
+    const oldAngle = card.angle;
+    const oldParent = card.parent;
+
     if (card.parent === planeTable) {
       planeTable.removeCard(card);
-      planeHand.addCard(spriteSheet, card.textureKey, onCardClick);
+      const newCard = planeHand.addCard(spriteSheet, card.textureKey, onCardClick);
+
+      // Store target position after repositionCards() was called
+      const targetX = newCard.x;
+      const targetY = newCard.y;
+
+      // Set starting position to old position
+      newCard.x = oldParent.x + oldX;
+      newCard.y = oldParent.y + oldY;
+      newCard.angle = oldAngle;
+      newCard.alpha = 0.7;
+
+      new Tween(newCard)
+        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
+        .easing(Easing.Cubic.Out)
+        .start();
     } else if (card.parent === planeHand) {
       planeHand.removeCard(card);
-      planeTable.addCard(spriteSheet, card.textureKey, onCardClick);
+      const newCard = planeTable.addCard(spriteSheet, card.textureKey, onCardClick);
+
+      // Store target position before animating from old position
+      const targetX = newCard.x;
+      const targetY = newCard.y;
+      const targetAngle = newCard.angle;
+
+      newCard.x = oldParent.x + oldX;
+      newCard.y = oldParent.y + oldY;
+      newCard.angle = 0;
+      newCard.alpha = 0.7;
+
+      new Tween(newCard)
+        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400)
+        .easing(Easing.Cubic.Out)
+        .start();
     }
   };
 
@@ -68,4 +104,9 @@ import { PlaneTable } from "./PlaneTable.js";
 
   addEventListener("resize", onResize);
   onResize();
+
+  // Update tweedle.js animations every frame
+  app.ticker.add(() => {
+    Group.shared.update();
+  });
 })();
