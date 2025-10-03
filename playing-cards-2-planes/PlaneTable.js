@@ -29,6 +29,11 @@ export class PlaneTable extends Container {
 
     const card = new Card(spriteSheet, textureKey, x, y, angle, null);
 
+    // Apply random 3D tilt effect
+    const tiltX = Math.random() * 30 - 15;
+    const tiltY = Math.random() * 30 - 15;
+    card.apply3DTilt(tiltX, tiltY);
+
     this.addChild(card);
 
     return card;
