@@ -9,9 +9,6 @@ export class PlaneTable extends Container {
 
     // Apply perspective transform: compress vertically to simulate viewing from above
     this.scale.y = 0.75;
-
-    // Move pivot to bottom center for proper perspective
-    this.pivot.y = 0;
   }
 
   resize() {
@@ -34,7 +31,7 @@ export class PlaneTable extends Container {
     const angle = Math.random() * 120 - 60;
 
     // Cards stay flat - the container provides the 3D perspective
-    const card = new Card(spriteSheet, textureKey, x, y, angle, null);
+    const card = new Card(spriteSheet, textureKey, x, y, angle);
 
     this.addChild(card);
 

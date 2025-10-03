@@ -7,6 +7,7 @@ export default [
       sourceType: "module"
     },
     rules: {
+      "indent": ["error", 2],
       "no-unused-vars": "warn",
       "no-console": "off"
     }

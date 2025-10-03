@@ -4,7 +4,7 @@ export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
 
 export class Card extends Container {
-  constructor(spriteSheet, textureKey, cardX, cardY, cardAngle, clickHandler = null) {
+  constructor(spriteSheet, textureKey, cardX = 0, cardY = 0, cardAngle = 0, clickHandler = null) {
     super();
 
     this.x = cardX;
@@ -31,12 +31,7 @@ export class Card extends Container {
       this.cursor = "pointer";
 
       // Setting hitArea is important for correct click events delivery
-      this.hitArea = new Rectangle(
-        -CARD_WIDTH / 2,
-        -CARD_HEIGHT / 2,
-        CARD_WIDTH,
-        CARD_HEIGHT
-      );
+      this.hitArea = new Rectangle(-CARD_WIDTH / 2, -CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
 
       this.onpointerdown = () => clickHandler(this);
     } else {

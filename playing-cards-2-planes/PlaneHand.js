@@ -18,7 +18,7 @@ export class PlaneHand extends Container {
   }
 
   addCard(spriteSheet, textureKey) {
-    const card = new Card(spriteSheet, textureKey, 0, 0, 0, null);
+    const card = new Card(spriteSheet, textureKey);
 
     this.addChild(card);
     this.repositionCards();
@@ -31,32 +31,39 @@ export class PlaneHand extends Container {
     this.repositionCards();
   }
 
+  // Requirements:
+  // 1. Cards centered at bottom of screen
+  // 2. CARD_WIDTH/2 minimum padding on sides (accounting for pivot at center)
+  // 3. Max spacing between cards is CARD_WIDTH/2
   repositionCards() {
     const totalCards = this.children.length;
-    if (totalCards === 0) return;
 
-    // Requirements:
-    // 1. Cards centered at bottom of screen
-    // 2. CARD_WIDTH/2 minimum padding on sides (accounting for pivot at center)
-    // 3. Max spacing between cards is CARD_WIDTH/2
+    if (totalCards === 0) {
+      return;
+    }
 
-    const minPadding = CARD_WIDTH / 2;
-    const maxSpacing = CARD_WIDTH / 2;
+    if (totalCards === 1) {
+      const card = this.children[0];
+      card.x = this.app.screen.width / 2;
+      card.y = this.app.screen.height - 0.3 * CARD_HEIGHT;
+      return;
+    }
+
+    const minPaddingToScreenEdge = CARD_WIDTH / 2;
+    const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
     // Available width for card spacing (excluding padding for card edges)
-    const availableWidth = this.app.screen.width - 2 * minPadding;
+    const availableWidth = this.app.screen.width - 2 * minPaddingToScreenEdge;
 
     // Calculate spacing between cards
-    let cardSpacing = maxSpacing;
+    let cardSpacing = maxSpacingBetweenCards;
 
-    if (totalCards > 1) {
-      // Total width needed with max spacing
-      const neededWidth = (totalCards - 1) * maxSpacing;
+    // Total width needed with max spacing
+    const neededWidth = (totalCards - 1) * maxSpacingBetweenCards;
 
-      // If doesn't fit, reduce spacing
-      if (neededWidth > availableWidth) {
-        cardSpacing = availableWidth / (totalCards - 1);
-      }
+    // If doesn't fit, reduce spacing
+    if (neededWidth > availableWidth) {
+      cardSpacing = availableWidth / (totalCards - 1);
     }
 
     // Center the cards
