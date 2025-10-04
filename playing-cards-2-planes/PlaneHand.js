@@ -34,23 +34,7 @@ export class PlaneHand extends Container {
   }
 
   sortCards() {
-    const suitOrder = { S: 0, D: 1, C: 2, H: 3 };
-    const rankOrder = { A: 0, K: 1, Q: 2, J: 3, T: 4, "9": 5, "8": 6, "7": 7 };
-
-    this.children.sort((a, b) => {
-      const suitA = a.textureKey.charAt(a.textureKey.length - 1);
-      const suitB = b.textureKey.charAt(b.textureKey.length - 1);
-      const rankA = a.textureKey.charAt(0);
-      const rankB = b.textureKey.charAt(0);
-
-      // Sort by suit first
-      if (suitOrder[suitA] !== suitOrder[suitB]) {
-        return suitOrder[suitA] - suitOrder[suitB];
-      }
-
-      // Then by rank
-      return rankOrder[rankA] - rankOrder[rankB];
-    });
+    this.children.sort(Card.compareCards);
   }
 
   repositionCards() {

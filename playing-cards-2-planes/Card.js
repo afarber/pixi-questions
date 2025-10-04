@@ -4,6 +4,30 @@ export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
 
 export class Card extends Container {
+  static isValidCard(key) {
+    const validRanks = ["7", "8", "9", "T", "J", "Q", "K", "A"];
+    const validSuits = ["C", "D", "H", "S"];
+    return validRanks.some((rank) => key.startsWith(rank)) && validSuits.some((suit) => key.endsWith(suit));
+  }
+
+  static compareCards(cardA, cardB) {
+    const suitOrder = { S: 0, D: 1, C: 2, H: 3 };
+    const rankOrder = { A: 0, K: 1, Q: 2, J: 3, T: 4, "9": 5, "8": 6, "7": 7 };
+
+    const suitA = cardA.textureKey.charAt(cardA.textureKey.length - 1);
+    const suitB = cardB.textureKey.charAt(cardB.textureKey.length - 1);
+    const rankA = cardA.textureKey.charAt(0);
+    const rankB = cardB.textureKey.charAt(0);
+
+    // Sort by suit first
+    if (suitOrder[suitA] !== suitOrder[suitB]) {
+      return suitOrder[suitA] - suitOrder[suitB];
+    }
+
+    // Then by rank
+    return rankOrder[rankA] - rankOrder[rankB];
+  }
+
   constructor(spriteSheet, textureKey, clickHandler = null, cardX = 0, cardY = 0, cardAngle = 0) {
     super();
 

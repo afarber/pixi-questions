@@ -1,5 +1,6 @@
 import { Application, Assets, TexturePool } from "pixi.js";
 import { Group, Tween, Easing } from "@tweenjs/tween.js";
+import { Card } from "./Card.js";
 import { PlaneHand } from "./PlaneHand.js";
 import { PlaneTable } from "./PlaneTable.js";
 
@@ -32,13 +33,6 @@ import { PlaneTable } from "./PlaneTable.js";
 
   // Create tween group for managing card animations
   const cardsTweenGroup = new Group();
-
-  // Check if a card key is valid (7-A of C/D/H/S)
-  const isValidCard = (key) => {
-    const validRanks = ["7", "8", "9", "T", "J", "Q", "K", "A"];
-    const validSuits = ["C", "D", "H", "S"];
-    return validRanks.some((rank) => key.startsWith(rank)) && validSuits.some((suit) => key.endsWith(suit));
-  };
 
   // Click handler to switch card between planes with animation
   const onCardClick = (card) => {
@@ -91,8 +85,8 @@ import { PlaneTable } from "./PlaneTable.js";
     }
   };
 
-  // Get all available card texture keys, filtering with isValidCard
-  const allTextureKeys = Object.keys(spriteSheet.textures).filter(isValidCard);
+  // Get all available card texture keys, filtering with Card.isValidCard
+  const allTextureKeys = Object.keys(spriteSheet.textures).filter(Card.isValidCard);
 
   // Shuffle the cards
   const shuffled = allTextureKeys.sort(() => Math.random() - 0.5);
