@@ -22,11 +22,39 @@ export class Card extends Container {
     this.addChild(sprite);
 
     // Setup as clickable card
-    this.#setupClickable(clickHandler);
+    this._setupClickable(clickHandler);
+  }
+
+  isParentHand() {
+    return this.parent && this.parent.scale.y > 0.9;
+  }
+
+  isParentTable() {
+    return this.parent && this.parent.scale.y < 0.9;
+  }
+
+  enableHoverEffect() {
+    // Base Y position to restore when mouse leaves
+    // (initial value doesn't matter, will be set on pointerenter)
+    let baseY = 0;
+
+    this.on("pointerenter", () => {
+      baseY = this.y;
+      this.y -= CARD_HEIGHT / 6;
+    });
+
+    this.on("pointerleave", () => {
+      this.y = baseY;
+    });
+  }
+
+  disableHoverEffect() {
+    this.off("pointerenter");
+    this.off("pointerleave");
   }
 
   // Setup clickable card
-  #setupClickable(clickHandler) {
+  _setupClickable(clickHandler) {
     if (clickHandler) {
       this.eventMode = "static";
       this.cursor = "pointer";

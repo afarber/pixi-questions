@@ -44,7 +44,11 @@ import { PlaneTable } from "./PlaneTable.js";
     const oldAngle = card.angle;
     const oldParent = card.parent;
 
-    if (card.parent === planeTable) {
+    // Disable hover effect immediately after the click
+    // to avoid interfering with tween animation
+    card.disableHoverEffect();
+
+    if (card.isParentTable()) {
       planeTable.removeCard(card);
       const newCard = planeHand.addCard(spriteSheet, card.textureKey, onCardClick);
 
@@ -58,11 +62,8 @@ import { PlaneTable } from "./PlaneTable.js";
       newCard.angle = oldAngle;
       newCard.alpha = 0.7;
 
-      new Tween(newCard)
-        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
-        .easing(Easing.Cubic.Out)
-        .start();
-    } else if (card.parent === planeHand) {
+      new Tween(newCard).to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400).easing(Easing.Cubic.Out).start();
+    } else if (card.isParentHand()) {
       planeHand.removeCard(card);
       const newCard = planeTable.addCard(spriteSheet, card.textureKey, onCardClick);
 
