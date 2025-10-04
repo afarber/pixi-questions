@@ -1,5 +1,5 @@
 import { Application, Assets, TexturePool } from "pixi.js";
-import { Group, Tween, Easing } from "tweedle.js";
+import { Group, Tween, Easing } from "@tweenjs/tween.js";
 import { PlaneHand } from "./PlaneHand.js";
 import { PlaneTable } from "./PlaneTable.js";
 
@@ -30,6 +30,9 @@ import { PlaneTable } from "./PlaneTable.js";
   app.stage.addChild(planeTable);
   app.stage.addChild(planeHand);
 
+  // Create tween group for managing card animations
+  const cardsTweenGroup = new Group();
+
   // Check if a card key is valid (7-A of C/D/H/S)
   const isValidCard = (key) => {
     const validRanks = ["7", "8", "9", "T", "J", "Q", "K", "A"];
@@ -39,6 +42,9 @@ import { PlaneTable } from "./PlaneTable.js";
 
   // Click handler to switch card between planes with animation
   const onCardClick = (card) => {
+    // Cancel all ongoing tweens to prevent conflicts
+    cardsTweenGroup.removeAll();
+
     const oldX = card.x;
     const oldY = card.y;
     const oldAngle = card.angle;
@@ -62,7 +68,9 @@ import { PlaneTable } from "./PlaneTable.js";
       newCard.angle = oldAngle;
       newCard.alpha = 0.7;
 
-      new Tween(newCard).to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400).easing(Easing.Cubic.Out).start();
+      const tween = new Tween(newCard, cardsTweenGroup).to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400).easing(Easing.Cubic.Out);
+      cardsTweenGroup.add(tween);
+      tween.start();
     } else if (card.isParentHand()) {
       planeHand.removeCard(card);
       const newCard = planeTable.addCard(spriteSheet, card.textureKey, onCardClick);
@@ -77,10 +85,9 @@ import { PlaneTable } from "./PlaneTable.js";
       newCard.angle = 0;
       newCard.alpha = 0.7;
 
-      new Tween(newCard)
-        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400)
-        .easing(Easing.Cubic.Out)
-        .start();
+      const tween = new Tween(newCard, cardsTweenGroup).to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400).easing(Easing.Cubic.Out);
+      cardsTweenGroup.add(tween);
+      tween.start();
     }
   };
 
@@ -106,8 +113,8 @@ import { PlaneTable } from "./PlaneTable.js";
   addEventListener("resize", onResize);
   onResize();
 
-  // Update tweedle.js animations every frame
-  app.ticker.add(() => {
-    Group.shared.update();
+  // Update tween.js animations every frame
+  app.ticker.add((time) => {
+    cardsTweenGroup.update(time.lastTime);
   });
 })();
