@@ -36,7 +36,8 @@ import { PlaneTable } from "./PlaneTable.js";
 
   // Click handler to switch card between planes with animation
   const onCardClick = (card) => {
-    // Cancel all ongoing tweens to prevent conflicts
+    // End all ongoing tweens (jumping to final values) to prevent conflicts
+    cardsTweenGroup.getAll().forEach((tween) => tween.end());
     cardsTweenGroup.removeAll();
 
     const oldX = card.x;
