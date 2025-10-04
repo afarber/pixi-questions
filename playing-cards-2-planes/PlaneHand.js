@@ -20,6 +20,23 @@ export class PlaneHand extends Container {
   addCard(spriteSheet, textureKey, clickHandler = null) {
     const card = new Card(spriteSheet, textureKey, clickHandler);
 
+    // Add hover effect for hand cards
+    if (clickHandler) {
+      card.eventMode = "static";
+      card.cursor = "pointer";
+
+      let baseY = 0;
+
+      card.on("pointerenter", () => {
+        baseY = card.y;
+        card.y -= CARD_HEIGHT / 6;
+      });
+
+      card.on("pointerleave", () => {
+        card.y = baseY;
+      });
+    }
+
     this.addChild(card);
     this.repositionCards();
 
