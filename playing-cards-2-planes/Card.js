@@ -92,10 +92,7 @@ export class Card extends Container {
         this._hoverTween.stop();
       }
 
-      this._hoverTween = new Tween(this, Card.tweenGroup)
-        .to({ y: this._baseY }, 150)
-        .easing(Easing.Cubic.In)
-        .start();
+      this._hoverTween = new Tween(this, Card.tweenGroup).to({ y: this._baseY }, 150).easing(Easing.Cubic.In).start();
       Card.tweenGroup.add(this._hoverTween);
     });
   }
@@ -126,5 +123,12 @@ export class Card extends Container {
       this.eventMode = "none";
       this.cursor = null;
     }
+  }
+
+  toString() {
+    return (
+      `Card(${this.textureKey} ${this.isParentHand() ? "hand" : "table"} ` +
+      `${Math.round(this.x)}, ${Math.round(this.y)} ${Math.round(this.angle)})`
+    );
   }
 }
