@@ -1,5 +1,5 @@
 import { Application, Assets, TexturePool } from "pixi.js";
-import { Group, Tween, Easing } from "@tweenjs/tween.js";
+import { Tween, Easing } from "@tweenjs/tween.js";
 import { Card } from "./Card.js";
 import { PlaneHand } from "./PlaneHand.js";
 import { PlaneTable } from "./PlaneTable.js";
@@ -31,14 +31,10 @@ import { PlaneTable } from "./PlaneTable.js";
   app.stage.addChild(planeTable);
   app.stage.addChild(planeHand);
 
-  // Create tween group for managing card animations
-  const cardsTweenGroup = new Group();
-
   // Click handler to switch card between planes with animation
   const onCardClick = (card) => {
     // End all ongoing tweens (jumping to final values) to prevent conflicts
-    cardsTweenGroup.getAll().forEach((tween) => tween.end());
-    cardsTweenGroup.removeAll();
+    Card.endAllTweens();
 
     const oldX = card.x;
     const oldY = card.y;
@@ -63,8 +59,8 @@ import { PlaneTable } from "./PlaneTable.js";
       newCard.angle = oldAngle;
       newCard.alpha = 0.7;
 
-      const tween = new Tween(newCard, cardsTweenGroup).to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400).easing(Easing.Cubic.Out);
-      cardsTweenGroup.add(tween);
+      const tween = new Tween(newCard, Card.tweenGroup).to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400).easing(Easing.Cubic.Out);
+      Card.tweenGroup.add(tween);
       tween.start();
     } else if (card.isParentHand()) {
       planeHand.removeCard(card);
@@ -80,8 +76,8 @@ import { PlaneTable } from "./PlaneTable.js";
       newCard.angle = 0;
       newCard.alpha = 0.7;
 
-      const tween = new Tween(newCard, cardsTweenGroup).to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400).easing(Easing.Cubic.Out);
-      cardsTweenGroup.add(tween);
+      const tween = new Tween(newCard, Card.tweenGroup).to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400).easing(Easing.Cubic.Out);
+      Card.tweenGroup.add(tween);
       tween.start();
     }
   };
@@ -110,6 +106,6 @@ import { PlaneTable } from "./PlaneTable.js";
 
   // Update tween.js animations every frame
   app.ticker.add((time) => {
-    cardsTweenGroup.update(time.lastTime);
+    Card.updateTweens(time.lastTime);
   });
 })();
