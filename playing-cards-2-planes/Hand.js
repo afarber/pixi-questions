@@ -1,11 +1,11 @@
 import { Container } from "pixi.js";
 import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
 
-export class PlaneHand extends Container {
-  constructor(app) {
+export class Hand extends Container {
+  constructor(screen) {
     super();
 
-    this.app = app;
+    this.screen = screen;
   }
 
   resize() {
@@ -30,7 +30,7 @@ export class PlaneHand extends Container {
 
   removeCard(card) {
     this.removeChild(card);
-    this.repositionCards();
+    //this.repositionCards();
   }
 
   sortCards() {
@@ -44,28 +44,28 @@ export class PlaneHand extends Container {
       return;
     }
 
-    // Sort cards before repositioning
-    this.sortCards();
-
     if (totalCards === 1) {
       const card = this.children[0];
-      card.x = this.app.screen.width / 2;
-      card.y = this.app.screen.height - 0.3 * CARD_HEIGHT;
+      card.x = this.screen.width / 2;
+      card.y = this.screen.height - 0.3 * CARD_HEIGHT;
       return;
     }
+
+    // Sort cards before repositioning
+    this.sortCards();
 
     const minPaddingToScreenEdge = CARD_WIDTH / 3;
     const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
     // Available width for card spacing (excluding padding for card edges and 1 card)
-    const availableWidth = this.app.screen.width - 2 * minPaddingToScreenEdge - CARD_WIDTH;
+    const availableWidth = this.screen.width - 2 * minPaddingToScreenEdge - CARD_WIDTH;
 
     // Calculate spacing between cards
     const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableWidth / (totalCards - 1));
 
     // Center the cards
     const totalCardsWidth = (totalCards - 1) * spacingBetweenCards;
-    const firstCardX = this.app.screen.width / 2 - totalCardsWidth / 2;
+    const firstCardX = this.screen.width / 2 - totalCardsWidth / 2;
 
     this.children.forEach((card, index) => {
       // Random jitter of +/- 4 pixels
@@ -74,7 +74,7 @@ export class PlaneHand extends Container {
 
       card.x = firstCardX + index * spacingBetweenCards + jitterX;
       // Position so only 60% of card height is visible from the top
-      card.y = this.app.screen.height - 0.3 * CARD_HEIGHT + jitterY;
+      card.y = this.screen.height - 0.3 * CARD_HEIGHT + jitterY;
     });
   }
 }

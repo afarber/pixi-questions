@@ -1,8 +1,8 @@
 import { Application, Assets, TexturePool } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
 import { Card } from "./Card.js";
-import { PlaneHand } from "./PlaneHand.js";
-import { PlaneTable } from "./PlaneTable.js";
+import { Hand } from "./Hand.js";
+import { Table } from "./Table.js";
 
 (async () => {
   const app = new Application();
@@ -25,11 +25,11 @@ import { PlaneTable } from "./PlaneTable.js";
   const spriteSheet = await Assets.load("playing-cards.json");
 
   // Create the two planes
-  const planeTable = new PlaneTable(app);
-  const planeHand = new PlaneHand(app);
+  const table = new Table(app.screen);
+  const hand = new Hand(app.screen);
 
-  app.stage.addChild(planeTable);
-  app.stage.addChild(planeHand);
+  app.stage.addChild(table);
+  app.stage.addChild(hand);
 
   // Click handler to switch card between planes with animation
   const onCardClick = (card) => {
@@ -48,8 +48,8 @@ import { PlaneTable } from "./PlaneTable.js";
     const oldParent = card.parent;
 
     if (card.isParentTable()) {
-      planeTable.removeCard(card);
-      const newCard = planeHand.addCard(spriteSheet, card.textureKey, onCardClick);
+      table.removeCard(card);
+      const newCard = hand.addCard(spriteSheet, card.textureKey, onCardClick);
 
       // Store target position after repositionCards() was called
       const targetX = newCard.x;
@@ -67,8 +67,8 @@ import { PlaneTable } from "./PlaneTable.js";
       Card.tweenGroup.add(tween);
       tween.start();
     } else if (card.isParentHand()) {
-      planeHand.removeCard(card);
-      const newCard = planeTable.addCard(spriteSheet, card.textureKey, onCardClick);
+      hand.removeCard(card);
+      const newCard = table.addCard(spriteSheet, card.textureKey, onCardClick);
 
       // Store target position before animating from old position
       const targetX = newCard.x;
@@ -96,15 +96,15 @@ import { PlaneTable } from "./PlaneTable.js";
 
   // Add 10 random cards to hand and 22 to table
   for (let i = 0; i < 10; i++) {
-    planeHand.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
+    hand.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
   }
   for (let i = 10; i < 32; i++) {
-    planeTable.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
+    table.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
   }
 
   const onResize = () => {
-    planeTable.resize();
-    planeHand.resize();
+    table.resize();
+    hand.resize();
   };
 
   addEventListener("resize", onResize);
