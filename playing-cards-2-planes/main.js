@@ -102,9 +102,18 @@ import { Table } from "./Table.js";
     table.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
   }
 
+  let resizeTimeout;
+
+  // Debounce resize handler to avoid excessive repositioning
   const onResize = () => {
-    table.resize();
-    hand.resize();
+    if (resizeTimeout) {
+      clearTimeout(resizeTimeout);
+    }
+
+    resizeTimeout = setTimeout(() => {
+      table.resize();
+      hand.resize();
+    }, 500);
   };
 
   addEventListener("resize", onResize);
