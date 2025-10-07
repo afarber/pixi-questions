@@ -1,4 +1,5 @@
 import { Container } from "pixi.js";
+import { Tween, Easing } from "@tweenjs/tween.js";
 import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
 
 export class Hand extends Container {
@@ -17,13 +18,30 @@ export class Hand extends Container {
     this.repositionCards();
   }
 
-  addCard(spriteSheet, textureKey, clickHandler = null) {
+  addCard(spriteSheet, textureKey, startX, startY, startAngle, startAlpha, clickHandler = null) {
     const card = new Card(spriteSheet, textureKey, clickHandler);
 
     this.addChild(card);
     this.repositionCards();
 
-    card.enableHoverEffect();
+    // If start parameters are provided, animate from start position to target position
+    if (startX !== null && startY !== null && startAngle !== null && startAlpha !== null) {
+      const targetX = card.x;
+      const targetY = card.y;
+
+      card.x = startX;
+      card.y = startY;
+      card.angle = startAngle;
+      card.alpha = startAlpha;
+
+      const tween = new Tween(card, Card.tweenGroup)
+        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
+        .easing(Easing.Cubic.Out);
+      Card.tweenGroup.add(tween);
+      tween.start();
+    } else {
+      card.enableHoverEffect();
+    }
 
     return card;
   }

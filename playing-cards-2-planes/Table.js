@@ -1,4 +1,5 @@
 import { Container } from "pixi.js";
+import { Tween, Easing } from "@tweenjs/tween.js";
 import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
 
 export class Table extends Container {
@@ -34,7 +35,7 @@ export class Table extends Container {
     });
   }
 
-  addCard(spriteSheet, textureKey, clickHandler = null) {
+  addCard(spriteSheet, textureKey, startX, startY, startAngle, startAlpha, clickHandler = null) {
     // Random position within the screen bounds,
     // avoiding the bottom area where hand cards are
     const margin = 50;
@@ -52,6 +53,24 @@ export class Table extends Container {
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
 
     this.addChild(card);
+
+    // If start parameters are provided, animate from start position to target position
+    if (startX !== null && startY !== null && startAngle !== null && startAlpha !== null) {
+      const targetX = card.x;
+      const targetY = card.y;
+      const targetAngle = card.angle;
+
+      card.x = startX;
+      card.y = startY;
+      card.angle = startAngle;
+      card.alpha = startAlpha;
+
+      const tween = new Tween(card, Card.tweenGroup)
+        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400)
+        .easing(Easing.Cubic.Out);
+      Card.tweenGroup.add(tween);
+      tween.start();
+    }
 
     return card;
   }

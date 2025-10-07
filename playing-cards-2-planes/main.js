@@ -16,10 +16,6 @@ import { Table } from "./Table.js";
   // append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
-  // the app stage will handle the move events
-  app.stage.eventMode = "static";
-  app.stage.hitArea = app.screen;
-
   TexturePool.textureOptions.scaleMode = "nearest";
 
   const spriteSheet = await Assets.load("playing-cards.json");
@@ -49,42 +45,10 @@ import { Table } from "./Table.js";
 
     if (card.isParentTable()) {
       table.removeCard(card);
-      const newCard = hand.addCard(spriteSheet, card.textureKey, onCardClick);
-
-      // Store target position after repositionCards() was called
-      const targetX = newCard.x;
-      const targetY = newCard.y;
-
-      // Set starting position to old position
-      newCard.x = oldParent.x + oldX;
-      newCard.y = oldParent.y + oldY;
-      newCard.angle = oldAngle;
-      newCard.alpha = 0.7;
-
-      const tween = new Tween(newCard, Card.tweenGroup)
-        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
-        .easing(Easing.Cubic.Out);
-      Card.tweenGroup.add(tween);
-      tween.start();
+      hand.addCard(spriteSheet, card.textureKey, oldParent.x + oldX, oldParent.y + oldY, oldAngle, 0.7, onCardClick);
     } else if (card.isParentHand()) {
       hand.removeCard(card);
-      const newCard = table.addCard(spriteSheet, card.textureKey, onCardClick);
-
-      // Store target position before animating from old position
-      const targetX = newCard.x;
-      const targetY = newCard.y;
-      const targetAngle = newCard.angle;
-
-      newCard.x = oldParent.x + oldX;
-      newCard.y = oldParent.y + oldY;
-      newCard.angle = 0;
-      newCard.alpha = 0.7;
-
-      const tween = new Tween(newCard, Card.tweenGroup)
-        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400)
-        .easing(Easing.Cubic.Out);
-      Card.tweenGroup.add(tween);
-      tween.start();
+      table.addCard(spriteSheet, card.textureKey, oldParent.x + oldX, oldParent.y + oldY, 0, 0.7, onCardClick);
     }
   };
 
@@ -96,19 +60,18 @@ import { Table } from "./Table.js";
 
   // Add 10 random cards to hand and 22 to table
   for (let i = 0; i < 10; i++) {
-    hand.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
+    hand.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, null, onCardClick);
   }
   for (let i = 10; i < 32; i++) {
-    table.addCard(spriteSheet, shuffledTextureKeys[i], onCardClick);
+    table.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, null, onCardClick);
   }
 
   let resizeTimeout;
 
   // Debounce resize handler to avoid excessive repositioning
   const onResize = () => {
-    if (resizeTimeout) {
-      clearTimeout(resizeTimeout);
-    }
+    // The call is noop if the param is undefined or invalid
+    clearTimeout(resizeTimeout);
 
     resizeTimeout = setTimeout(() => {
       table.resize();
