@@ -24,26 +24,20 @@ export class Hand extends Container {
     this.addChild(card);
     this.repositionCards();
 
-    // If start parameters are provided, animate from start position to target position
-    if (startX !== null && startY !== null && startAngle !== null && startAlpha !== null) {
-      const targetX = card.x;
-      const targetY = card.y;
+    const targetX = card.x;
+    const targetY = card.y;
 
-      card.x = startX;
-      card.y = startY;
-      card.angle = startAngle;
-      card.alpha = startAlpha;
+    card.x = startX;
+    card.y = startY;
+    card.angle = startAngle;
+    card.alpha = startAlpha;
 
-      const tween = new Tween(card, Card.tweenGroup)
-        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
-        .easing(Easing.Cubic.Out);
-      Card.tweenGroup.add(tween);
-      tween.start();
-    } else {
-      card.enableHoverEffect();
-    }
-
-    return card;
+    const tween = new Tween(card, Card.tweenGroup)
+      .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
+      .easing(Easing.Cubic.Out)
+      .onComplete(() => card.enableHoverEffect());
+    Card.tweenGroup.add(tween);
+    tween.start();
   }
 
   removeCard(card) {
