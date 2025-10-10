@@ -3,6 +3,7 @@ import { Group, Tween, Easing } from "@tweenjs/tween.js";
 
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
+export const TWEEN_DURATION = 400;
 
 export class Card extends Container {
   static tweenGroup = new Group();

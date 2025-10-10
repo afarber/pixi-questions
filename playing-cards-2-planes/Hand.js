@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from "./Card.js";
 
 export class Hand extends Container {
   constructor(screen) {
@@ -33,7 +33,7 @@ export class Hand extends Container {
     card.alpha = startAlpha;
 
     const tween = new Tween(card, Card.tweenGroup)
-      .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, 400)
+      .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, TWEEN_DURATION)
       .easing(Easing.Cubic.Out)
       .onComplete(() => card.enableHoverEffect());
     Card.tweenGroup.add(tween);
@@ -43,10 +43,6 @@ export class Hand extends Container {
   removeCard(card) {
     this.removeChild(card);
     //this.repositionCards();
-  }
-
-  sortCards() {
-    this.children.sort(Card.compareCards);
   }
 
   repositionCards() {
@@ -64,7 +60,7 @@ export class Hand extends Container {
     }
 
     // Sort cards before repositioning
-    this.sortCards();
+    this.children.sort(Card.compareCards);
 
     const minPaddingToScreenEdge = CARD_WIDTH / 3;
     const maxSpacingBetweenCards = CARD_WIDTH / 2;

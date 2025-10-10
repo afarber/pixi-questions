@@ -1,10 +1,13 @@
 import { Application, Assets, TexturePool } from "pixi.js";
-import { Tween, Easing } from "@tweenjs/tween.js";
 import { Card } from "./Card.js";
 import { Hand } from "./Hand.js";
 import { Table } from "./Table.js";
 
 (async () => {
+  TexturePool.textureOptions.scaleMode = "nearest";
+
+  const spriteSheet = await Assets.load("playing-cards.json");
+
   const app = new Application();
   await app.init({
     background: "DarkKhaki",
@@ -13,12 +16,8 @@ import { Table } from "./Table.js";
     hello: true
   });
 
-  // append the app canvas to the document body
+  // Append the app canvas to the document body
   document.body.appendChild(app.canvas);
-
-  TexturePool.textureOptions.scaleMode = "nearest";
-
-  const spriteSheet = await Assets.load("playing-cards.json");
 
   // Create the two planes
   const table = new Table(app.screen);
@@ -43,12 +42,17 @@ import { Table } from "./Table.js";
     const oldAngle = card.angle;
     const oldParent = card.parent;
 
+    // Convert to stage coordinates accounting for parent's scale
+    const stageX = oldParent.x + oldX * oldParent.scale.x;
+    const stageY = oldParent.y + oldY * oldParent.scale.y;
+    const stageAngle = oldAngle;
+
     if (card.isParentTable()) {
       table.removeCard(card);
-      hand.addCard(spriteSheet, card.textureKey, oldParent.x + oldX, oldParent.y + oldY, oldAngle, 0.7, onCardClick);
+      hand.addCard(spriteSheet, card.textureKey, stageX, stageY, stageAngle, 0.7, onCardClick);
     } else if (card.isParentHand()) {
       hand.removeCard(card);
-      table.addCard(spriteSheet, card.textureKey, oldParent.x + oldX, oldParent.y + oldY, 0, 0.7, onCardClick);
+      table.addCard(spriteSheet, card.textureKey, stageX, stageY, stageAngle, 0.7, onCardClick);
     }
   };
 

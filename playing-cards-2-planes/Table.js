@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT } from "./Card.js";
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from "./Card.js";
 
 export class Table extends Container {
   constructor(screen) {
@@ -64,7 +64,7 @@ export class Table extends Container {
     card.alpha = startAlpha;
 
     const tween = new Tween(card, Card.tweenGroup)
-      .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, 400)
+      .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
       .easing(Easing.Cubic.Out);
     Card.tweenGroup.add(tween);
     tween.start();
