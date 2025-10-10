@@ -28,6 +28,7 @@ export class Hand extends Container {
     const targetY = card.y;
 
     if (startPos) {
+      // Animate card from startPos to target position (moving from another container)
       card.x = startPos.x;
       card.y = startPos.y;
       card.angle = startAngle;
@@ -40,6 +41,7 @@ export class Hand extends Container {
       Card.tweenGroup.add(tween);
       tween.start();
     } else {
+      // Initial card placement: keep repositioned coordinates, enable hover immediately
       card.enableHoverEffect();
     }
   }

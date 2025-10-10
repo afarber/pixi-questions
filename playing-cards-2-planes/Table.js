@@ -55,6 +55,7 @@ export class Table extends Container {
     this.addChild(card);
 
     if (startPos) {
+      // Animate card from startPos to target position (moving from another container)
       const targetX = card.x;
       const targetY = card.y;
       const targetAngle = card.angle;
@@ -70,6 +71,7 @@ export class Table extends Container {
       Card.tweenGroup.add(tween);
       tween.start();
     }
+    // Else: initial card placement - keep random position and angle, no tween
   }
 
   removeCard(card) {
