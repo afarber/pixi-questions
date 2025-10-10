@@ -37,22 +37,19 @@ import { Table } from "./Table.js";
     // End all ongoing tweens (jumping to final values) to prevent conflicts
     Card.endAllTweens();
 
-    const oldX = card.x;
-    const oldY = card.y;
-    const oldAngle = card.angle;
-    const oldParent = card.parent;
-
-    // Convert to stage coordinates accounting for parent's scale
-    const stageX = oldParent.x + oldX * oldParent.scale.x;
-    const stageY = oldParent.y + oldY * oldParent.scale.y;
-    const stageAngle = oldAngle;
+    // Convert to stage coordinates using PixiJS transformation matrix
+    const globalPos = card.parent.toGlobal(card.position);
 
     if (card.isParentTable()) {
+      // Convert from stage to Hand's local coordinates
+      const handPos = hand.toLocal(globalPos);
       table.removeCard(card);
-      hand.addCard(spriteSheet, card.textureKey, stageX, stageY, stageAngle, 0.7, onCardClick);
+      hand.addCard(spriteSheet, card.textureKey, handPos.x, handPos.y, card.angle, 0.7, onCardClick);
     } else if (card.isParentHand()) {
+      // Convert from stage to Table's local coordinates
+      const tablePos = table.toLocal(globalPos);
       hand.removeCard(card);
-      table.addCard(spriteSheet, card.textureKey, stageX, stageY, stageAngle, 0.7, onCardClick);
+      table.addCard(spriteSheet, card.textureKey, tablePos.x, tablePos.y, card.angle, 0.7, onCardClick);
     }
   };
 
