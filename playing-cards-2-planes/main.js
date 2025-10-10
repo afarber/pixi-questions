@@ -44,12 +44,12 @@ import { Table } from "./Table.js";
       // Convert from stage to Hand's local coordinates
       const handPos = hand.toLocal(globalPos);
       table.removeCard(card);
-      hand.addCard(spriteSheet, card.textureKey, handPos.x, handPos.y, card.angle, 0.7, onCardClick);
+      hand.addCard(spriteSheet, card.textureKey, handPos, card.angle, 0.7, onCardClick);
     } else if (card.isParentHand()) {
       // Convert from stage to Table's local coordinates
       const tablePos = table.toLocal(globalPos);
       hand.removeCard(card);
-      table.addCard(spriteSheet, card.textureKey, tablePos.x, tablePos.y, card.angle, 0.7, onCardClick);
+      table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
     }
   };
 
@@ -61,10 +61,10 @@ import { Table } from "./Table.js";
 
   // Add 10 random cards to hand and 22 to table
   for (let i = 0; i < 10; i++) {
-    hand.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, null, onCardClick);
+    hand.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
   for (let i = 10; i < 32; i++) {
-    table.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, null, onCardClick);
+    table.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
 
   let resizeTimeout;

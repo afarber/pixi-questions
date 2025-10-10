@@ -35,7 +35,7 @@ export class Table extends Container {
     });
   }
 
-  addCard(spriteSheet, textureKey, startX, startY, startAngle, startAlpha, clickHandler = null) {
+  addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
     // Random position within the screen bounds,
     // avoiding the bottom area where hand cards are
     const margin = 50;
@@ -54,20 +54,22 @@ export class Table extends Container {
 
     this.addChild(card);
 
-    const targetX = card.x;
-    const targetY = card.y;
-    const targetAngle = card.angle;
+    if (startPos) {
+      const targetX = card.x;
+      const targetY = card.y;
+      const targetAngle = card.angle;
 
-    card.x = startX;
-    card.y = startY;
-    card.angle = startAngle;
-    card.alpha = startAlpha;
+      card.x = startPos.x;
+      card.y = startPos.y;
+      card.angle = startAngle;
+      card.alpha = startAlpha;
 
-    const tween = new Tween(card, Card.tweenGroup)
-      .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
-      .easing(Easing.Cubic.Out);
-    Card.tweenGroup.add(tween);
-    tween.start();
+      const tween = new Tween(card, Card.tweenGroup)
+        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
+        .easing(Easing.Cubic.Out);
+      Card.tweenGroup.add(tween);
+      tween.start();
+    }
   }
 
   removeCard(card) {

@@ -18,7 +18,7 @@ export class Hand extends Container {
     this.repositionCards();
   }
 
-  addCard(spriteSheet, textureKey, startX, startY, startAngle, startAlpha, clickHandler = null) {
+  addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
     const card = new Card(spriteSheet, textureKey, clickHandler);
 
     this.addChild(card);
@@ -27,17 +27,21 @@ export class Hand extends Container {
     const targetX = card.x;
     const targetY = card.y;
 
-    card.x = startX;
-    card.y = startY;
-    card.angle = startAngle;
-    card.alpha = startAlpha;
+    if (startPos) {
+      card.x = startPos.x;
+      card.y = startPos.y;
+      card.angle = startAngle;
+      card.alpha = startAlpha;
 
-    const tween = new Tween(card, Card.tweenGroup)
-      .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, TWEEN_DURATION)
-      .easing(Easing.Cubic.Out)
-      .onComplete(() => card.enableHoverEffect());
-    Card.tweenGroup.add(tween);
-    tween.start();
+      const tween = new Tween(card, Card.tweenGroup)
+        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, TWEEN_DURATION)
+        .easing(Easing.Cubic.Out)
+        .onComplete(() => card.enableHoverEffect());
+      Card.tweenGroup.add(tween);
+      tween.start();
+    } else {
+      card.enableHoverEffect();
+    }
   }
 
   removeCard(card) {
