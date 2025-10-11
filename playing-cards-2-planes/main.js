@@ -10,7 +10,7 @@ import { Table } from "./Table.js";
 
   const app = new Application();
   await app.init({
-    background: "DarkKhaki",
+    background: "red",
     resizeTo: window,
     antialias: true,
     hello: true

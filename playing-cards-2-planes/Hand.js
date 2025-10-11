@@ -52,22 +52,31 @@ export class Hand extends Container {
   }
 
   repositionCards() {
-    const totalCards = this.children.length;
+    // Get only Card children
+    const cards = this.children.filter(child => child instanceof Card);
 
-    if (totalCards === 0) {
+    if (cards.length === 0) {
       return;
     }
 
-    if (totalCards === 1) {
-      const card = this.children[0];
+    if (cards.length === 1) {
+      const card = cards[0];
       card.x = this.screen.width / 2;
       card.y = this.screen.height - 0.3 * CARD_HEIGHT;
+      card.baseY = card.y;
       return;
     }
 
-    // Sort cards before repositioning
-    this.children.sort(Card.compareCards);
+    // Sort cards and update their z-order
+    cards.sort(Card.compareCards);
 
+    // Remove all cards from container
+    cards.forEach(card => this.removeChild(card));
+
+    // Re-add them in sorted order (background stays at index 0)
+    cards.forEach(card => this.addChild(card));
+
+    const totalCards = cards.length;
     const minPaddingToScreenEdge = CARD_WIDTH / 3;
     const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
@@ -81,7 +90,7 @@ export class Hand extends Container {
     const totalCardsWidth = (totalCards - 1) * spacingBetweenCards;
     const firstCardX = this.screen.width / 2 - totalCardsWidth / 2;
 
-    this.children.forEach((card, index) => {
+    cards.forEach((card, index) => {
       card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
       // Position so only 60% of card height is visible from the top
       card.y = this.screen.height - 0.3 * CARD_HEIGHT + card.jitterY;
