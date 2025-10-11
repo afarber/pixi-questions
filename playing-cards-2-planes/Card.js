@@ -72,35 +72,15 @@ export class Card extends Container {
 
   enableHoverEffect() {
     this.on("pointerenter", () => {
-      if (this._hoverTween) {
-        this._hoverTween.stop();
-      }
+      this.y = this.baseY - CARD_HEIGHT / 6;
 
-      this._hoverTween = new Tween(this, Card.tweenGroup)
-        .to({ y: this.baseY - CARD_HEIGHT / 6 }, 150)
-        .easing(Easing.Cubic.In)
-        .start();
-      Card.tweenGroup.add(this._hoverTween);
-    });
-
-    this.on("pointerleave", () => {
-      if (this._hoverTween) {
-        this._hoverTween.stop();
-      }
-
-      this._hoverTween = new Tween(this, Card.tweenGroup).to({ y: this.baseY }, 150).easing(Easing.Cubic.In).start();
-      Card.tweenGroup.add(this._hoverTween);
+      this.once("pointerleave", () => {
+        this.y = this.baseY;
+      });
     });
   }
 
   disableHoverEffect() {
-    if (this._hoverTween) {
-      this._hoverTween.stop();
-      this._hoverTween = null;
-    }
-
-    this.baseY = undefined;
-
     this.off("pointerenter");
     this.off("pointerleave");
   }
