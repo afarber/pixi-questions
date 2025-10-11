@@ -1,5 +1,5 @@
 import { Container, Sprite, Rectangle } from "pixi.js";
-import { Group, Tween, Easing } from "@tweenjs/tween.js";
+import { Group } from "@tweenjs/tween.js";
 
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
@@ -49,6 +49,10 @@ export class Card extends Container {
     this.angle = cardAngle;
     this.textureKey = textureKey;
 
+    // Random jitter of +/- 4 pixels, stored once for consistent repositioning
+    this.jitterX = Math.random() * 8 - 4;
+    this.jitterY = Math.random() * 8 - 4;
+
     this.interactiveChildren = false;
     this.cacheAsTexture = true;
 
@@ -72,6 +76,7 @@ export class Card extends Container {
 
   enableHoverEffect() {
     this.on("pointerenter", () => {
+      // On mouse hover, move the hand card up by 1/6
       this.y = this.baseY - CARD_HEIGHT / 6;
 
       this.once("pointerleave", () => {

@@ -82,13 +82,9 @@ export class Hand extends Container {
     const firstCardX = this.screen.width / 2 - totalCardsWidth / 2;
 
     this.children.forEach((card, index) => {
-      // Random jitter of +/- 4 pixels
-      const jitterX = Math.random() * 8 - 4;
-      const jitterY = Math.random() * 8 - 4;
-
-      card.x = firstCardX + index * spacingBetweenCards + jitterX;
+      card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
       // Position so only 60% of card height is visible from the top
-      card.y = this.screen.height - 0.3 * CARD_HEIGHT + jitterY;
+      card.y = this.screen.height - 0.3 * CARD_HEIGHT + card.jitterY;
       // Store base Y position for hover effect
       card.baseY = card.y;
     });
