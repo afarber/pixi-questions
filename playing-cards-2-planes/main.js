@@ -2,6 +2,7 @@ import { Application, Assets, TexturePool } from "pixi.js";
 import { Card } from "./Card.js";
 import { Hand } from "./Hand.js";
 import { Table } from "./Table.js";
+import { Background } from "./Background.js";
 
 (async () => {
   TexturePool.textureOptions.scaleMode = "nearest";
@@ -18,6 +19,10 @@ import { Table } from "./Table.js";
 
   // Append the app canvas to the document body
   document.body.appendChild(app.canvas);
+
+  // Create background (added first, rendered behind everything)
+  const background = new Background(app.screen);
+  app.stage.addChild(background);
 
   // Create the two planes
   const table = new Table(app.screen);
@@ -76,6 +81,7 @@ import { Table } from "./Table.js";
     clearTimeout(resizeTimeout);
 
     resizeTimeout = setTimeout(() => {
+      background.resize();
       table.resize();
       hand.resize();
     }, 500);

@@ -52,7 +52,6 @@ export class Hand extends Container {
   }
 
   repositionCards() {
-    // Get only Card children
     const cards = this.children.filter(child => child instanceof Card);
 
     if (cards.length === 0) {
@@ -69,11 +68,7 @@ export class Hand extends Container {
 
     // Sort cards and update their z-order
     cards.sort(Card.compareCards);
-
-    // Remove all cards from container
     cards.forEach(card => this.removeChild(card));
-
-    // Re-add them in sorted order (background stays at index 0)
     cards.forEach(card => this.addChild(card));
 
     const totalCards = cards.length;
