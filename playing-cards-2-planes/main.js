@@ -3,6 +3,7 @@ import { Card } from "./Card.js";
 import { Hand } from "./Hand.js";
 import { Table } from "./Table.js";
 import { Background } from "./Background.js";
+import { APP_BACKGROUND } from "./Theme.js";
 
 (async () => {
   TexturePool.textureOptions.scaleMode = "nearest";
@@ -11,7 +12,7 @@ import { Background } from "./Background.js";
 
   const app = new Application();
   await app.init({
-    background: "red",
+    background: APP_BACKGROUND,
     resizeTo: window,
     antialias: true,
     hello: true
