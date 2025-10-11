@@ -38,18 +38,20 @@ export class Table extends Container {
   }
 
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    // Random position within the screen bounds,
-    // avoiding the bottom area where hand cards are
+    // Random position within the center area,
+    // avoiding the bottom area where hand cards are and the left/right columns
     const margin = 50;
+    const columnWidth = CARD_WIDTH + 2 * margin;
     const handAreaHeight = CARD_HEIGHT / 2;
-    const availableWidth = this.screen.width - 2 * margin - CARD_WIDTH;
-    const availableHeight = this.screen.height - handAreaHeight - 2 * margin - CARD_HEIGHT;
 
-    const x = Math.random() * availableWidth + margin + CARD_WIDTH / 2;
-    const y = Math.random() * availableHeight + margin + CARD_HEIGHT / 2;
+    const centerWidth = this.screen.width - 2 * columnWidth;
+    const centerHeight = this.screen.height - handAreaHeight - 2 * margin - CARD_HEIGHT;
 
-    // Random angle between -60 and +60 degrees
-    const angle = Math.random() * 120 - 60;
+    const x = Math.random() * centerWidth + columnWidth + CARD_WIDTH / 2;
+    const y = Math.random() * centerHeight + margin + CARD_HEIGHT / 2;
+
+    // Random angle between -20 and +20 degrees
+    const angle = Math.random() * 40 - 20;
 
     // Cards stay flat - the container provides the 3D perspective
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);

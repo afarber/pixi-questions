@@ -1,5 +1,9 @@
 import { Container, Sprite, Rectangle } from "pixi.js";
 import { Group } from "@tweenjs/tween.js";
+import { Hand } from "./Hand.js";
+import { Table } from "./Table.js";
+import { Left } from "./Left.js";
+import { Right } from "./Right.js";
 
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
@@ -67,11 +71,19 @@ export class Card extends Container {
   }
 
   isParentHand() {
-    return this.parent && this.parent.scale.y > 0.9;
+    return this.parent instanceof Hand;
   }
 
   isParentTable() {
-    return this.parent && this.parent.scale.y < 0.9;
+    return this.parent instanceof Table;
+  }
+
+  isParentLeft() {
+    return this.parent instanceof Left;
+  }
+
+  isParentRight() {
+    return this.parent instanceof Right;
   }
 
   enableHoverEffect() {
@@ -107,8 +119,19 @@ export class Card extends Container {
   }
 
   toString() {
+    let plane = "unknown";
+    if (this.isParentHand()) {
+      plane = "hand";
+    } else if (this.isParentLeft()) {
+      plane = "left";
+    } else if (this.isParentRight()) {
+      plane = "right";
+    } else if (this.isParentTable()) {
+      plane = "table";
+    }
+
     return (
-      `Card(${this.textureKey} ${this.isParentHand() ? "hand" : "table"} ` +
+      `Card(${this.textureKey} ${plane} ` +
       `${Math.round(this.x)}, ${Math.round(this.y)} ${Math.round(this.angle)})`
     );
   }
