@@ -39,6 +39,7 @@ import { Table } from "./Table.js";
 
     // Convert to stage coordinates using PixiJS transformation matrix
     const globalPos = card.parent.toGlobal(card.position);
+    // Note: angle is same in both coordinate spaces since Hand and Table are not rotated
 
     if (card.isParentTable()) {
       // Convert from stage to Hand's local coordinates

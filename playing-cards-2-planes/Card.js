@@ -76,13 +76,8 @@ export class Card extends Container {
         this._hoverTween.stop();
       }
 
-      // Store base Y position on first hover
-      if (this._baseY === undefined) {
-        this._baseY = this.y;
-      }
-
       this._hoverTween = new Tween(this, Card.tweenGroup)
-        .to({ y: this._baseY - CARD_HEIGHT / 6 }, 150)
+        .to({ y: this.baseY - CARD_HEIGHT / 6 }, 150)
         .easing(Easing.Cubic.In)
         .start();
       Card.tweenGroup.add(this._hoverTween);
@@ -93,7 +88,7 @@ export class Card extends Container {
         this._hoverTween.stop();
       }
 
-      this._hoverTween = new Tween(this, Card.tweenGroup).to({ y: this._baseY }, 150).easing(Easing.Cubic.In).start();
+      this._hoverTween = new Tween(this, Card.tweenGroup).to({ y: this.baseY }, 150).easing(Easing.Cubic.In).start();
       Card.tweenGroup.add(this._hoverTween);
     });
   }
@@ -104,7 +99,7 @@ export class Card extends Container {
       this._hoverTween = null;
     }
 
-    this._baseY = undefined;
+    this.baseY = undefined;
 
     this.off("pointerenter");
     this.off("pointerleave");

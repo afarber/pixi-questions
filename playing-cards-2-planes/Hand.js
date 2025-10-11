@@ -89,6 +89,8 @@ export class Hand extends Container {
       card.x = firstCardX + index * spacingBetweenCards + jitterX;
       // Position so only 60% of card height is visible from the top
       card.y = this.screen.height - 0.3 * CARD_HEIGHT + jitterY;
+      // Store base Y position for hover effect
+      card.baseY = card.y;
     });
   }
 }
