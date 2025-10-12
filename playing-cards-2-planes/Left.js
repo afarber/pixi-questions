@@ -29,6 +29,7 @@ export class Left extends Container {
 
     const targetX = card.x;
     const targetY = card.y;
+    const targetAngle = card.angle;
 
     if (startPos) {
       // Animate card from startPos to target position (moving from another container)
@@ -38,7 +39,7 @@ export class Left extends Container {
       card.alpha = startAlpha;
 
       const tween = new Tween(card, Card.tweenGroup)
-        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, TWEEN_DURATION)
+        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
         .easing(Easing.Cubic.Out);
       Card.tweenGroup.add(tween);
       tween.start();
@@ -62,7 +63,7 @@ export class Left extends Container {
       const margin = 50;
       card.x = margin + CARD_WIDTH / 2;
       card.y = this.screen.height / 2;
-      card.angle = 0;
+      card.angle = 90;
       return;
     }
 
@@ -92,7 +93,7 @@ export class Left extends Container {
     cards.forEach((card, index) => {
       card.x = cardX + card.jitterX;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
-      card.angle = 0;
+      card.angle = 90;
     });
   }
 }
