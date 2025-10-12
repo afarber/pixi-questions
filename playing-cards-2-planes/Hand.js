@@ -26,6 +26,7 @@ export class Hand extends Container {
 
     const targetX = card.x;
     const targetY = card.y;
+    const targetAngle = card.angle;
 
     if (startPos) {
       // Animate card from startPos to target position (moving from another container)
@@ -35,7 +36,7 @@ export class Hand extends Container {
       card.alpha = startAlpha;
 
       const tween = new Tween(card, Card.tweenGroup)
-        .to({ x: targetX, y: targetY, angle: 0, alpha: 1 }, TWEEN_DURATION)
+        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
         .easing(Easing.Cubic.Out)
         .onComplete(() => card.enableHoverEffect());
       Card.tweenGroup.add(tween);
@@ -63,6 +64,7 @@ export class Hand extends Container {
       card.x = this.screen.width / 2;
       card.y = this.screen.height - 0.3 * CARD_HEIGHT;
       card.baseY = card.y;
+      card.angle = 0;
       return;
     }
 
@@ -85,12 +87,16 @@ export class Hand extends Container {
     const totalCardsWidth = (totalCards - 1) * spacingBetweenCards;
     const firstCardX = this.screen.width / 2 - totalCardsWidth / 2;
 
+    const middleIndex = (totalCards - 1) / 2;
+
     cards.forEach((card, index) => {
       card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
       // Position so only 60% of card height is visible from the top
       card.y = this.screen.height - 0.3 * CARD_HEIGHT + card.jitterY;
       // Store base Y position for hover effect
       card.baseY = card.y;
+      // Apply tilt: 0 degrees at middle, increasing by 1 degree per card away from center
+      card.angle = (index - middleIndex) * 1;
     });
   }
 }
