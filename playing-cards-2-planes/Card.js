@@ -8,6 +8,7 @@ import { Right } from "./Right.js";
 export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
 export const TWEEN_DURATION = 400;
+export const CARD_VISIBLE_RATIO = 0.3;
 
 export class Card extends Container {
   static tweenGroup = new Group();

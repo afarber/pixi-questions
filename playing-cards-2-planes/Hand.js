@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from "./Card.js";
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from "./Card.js";
 
 export class Hand extends Container {
   constructor(screen) {
@@ -62,7 +62,8 @@ export class Hand extends Container {
     if (cards.length === 1) {
       const card = cards[0];
       card.x = this.screen.width / 2;
-      card.y = this.screen.height - 0.3 * CARD_HEIGHT;
+      // Position so only CARD_VISIBLE_RATIO (30%) of card height is visible from top, rest is off-screen at bottom
+      card.y = this.screen.height - CARD_VISIBLE_RATIO * CARD_HEIGHT;
       card.baseY = card.y;
       card.angle = 0;
       return;
@@ -91,8 +92,8 @@ export class Hand extends Container {
 
     cards.forEach((card, index) => {
       card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
-      // Position so only 60% of card height is visible from the top
-      card.y = this.screen.height - 0.3 * CARD_HEIGHT + card.jitterY;
+      // Position so only CARD_VISIBLE_RATIO (30%) of card height is visible from top, rest is off-screen at bottom
+      card.y = this.screen.height - CARD_VISIBLE_RATIO * CARD_HEIGHT + card.jitterY;
       // Store base Y position for hover effect
       card.baseY = card.y;
       // Apply tilt: 0 degrees at middle, increasing by 1 degree per card away from center

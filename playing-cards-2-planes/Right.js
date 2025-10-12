@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from "./Card.js";
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from "./Card.js";
 
 export class Right extends Container {
   constructor(screen) {
@@ -52,7 +52,7 @@ export class Right extends Container {
   }
 
   repositionCards() {
-    const cards = this.children.filter(child => child instanceof Card);
+    const cards = this.children.filter((child) => child instanceof Card);
 
     if (cards.length === 0) {
       return;
@@ -60,14 +60,13 @@ export class Right extends Container {
 
     if (cards.length === 1) {
       const card = cards[0];
-      const margin = 50;
-      card.x = this.screen.width - margin - CARD_WIDTH / 2;
+      // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from left, rest is off-screen at right
+      card.x = this.screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;
       card.y = this.screen.height / 2;
       card.angle = 90;
       return;
     }
 
-    // Sort cards
     cards.sort(Card.compareCards);
 
     const totalCards = cards.length;
@@ -86,17 +85,19 @@ export class Right extends Container {
     const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
     const firstCardY = (this.screen.height - handAreaHeight) / 2 - totalCardsHeight / 2;
 
-    const cardX = this.screen.width - margin - CARD_WIDTH / 2;
+    // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from left, rest is off-screen at right
+    const cardX = this.screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;
     const middleIndex = (totalCards - 1) / 2;
 
     cards.forEach((card, index) => {
       card.x = cardX + card.jitterX;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
+      // Apply tilt: 90 degrees at middle (horizontal), decreasing by 1 degree per card away from center (opposite fan direction)
       card.angle = 90 - (index - middleIndex) * 1;
     });
 
     // Update z-order in reverse (cards at bottom position render on top)
-    cards.forEach(card => this.removeChild(card));
-    cards.reverse().forEach(card => this.addChild(card));
+    cards.forEach((card) => this.removeChild(card));
+    cards.reverse().forEach((card) => this.addChild(card));
   }
 }

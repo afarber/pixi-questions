@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from "./Card.js";
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from "./Card.js";
 
 export class Left extends Container {
   constructor(screen) {
@@ -60,8 +60,8 @@ export class Left extends Container {
 
     if (cards.length === 1) {
       const card = cards[0];
-      const margin = 50;
-      card.x = margin + CARD_WIDTH / 2;
+      // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from right, rest is off-screen at left
+      card.x = CARD_VISIBLE_RATIO * CARD_WIDTH;
       card.y = this.screen.height / 2;
       card.angle = 90;
       return;
@@ -88,12 +88,14 @@ export class Left extends Container {
     const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
     const firstCardY = (this.screen.height - handAreaHeight) / 2 - totalCardsHeight / 2;
 
-    const cardX = margin + CARD_WIDTH / 2;
+    // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from right, rest is off-screen at left
+    const cardX = CARD_VISIBLE_RATIO * CARD_WIDTH;
     const middleIndex = (totalCards - 1) / 2;
 
     cards.forEach((card, index) => {
       card.x = cardX + card.jitterX;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
+      // Apply tilt: 90 degrees at middle (horizontal), increasing by 1 degree per card away from center
       card.angle = 90 + (index - middleIndex) * 1;
     });
   }
