@@ -67,8 +67,8 @@ export class Right extends Container {
       return;
     }
 
-    // Sort cards and update their z-order
-    cards.sort(Card.compareCards);
+    // Sort cards in reverse order and update their z-order
+    cards.sort((a, b) => Card.compareCards(b, a));
     cards.forEach(card => this.removeChild(card));
     cards.forEach(card => this.addChild(card));
 
@@ -89,11 +89,12 @@ export class Right extends Container {
     const firstCardY = (this.screen.height - handAreaHeight) / 2 - totalCardsHeight / 2;
 
     const cardX = this.screen.width - margin - CARD_WIDTH / 2;
+    const middleIndex = (totalCards - 1) / 2;
 
     cards.forEach((card, index) => {
       card.x = cardX + card.jitterX;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
-      card.angle = 90;
+      card.angle = 90 - (index - middleIndex) * 1;
     });
   }
 }

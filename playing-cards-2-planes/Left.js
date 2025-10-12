@@ -89,11 +89,12 @@ export class Left extends Container {
     const firstCardY = (this.screen.height - handAreaHeight) / 2 - totalCardsHeight / 2;
 
     const cardX = margin + CARD_WIDTH / 2;
+    const middleIndex = (totalCards - 1) / 2;
 
     cards.forEach((card, index) => {
       card.x = cardX + card.jitterX;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
-      card.angle = 90;
+      card.angle = 90 + (index - middleIndex) * 1;
     });
   }
 }
