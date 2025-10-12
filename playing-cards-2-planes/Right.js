@@ -70,20 +70,19 @@ export class Right extends Container {
     cards.sort(Card.compareCards);
 
     const totalCards = cards.length;
-    const margin = 50;
-    const minPaddingToScreenEdge = CARD_HEIGHT / 3;
-    const maxSpacingBetweenCards = CARD_HEIGHT / 2;
+    const paddingTop = 0;
+    const paddingBottom = CARD_VISIBLE_RATIO * CARD_HEIGHT;
+    const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
-    // Available height for card spacing (excluding padding for card edges and 1 card)
-    const handAreaHeight = CARD_HEIGHT / 2;
-    const availableHeight = this.screen.height - handAreaHeight - 2 * minPaddingToScreenEdge - CARD_HEIGHT;
+    // Available height for card spacing (excluding padding and 1 card height)
+    const availableHeight = this.screen.height - paddingTop - paddingBottom - CARD_HEIGHT;
 
     // Calculate spacing between cards
     const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
 
     // Center the cards vertically
     const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
-    const firstCardY = (this.screen.height - handAreaHeight) / 2 - totalCardsHeight / 2;
+    const firstCardY = paddingTop + CARD_HEIGHT / 2 + (availableHeight - totalCardsHeight) / 2;
 
     // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from left, rest is off-screen at right
     const cardX = this.screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;

@@ -53,7 +53,7 @@ export class Hand extends Container {
   }
 
   repositionCards() {
-    const cards = this.children.filter(child => child instanceof Card);
+    const cards = this.children.filter((child) => child instanceof Card);
 
     if (cards.length === 0) {
       return;
@@ -71,8 +71,8 @@ export class Hand extends Container {
 
     // Sort cards and update their z-order
     cards.sort(Card.compareCards);
-    cards.forEach(card => this.removeChild(card));
-    cards.forEach(card => this.addChild(card));
+    cards.forEach((card) => this.removeChild(card));
+    cards.forEach((card) => this.addChild(card));
 
     const totalCards = cards.length;
     const minPaddingToScreenEdge = CARD_WIDTH / 3;
@@ -92,7 +92,8 @@ export class Hand extends Container {
 
     cards.forEach((card, index) => {
       card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
-      // Position so only CARD_VISIBLE_RATIO (30%) of card height is visible from top, rest is off-screen at bottom
+      // Position so only CARD_VISIBLE_RATIO (30%) of card height
+      // is visible from top, rest is off-screen at bottom
       card.y = this.screen.height - CARD_VISIBLE_RATIO * CARD_HEIGHT + card.jitterY;
       // Store base Y position for hover effect
       card.baseY = card.y;

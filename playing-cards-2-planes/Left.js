@@ -52,7 +52,7 @@ export class Left extends Container {
   }
 
   repositionCards() {
-    const cards = this.children.filter(child => child instanceof Card);
+    const cards = this.children.filter((child) => child instanceof Card);
 
     if (cards.length === 0) {
       return;
@@ -69,24 +69,23 @@ export class Left extends Container {
 
     // Sort cards and update their z-order
     cards.sort(Card.compareCards);
-    cards.forEach(card => this.removeChild(card));
-    cards.forEach(card => this.addChild(card));
+    cards.forEach((card) => this.removeChild(card));
+    cards.forEach((card) => this.addChild(card));
 
     const totalCards = cards.length;
-    const margin = 50;
-    const minPaddingToScreenEdge = CARD_HEIGHT / 3;
-    const maxSpacingBetweenCards = CARD_HEIGHT / 2;
+    const paddingTop = 0;
+    const paddingBottom = CARD_VISIBLE_RATIO * CARD_HEIGHT;
+    const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
-    // Available height for card spacing (excluding padding for card edges and 1 card)
-    const handAreaHeight = CARD_HEIGHT / 2;
-    const availableHeight = this.screen.height - handAreaHeight - 2 * minPaddingToScreenEdge - CARD_HEIGHT;
+    // Available height for card spacing (excluding padding and 1 card height)
+    const availableHeight = this.screen.height - paddingTop - paddingBottom - CARD_HEIGHT;
 
     // Calculate spacing between cards
     const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
 
     // Center the cards vertically
     const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
-    const firstCardY = (this.screen.height - handAreaHeight) / 2 - totalCardsHeight / 2;
+    const firstCardY = paddingTop + CARD_HEIGHT / 2 + (availableHeight - totalCardsHeight) / 2;
 
     // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from right, rest is off-screen at left
     const cardX = CARD_VISIBLE_RATIO * CARD_WIDTH;
