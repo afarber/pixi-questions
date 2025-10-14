@@ -89,11 +89,23 @@ export class Card extends Container {
 
   enableHoverEffect() {
     this.on("pointerenter", () => {
-      // On mouse hover, move the hand card up by 1/6
-      this.y = this.baseY - CARD_HEIGHT / 6;
+      if (this.isParentHand()) {
+        // On mouse hover, move the hand card up by 1/6
+        this.y = this.baseY - CARD_HEIGHT / 6;
+      } else if (this.isParentLeft()) {
+        // On mouse hover, move the left card right by 1/6
+        this.x = this.baseX + CARD_WIDTH / 6;
+      } else if (this.isParentRight()) {
+        // On mouse hover, move the right card left by 1/6
+        this.x = this.baseX - CARD_WIDTH / 6;
+      }
 
       this.once("pointerleave", () => {
-        this.y = this.baseY;
+        if (this.isParentHand()) {
+          this.y = this.baseY;
+        } else if (this.isParentLeft() || this.isParentRight()) {
+          this.x = this.baseX;
+        }
       });
     });
   }

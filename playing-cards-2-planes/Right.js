@@ -40,11 +40,14 @@ export class Right extends Container {
 
       const tween = new Tween(card, Card.tweenGroup)
         .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
-        .easing(Easing.Cubic.Out);
+        .easing(Easing.Cubic.Out)
+        .onComplete(() => card.enableHoverEffect());
       Card.tweenGroup.add(tween);
       tween.start();
+    } else {
+      // Initial card placement: keep repositioned coordinates, enable hover immediately
+      card.enableHoverEffect();
     }
-    // Else: initial card placement - keep repositioned coordinates, no tween
   }
 
   removeCard(card) {
@@ -62,6 +65,7 @@ export class Right extends Container {
       const card = cards[0];
       // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from left, rest is off-screen at right
       card.x = this.screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;
+      card.baseX = card.x;
       card.y = this.screen.height / 2;
       card.angle = 90;
       return;
@@ -90,6 +94,8 @@ export class Right extends Container {
 
     cards.forEach((card, index) => {
       card.x = cardX + card.jitterX;
+      // Store base X position for hover effect
+      card.baseX = card.x;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
       // Apply tilt: 90 degrees at middle (horizontal), decreasing by 1 degree per card away from center (opposite fan direction)
       card.angle = 90 - (index - middleIndex) * 1;
