@@ -3,11 +3,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 describe('WebSocket Connection Management', () => {
   let mockWebSocket;
   let mockElement;
-  
+
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
-    
+
     // Mock DOM elements
     mockElement = {
       textContent: '',
@@ -25,14 +25,40 @@ describe('WebSocket Connection Management', () => {
       focus: vi.fn(),
       style: {}
     };
-    
+
     global.document.getElementById = vi.fn().mockReturnValue(mockElement);
     global.console.log = vi.fn();
     global.console.error = vi.fn();
-    
-    // Mock WebSocket
+
+    // Mock WebSocket as a proper class
+    class MockWebSocket {
+      static CONNECTING = 0;
+      static OPEN = 1;
+      static CLOSING = 2;
+      static CLOSED = 3;
+
+      constructor(url) {
+        this.url = url;
+        this.readyState = MockWebSocket.CONNECTING;
+        this.send = vi.fn();
+        this.close = vi.fn();
+        this.onopen = null;
+        this.onmessage = null;
+        this.onclose = null;
+        this.onerror = null;
+        mockWebSocket = this;
+      }
+    }
+
+    global.WebSocket = MockWebSocket;
+    global.location = {
+      protocol: 'http:',
+      host: 'localhost:8000'
+    };
+
+    // Initialize mockWebSocket with defaults
     mockWebSocket = {
-      readyState: WebSocket.CONNECTING,
+      readyState: 0,
       send: vi.fn(),
       close: vi.fn(),
       onopen: null,
@@ -40,24 +66,18 @@ describe('WebSocket Connection Management', () => {
       onclose: null,
       onerror: null
     };
-    
-    global.WebSocket = vi.fn().mockImplementation(() => mockWebSocket);
-    global.location = {
-      protocol: 'http:',
-      host: 'localhost:8000'
-    };
   });
 
   describe('WebSocket Creation', () => {
     it('should create WebSocket with correct URL', () => {
-      new WebSocket('ws://localhost:8000/ws');
-      expect(WebSocket).toHaveBeenCalledWith('ws://localhost:8000/ws');
+      const ws = new WebSocket('ws://localhost:8000/ws');
+      expect(ws.url).toBe('ws://localhost:8000/ws');
     });
 
     it('should use wss protocol for https', () => {
       global.location.protocol = 'https:';
-      new WebSocket('wss://localhost:8000/ws');
-      expect(WebSocket).toHaveBeenCalledWith('wss://localhost:8000/ws');
+      const ws = new WebSocket('wss://localhost:8000/ws');
+      expect(ws.url).toBe('wss://localhost:8000/ws');
     });
   });
 

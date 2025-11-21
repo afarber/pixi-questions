@@ -1,47 +1,58 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { PixiCanvas } from '../../src/pixi-canvas.js';
 
-// Mock PIXI globally
-global.PIXI = {
-  Application: vi.fn().mockImplementation(() => ({
-    init: vi.fn().mockResolvedValue(),
-    canvas: document.createElement('canvas'),
-    stage: {
-      addChild: vi.fn()
-    },
-    screen: {
-      width: 800,
-      height: 400
-    },
-    ticker: {
+// Mock PIXI globally with proper classes
+class MockApplication {
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.stage = { addChild: vi.fn() };
+    this.screen = { width: 800, height: 400 };
+    this.ticker = {
       add: vi.fn(),
       remove: vi.fn(),
       deltaTime: 1,
       lastTime: 1000
-    }
-  })),
-  Container: vi.fn().mockImplementation(() => ({
-    addChild: vi.fn(),
-    removeChild: vi.fn()
-  })),
-  Graphics: vi.fn().mockImplementation(() => ({
-    rect: vi.fn().mockReturnThis(),
-    fill: vi.fn().mockReturnThis(),
-    stroke: vi.fn().mockReturnThis(),
-    addChild: vi.fn(),
-    x: 0,
-    y: 0,
-    width: 80,
-    height: 40,
-    userData: {}
-  })),
-  Text: vi.fn().mockImplementation(() => ({
-    anchor: {
-      set: vi.fn()
-    },
-    x: 0,
-    y: 0
-  }))
+    };
+  }
+  async init() {
+    return Promise.resolve();
+  }
+}
+
+class MockContainer {
+  constructor() {
+    this.addChild = vi.fn();
+    this.removeChild = vi.fn();
+  }
+}
+
+class MockGraphics {
+  constructor() {
+    this.x = 0;
+    this.y = 0;
+    this.width = 80;
+    this.height = 40;
+    this.userData = {};
+    this.addChild = vi.fn();
+  }
+  rect() { return this; }
+  fill() { return this; }
+  stroke() { return this; }
+}
+
+class MockText {
+  constructor() {
+    this.anchor = { set: vi.fn() };
+    this.x = 0;
+    this.y = 0;
+  }
+}
+
+global.PIXI = {
+  Application: MockApplication,
+  Container: MockContainer,
+  Graphics: MockGraphics,
+  Text: MockText
 };
 
 describe('PixiCanvas', () => {
@@ -80,7 +91,7 @@ describe('PixiCanvas', () => {
 
     it('should create PIXI application on init', async () => {
       await pixiCanvas.init();
-      expect(PIXI.Application).toHaveBeenCalled();
+      expect(pixiCanvas.app).toBeInstanceOf(MockApplication);
     });
 
     it('should add animation function to ticker', async () => {
@@ -211,13 +222,12 @@ describe('PixiCanvas', () => {
       const x = 100;
       const y = 200;
       const index = 0;
-      
+
       pixiCanvas.createUserRectangle(name, color, x, y, index);
-      
-      expect(PIXI.Graphics).toHaveBeenCalled();
-      expect(PIXI.Text).toHaveBeenCalled();
+
       expect(pixiCanvas.userRectangles.length).toBe(1);
       expect(pixiCanvas.users.has(name)).toBe(true);
+      expect(pixiCanvas.userRectangles[0]).toBeInstanceOf(MockContainer);
     });
   });
 });

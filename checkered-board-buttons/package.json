@@ -14,18 +14,18 @@
   },
   "dependencies": {
     "@pixi/sound": "^6.0.1",
-    "@pixi/ui": "^2.2.7",
+    "@pixi/ui": "^2.3.0",
     "@tweenjs/tween.js": "^25.0.0",
-    "pixi.js": "^8.13.2"
+    "pixi.js": "^8.14.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
-    "@vitest/ui": "^3.2.4",
-    "eslint": "^9.35.0",
-    "jsdom": "^27.0.0",
-    "vite": "^7.1.5",
-    "vitest": "^3.2.4",
-    "vitest-canvas-mock": "^0.3.3"
+    "@playwright/test": "^1.56.1",
+    "@vitest/ui": "^4.0.12",
+    "eslint": "^9.39.1",
+    "jsdom": "^27.2.0",
+    "vite": "^7.2.4",
+    "vitest": "^4.0.12",
+    "vitest-canvas-mock": "^1.1.2"
   },
   "keywords": [
     "pixi.js"
