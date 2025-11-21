@@ -2,7 +2,7 @@ import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
 import { MyButton } from "../ui/MyButton.js";
-import { CheckBox } from "@pixi/ui";
+import { MyCheckbox } from "../ui/MyCheckbox.js";
 
 export const swapDialogTweenGroup = new Group();
 
@@ -83,25 +83,7 @@ export class MySwapDialog extends Container {
     this.checkboxes = [];
 
     for (let i = 0; i < 7; i++) {
-      const unchecked = new Graphics().roundRect(0, 0, 24, 24, 4).fill("White");
-      const checked = new Graphics()
-        .roundRect(0, 0, 24, 24, 4)
-        .fill("LightGreen")
-        .moveTo(6, 12)
-        .lineTo(10, 16)
-        .lineTo(18, 8)
-        .stroke({ width: 4, color: "DarkGreen" });
-
-      const checkbox = new CheckBox({
-        style: {
-          unchecked: unchecked,
-          checked: checked,
-          text: {
-            ...TITLE_TEXT_STYLE,
-            fontSize: 18
-          }
-        }
-      });
+      const checkbox = new MyCheckbox({});
       checkbox.y = i * 50;
       this.checkboxesContainer.addChild(checkbox);
       this.checkboxes.push(checkbox);
