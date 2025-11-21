@@ -19,14 +19,7 @@ function shuffleTiles(tiles) {
   shuffleTweenGroup.removeAll();
 
   // Snap tiles to grid first to ensure clean positions
-  tiles.forEach(tile => {
-    let col = Math.round(tile.x / TILE_SIZE - 0.5);
-    let row = Math.round(tile.y / TILE_SIZE - 0.5);
-    col = Math.max(0, Math.min(col, 7));
-    row = Math.max(0, Math.min(row, 7));
-    tile.x = (col + 0.5) * TILE_SIZE;
-    tile.y = (row + 0.5) * TILE_SIZE;
-  });
+  tiles.forEach(tile => tile.snapToGrid());
 
   // Get current positions
   const positions = tiles.map(tile => ({ x: tile.x, y: tile.y }));

@@ -106,7 +106,20 @@ export class Tile extends Container {
     this.alpha = 1;
     this.shadow.visible = false;
 
-    // Align x, y to the checker board grid
+    this.snapToGrid();
+
+    this.onpointerdown = (e) => this.onDragStart(e);
+
+    this.stage.onpointermove = null;
+
+    this.stage.onpointerup = null;
+    this.stage.onpointercancel = null;
+    this.stage.onpointerupoutside = null;
+    this.stage.onpointercanceloutside = null;
+  }
+
+  // Align x, y to the checker board grid
+  snapToGrid() {
     let col = Math.floor(this.x / TILE_SIZE);
     let row = Math.floor(this.y / TILE_SIZE);
     // Ensure the col is between 0 and 7
@@ -118,15 +131,6 @@ export class Tile extends Container {
     // Snap to the center of the grid cell
     this.x = (col + 0.5) * TILE_SIZE;
     this.y = (row + 0.5) * TILE_SIZE;
-
-    this.onpointerdown = (e) => this.onDragStart(e);
-
-    this.stage.onpointermove = null;
-
-    this.stage.onpointerup = null;
-    this.stage.onpointercancel = null;
-    this.stage.onpointerupoutside = null;
-    this.stage.onpointercanceloutside = null;
   }
 
   onDragMove(e) {
