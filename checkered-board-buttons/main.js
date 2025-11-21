@@ -1,4 +1,5 @@
 import { Application, Assets, Sprite, Text } from "pixi.js";
+import { Tween, Easing, Group } from "@tweenjs/tween.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { MyButton, buttonsTweenGroup } from "./ui/MyButton";
@@ -8,6 +9,32 @@ import { MyVerticalPanel } from "./layout/MyVerticalPanel";
 import { MyLayoutManager } from "./layout/MyLayoutManager";
 import { MyConfirmDialog, confirmDialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
 import { MySwapDialog, swapDialogTweenGroup } from "./dialogs/MySwapDialog.js";
+
+// Tween group for tile shuffle animations
+const shuffleTweenGroup = new Group();
+
+// Shuffle tiles by rotating their positions
+function shuffleTiles(tiles) {
+  // Get current positions
+  const positions = tiles.map(tile => ({ x: tile.x, y: tile.y }));
+
+  // Rotate positions: r gets g's position, g gets b's position, b gets r's position
+  const newPositions = [
+    positions[1],
+    positions[2],
+    positions[0]
+  ];
+
+  // Animate each tile to its new position
+  const duration = 300;
+
+  tiles.forEach((tile, i) => {
+    new Tween(tile, shuffleTweenGroup)
+      .to({ x: newPositions[i].x, y: newPositions[i].y }, duration)
+      .easing(Easing.Quadratic.InOut)
+      .start();
+  });
+}
 
 const manifest = {
   "bundles": [
@@ -190,6 +217,7 @@ const manifest = {
       "text": null,
       "onpress": () => {
         console.log("___SHUFFLE___ pressed!");
+        shuffleTiles([r, g, b]);
       }
     }
   ];
@@ -238,6 +266,7 @@ const manifest = {
     buttonsTweenGroup.update();
     confirmDialogTweenGroup.update();
     swapDialogTweenGroup.update();
+    shuffleTweenGroup.update();
 
     bunny.rotation += 0.05 * time.deltaTime;
     label.skew.x += 0.02 * time.deltaTime;
