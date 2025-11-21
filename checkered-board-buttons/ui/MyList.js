@@ -70,7 +70,7 @@ export class MyList extends Container {
     button.y = UI_HEIGHT / 2;
     parentContainer.addChild(button);
 
-    button.onPress.connect(() => console.log(`Game ${gameId} pressed!`));
+    button.onPress = () => console.log(`Game ${gameId} pressed!`);
     return parentContainer;
   }
 

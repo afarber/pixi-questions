@@ -134,18 +134,15 @@ export class MySwapDialog extends Container {
   }
 
   #setupCallbacks(onYes, onNo) {
-    this.yesButton.onPress.disconnectAll();
-    this.noButton.onPress.disconnectAll();
-
-    this.yesButton.onPress.connect(() => {
+    this.yesButton.onPress = () => {
       if (onYes) onYes();
       this.hide();
-    });
+    };
 
-    this.noButton.onPress.connect(() => {
+    this.noButton.onPress = () => {
       if (onNo) onNo();
       this.hide();
-    });
+    };
   }
 
   show(text, onYes = null, onNo = null) {

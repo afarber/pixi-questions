@@ -200,7 +200,7 @@ const manifest = {
       text: buttonConfig.label
     });
 
-    button.onPress.connect(() => {
+    button.onPress = () => {
       if (buttonConfig.text) {
         if (buttonConfig.label === "___SWAP___") {
           swapDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
@@ -214,7 +214,7 @@ const manifest = {
       } else {
         buttonConfig.onpress();
       }
-    });
+    };
 
     button.enabled = i !== 7;
     rightPanel.addChild(button);
