@@ -38,10 +38,10 @@ export class Board extends Container {
   resize(w, h) {
     const boardSize = NUM_CELLS * TILE_SIZE;
     const appSize = Math.min(w, h);
-    let boardScale = appSize / boardSize;
+    const boardScale = appSize / boardSize;
     this.scale.set(boardScale);
 
-    let boardOrigin = new Point();
+    const boardOrigin = new Point();
     boardOrigin.x = (w - appSize) / 2;
     boardOrigin.y = (h - appSize) / 2;
     this.position.set(boardOrigin.x, boardOrigin.y);

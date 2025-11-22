@@ -180,7 +180,7 @@ export class Tile extends Container {
     this.stage.onpointercanceloutside = (e) => this.onDragEnd(e);
 
     // put the dragged tile on the top
-    let parent = this.parent;
+    const parent = this.parent;
     parent.removeChild(this);
     parent.addChild(this);
   }

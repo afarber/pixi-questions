@@ -49,10 +49,10 @@ export class Board extends Container {
     const boardSize = Math.max(boardWidth, boardHeight);
     const appSize = Math.min(w, h);
 
-    let boardScale = appSize / boardSize;
+    const boardScale = appSize / boardSize;
     this.scale.set(boardScale);
 
-    let boardOrigin = new Point();
+    const boardOrigin = new Point();
     boardOrigin.x = (w - boardWidth * boardScale) / 2;
     boardOrigin.y = (h - boardHeight * boardScale) / 2;
     this.position.set(boardOrigin.x, boardOrigin.y);
@@ -70,7 +70,7 @@ export class Board extends Container {
     // Random angle between -60 and +60 degrees
     const angle = Math.random() * 120 - 60;
 
-    let card = new Card(spriteSheet, spriteKey, x, y, angle, this.stage);
+    const card = new Card(spriteSheet, spriteKey, x, y, angle, this.stage);
 
     this.addChild(card);
     return card;

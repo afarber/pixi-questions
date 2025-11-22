@@ -179,7 +179,7 @@ export class Card extends Container {
     this.stage.onpointercanceloutside = (e) => this.onDragEnd(e);
 
     // put the dragged card on the top
-    let parent = this.parent;
+    const parent = this.parent;
     parent.removeChild(this);
     parent.addChild(this);
   }

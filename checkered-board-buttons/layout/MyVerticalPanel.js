@@ -30,7 +30,7 @@ export class MyVerticalPanel {
 
   // add all children elements to stage
   addChildrenToStage(stage) {
-    for (let child of this.children) {
+    for (const child of this.children) {
       stage.addChild(child);
     }
   }
@@ -65,7 +65,7 @@ export class MyVerticalPanel {
     // For MyList and Board (there can be max 1 of them) use the max height
     let currentY = panelY;
 
-    for (let child of this.children) {
+    for (const child of this.children) {
       if (!child.resize) {
         console.log("Skipping a MyVerticalPanel child without resize() method");
         // TODO

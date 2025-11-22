@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let userName = '';
     let pixiCanvas = null;
     let reconnectAttempts = 0;
-    let maxReconnectAttempts = 10;
+    const maxReconnectAttempts = 10;
     let reconnectTimeout = null;
     
     // Show name drawer on page load
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     addMessage('Server', event.data);
                 }
             } catch (e) {
-                // Handle non-JSON messages
+                console.warn('Non-JSON message received:', e.message);
                 addMessage('Server', event.data);
             }
         };

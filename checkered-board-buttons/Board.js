@@ -37,11 +37,11 @@ export class Board extends Container {
   resize(x, y, w, h) {
     const boardSize = NUM_CELLS * TILE_SIZE;
     const appSize = Math.min(w, h);
-    let boardScale = appSize / boardSize;
+    const boardScale = appSize / boardSize;
     this.scale.set(boardScale);
 
     // Calculate an offset to keep the board centered within the given panel area
-    let boardOffset = new Point();
+    const boardOffset = new Point();
     boardOffset.x = x + (w - appSize) / 2;
     boardOffset.y = y + (h - appSize) / 2;
     this.position.set(boardOffset.x, boardOffset.y);

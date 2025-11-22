@@ -8,7 +8,7 @@
 // Tests for SectionedList.js component
 // Tests our custom scrollable list creation and functionality
 
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { Container } from 'pixi.js';
 import { SectionedList } from '../ui/SectionedList.js';
 

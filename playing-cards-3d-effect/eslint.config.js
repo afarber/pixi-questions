@@ -14,8 +14,13 @@ export default [
       sourceType: "module"
     },
     rules: {
-      "no-unused-vars": "warn",
-      "no-console": "off"
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "no-console": "off",
+      "linebreak-style": ["error", "unix"],
+      "semi": ["error", "always"],
+      // "quotes": ["warn", "single"],
+      "prefer-const": "error",
+      "no-var": "error"
     }
   }
 ];

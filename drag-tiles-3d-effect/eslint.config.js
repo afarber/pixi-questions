@@ -23,8 +23,14 @@ export default [
       }
     },
     rules: {
-      "no-unused-vars": "warn",
-      "no-undef": "error"
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "no-undef": "error",
+      "no-console": "off",
+      "linebreak-style": ["error", "unix"],
+      "semi": ["error", "always"],
+      // "quotes": ["warn", "single"],
+      "prefer-const": "error",
+      "no-var": "error"
     }
   }
 ];

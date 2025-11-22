@@ -38,7 +38,7 @@ WebSocket.CLOSING = 2;
 WebSocket.CLOSED = 3;
 
 // Mock DOM elements that might be needed
-global.document.getElementById = (id) => {
+global.document.getElementById = (_id) => {
   const mockElement = {
     textContent: '',
     value: '',

@@ -96,7 +96,7 @@ test.describe('Canvas Interaction Tests', () => {
     await expect(canvas).toBeVisible();
     
     // Get initial canvas size
-    const initialBox = await canvas.boundingBox();
+    await canvas.boundingBox();
     
     // Resize viewport
     await page.setViewportSize({ width: 800, height: 600 });

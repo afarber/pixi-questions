@@ -1,0 +1,38 @@
+name: Format Check
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    name: Check Code Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies for all projects
+        run: |
+          for dir in checkered-board-buttons drag-tiles-3d-effect drag-tiles-layout fastapi-websockets-chat playing-cards-2-planes playing-cards-3d-effect; do
+            if [ -f "$dir/package.json" ]; then
+              echo "Installing dependencies for $dir..."
+              cd "$dir"
+              npm ci
+              cd ..
+            fi
+          done
+
+      - name: Run format check
+        run: bash ./scripts/check-format.sh
