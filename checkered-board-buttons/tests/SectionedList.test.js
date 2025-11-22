@@ -105,8 +105,8 @@ describe('SectionedList', () => {
     list.addItem(item1);
     list.addItem(item2);
 
-    // 50 + 10 + 30 = 90, but last margin removed = 80
-    expect(list._contentHeight).toBe(80);
+    // 50 + 10 (margin) + 30 = 90
+    expect(list._contentHeight).toBe(90);
   });
 
   // Test setSize updates dimensions

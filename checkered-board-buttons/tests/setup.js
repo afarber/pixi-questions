@@ -26,6 +26,21 @@ vi.mock('pixi.js', () => {
       this.fillCalls = [];
       // Track stroke() calls
       this.strokeCalls = [];
+      // Display properties
+      this.visible = true;
+      this.alpha = 1;
+      this.x = 0;
+      this.y = 0;
+      this.eventMode = 'auto';
+      this.cursor = null;
+      this.position = {
+        x: 0,
+        y: 0,
+        set: (x, y) => {
+          this.position.x = x;
+          this.position.y = y;
+        }
+      };
     }
     
     // Fake rect method - just remember it was called with these parameters
@@ -60,6 +75,34 @@ vi.mock('pixi.js', () => {
       this.rectCalls.push({ x, y, w, h, radius });
       return this;
     }
+
+    // Fake moveTo method
+    moveTo(_x, _y) {
+      return this;
+    }
+
+    // Fake lineTo method
+    lineTo(_x, _y) {
+      return this;
+    }
+
+    // Fake circle method
+    circle(_x, _y, _radius) {
+      return this;
+    }
+
+    // Mock event methods
+    on(_event, _handler) {
+      return this;
+    }
+
+    off(_event, _handler) {
+      return this;
+    }
+
+    emit(_event, ..._args) {
+      return this;
+    }
   }
   
   // Fake Container class that tracks children
@@ -70,6 +113,9 @@ vi.mock('pixi.js', () => {
       // Position properties
       this.x = 0;
       this.y = 0;
+      // Size properties
+      this.width = 0;
+      this.height = 0;
       // Scale properties with set method
       this.scale = { 
         x: 1, 
@@ -128,16 +174,29 @@ vi.mock('pixi.js', () => {
     getGlobalPosition() {
       return { x: this.x, y: this.y };
     }
-    
+
     getLocalPosition() {
       return { x: this.x, y: this.y };
     }
-    
+
     toLocal(globalPoint) {
       return { x: globalPoint.x - this.x, y: globalPoint.y - this.y };
     }
+
+    // Mock event methods
+    on(_event, _handler) {
+      return this;
+    }
+
+    off(_event, _handler) {
+      return this;
+    }
+
+    emit(_event, ..._args) {
+      return this;
+    }
   }
-  
+
   // Fake Text class
   class MockText extends MockContainer {
     constructor(options = {}) {

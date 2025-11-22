@@ -42,7 +42,9 @@ if [ ${#FAILED_PROJECTS[@]} -gt 0 ]; then
     echo "  - $project"
   done
   echo ""
-  echo "Run 'cd <project> && npm run lint' to see detailed errors."
+  echo "Run 'cd <project> && npm run lint' to see detailed errors, for example:"
+  echo ""
+  echo "  cd ${FAILED_PROJECTS[0]} && npm run lint"
   echo ""
   exit 1
 fi

@@ -223,6 +223,12 @@ export class SectionedList extends Container {
     }
   }
 
+  // Public properties
+
+  get items() {
+    return this._items;
+  }
+
   // Public methods
 
   addItem(item) {

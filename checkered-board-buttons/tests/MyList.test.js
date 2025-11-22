@@ -260,10 +260,10 @@ describe('MyList', () => {
     // Container should have a button child
     expect(container.children.length).toBeGreaterThan(0);
     
-    // Button should have onPress handler
+    // Button should have onPress handler set as a function
     const button = container.children[0];
     expect(button.onPress).toBeDefined();
-    expect(button.onPress.connect).toBeDefined();
+    expect(typeof button.onPress).toBe('function');
   });
 
 });
