@@ -1,19 +1,20 @@
 import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
-import { MyButton } from "../ui/MyButton.js";
+import { Button } from "../ui/Button.js";
+import { Checkbox } from "../ui/Checkbox.js";
 
-export const confirmDialogTweenGroup = new Group();
+export const swapDialogTweenGroup = new Group();
 
 const ANIMATION_DURATION = 300;
 const BACKGROUND_ALPHA = 0.8;
 const BACKGROUND_COLOR = 0x000000;
 const PANEL_WIDTH = UI_WIDTH * 2;
-const PANEL_HEIGHT = UI_HEIGHT * 3;
+const PANEL_HEIGHT = UI_HEIGHT * 8;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
 
-export class MyConfirmDialog extends Container {
+export class SwapDialog extends Container {
   constructor(app) {
     super();
 
@@ -29,6 +30,7 @@ export class MyConfirmDialog extends Container {
     this.noButton = null;
     this.activeTween = null;
     this.keydownHandler = null;
+    this.randomLetters = [];
 
     this.visible = false;
     this.#setupBackground();
@@ -75,13 +77,26 @@ export class MyConfirmDialog extends Container {
       }
     });
     this.questionText.anchor.set(0.5, 0.5);
-    this.questionText.y = -PANEL_HEIGHT / 4;
+    this.questionText.y = -PANEL_HEIGHT / 2 + PANEL_PADDING + 20;
+
+    this.checkboxesContainer = new Container();
+    this.checkboxes = [];
+
+    for (let i = 0; i < 7; i++) {
+      const checkbox = new Checkbox({});
+      checkbox.y = i * 50;
+      this.checkboxesContainer.addChild(checkbox);
+      this.checkboxes.push(checkbox);
+    }
+
+    this.checkboxesContainer.x = -PANEL_WIDTH / 2 + PANEL_PADDING;
+    this.checkboxesContainer.y = this.questionText.y + this.questionText.height + PANEL_PADDING;
 
     this.buttonsContainer = new Container();
-    this.buttonsContainer.y = PANEL_HEIGHT / 4;
+    this.buttonsContainer.y = PANEL_HEIGHT / 2 - PANEL_PADDING - 20;
 
-    this.yesButton = new MyButton({ text: "___YES___" });
-    this.noButton = new MyButton({ text: "___NO___" });
+    this.yesButton = new Button({ text: "___SWAP___" });
+    this.noButton = new Button({ text: "___CANCEL___" });
 
     this.yesButton.x = -UI_WIDTH / 2 - BUTTON_SPACING / 2;
     this.noButton.x = UI_WIDTH / 2 + BUTTON_SPACING / 2;
@@ -91,6 +106,7 @@ export class MyConfirmDialog extends Container {
 
     this.panelContainer.addChild(this.panelBackground);
     this.panelContainer.addChild(this.questionText);
+    this.panelContainer.addChild(this.checkboxesContainer);
     this.panelContainer.addChild(this.buttonsContainer);
     this.addChild(this.panelContainer);
   }
@@ -112,6 +128,12 @@ export class MyConfirmDialog extends Container {
   }
 
   show(text, onYes = null, onNo = null) {
+    this.#generateRandomLetters();
+    for (let i = 0; i < this.randomLetters.length; i++) {
+      this.checkboxes[i].text = this.randomLetters[i];
+      this.checkboxes[i].checked = false;
+    }
+
     this.#updateQuestion(text);
     this.#setupCallbacks(onYes, onNo);
     this.#setupKeyHandler();
@@ -131,12 +153,12 @@ export class MyConfirmDialog extends Container {
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.darkOverlay, confirmDialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, swapDialogTweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
 
-    new Tween(this.panelContainer.pivot, confirmDialogTweenGroup)
+    new Tween(this.panelContainer.pivot, swapDialogTweenGroup)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
@@ -153,7 +175,7 @@ export class MyConfirmDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.darkOverlay, confirmDialogTweenGroup)
+    this.activeTween = new Tween(this.darkOverlay, swapDialogTweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
@@ -161,7 +183,7 @@ export class MyConfirmDialog extends Container {
       })
       .start();
 
-    new Tween(this.panelContainer.pivot, confirmDialogTweenGroup)
+    new Tween(this.panelContainer.pivot, swapDialogTweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();
@@ -195,6 +217,14 @@ export class MyConfirmDialog extends Container {
     if (this.keydownHandler) {
       document.removeEventListener("keydown", this.keydownHandler, true);
       this.keydownHandler = null;
+    }
+  }
+
+  #generateRandomLetters() {
+    this.randomLetters.length = 0;
+    for (let i = 0; i < 7; i++) {
+      const randomIndex = Math.floor(Math.random() * LETTERS.length);
+      this.randomLetters.push(LETTERS[randomIndex]);
     }
   }
 }

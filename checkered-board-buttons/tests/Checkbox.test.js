@@ -2,13 +2,13 @@
 // Tests our custom checkbox creation and state management
 
 import { describe, test, expect, vi } from 'vitest';
-import { MyCheckbox } from '../ui/MyCheckbox.js';
+import { Checkbox } from '../ui/Checkbox.js';
 
 describe('MyCheckbox', () => {
 
   // Test basic checkbox creation with default options
   test('creates checkbox with default options', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     // Checkbox should be created successfully
     expect(checkbox).toBeDefined();
@@ -19,14 +19,14 @@ describe('MyCheckbox', () => {
   // Test checkbox creation with custom text
   test('creates checkbox with custom text', () => {
     const checkboxText = 'Test Option';
-    const checkbox = new MyCheckbox({ text: checkboxText });
+    const checkbox = new Checkbox({ text: checkboxText });
 
     expect(checkbox.text).toBe(checkboxText);
   });
 
   // Test initial state is unchecked
   test('initial state is unchecked', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     expect(checkbox.checked).toBe(false);
     expect(checkbox._uncheckedView.visible).toBe(true);
@@ -35,7 +35,7 @@ describe('MyCheckbox', () => {
 
   // Test checked property setter
   test('setting checked updates state and views', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     checkbox.checked = true;
     expect(checkbox.checked).toBe(true);
@@ -50,7 +50,7 @@ describe('MyCheckbox', () => {
 
   // Test setting same value doesn't trigger update
   test('setting same checked value is ignored', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     checkbox.checked = false;
     // Should not throw or cause issues
@@ -59,7 +59,7 @@ describe('MyCheckbox', () => {
 
   // Test text property getter and setter
   test('text property getter and setter work', () => {
-    const checkbox = new MyCheckbox({ text: 'Initial' });
+    const checkbox = new Checkbox({ text: 'Initial' });
 
     expect(checkbox.text).toBe('Initial');
 
@@ -69,7 +69,7 @@ describe('MyCheckbox', () => {
 
   // Test event mode and cursor
   test('has correct event mode and cursor', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     expect(checkbox.eventMode).toBe('static');
     expect(checkbox.cursor).toBe('pointer');
@@ -77,7 +77,7 @@ describe('MyCheckbox', () => {
 
   // Test onToggle callback can be set
   test('onToggle callback can be set', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
     const callback = vi.fn();
 
     checkbox.onToggle = callback;
@@ -86,7 +86,7 @@ describe('MyCheckbox', () => {
 
   // Test views are created
   test('creates unchecked and checked views', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     expect(checkbox._uncheckedView).toBeDefined();
     expect(checkbox._checkedView).toBeDefined();
@@ -94,21 +94,21 @@ describe('MyCheckbox', () => {
 
   // Test text view is created
   test('creates text view', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     expect(checkbox._textView).toBeDefined();
   });
 
   // Test custom box size
   test('creates checkbox with custom box size', () => {
-    const checkbox = new MyCheckbox({ boxSize: 32 });
+    const checkbox = new Checkbox({ boxSize: 32 });
 
     expect(checkbox._boxSize).toBe(32);
   });
 
   // Test custom colors
   test('creates checkbox with custom colors', () => {
-    const checkbox = new MyCheckbox({
+    const checkbox = new Checkbox({
       boxColor: 'LightGray',
       checkColor: 'Blue'
     });
@@ -119,7 +119,7 @@ describe('MyCheckbox', () => {
 
   // Test empty options object
   test('handles empty options object', () => {
-    const checkbox = new MyCheckbox({});
+    const checkbox = new Checkbox({});
 
     expect(checkbox).toBeDefined();
     expect(checkbox.text).toBe('');

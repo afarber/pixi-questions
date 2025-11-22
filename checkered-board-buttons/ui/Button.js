@@ -32,7 +32,7 @@ const DEFAULT_OPTIONS = {
   enabled: true
 };
 
-export class MyButton extends Container {
+export class Button extends Container {
   constructor(args) {
     super();
 

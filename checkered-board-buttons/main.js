@@ -2,13 +2,13 @@ import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Tween, Easing, Group } from "@tweenjs/tween.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
-import { MyButton, buttonsTweenGroup } from "./ui/MyButton";
+import { Button, buttonsTweenGroup } from "./ui/Button";
 import { MyList } from "./ui/MyList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./layout/MyVerticalPanel";
 import { MyLayoutManager } from "./layout/MyLayoutManager";
-import { MyConfirmDialog, confirmDialogTweenGroup } from "./dialogs/MyConfirmDialog.js";
-import { MySwapDialog, swapDialogTweenGroup } from "./dialogs/MySwapDialog.js";
+import { ConfirmDialog, confirmDialogTweenGroup } from "./dialogs/ConfirmDialog.js";
+import { SwapDialog, swapDialogTweenGroup } from "./dialogs/SwapDialog.js";
 
 // Tween group for tile shuffle animations
 const shuffleTweenGroup = new Group();
@@ -136,20 +136,20 @@ const manifest = {
   const label = createLabel();
   boardContainer.addChild(label);
 
-  const newGameButton = new MyButton({ text: "___NEW_GAME___" });
+  const newGameButton = new Button({ text: "___NEW_GAME___" });
   leftPanel.addChild(newGameButton);
 
   const gamesList = new MyList();
   gamesList.setGames(games);
   leftPanel.addChild(gamesList);
 
-  const twoLettersButton = new MyButton({ text: "___TWO_LETTERS___" });
+  const twoLettersButton = new Button({ text: "___TWO_LETTERS___" });
   leftPanel.addChild(twoLettersButton);
-  const threeLettersButton = new MyButton({ text: "___THREE_LETTERS___" });
+  const threeLettersButton = new Button({ text: "___THREE_LETTERS___" });
   leftPanel.addChild(threeLettersButton);
-  const rareOneButton = new MyButton({ text: "___RARE_LETTER_1___" });
+  const rareOneButton = new Button({ text: "___RARE_LETTER_1___" });
   leftPanel.addChild(rareOneButton);
-  const rareTwoButton = new MyButton({ text: "___RARE_LETTER_2___" });
+  const rareTwoButton = new Button({ text: "___RARE_LETTER_2___" });
   leftPanel.addChild(rareTwoButton);
 
   const rightButtons = [
@@ -230,7 +230,7 @@ const manifest = {
 
   for (let i = 0; i < rightButtons.length; i++) {
     const buttonConfig = rightButtons[i];
-    const button = new MyButton({
+    const button = new Button({
       text: buttonConfig.label
     });
 
@@ -259,8 +259,8 @@ const manifest = {
   rightPanel.addChildrenToStage(app.stage);
 
   // Create dialog instances
-  const confirmDialog = new MyConfirmDialog(app);
-  const swapDialog = new MySwapDialog(app);
+  const confirmDialog = new ConfirmDialog(app);
+  const swapDialog = new SwapDialog(app);
   app.stage.addChild(confirmDialog);
   app.stage.addChild(swapDialog);
 

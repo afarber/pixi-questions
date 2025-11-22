@@ -2,14 +2,14 @@
 // Tests our custom button creation, animations, and state management
 
 import { describe, test, expect, vi } from 'vitest';
-import { MyButton, buttonsTweenGroup } from '../ui/MyButton.js';
+import { Button, buttonsTweenGroup } from '../ui/Button.js';
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS } from '../Theme.js';
 
 describe('MyButton', () => {
 
   // Test basic button creation with default options
   test('creates button with default options', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Button should be created successfully
     expect(button).toBeDefined();
@@ -23,7 +23,7 @@ describe('MyButton', () => {
   // Test button creation with custom text
   test('creates button with custom text', () => {
     const buttonText = 'Test Button';
-    const button = new MyButton({ text: buttonText });
+    const button = new Button({ text: buttonText });
 
     // Button should have the custom text
     expect(button.text).toBe(buttonText);
@@ -33,7 +33,7 @@ describe('MyButton', () => {
   test('creates button with custom dimensions', () => {
     const customWidth = 300;
     const customHeight = 80;
-    const button = new MyButton({
+    const button = new Button({
       width: customWidth,
       height: customHeight
     });
@@ -45,7 +45,7 @@ describe('MyButton', () => {
 
   // Test button enabled state
   test('button is enabled by default', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Button should be enabled by default
     expect(button.enabled).toBe(true);
@@ -53,7 +53,7 @@ describe('MyButton', () => {
 
   // Test button can be disabled
   test('button can be disabled', () => {
-    const button = new MyButton({ enabled: false });
+    const button = new Button({ enabled: false });
 
     expect(button.enabled).toBe(false);
     expect(button.eventMode).toBe('none');
@@ -61,7 +61,7 @@ describe('MyButton', () => {
 
   // Test enabling/disabling button
   test('can toggle enabled state', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     button.enabled = false;
     expect(button.enabled).toBe(false);
@@ -74,7 +74,7 @@ describe('MyButton', () => {
 
   // Test button visibility
   test('button is visible by default', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Button should be visible by default
     expect(button.visible).toBe(true);
@@ -82,7 +82,7 @@ describe('MyButton', () => {
 
   // Test show method with animation
   test('show method works with animation', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Show method should exist and not throw
     expect(typeof button.show).toBe('function');
@@ -94,7 +94,7 @@ describe('MyButton', () => {
 
   // Test show method without animation
   test('show method works without animation', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Show without animation should work
     expect(() => button.show(false)).not.toThrow();
@@ -107,7 +107,7 @@ describe('MyButton', () => {
 
   // Test show method with delay
   test('show method accepts delay parameter', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     expect(() => button.show(true, 100)).not.toThrow();
     expect(button.visible).toBe(true);
@@ -115,7 +115,7 @@ describe('MyButton', () => {
 
   // Test hide method with animation
   test('hide method works with animation', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Hide method should exist and not throw
     expect(typeof button.hide).toBe('function');
@@ -124,7 +124,7 @@ describe('MyButton', () => {
 
   // Test hide method without animation
   test('hide method works without animation', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Hide without animation should work
     expect(() => button.hide(false)).not.toThrow();
@@ -137,7 +137,7 @@ describe('MyButton', () => {
 
   // Test resize method
   test('resize method works correctly', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Resize method should exist and not throw
     expect(typeof button.resize).toBe('function');
@@ -160,7 +160,7 @@ describe('MyButton', () => {
 
   // Test resize uses default radius
   test('resize uses default radius when not provided', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     button.resize(0, 0, 200, 60);
 
@@ -169,7 +169,7 @@ describe('MyButton', () => {
 
   // Test that button creates background graphics
   test('creates background graphics', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Button should have background
     expect(button._background).toBeDefined();
@@ -177,7 +177,7 @@ describe('MyButton', () => {
 
   // Test that button creates text view
   test('creates text view', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Button should have text view
     expect(button._textView).toBeDefined();
@@ -185,7 +185,7 @@ describe('MyButton', () => {
 
   // Test text property getter and setter
   test('text property getter and setter work', () => {
-    const button = new MyButton({ text: 'Initial' });
+    const button = new Button({ text: 'Initial' });
 
     expect(button.text).toBe('Initial');
 
@@ -195,7 +195,7 @@ describe('MyButton', () => {
 
   // Test activeTween property initialization
   test('initializes activeTween property', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Should have activeTween property
     expect(button.activeTween).toBeDefined();
@@ -211,7 +211,7 @@ describe('MyButton', () => {
 
   // Test toggle functionality
   test('button can be created as toggle', () => {
-    const button = new MyButton({ isToggle: true });
+    const button = new Button({ isToggle: true });
 
     expect(button.isToggle).toBe(true);
     expect(button.toggled).toBe(false);
@@ -219,7 +219,7 @@ describe('MyButton', () => {
 
   // Test toggle state
   test('toggled property can be set', () => {
-    const button = new MyButton({ isToggle: true });
+    const button = new Button({ isToggle: true });
 
     button.toggled = true;
     expect(button.toggled).toBe(true);
@@ -230,7 +230,7 @@ describe('MyButton', () => {
 
   // Test onPress callback
   test('onPress callback can be set', () => {
-    const button = new MyButton({});
+    const button = new Button({});
     const callback = vi.fn();
 
     button.onPress = callback;
@@ -239,7 +239,7 @@ describe('MyButton', () => {
 
   // Test onToggle callback
   test('onToggle callback can be set', () => {
-    const button = new MyButton({ isToggle: true });
+    const button = new Button({ isToggle: true });
     const callback = vi.fn();
 
     button.onToggle = callback;
@@ -248,7 +248,7 @@ describe('MyButton', () => {
 
   // Test pointer event handlers exist
   test('has pointer event handlers', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     expect(typeof button._onPointerOver).toBe('function');
     expect(typeof button._onPointerOut).toBe('function');
@@ -259,7 +259,7 @@ describe('MyButton', () => {
 
   // Test event mode and cursor
   test('has correct event mode and cursor', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     expect(button.eventMode).toBe('static');
     expect(button.cursor).toBe('pointer');
@@ -267,7 +267,7 @@ describe('MyButton', () => {
 
   // Test isToggle property can be changed
   test('isToggle property can be changed', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     expect(button.isToggle).toBe(false);
 
@@ -277,7 +277,7 @@ describe('MyButton', () => {
 
   // Test button with empty options object
   test('handles empty options object', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Should not throw and should use all defaults
     expect(button).toBeDefined();
@@ -288,7 +288,7 @@ describe('MyButton', () => {
 
   // Test canceling active tween on show
   test('cancels active tween when showing', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Start a hide animation
     button.hide(true);
@@ -301,7 +301,7 @@ describe('MyButton', () => {
 
   // Test canceling active tween on hide
   test('cancels active tween when hiding', () => {
-    const button = new MyButton({});
+    const button = new Button({});
 
     // Start a show animation
     button.show(true);

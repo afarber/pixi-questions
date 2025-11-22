@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = {
   checkColor: CHECK_COLOR
 };
 
-export class MyCheckbox extends Container {
+export class Checkbox extends Container {
   constructor(args) {
     super();
 
