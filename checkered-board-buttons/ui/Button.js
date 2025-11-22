@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 import { Container, Graphics, Text } from "pixi.js";
 import { sound } from "@pixi/sound";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";

@@ -52,3 +52,6 @@ The tiles use advanced perspective transformations:
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-layout/screenshot.gif)
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

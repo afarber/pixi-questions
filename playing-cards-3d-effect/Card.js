@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 import { Container, PerspectiveMesh, Point, Rectangle } from "pixi.js";
 
 export const CARD_WIDTH = 188;

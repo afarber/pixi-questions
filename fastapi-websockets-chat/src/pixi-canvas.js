@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 // Pixi.js Canvas for Dynamic User Visualization
 export class PixiCanvas {
     constructor() {

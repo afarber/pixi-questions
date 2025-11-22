@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 // Current timestamp (to use as reference)
 const now = Date.now();
 const ONE_DAY = 24 * 60 * 60 * 1000; // One day in milliseconds

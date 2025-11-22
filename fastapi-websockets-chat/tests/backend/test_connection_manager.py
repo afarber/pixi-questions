@@ -1,3 +1,8 @@
+# Copyright (c) 2025 Alexander Farber
+# SPDX-License-Identifier: MIT
+#
+# This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+
 import pytest
 import json
 from unittest.mock import AsyncMock, MagicMock

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 import { Container, Graphics, FillGradient } from "pixi.js";
 import { TABLE_COLOR_TOP, TABLE_COLOR_MID, TABLE_COLOR_BOTTOM } from "./Theme.js";
 

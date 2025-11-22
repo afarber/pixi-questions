@@ -1,0 +1,22 @@
+name: Copyright Check
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  copyright:
+    name: Check Copyright Headers
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for missing copyright headers
+        run: bash ./scripts/check-copyright.sh

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 // Test setup file that runs before each test
 // This file mocks PixiJS and other dependencies so we can test our game logic
 // without needing real graphics rendering

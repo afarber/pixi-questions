@@ -28,3 +28,6 @@ A PixiJS application that creates a checkered board with 3D draggable tiles feat
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-3d-effect/screenshot.gif)
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

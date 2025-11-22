@@ -334,4 +334,4 @@ fastapi-websockets-chat/
 
 ## License
 
-This project is open source and available under the Public Domain License.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

@@ -56,3 +56,7 @@ npm install vite @playwright/test @vitest/ui jsdom vitest vitest-canvas-mock --s
 
 The sounds are CC0-licensed [Interface Sounds](https://kenney.nl/assets/interface-sounds) by Kenney
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+

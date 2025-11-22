@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 import { Application, Assets, Sprite, Text } from "pixi.js";
 import { Tween, Easing, Group } from "@tweenjs/tween.js";
 import { Board, NUM_CELLS } from "./Board";

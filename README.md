@@ -2,7 +2,7 @@ pixi-questions
 ==========
 Small projects created on my way to PixiJs nirvana
 
-The files are public domain - unless there is a different note (by their respective authors) in the videos or files.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Screenshots
 ==========

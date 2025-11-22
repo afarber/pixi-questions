@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 export const UI_WIDTH = 200;
 export const UI_HEIGHT = 60;
 export const UI_RADIUS = 20;

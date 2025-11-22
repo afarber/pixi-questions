@@ -13,6 +13,7 @@
     "test:run": "vitest run"
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^2.0.50",
     "@pixi/sound": "^6.0.1",
     "@tweenjs/tween.js": "^25.0.0",
     "pixi.js": "^8.14.3"

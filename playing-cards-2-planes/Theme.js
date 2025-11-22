@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 // Table gradient colors - darker at top (farther), lighter at bottom (closer)
 export const TABLE_COLOR_TOP = '#1A3D0A';
 export const TABLE_COLOR_MID = '#2D5016';

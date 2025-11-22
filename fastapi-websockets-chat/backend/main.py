@@ -1,3 +1,8 @@
+# Copyright (c) 2025 Alexander Farber
+# SPDX-License-Identifier: MIT
+#
+# This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse

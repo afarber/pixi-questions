@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 Alexander Farber
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
+ */
+
 import { Graphics, Text } from "pixi.js";
 import { Board } from "../Board";
 import { MyList } from "../ui/MyList.js";
