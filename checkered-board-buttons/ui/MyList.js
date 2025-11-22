@@ -1,5 +1,5 @@
 import { Container, Text } from "pixi.js";
-import { ScrollBox } from "@pixi/ui";
+import { SectionedList } from "./SectionedList";
 import { Button } from "./Button";
 import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme";
 
@@ -8,7 +8,7 @@ export class MyList extends Container {
   constructor() {
     super();
 
-    this.scrollBox = new ScrollBox({
+    this.scrollBox = new SectionedList({
       background: UI_BACKGROUND,
       width: UI_WIDTH + 2 * UI_PADDING,
       height: 3.5 * UI_HEIGHT,

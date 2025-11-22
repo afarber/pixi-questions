@@ -21,6 +21,15 @@ npm install
 npm run dev
 ```
 
+## Custom UI Components
+
+This project uses custom UI components built with PixiJS only:
+
+- **Button** - States: default, hover, pressed, disabled. Toggle mode for checkboxes.
+- **Checkbox** - Simple checkbox with checkmark rendering.
+- **SectionedList** - Scrollable container with visible scrollbar.
+- **ScrollBar** - Standalone scrollbar with track and thumb.
+
 ## Project Setup
 
 If you want to recreate this project from scratch:
@@ -30,7 +39,7 @@ If you want to recreate this project from scratch:
 npm init -y
 
 # Install dependencies
-npm install pixi.js @pixi/ui @pixi/sound @tweenjs/tween.js
+npm install pixi.js @pixi/sound @tweenjs/tween.js
 npm install vite @playwright/test @vitest/ui jsdom vitest vitest-canvas-mock --save-dev
 ```
 
