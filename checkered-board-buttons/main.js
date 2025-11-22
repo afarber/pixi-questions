@@ -12,8 +12,8 @@ import { Tile, TILE_SIZE } from "./Tile";
 import { Button, buttonsTweenGroup } from "./ui/Button";
 import { GamesList } from "./ui/GamesList";
 import { games } from "./TestData";
-import { MyVerticalPanel } from "./layout/MyVerticalPanel";
-import { MyLayoutManager } from "./layout/MyLayoutManager";
+import { VerticalPanel } from "./layout/VerticalPanel";
+import { LayoutManager } from "./layout/LayoutManager";
 import { ConfirmDialog, confirmDialogTweenGroup } from "./dialogs/ConfirmDialog.js";
 import { SwapDialog, swapDialogTweenGroup } from "./dialogs/SwapDialog.js";
 
@@ -104,9 +104,9 @@ const manifest = {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen;
 
-  const leftPanel = new MyVerticalPanel(app.stage);
-  const midPanel = new MyVerticalPanel(app.stage);
-  const rightPanel = new MyVerticalPanel(app.stage);
+  const leftPanel = new VerticalPanel(app.stage);
+  const midPanel = new VerticalPanel(app.stage);
+  const rightPanel = new VerticalPanel(app.stage);
 
   await Assets.init({ manifest: manifest });
   await Assets.loadBundle("animals");
@@ -279,7 +279,7 @@ const manifest = {
   app.stage.addChild(swapDialog);
 
   // Initialize layout manager with dialog and setup event listeners
-  const layoutManager = new MyLayoutManager(app, leftPanel, midPanel, rightPanel, [confirmDialog, swapDialog]);
+  const layoutManager = new LayoutManager(app, leftPanel, midPanel, rightPanel, [confirmDialog, swapDialog]);
   layoutManager.setupEventListeners();
 
   app.ticker.add((time) => {

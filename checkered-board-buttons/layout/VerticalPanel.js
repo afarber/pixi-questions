@@ -15,7 +15,7 @@ import { TILE_SIZE } from "../Tile";
 // They are placed vertically by calling resize() method.
 // Instances of GamesList or Board are given the max height.
 
-export class MyVerticalPanel {
+export class VerticalPanel {
   constructor(stage) {
     this.children = [];
     this.debugRect = new Graphics().rect(0, 0, TILE_SIZE, TILE_SIZE).stroke({ color: "Red" });
@@ -43,7 +43,7 @@ export class MyVerticalPanel {
   // Resize children when this panel is resized
   resize(panelX, panelY, panelWidth, panelHeight) {
     if (panelWidth <= 0 || panelHeight <= 0 || !this.children.length) {
-      console.log("MyVerticalPanel.resize called with invalid params or empty children", {
+      console.log("VerticalPanel.resize called with invalid params or empty children", {
         panelX,
         panelY,
         panelWidth,
@@ -67,7 +67,7 @@ export class MyVerticalPanel {
 
     for (const child of this.children) {
       if (!child.resize) {
-        console.log("Skipping a MyVerticalPanel child without resize() method");
+        console.log("Skipping a VerticalPanel child without resize() method");
         // TODO
         //continue;
       }

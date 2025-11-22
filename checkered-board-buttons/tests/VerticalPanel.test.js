@@ -5,15 +5,15 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-// Tests for MyVerticalPanel.js component
+// Tests for VerticalPanel.js component
 // Tests our layout manager for vertical arrangement of UI elements
 
 import { describe, test, expect, vi } from "vitest";
-import { MyVerticalPanel } from "../layout/MyVerticalPanel.js";
+import { VerticalPanel } from "../layout/VerticalPanel.js";
 import { Board } from "../Board.js";
 import { GamesList } from "../ui/GamesList.js";
 
-describe("MyVerticalPanel", () => {
+describe("VerticalPanel", () => {
   // Helper function to create a mock stage
   function createMockStage() {
     return {
@@ -24,7 +24,7 @@ describe("MyVerticalPanel", () => {
   // Test basic panel creation
   test("creates panel successfully", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
 
     // Panel should be created with empty children array
     expect(panel).toBeDefined();
@@ -36,7 +36,7 @@ describe("MyVerticalPanel", () => {
   // Test adding children
   test("adds children correctly", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const mockChild = { resize: vi.fn() };
 
     // Add child should return the panel for chaining
@@ -51,7 +51,7 @@ describe("MyVerticalPanel", () => {
   // Test adding multiple children
   test("adds multiple children correctly", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const child1 = { resize: vi.fn() };
     const child2 = { resize: vi.fn() };
     const child3 = { resize: vi.fn() };
@@ -69,7 +69,7 @@ describe("MyVerticalPanel", () => {
   // Test addChildrenToStage method
   test("adds children to stage correctly", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const anotherMockStage = { addChild: vi.fn() };
     const child1 = { resize: vi.fn() };
     const child2 = { resize: vi.fn() };
@@ -88,7 +88,7 @@ describe("MyVerticalPanel", () => {
   // Test hasSpecialChild method with no special children
   test("hasSpecialChild returns false with regular children", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const regularChild = { resize: vi.fn() };
 
     panel.addChild(regularChild);
@@ -100,7 +100,7 @@ describe("MyVerticalPanel", () => {
   // Test hasSpecialChild method with GamesList
   test("hasSpecialChild returns true with GamesList", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const myList = new GamesList();
 
     panel.addChild(myList);
@@ -112,7 +112,7 @@ describe("MyVerticalPanel", () => {
   // Test hasSpecialChild method with Board
   test("hasSpecialChild returns true with Board", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const board = new Board();
 
     panel.addChild(board);
@@ -124,7 +124,7 @@ describe("MyVerticalPanel", () => {
   // Test resize with invalid parameters
   test("handles invalid resize parameters", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
 
     // Should handle zero or negative dimensions gracefully
     expect(() => panel.resize(0, 0, 0, 0)).not.toThrow();
@@ -135,7 +135,7 @@ describe("MyVerticalPanel", () => {
   // Test resize with empty children
   test("handles resize with empty children", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
 
     // Should handle empty children array gracefully
     expect(() => panel.resize(0, 0, 200, 400)).not.toThrow();
@@ -144,7 +144,7 @@ describe("MyVerticalPanel", () => {
   // Test resize with valid parameters
   test("calls resize on children with valid parameters", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const child1 = { resize: vi.fn() };
     const child2 = { resize: vi.fn() };
 
@@ -166,7 +166,7 @@ describe("MyVerticalPanel", () => {
   // Test GamesList special handling in resize
   test("handles GamesList specially in resize", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const myList = new GamesList();
 
     // Mock the resize method
@@ -186,7 +186,7 @@ describe("MyVerticalPanel", () => {
   // Test Board special handling in resize
   test("handles Board specially in resize", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
     const board = new Board();
 
     // Mock the resize method
@@ -206,7 +206,7 @@ describe("MyVerticalPanel", () => {
   // Test Text object handling in resize
   test("handles Text objects in resize", async () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
 
     // Import Text from our mocked pixi.js
     const { Text } = await import("pixi.js");
@@ -224,7 +224,7 @@ describe("MyVerticalPanel", () => {
   // Test button animation handling
   test("handles button show/hide animations", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
 
     // Create mock button with show/hide methods
     const mockButton = {
@@ -244,7 +244,7 @@ describe("MyVerticalPanel", () => {
   // Test child without resize method
   test("handles children without resize method", () => {
     const mockStage = createMockStage();
-    const panel = new MyVerticalPanel(mockStage);
+    const panel = new VerticalPanel(mockStage);
 
     // Child without resize method
     const childWithoutResize = {};
@@ -252,7 +252,7 @@ describe("MyVerticalPanel", () => {
     panel.addChild(childWithoutResize);
 
     // Note: The actual implementation may throw when child lacks resize method
-    // This depends on the specific logic in MyVerticalPanel.resize()
+    // This depends on the specific logic in VerticalPanel.resize()
     // The test verifies that the panel doesn't crash completely
     expect(panel.children).toContain(childWithoutResize);
   });

@@ -11,7 +11,7 @@ import { UI_PADDING, UI_WIDTH } from "../Theme.js";
  * Manages the three-column layout system for the application.
  * Handles responsive resizing and fullscreen transitions.
  */
-export class MyLayoutManager {
+export class LayoutManager {
   #resizeTimeout = null;
 
   constructor(app, leftPanel, midPanel, rightPanel, dialogs = []) {
@@ -43,7 +43,7 @@ export class MyLayoutManager {
     const screenWidth = this.app.screen.width;
     const screenHeight = this.app.screen.height;
 
-    console.log("MyLayoutManager: updateLayout", screenWidth, screenHeight);
+    console.log("LayoutManager: updateLayout", screenWidth, screenHeight);
 
     // Left panel: Fixed width, full height with padding
     this.leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, screenHeight - 2 * UI_PADDING);
