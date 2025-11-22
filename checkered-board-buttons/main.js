@@ -152,15 +152,22 @@ const manifest = {
   const rareTwoButton = new Button({ text: "___RARE_LETTER_2___" });
   leftPanel.addChild(rareTwoButton);
 
+  // Create fullscreen toggle button separately
+  const fullscreenButton = new Button({
+    text: "___FULL_SCREEN___",
+    isToggle: true
+  });
+  fullscreenButton.onPress = () => {
+    const fullDiv = document.getElementById("fullDiv");
+    toggleFullscreen(fullDiv);
+  };
+  // Sync button state with actual fullscreen state
+  document.addEventListener("fullscreenchange", () => {
+    fullscreenButton.toggled = !!document.fullscreenElement;
+  });
+  rightPanel.addChild(fullscreenButton);
+
   const rightButtons = [
-    {
-      "label": "___FULL_SCREEN___",
-      "text": null,
-      "onpress": () => {
-        const fullDiv = document.getElementById("fullDiv");
-        toggleFullscreen(fullDiv);
-      }
-    },
     {
       "label": "___SWAP___",
       "text": null,
