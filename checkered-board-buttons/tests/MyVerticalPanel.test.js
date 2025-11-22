@@ -11,7 +11,7 @@
 import { describe, test, expect, vi } from "vitest";
 import { MyVerticalPanel } from "../layout/MyVerticalPanel.js";
 import { Board } from "../Board.js";
-import { MyList } from "../ui/MyList.js";
+import { GamesList } from "../ui/GamesList.js";
 
 describe("MyVerticalPanel", () => {
   // Helper function to create a mock stage
@@ -97,15 +97,15 @@ describe("MyVerticalPanel", () => {
     expect(panel.hasSpecialChild()).toBe(false);
   });
 
-  // Test hasSpecialChild method with MyList
-  test("hasSpecialChild returns true with MyList", () => {
+  // Test hasSpecialChild method with GamesList
+  test("hasSpecialChild returns true with GamesList", () => {
     const mockStage = createMockStage();
     const panel = new MyVerticalPanel(mockStage);
-    const myList = new MyList();
+    const myList = new GamesList();
 
     panel.addChild(myList);
 
-    // Should return true when MyList is present
+    // Should return true when GamesList is present
     expect(panel.hasSpecialChild()).toBe(true);
   });
 
@@ -163,11 +163,11 @@ describe("MyVerticalPanel", () => {
     expect(child2.resize).toHaveBeenCalled();
   });
 
-  // Test MyList special handling in resize
-  test("handles MyList specially in resize", () => {
+  // Test GamesList special handling in resize
+  test("handles GamesList specially in resize", () => {
     const mockStage = createMockStage();
     const panel = new MyVerticalPanel(mockStage);
-    const myList = new MyList();
+    const myList = new GamesList();
 
     // Mock the resize method
     myList.resize = vi.fn();
@@ -175,7 +175,7 @@ describe("MyVerticalPanel", () => {
     panel.addChild(myList);
     panel.resize(0, 0, 200, 400);
 
-    // MyList should get special resize treatment
+    // GamesList should get special resize treatment
     expect(myList.resize).toHaveBeenCalled();
 
     // Check the resize call parameters structure

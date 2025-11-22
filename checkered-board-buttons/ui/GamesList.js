@@ -10,8 +10,8 @@ import { SectionedList } from "./SectionedList";
 import { Button } from "./Button";
 import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme";
 
-// A list with 3 sections
-export class MyList extends Container {
+// A list with 3 sections for games
+export class GamesList extends Container {
   constructor() {
     super();
 

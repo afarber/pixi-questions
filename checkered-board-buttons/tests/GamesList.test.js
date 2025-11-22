@@ -5,18 +5,18 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-// Tests for MyList.js component
+// Tests for GamesList.js component
 // Tests our game list with scrolling and game categorization logic
 
 import { describe, test, expect, vi } from 'vitest';
-import { MyList } from '../ui/MyList.js';
+import { GamesList } from '../ui/GamesList.js';
 import { games } from '../TestData.js';
 
-describe('MyList', () => {
-  
+describe('GamesList', () => {
+
   // Test basic list creation
   test('creates list successfully', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // List should be created as a Container
     expect(list).toBeDefined();
@@ -29,7 +29,7 @@ describe('MyList', () => {
   
   // Test scroll box initialization
   test('initializes scroll box correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Scroll box should be added as child
     expect(list.children).toContain(list.scrollBox);
@@ -42,7 +42,7 @@ describe('MyList', () => {
   
   // Test setGames with empty array
   test('handles empty games array', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Should not throw with empty array
     expect(() => list.setGames([])).not.toThrow();
@@ -53,7 +53,7 @@ describe('MyList', () => {
   
   // Test setGames with null/undefined
   test('handles null or undefined games', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Should handle null gracefully
     expect(() => list.setGames(null)).not.toThrow();
@@ -65,7 +65,7 @@ describe('MyList', () => {
   
   // Test setGames with non-array input
   test('handles non-array input', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Should handle non-array gracefully
     expect(() => list.setGames("not an array")).not.toThrow();
@@ -78,7 +78,7 @@ describe('MyList', () => {
   
   // Test game categorization logic
   test('categorizes games correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Create test games with known states
     const testGames = [
@@ -113,7 +113,7 @@ describe('MyList', () => {
   
   // Test your turn logic
   test('identifies your turn correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Game where player 1 should play next (played1 <= played2)
     const yourTurnGame = {
@@ -131,7 +131,7 @@ describe('MyList', () => {
   
   // Test opponent turn logic  
   test('identifies opponent turn correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Game where player 2 should play next (played1 > played2)
     const opponentTurnGame = {
@@ -149,7 +149,7 @@ describe('MyList', () => {
   
   // Test finished game detection
   test('identifies finished games correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Finished game
     const finishedGame = {
@@ -167,7 +167,7 @@ describe('MyList', () => {
   
   // Test createSection method
   test('createSection works correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Clear items first
     list.scrollBox.removeItems();
@@ -181,7 +181,7 @@ describe('MyList', () => {
   
   // Test createSection with empty games
   test('createSection handles empty games array', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Clear items first
     list.scrollBox.removeItems();
@@ -196,7 +196,7 @@ describe('MyList', () => {
   
   // Test createParentContainer method
   test('createParentContainer works correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     const gameId = 123;
     
     const container = list.createParentContainer(gameId);
@@ -211,7 +211,7 @@ describe('MyList', () => {
   
   // Test resize method
   test('resize method works correctly', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     const x = 10;
     const y = 20;
@@ -228,7 +228,7 @@ describe('MyList', () => {
   
   // Test with real test data
   test('works with test data from TestData.js', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Should handle the actual test data without errors
     expect(() => list.setGames(games)).not.toThrow();
@@ -239,7 +239,7 @@ describe('MyList', () => {
   
   // Test removeItems is called before setting new games
   test('clears previous items before setting new games', () => {
-    const list = new MyList();
+    const list = new GamesList();
     
     // Mock removeItems to track calls
     list.scrollBox.removeItems = vi.fn();
@@ -252,7 +252,7 @@ describe('MyList', () => {
   
   // Test game ID handling in button creation
   test('creates buttons with correct game IDs', () => {
-    const list = new MyList();
+    const list = new GamesList();
     const gameId = 456;
     
     const container = list.createParentContainer(gameId);

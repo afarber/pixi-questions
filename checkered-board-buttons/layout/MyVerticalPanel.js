@@ -7,13 +7,13 @@
 
 import { Graphics, Text } from "pixi.js";
 import { Board } from "../Board";
-import { MyList } from "../ui/MyList.js";
+import { GamesList } from "../ui/GamesList.js";
 import { UI_HEIGHT, UI_RADIUS, UI_PADDING } from "../Theme";
 import { TILE_SIZE } from "../Tile";
 
 // A class for placing and resizing Pixi Containers.
 // They are placed vertically by calling resize() method.
-// Instances of MyList or Board are given the max height.
+// Instances of GamesList or Board are given the max height.
 
 export class MyVerticalPanel {
   constructor(stage) {
@@ -35,9 +35,9 @@ export class MyVerticalPanel {
     }
   }
 
-  // Find a MyList or Board, there can be 0 or 1 of those
+  // Find a GamesList or Board, there can be 0 or 1 of those
   hasSpecialChild() {
-    return this.children.some((child) => child instanceof MyList || child instanceof Board);
+    return this.children.some((child) => child instanceof GamesList || child instanceof Board);
   }
 
   // Resize children when this panel is resized
@@ -62,7 +62,7 @@ export class MyVerticalPanel {
       : (panelHeight - childHeight * this.children.length) / (this.children.length - 1);
 
     // Iterate the list of children and call .resize() on each of them
-    // For MyList and Board (there can be max 1 of them) use the max height
+    // For GamesList and Board (there can be max 1 of them) use the max height
     let currentY = panelY;
 
     for (const child of this.children) {
@@ -72,7 +72,7 @@ export class MyVerticalPanel {
         //continue;
       }
 
-      if (child instanceof MyList) {
+      if (child instanceof GamesList) {
         child.resize(panelX - UI_PADDING, currentY, panelWidth + 2 * UI_PADDING, maxChildHeight);
         currentY += maxChildHeight + UI_PADDING;
       } else if (child instanceof Board) {

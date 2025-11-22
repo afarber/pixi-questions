@@ -10,7 +10,7 @@ import { Tween, Easing, Group } from "@tweenjs/tween.js";
 import { Board, NUM_CELLS } from "./Board";
 import { Tile, TILE_SIZE } from "./Tile";
 import { Button, buttonsTweenGroup } from "./ui/Button";
-import { MyList } from "./ui/MyList";
+import { GamesList } from "./ui/GamesList";
 import { games } from "./TestData";
 import { MyVerticalPanel } from "./layout/MyVerticalPanel";
 import { MyLayoutManager } from "./layout/MyLayoutManager";
@@ -146,7 +146,7 @@ const manifest = {
   const newGameButton = new Button({ text: "___NEW_GAME___" });
   leftPanel.addChild(newGameButton);
 
-  const gamesList = new MyList();
+  const gamesList = new GamesList();
   gamesList.setGames(games);
   leftPanel.addChild(gamesList);
 
