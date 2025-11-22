@@ -1,33 +1,29 @@
 # drag-tiles-3d-effect
 
-A PixiJS application that creates a checkered board with 3D draggable tiles featuring tilt effects.
-
-## Development Commands
-
-- `npm run dev` - Start development server with Vite
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-## Setup
-
-    mkdir drag-tiles-3d-effect
-    cd drag-tiles-3d-effect
-    npm init -y
-    npm install pixi.js @pixi/ui @tweenjs/tween.js
-    npm install vite --save-dev
-    npm run dev
-
-## Features
-
-- Interactive 3D draggable tiles with perspective effects
-- Checkered board with responsive scaling
-- Shadow effects during drag operations
-- Localization support (English, German, French)
-- Private method encapsulation with # prefix
+Checkered board with 3D draggable tiles featuring tilt and shadow effects.
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/drag-tiles-3d-effect/screenshot.gif)
 
+## Quick Start
+
+```bash
+npm install
+npm run dev
+```
+
+## Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build production version
+- `npm run test:run` - Run tests
+- `npm run lint` - Run ESLint
+
+## Features
+
+- 3D perspective tilt effects on drag
+- Shadow effects during drag
+- Localization (English, German, French)
+
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+MIT License - see [LICENSE](../LICENSE)

@@ -1,0 +1,49 @@
+name: Test
+
+on:
+  workflow_call:
+
+env:
+  PROJECTS: "checkered-board-buttons drag-tiles-3d-effect drag-tiles-layout fastapi-websockets-chat playing-cards-2-planes playing-cards-3d-effect"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies and run tests
+        run: |
+          FAILED_PROJECTS=()
+
+          for dir in $PROJECTS; do
+            if [ -f "$dir/package.json" ]; then
+              echo "Testing $dir..."
+              cd "$dir"
+              npm ci
+              npm run test:run || FAILED_PROJECTS+=("$dir")
+              cd ..
+            fi
+          done
+
+          if [ ${#FAILED_PROJECTS[@]} -gt 0 ]; then
+            echo ""
+            echo "ERROR: Tests failed in the following projects:"
+            for project in "${FAILED_PROJECTS[@]}"; do
+              echo "  - $project"
+            done
+            exit 1
+          fi
+
+          echo "All tests passed."

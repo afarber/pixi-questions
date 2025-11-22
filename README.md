@@ -1,11 +1,41 @@
 pixi-questions
 ==========
-Small projects created on my way to PixiJs nirvana
+
+[![CI](https://github.com/afarber/pixi-questions/actions/workflows/ci.yml/badge.svg)](https://github.com/afarber/pixi-questions/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Small PixiJS projects for learning game development with JavaScript.
+
+## Quick Start
+
+```bash
+cd checkered-board-buttons
+npm install
+npm run dev
+```
+
+## Development
+
+```bash
+# Run tests
+npm run test:run
+
+# Check formatting
+npm run lint
+
+# Auto-fix ESLint issues
+npx eslint . --ext js,jsx --fix
+```
+
+## Documentation
+
+- [GitHub Workflows Guide](docs/GITHUB_WORKFLOWS.md)
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Screenshots
-==========
+## Projects
 
 [checkered-board-buttons](https://github.com/afarber/pixi-questions/tree/master/checkered-board-buttons) with draggable rectangles, based on [Pixi.js Tutorial for Absolute Beginners](https://youtube.com/watch?v=kkbzL5dXezU&list=PLjcjAqAnHd1ELH6j5RZaT2Ilvwj1sMCi6) by Wael Yasmina:
 

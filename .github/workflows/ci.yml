@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  format:
+    name: Format Check
+    uses: ./.github/workflows/_format.yml
+
+  copyright:
+    name: Copyright Check
+    uses: ./.github/workflows/_copyright.yml
+
+  test:
+    name: Test
+    needs: [format, copyright]
+    uses: ./.github/workflows/_test.yml

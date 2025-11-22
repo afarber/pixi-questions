@@ -1,10 +1,10 @@
 name: Format Check
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_call:
+
+env:
+  PROJECTS: "checkered-board-buttons drag-tiles-3d-effect drag-tiles-layout fastapi-websockets-chat playing-cards-2-planes playing-cards-3d-effect"
 
 permissions:
   contents: read
@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies for all projects
         run: |
-          for dir in checkered-board-buttons drag-tiles-3d-effect drag-tiles-layout fastapi-websockets-chat playing-cards-2-planes playing-cards-3d-effect; do
+          for dir in $PROJECTS; do
             if [ -f "$dir/package.json" ]; then
               echo "Installing dependencies for $dir..."
               cd "$dir"
