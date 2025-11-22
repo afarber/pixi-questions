@@ -29,10 +29,15 @@ jobs:
 
           for dir in $PROJECTS; do
             if [ -f "$dir/package.json" ]; then
-              echo "Testing $dir..."
               cd "$dir"
               npm ci
-              npm run test:run || FAILED_PROJECTS+=("$dir")
+              # Only run tests if test files exist
+              if [ -n "$(find . -type f -name '*.test.js' -print -quit)" ]; then
+                echo "Testing $dir..."
+                npm run test:run || FAILED_PROJECTS+=("$dir")
+              else
+                echo "Skipping $dir (no test files)..."
+              fi
               cd ..
             fi
           done
