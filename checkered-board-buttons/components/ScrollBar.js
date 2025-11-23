@@ -37,9 +37,7 @@ export class ScrollBar extends Container {
     // Scroll state
     this._scrollRatio = 0;
     this._thumbRatio = 1;
-    this._isDragging = false;
-    this._dragStartY = 0;
-    this._dragStartRatio = 0;
+    this._dragState = null; // { startY, startRatio } when dragging
 
     // Callback
     this.onScroll = null;
@@ -66,9 +64,10 @@ export class ScrollBar extends Container {
   }
 
   _onThumbPointerDown(e) {
-    this._isDragging = true;
-    this._dragStartY = e.global.y;
-    this._dragStartRatio = this._scrollRatio;
+    this._dragState = {
+      startY: e.global.y,
+      startRatio: this._scrollRatio
+    };
 
     // Listen on stage for move/up events
     const stage = this._thumb.stage;
@@ -80,11 +79,11 @@ export class ScrollBar extends Container {
   }
 
   _onPointerMove(e) {
-    if (!this._isDragging) {
+    if (!this._dragState) {
       return;
     }
 
-    const deltaY = e.global.y - this._dragStartY;
+    const deltaY = e.global.y - this._dragState.startY;
     const trackHeight = this._height;
     const thumbHeight = this._getThumbHeight();
     const availableHeight = trackHeight - thumbHeight;
@@ -95,7 +94,7 @@ export class ScrollBar extends Container {
 
     // Calculate new scroll ratio
     const deltaRatio = deltaY / availableHeight;
-    let newRatio = this._dragStartRatio + deltaRatio;
+    let newRatio = this._dragState.startRatio + deltaRatio;
 
     // Clamp to 0-1
     newRatio = Math.max(0, Math.min(1, newRatio));
@@ -109,7 +108,7 @@ export class ScrollBar extends Container {
   }
 
   _onPointerUp() {
-    this._isDragging = false;
+    this._dragState = null;
 
     // Remove stage listeners
     const stage = this._thumb.stage;

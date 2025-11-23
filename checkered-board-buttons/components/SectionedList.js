@@ -43,9 +43,7 @@ export class SectionedList extends Container {
     // Scroll state
     this._scrollY = 0;
     this._contentHeight = 0;
-    this._isDragging = false;
-    this._dragStartY = 0;
-    this._dragStartScrollY = 0;
+    this._dragState = null; // { startY, startScrollY } when dragging
 
     // Items array
     this._items = [];
@@ -90,9 +88,10 @@ export class SectionedList extends Container {
   }
 
   _onPointerDown(e) {
-    this._isDragging = true;
-    this._dragStartY = e.global.y;
-    this._dragStartScrollY = this._scrollY;
+    this._dragState = {
+      startY: e.global.y,
+      startScrollY: this._scrollY
+    };
 
     // Listen on stage for move/up events
     const stage = this.stage;
@@ -104,19 +103,19 @@ export class SectionedList extends Container {
   }
 
   _onPointerMove(e) {
-    if (!this._isDragging) {
+    if (!this._dragState) {
       return;
     }
 
-    const deltaY = e.global.y - this._dragStartY;
-    this._scrollY = this._dragStartScrollY + deltaY;
+    const deltaY = e.global.y - this._dragState.startY;
+    this._scrollY = this._dragState.startScrollY + deltaY;
     this._clampScroll();
     this._updateContentPosition();
     this._updateScrollBar();
   }
 
   _onPointerUp() {
-    this._isDragging = false;
+    this._dragState = null;
 
     // Remove stage listeners
     const stage = this.stage;

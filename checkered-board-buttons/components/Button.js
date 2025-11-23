@@ -51,8 +51,7 @@ export class Button extends Container {
     this._width = options.width;
     this._height = options.height;
     this._radius = options.radius;
-    this._state = STATE_DEFAULT;
-    this._enabled = options.enabled;
+    this._state = options.enabled ? STATE_DEFAULT : STATE_DISABLED;
     this._isToggle = options.isToggle;
     this._toggled = false;
     this._isDown = false;
@@ -95,9 +94,10 @@ export class Button extends Container {
     this._updateBackground();
     this._updateTextPosition();
 
-    // Apply initial enabled state
-    if (!this._enabled) {
-      this._applyDisabledState();
+    // Apply initial disabled state
+    if (this._state === STATE_DISABLED) {
+      this.eventMode = "none";
+      this.cursor = "default";
     }
   }
 
@@ -110,7 +110,7 @@ export class Button extends Container {
   }
 
   _onPointerOver() {
-    if (!this._enabled || this._isDown) {
+    if (this._state === STATE_DISABLED || this._isDown) {
       return;
     }
     this._state = STATE_HOVER;
@@ -118,7 +118,7 @@ export class Button extends Container {
   }
 
   _onPointerOut() {
-    if (!this._enabled) {
+    if (this._state === STATE_DISABLED) {
       return;
     }
     this._isDown = false;
@@ -127,7 +127,7 @@ export class Button extends Container {
   }
 
   _onPointerDown() {
-    if (!this._enabled) {
+    if (this._state === STATE_DISABLED) {
       return;
     }
     this._isDown = true;
@@ -137,7 +137,7 @@ export class Button extends Container {
   }
 
   _onPointerUp() {
-    if (!this._enabled || !this._isDown) {
+    if (this._state === STATE_DISABLED || !this._isDown) {
       return;
     }
     this._isDown = false;
@@ -160,7 +160,7 @@ export class Button extends Container {
   }
 
   _onPointerUpOutside() {
-    if (!this._enabled) {
+    if (this._state === STATE_DISABLED) {
       return;
     }
     this._isDown = false;
@@ -210,36 +210,27 @@ export class Button extends Container {
     this._textView.position.set(0, 0);
   }
 
-  _applyDisabledState() {
-    this._state = STATE_DISABLED;
-    this.eventMode = "none";
-    this.cursor = "default";
-    this._updateBackground();
-  }
-
-  _applyEnabledState() {
-    this._state = STATE_DEFAULT;
-    this.eventMode = "static";
-    this.cursor = "pointer";
-    this._updateBackground();
-  }
-
   // Public properties
 
   get enabled() {
-    return this._enabled;
+    return this._state !== STATE_DISABLED;
   }
 
   set enabled(value) {
-    if (this._enabled === value) {
+    const isCurrentlyEnabled = this._state !== STATE_DISABLED;
+    if (isCurrentlyEnabled === value) {
       return;
     }
-    this._enabled = value;
     if (value) {
-      this._applyEnabledState();
+      this._state = STATE_DEFAULT;
+      this.eventMode = "static";
+      this.cursor = "pointer";
     } else {
-      this._applyDisabledState();
+      this._state = STATE_DISABLED;
+      this.eventMode = "none";
+      this.cursor = "default";
     }
+    this._updateBackground();
   }
 
   get toggled() {
