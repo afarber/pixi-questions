@@ -12,7 +12,7 @@ import { UI_PADDING, UI_WIDTH } from "../Theme.js";
  * Handles responsive resizing and fullscreen transitions.
  */
 export class LayoutManager {
-  #resizeTimeout = null;
+  _resizeTimeout = null;
 
   constructor(app, leftPanel, midPanel, rightPanel, dialogs = []) {
     this.app = app;
@@ -27,19 +27,19 @@ export class LayoutManager {
    * Uses setTimeout to handle fullscreen transition timing issues.
    */
   updateLayout() {
-    if (this.#resizeTimeout) {
-      clearTimeout(this.#resizeTimeout);
+    if (this._resizeTimeout) {
+      clearTimeout(this._resizeTimeout);
     }
 
-    this.#resizeTimeout = setTimeout(() => {
-      this.#performLayout();
+    this._resizeTimeout = setTimeout(() => {
+      this._performLayout();
     }, 250);
   }
 
   /**
    * Performs the actual layout calculations and panel resizing.
    */
-  #performLayout() {
+  _performLayout() {
     const screenWidth = this.app.screen.width;
     const screenHeight = this.app.screen.height;
 
@@ -85,9 +85,9 @@ export class LayoutManager {
    * Cleanup method to clear any pending timeouts.
    */
   destroy() {
-    if (this.#resizeTimeout) {
-      clearTimeout(this.#resizeTimeout);
-      this.#resizeTimeout = null;
+    if (this._resizeTimeout) {
+      clearTimeout(this._resizeTimeout);
+      this._resizeTimeout = null;
     }
   }
 }

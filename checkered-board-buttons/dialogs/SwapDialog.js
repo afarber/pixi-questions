@@ -40,11 +40,11 @@ export class SwapDialog extends Container {
     this.randomLetters = [];
 
     this.visible = false;
-    this.#setupBackground();
-    this.#setupPanel();
+    this._setupBackground();
+    this._setupPanel();
   }
 
-  #setupBackground() {
+  _setupBackground() {
     this.darkOverlay = new Sprite(Texture.WHITE);
     this.darkOverlay.tint = BACKGROUND_COLOR;
     this.darkOverlay.alpha = 0;
@@ -59,7 +59,7 @@ export class SwapDialog extends Container {
     this.addChild(this.darkOverlay);
   }
 
-  #setupPanel() {
+  _setupPanel() {
     this.panelContainer = new Container();
     this.panelContainer.pivot.set(0, 0);
     this.panelContainer.eventMode = "static";
@@ -118,11 +118,11 @@ export class SwapDialog extends Container {
     this.addChild(this.panelContainer);
   }
 
-  #updateQuestion(text) {
+  _updateQuestion(text) {
     this.questionText.text = text;
   }
 
-  #setupCallbacks(onYes, onNo) {
+  _setupCallbacks(onYes, onNo) {
     this.yesButton.onPress = () => {
       if (onYes) onYes();
       this.hide();
@@ -135,15 +135,15 @@ export class SwapDialog extends Container {
   }
 
   show(text, onYes = null, onNo = null) {
-    this.#generateRandomLetters();
+    this._generateRandomLetters();
     for (let i = 0; i < this.randomLetters.length; i++) {
       this.checkboxes[i].text = this.randomLetters[i];
       this.checkboxes[i].checked = false;
     }
 
-    this.#updateQuestion(text);
-    this.#setupCallbacks(onYes, onNo);
-    this.#setupKeyHandler();
+    this._updateQuestion(text);
+    this._setupCallbacks(onYes, onNo);
+    this._setupKeyHandler();
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
@@ -172,7 +172,7 @@ export class SwapDialog extends Container {
   }
 
   hide() {
-    this.#removeKeyHandler();
+    this._removeKeyHandler();
     if (this.activeTween) {
       this.activeTween.stop();
       this.activeTween = null;
@@ -209,7 +209,7 @@ export class SwapDialog extends Container {
     this.panelContainer.y = height * 0.5;
   }
 
-  #setupKeyHandler() {
+  _setupKeyHandler() {
     this.keydownHandler = (event) => {
       if (event.key === "Escape") {
         // Close dialog (acts like clicking NO button)
@@ -220,14 +220,14 @@ export class SwapDialog extends Container {
     document.addEventListener("keydown", this.keydownHandler, true);
   }
 
-  #removeKeyHandler() {
+  _removeKeyHandler() {
     if (this.keydownHandler) {
       document.removeEventListener("keydown", this.keydownHandler, true);
       this.keydownHandler = null;
     }
   }
 
-  #generateRandomLetters() {
+  _generateRandomLetters() {
     this.randomLetters.length = 0;
     for (let i = 0; i < 7; i++) {
       const randomIndex = Math.floor(Math.random() * LETTERS.length);
