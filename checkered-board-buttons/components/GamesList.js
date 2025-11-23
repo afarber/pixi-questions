@@ -5,17 +5,17 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container, Text } from "pixi.js";
-import { SectionedList } from "./SectionedList";
-import { Button } from "./Button";
-import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme";
+import { Container, Text } from 'pixi.js';
+import { SectionedList } from './SectionedList';
+import { Button } from './Button';
+import { UI_HEIGHT, UI_WIDTH, UI_RADIUS, UI_PADDING, UI_BACKGROUND, TITLE_TEXT_STYLE } from '../Theme';
 
 // A list with 3 sections for games
 export class GamesList extends Container {
   constructor() {
     super();
 
-    this.scrollBox = new SectionedList({
+    this.sectionedList = new SectionedList({
       background: UI_BACKGROUND,
       width: UI_WIDTH + 2 * UI_PADDING,
       height: 3.5 * UI_HEIGHT,
@@ -23,19 +23,19 @@ export class GamesList extends Container {
       elementsMargin: UI_PADDING,
       padding: UI_PADDING
     });
-    this.addChild(this.scrollBox);
+    this.addChild(this.sectionedList);
   }
 
   setGames(games) {
-    this.scrollBox.removeItems();
+    this.sectionedList.removeItems();
 
     if (!Array.isArray(games) || games.length == 0) {
       const zeroGames = new Text({
-        text: "___ZERO_GAMES___",
+        text: '___ZERO_GAMES___',
         style: TITLE_TEXT_STYLE
       });
 
-      this.scrollBox.addItem(zeroGames);
+      this.sectionedList.addItem(zeroGames);
       return;
     }
 
@@ -57,9 +57,9 @@ export class GamesList extends Container {
       }
     }
 
-    this.createSection("___YOUR_TURN___", yourGames);
-    this.createSection("___HIS_TURN___", opponentGames);
-    this.createSection("___ARCHIVE___", finishedGames);
+    this.createSection('___YOUR_TURN___', yourGames);
+    this.createSection('___HIS_TURN___', opponentGames);
+    this.createSection('___ARCHIVE___', finishedGames);
   }
 
   // Create a parent container for a button.
@@ -88,21 +88,17 @@ export class GamesList extends Container {
         style: TITLE_TEXT_STYLE
       });
 
-      this.scrollBox.addItem(sectionTitle);
+      this.sectionedList.addItem(sectionTitle);
 
       for (const gid of gameIds) {
         const parentContainer = this.createParentContainer(gid);
-        this.scrollBox.addItem(parentContainer);
+        this.sectionedList.addItem(parentContainer);
       }
     }
   }
 
   resize(x, y, w, h) {
-    this.scrollBox.position.set(x, y);
-    // both options.height should be updated and setSize() called or items will disappear
-    this.scrollBox.options.width = w;
-    this.scrollBox.options.height = h;
-    this.scrollBox.setSize({ width: w, height: h });
-    console.log(this.scrollBox.options);
+    this.sectionedList.position.set(x, y);
+    this.sectionedList.setSize({ width: w, height: h });
   }
 }
