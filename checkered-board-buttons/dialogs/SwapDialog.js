@@ -6,13 +6,10 @@
  */
 
 import { Container, Graphics, Text } from 'pixi.js';
-import { Group } from '@tweenjs/tween.js';
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from '../Theme.js';
 import { Button } from '../components/Button.js';
 import { Checkbox } from '../components/Checkbox.js';
 import { BaseDialog } from './BaseDialog.js';
-
-export const swapDialogTweenGroup = new Group();
 
 const PANEL_WIDTH = UI_WIDTH * 2;
 const PANEL_HEIGHT = UI_HEIGHT * 8;
@@ -27,7 +24,7 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
  */
 export class SwapDialog extends BaseDialog {
   constructor(app) {
-    super(app, swapDialogTweenGroup);
+    super(app);
     this.checkboxes = [];
     this.randomLetters = [];
     this._setupPanel();

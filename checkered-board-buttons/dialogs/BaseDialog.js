@@ -6,7 +6,9 @@
  */
 
 import { Container, Texture, Sprite } from 'pixi.js';
-import { Easing, Tween } from '@tweenjs/tween.js';
+import { Easing, Tween, Group } from '@tweenjs/tween.js';
+
+export const dialogTweenGroup = new Group();
 
 export const ANIMATION_DURATION = 300;
 export const BACKGROUND_ALPHA = 0.8;
@@ -22,11 +24,11 @@ export const BACKGROUND_COLOR = 0x000000;
  * - Add all elements to panelContainer, then add panelContainer to this
  */
 export class BaseDialog extends Container {
-  constructor(app, tweenGroup) {
+  constructor(app) {
     super();
 
     this.app = app;
-    this._tweenGroup = tweenGroup;
+    this._tweenGroup = dialogTweenGroup;
     this.zIndex = 1000;
 
     this.darkOverlay = null;

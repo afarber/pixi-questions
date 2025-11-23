@@ -14,8 +14,9 @@ import { GamesList } from './components/GamesList';
 import { games } from './TestData';
 import { VerticalPanel } from './layout/VerticalPanel';
 import { LayoutManager } from './layout/LayoutManager';
-import { ConfirmDialog, confirmDialogTweenGroup } from './dialogs/ConfirmDialog.js';
-import { SwapDialog, swapDialogTweenGroup } from './dialogs/SwapDialog.js';
+import { ConfirmDialog } from './dialogs/ConfirmDialog.js';
+import { SwapDialog } from './dialogs/SwapDialog.js';
+import { dialogTweenGroup } from './dialogs/BaseDialog.js';
 
 // Tween group for tile shuffle animations
 const shuffleTweenGroup = new Group();
@@ -283,8 +284,7 @@ const manifest = {
 
   app.ticker.add((time) => {
     buttonsTweenGroup.update();
-    confirmDialogTweenGroup.update();
-    swapDialogTweenGroup.update();
+    dialogTweenGroup.update();
     shuffleTweenGroup.update();
 
     bunny.rotation += 0.05 * time.deltaTime;

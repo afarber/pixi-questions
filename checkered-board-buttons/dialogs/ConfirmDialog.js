@@ -6,12 +6,9 @@
  */
 
 import { Container, Graphics, Text } from 'pixi.js';
-import { Group } from '@tweenjs/tween.js';
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from '../Theme.js';
 import { Button } from '../components/Button.js';
 import { BaseDialog } from './BaseDialog.js';
-
-export const confirmDialogTweenGroup = new Group();
 
 const PANEL_WIDTH = UI_WIDTH * 2;
 const PANEL_HEIGHT = UI_HEIGHT * 3;
@@ -24,7 +21,7 @@ const BUTTON_SPACING = 20;
  */
 export class ConfirmDialog extends BaseDialog {
   constructor(app) {
-    super(app, confirmDialogTweenGroup);
+    super(app);
     this._setupPanel();
   }
 

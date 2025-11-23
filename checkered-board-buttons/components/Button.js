@@ -5,9 +5,9 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container, Graphics, Text } from "pixi.js";
-import { sound } from "@pixi/sound";
-import { Group, Easing, Tween } from "@tweenjs/tween.js";
+import { Container, Graphics, Text } from 'pixi.js';
+import { sound } from '@pixi/sound';
+import { Group, Easing, Tween } from '@tweenjs/tween.js';
 import {
   UI_HEIGHT,
   UI_WIDTH,
@@ -16,22 +16,22 @@ import {
   UI_BACKGROUND_HOVER,
   UI_BACKGROUND_PRESSED,
   UI_BACKGROUND_DISABLED
-} from "../Theme";
+} from '../Theme';
 
 // Create a shared tween group for all buttons
 export const buttonsTweenGroup = new Group();
 
 // Duration of the show/hide animation in milliseconds
-const HIDE_SHOW_DURATION = 200;
+const ANIMATION_DURATION = 200;
 
 // Button states
-const STATE_DEFAULT = "default";
-const STATE_HOVER = "hover";
-const STATE_PRESSED = "pressed";
-const STATE_DISABLED = "disabled";
+const STATE_DEFAULT = 'default';
+const STATE_HOVER = 'hover';
+const STATE_PRESSED = 'pressed';
+const STATE_DISABLED = 'disabled';
 
 const DEFAULT_OPTIONS = {
-  text: "",
+  text: '',
   width: UI_WIDTH,
   height: UI_HEIGHT,
   radius: UI_RADIUS,
@@ -84,8 +84,8 @@ export class Button extends Container {
     this.addChild(this._textView);
 
     // Set up interactivity
-    this.eventMode = "static";
-    this.cursor = "pointer";
+    this.eventMode = 'static';
+    this.cursor = 'pointer';
 
     // Bind event handlers
     this._onPointerOver = this._onPointerOver.bind(this);
@@ -102,17 +102,17 @@ export class Button extends Container {
 
     // Apply initial disabled state
     if (this._state === STATE_DISABLED) {
-      this.eventMode = "none";
-      this.cursor = "default";
+      this.eventMode = 'none';
+      this.cursor = 'default';
     }
   }
 
   _setupEvents() {
-    this.on("pointerover", this._onPointerOver);
-    this.on("pointerout", this._onPointerOut);
-    this.on("pointerdown", this._onPointerDown);
-    this.on("pointerup", this._onPointerUp);
-    this.on("pointerupoutside", this._onPointerUpOutside);
+    this.on('pointerover', this._onPointerOver);
+    this.on('pointerout', this._onPointerOut);
+    this.on('pointerdown', this._onPointerDown);
+    this.on('pointerup', this._onPointerUp);
+    this.on('pointerupoutside', this._onPointerUpOutside);
   }
 
   _onPointerOver() {
@@ -137,7 +137,7 @@ export class Button extends Container {
     }
     this._state = STATE_PRESSED;
     this._updateBackground();
-    sound.play("click_002");
+    sound.play('click_002');
   }
 
   _onPointerUp() {
@@ -198,13 +198,7 @@ export class Button extends Container {
     }
 
     this._background
-      .roundRect(
-        -this._width / 2,
-        -this._height / 2,
-        this._width,
-        this._height,
-        this._radius
-      )
+      .roundRect(-this._width / 2, -this._height / 2, this._width, this._height, this._radius)
       .fill({ color });
   }
 
@@ -225,12 +219,12 @@ export class Button extends Container {
     }
     if (value) {
       this._state = STATE_DEFAULT;
-      this.eventMode = "static";
-      this.cursor = "pointer";
+      this.eventMode = 'static';
+      this.cursor = 'pointer';
     } else {
       this._state = STATE_DISABLED;
-      this.eventMode = "none";
-      this.cursor = "default";
+      this.eventMode = 'none';
+      this.cursor = 'default';
     }
     this._updateBackground();
   }
@@ -283,7 +277,7 @@ export class Button extends Container {
 
     this.activeTween = new Tween(this.scale, buttonsTweenGroup)
       .delay(delay)
-      .to({ x: 1, y: 1 }, HIDE_SHOW_DURATION)
+      .to({ x: 1, y: 1 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
   }
@@ -302,7 +296,7 @@ export class Button extends Container {
     }
 
     this.activeTween = new Tween(this.scale, buttonsTweenGroup)
-      .to({ x: 0, y: 0 }, HIDE_SHOW_DURATION)
+      .to({ x: 0, y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .onComplete(() => {
         this.visible = false;
