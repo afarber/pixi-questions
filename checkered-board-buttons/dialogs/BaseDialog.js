@@ -12,6 +12,15 @@ export const ANIMATION_DURATION = 300;
 export const BACKGROUND_ALPHA = 0.8;
 export const BACKGROUND_COLOR = 0x000000;
 
+/**
+ * Base class for modal dialogs.
+ *
+ * Subclasses must implement _setupPanel() which should:
+ * - Create this.panelContainer (Container with eventMode 'static')
+ * - Create this.questionText (Text element for the dialog question)
+ * - Create this.yesButton and this.noButton (Button instances)
+ * - Add all elements to panelContainer, then add panelContainer to this
+ */
 export class BaseDialog extends Container {
   constructor(app, tweenGroup) {
     super();
@@ -84,12 +93,14 @@ export class BaseDialog extends Container {
     this.yesButton.show(true, 100);
     this.noButton.show(true, 200);
 
-    this.activeTween = new Tween(this.darkOverlay, this._tweenGroup)
+    this.activeTween = new Tween(this.darkOverlay)
+      .group(this._tweenGroup)
       .to({ alpha: BACKGROUND_ALPHA }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .start();
 
-    new Tween(this.panelContainer.pivot, this._tweenGroup)
+    new Tween(this.panelContainer.pivot)
+      .group(this._tweenGroup)
       .to({ y: 0 }, ANIMATION_DURATION)
       .easing(Easing.Back.Out)
       .start();
@@ -107,7 +118,8 @@ export class BaseDialog extends Container {
     this.yesButton.hide(true);
     this.noButton.hide(true);
 
-    this.activeTween = new Tween(this.darkOverlay, this._tweenGroup)
+    this.activeTween = new Tween(this.darkOverlay)
+      .group(this._tweenGroup)
       .to({ alpha: 0 }, ANIMATION_DURATION * 0.67)
       .easing(Easing.Linear.None)
       .onComplete(() => {
@@ -115,7 +127,8 @@ export class BaseDialog extends Container {
       })
       .start();
 
-    new Tween(this.panelContainer.pivot, this._tweenGroup)
+    new Tween(this.panelContainer.pivot)
+      .group(this._tweenGroup)
       .to({ y: -500 }, ANIMATION_DURATION)
       .easing(Easing.Back.In)
       .start();
