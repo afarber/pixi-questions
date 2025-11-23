@@ -39,6 +39,13 @@ const DEFAULT_OPTIONS = {
   enabled: true
 };
 
+/**
+ * Interactive button component with multiple states (default, hover, pressed, disabled).
+ * Supports toggle mode for on/off buttons and animated show/hide transitions.
+ *
+ * @fires onPress - Called when button is clicked
+ * @fires onToggle - Called when toggle state changes (toggle buttons only)
+ */
 export class Button extends Container {
   constructor(args) {
     super();

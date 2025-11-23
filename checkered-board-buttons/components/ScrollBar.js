@@ -20,6 +20,12 @@ const DEFAULT_OPTIONS = {
   thumbColor: DEFAULT_THUMB_COLOR
 };
 
+/**
+ * Vertical scrollbar with draggable thumb.
+ * Reports scroll position as a ratio (0-1) via onScroll callback.
+ *
+ * @fires onScroll - Called with scroll ratio when thumb is dragged
+ */
 export class ScrollBar extends Container {
   constructor(args) {
     super();

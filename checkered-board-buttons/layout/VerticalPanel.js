@@ -11,10 +11,11 @@ import { GamesList } from "../components/GamesList.js";
 import { UI_HEIGHT, UI_RADIUS, UI_PADDING } from "../Theme";
 import { TILE_SIZE } from "../Tile";
 
-// A class for placing and resizing Pixi Containers.
-// They are placed vertically by calling resize() method.
-// Instances of GamesList or Board are given the max height.
-
+/**
+ * Container for vertically stacking UI elements in a column.
+ * Handles positioning and resizing of children via the resize() method.
+ * Special children (GamesList, Board) are given maximum available height.
+ */
 export class VerticalPanel {
   constructor(stage) {
     this.children = [];

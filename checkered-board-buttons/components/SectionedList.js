@@ -21,6 +21,10 @@ const DEFAULT_OPTIONS = {
   elementsMargin: 0
 };
 
+/**
+ * Scrollable container for displaying a vertical list of items.
+ * Supports drag scrolling, mouse wheel, and includes an auto-hiding scrollbar.
+ */
 export class SectionedList extends Container {
   constructor(args) {
     super();

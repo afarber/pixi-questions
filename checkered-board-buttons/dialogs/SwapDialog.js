@@ -21,6 +21,10 @@ const BUTTON_SPACING = 20;
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+/**
+ * A dialog for swapping game tiles/letters.
+ * Displays a list of checkboxes with random letters that the user can select for swapping.
+ */
 export class SwapDialog extends BaseDialog {
   constructor(app) {
     super(app, swapDialogTweenGroup);

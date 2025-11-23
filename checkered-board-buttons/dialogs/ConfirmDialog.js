@@ -18,6 +18,10 @@ const PANEL_HEIGHT = UI_HEIGHT * 3;
 const PANEL_PADDING = 20;
 const BUTTON_SPACING = 20;
 
+/**
+ * A simple confirmation dialog with Yes/No buttons.
+ * Displays a question text and calls the appropriate callback based on user choice.
+ */
 export class ConfirmDialog extends BaseDialog {
   constructor(app) {
     super(app, confirmDialogTweenGroup);

@@ -23,6 +23,11 @@ const DEFAULT_OPTIONS = {
   checkColor: CHECK_COLOR
 };
 
+/**
+ * Simple checkbox component with a checkmark indicator and optional text label.
+ *
+ * @fires onToggle - Called when checked state changes
+ */
 export class Checkbox extends Container {
   constructor(args) {
     super();
