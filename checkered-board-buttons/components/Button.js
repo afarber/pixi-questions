@@ -54,7 +54,6 @@ export class Button extends Container {
     this._state = options.enabled ? STATE_DEFAULT : STATE_DISABLED;
     this._isToggle = options.isToggle;
     this._toggled = false;
-    this._isDown = false;
 
     this.activeTween = null;
 
@@ -110,7 +109,7 @@ export class Button extends Container {
   }
 
   _onPointerOver() {
-    if (this._state === STATE_DISABLED || this._isDown) {
+    if (this._state === STATE_DISABLED || this._state === STATE_PRESSED) {
       return;
     }
     this._state = STATE_HOVER;
@@ -121,7 +120,6 @@ export class Button extends Container {
     if (this._state === STATE_DISABLED) {
       return;
     }
-    this._isDown = false;
     this._state = STATE_DEFAULT;
     this._updateBackground();
   }
@@ -130,17 +128,15 @@ export class Button extends Container {
     if (this._state === STATE_DISABLED) {
       return;
     }
-    this._isDown = true;
     this._state = STATE_PRESSED;
     this._updateBackground();
     sound.play("click_002");
   }
 
   _onPointerUp() {
-    if (this._state === STATE_DISABLED || !this._isDown) {
+    if (this._state !== STATE_PRESSED) {
       return;
     }
-    this._isDown = false;
 
     // Handle toggle
     if (this._isToggle) {
@@ -160,10 +156,9 @@ export class Button extends Container {
   }
 
   _onPointerUpOutside() {
-    if (this._state === STATE_DISABLED) {
+    if (this._state !== STATE_PRESSED) {
       return;
     }
-    this._isDown = false;
     this._state = STATE_DEFAULT;
     this._updateBackground();
   }
