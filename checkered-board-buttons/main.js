@@ -174,67 +174,79 @@ const manifest = {
   });
   rightPanel.addChild(fullscreenButton);
 
+  // Create dialog instances
+  const confirmDialog = new ConfirmDialog(app);
+  const swapDialog = new SwapDialog(app);
+
   const rightButtons = [
     {
-      "label": "___SWAP___",
-      "text": null,
-      "text": "___QUESTION_SWAP___",
+      "text": "___SWAP___",
+      "question": "___QUESTION_SWAP___",
+      "dialog": swapDialog,
       "onpress": () => {
         console.log("___SWAP___ confirmed and executed!");
       }
     },
     {
-      "label": "___SKIP___",
-      "text": "___QUESTION_SKIP___",
+      "text": "___SKIP___",
+      "question": "___QUESTION_SKIP___",
+      "dialog": confirmDialog,
       "onpress": () => {
         console.log("___SKIP___ confirmed and executed!");
       }
     },
     {
-      "label": "___RESIGN___",
-      "text": "___QUESTION_RESIGN___",
+      "text": "___RESIGN___",
+      "question": "___QUESTION_RESIGN___",
+      "dialog": confirmDialog,
       "onpress": () => {
         console.log("___RESIGN___ confirmed and executed!");
       }
     },
     {
-      "label": "___PILE___",
-      "text": null,
+      "text": "___PILE___",
+      "question": null,
+      "dialog": null,
       "onpress": () => {
         console.log("___PILE___ pressed!");
       }
     },
     {
-      "label": "___MOVES_HISTORY___",
-      "text": null,
+      "text": "___MOVES_HISTORY___",
+      "question": null,
+      "dialog": null,
       "onpress": () => {
         console.log("___MOVES_HISTORY___ pressed!");
       }
     },
     {
-      "label": "___SETTINGS___",
-      "text": null,
+      "text": "___SETTINGS___",
+      "question": null,
+      "dialog": null,
       "onpress": () => {
         console.log("___SETTINGS___ pressed!");
       }
     },
     {
-      "label": "___SHARE___",
-      "text": "___QUESTION_SHARE___",
+      "text": "___SHARE___",
+      "question": "___QUESTION_SHARE___",
+      "dialog": confirmDialog,
       "onpress": () => {
         console.log("___SHARE___ confirmed and executed!");
       }
     },
     {
-      "label": "___PLAY___",
-      "text": "___QUESTION_PLAY___",
+      "text": "___PLAY___",
+      "question": "___QUESTION_PLAY___",
+      "dialog": confirmDialog,
       "onpress": () => {
         console.log("___PLAY___ confirmed and executed!");
       }
     },
     {
-      "label": "___SHUFFLE___",
-      "text": null,
+      "text": "___SHUFFLE___",
+      "question": null,
+      "dialog": null,
       "onpress": () => {
         console.log("___SHUFFLE___ pressed!");
         shuffleTiles([r, g, b]);
@@ -245,20 +257,14 @@ const manifest = {
   for (let i = 0; i < rightButtons.length; i++) {
     const buttonConfig = rightButtons[i];
     const button = new Button({
-      text: buttonConfig.label
+      text: buttonConfig.text
     });
 
     button.onPress = () => {
-      if (buttonConfig.text) {
-        if (buttonConfig.label === "___SWAP___") {
-          swapDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
-            console.log(`${buttonConfig.label} cancelled!`);
-          });
-        } else {
-          confirmDialog.show(buttonConfig.text, buttonConfig.onpress, () => {
-            console.log(`${buttonConfig.label} cancelled!`);
-          });
-        }
+      if (buttonConfig.dialog) {
+        buttonConfig.dialog.show(buttonConfig.question, buttonConfig.onpress, () => {
+          console.log(`${buttonConfig.text} cancelled!`);
+        });
       } else {
         buttonConfig.onpress();
       }
@@ -272,9 +278,6 @@ const manifest = {
   midPanel.addChildrenToStage(app.stage);
   rightPanel.addChildrenToStage(app.stage);
 
-  // Create dialog instances
-  const confirmDialog = new ConfirmDialog(app);
-  const swapDialog = new SwapDialog(app);
   app.stage.addChild(confirmDialog);
   app.stage.addChild(swapDialog);
 
