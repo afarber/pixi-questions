@@ -10,7 +10,7 @@
 
 import { describe, test, expect } from 'vitest';
 import { Container } from 'pixi.js';
-import { SectionedList } from '../ui/SectionedList.js';
+import { SectionedList } from '../components/SectionedList.js';
 
 describe('SectionedList', () => {
 

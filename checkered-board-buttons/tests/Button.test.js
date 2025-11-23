@@ -9,7 +9,7 @@
 // Tests our custom button creation, animations, and state management
 
 import { describe, test, expect, vi } from 'vitest';
-import { Button, buttonsTweenGroup } from '../ui/Button.js';
+import { Button, buttonsTweenGroup } from '../components/Button.js';
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS } from '../Theme.js';
 
 describe('MyButton', () => {

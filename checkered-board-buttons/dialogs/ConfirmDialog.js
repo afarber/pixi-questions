@@ -8,7 +8,7 @@
 import { Container, Graphics, Texture, Sprite, Text } from "pixi.js";
 import { Group, Easing, Tween } from "@tweenjs/tween.js";
 import { UI_WIDTH, UI_HEIGHT, UI_RADIUS, UI_BACKGROUND, TITLE_TEXT_STYLE } from "../Theme.js";
-import { Button } from "../ui/Button.js";
+import { Button } from "../components/Button.js";
 
 export const confirmDialogTweenGroup = new Group();
 

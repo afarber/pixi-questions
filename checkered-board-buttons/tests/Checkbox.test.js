@@ -9,7 +9,7 @@
 // Tests our custom checkbox creation and state management
 
 import { describe, test, expect, vi } from 'vitest';
-import { Checkbox } from '../ui/Checkbox.js';
+import { Checkbox } from '../components/Checkbox.js';
 
 describe('MyCheckbox', () => {
 

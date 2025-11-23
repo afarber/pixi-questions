@@ -9,7 +9,7 @@
 // Tests our game list with scrolling and game categorization logic
 
 import { describe, test, expect, vi } from 'vitest';
-import { GamesList } from '../ui/GamesList.js';
+import { GamesList } from '../components/GamesList.js';
 import { games } from '../TestData.js';
 
 describe('GamesList', () => {

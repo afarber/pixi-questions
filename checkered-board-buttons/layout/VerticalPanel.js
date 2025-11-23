@@ -7,7 +7,7 @@
 
 import { Graphics, Text } from "pixi.js";
 import { Board } from "../Board";
-import { GamesList } from "../ui/GamesList.js";
+import { GamesList } from "../components/GamesList.js";
 import { UI_HEIGHT, UI_RADIUS, UI_PADDING } from "../Theme";
 import { TILE_SIZE } from "../Tile";
 

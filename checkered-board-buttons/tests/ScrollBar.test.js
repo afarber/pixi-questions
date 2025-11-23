@@ -9,7 +9,7 @@
 // Tests our custom scrollbar creation and interaction
 
 import { describe, test, expect, vi } from 'vitest';
-import { ScrollBar } from '../ui/ScrollBar.js';
+import { ScrollBar } from '../components/ScrollBar.js';
 
 describe('ScrollBar', () => {
 
