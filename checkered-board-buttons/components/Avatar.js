@@ -13,8 +13,8 @@ const AVATAR_HEIGHT = 80;
 const DEFAULT_AVATAR_URL = 'https://pixijs.com/assets/bunny.png';
 
 const DEFAULT_OPTIONS = {
-  imageUrl: '',
-  first: '',
+  photo: '',
+  given: '',
   elo: 1500,
   score: 0
 };
@@ -31,8 +31,8 @@ export class Avatar extends Container {
       ...args
     };
 
-    this._imageUrl = options.imageUrl;
-    this._first = options.first;
+    this._photo = options.photo;
+    this._given = options.given;
     this._elo = options.elo;
     this._score = options.score;
 
@@ -41,7 +41,7 @@ export class Avatar extends Container {
 
     // Create name text (above sprite)
     this._nameText = new Text({
-      text: this._first,
+      text: this._given,
       style: {
         fontSize: 16,
         fill: 0x000000
@@ -76,12 +76,16 @@ export class Avatar extends Container {
     this._loadImage();
   }
 
-  async _loadImage() {
-    // Validate and use default if imageUrl is empty or invalid
-    let imageUrl = this._imageUrl;
-    if (!imageUrl || !imageUrl.startsWith('https://')) {
-      imageUrl = DEFAULT_AVATAR_URL;
+  _validatePhoto(url) {
+    // Return default if url is empty or doesn't start with https://
+    if (!url || !url.startsWith('https://')) {
+      return DEFAULT_AVATAR_URL;
     }
+    return url;
+  }
+
+  async _loadImage() {
+    const imageUrl = this._validatePhoto(this._photo);
 
     try {
       const texture = await Assets.load(imageUrl);
@@ -146,12 +150,26 @@ export class Avatar extends Container {
 
   // Public properties
 
-  get first() {
-    return this._first;
+  get photo() {
+    return this._photo;
   }
 
-  set first(value) {
-    this._first = value;
+  set photo(value) {
+    this._photo = value;
+    // Reload the image with new URL
+    if (this._sprite) {
+      this.removeChild(this._sprite);
+      this._sprite = null;
+    }
+    this._loadImage();
+  }
+
+  get given() {
+    return this._given;
+  }
+
+  set given(value) {
+    this._given = value;
     this._nameText.text = value;
     this._updateLayout();
   }

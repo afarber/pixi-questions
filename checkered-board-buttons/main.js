@@ -147,15 +147,15 @@ const manifest = {
 
   // Create player avatars in avatar panel
   const avatar1 = new Avatar({
-    first: 'Alexander',
+    given: 'Alexander',
     elo: 2317,
     score: 81
   });
   avatarPanel.addChild(avatar1);
 
   const avatar2 = new Avatar({
-    imageUrl: 'https://m.media-amazon.com/images/G/02/CerberusPrimeVideo-FN38FSBD/adult-1.png',
-    first: 'Olga',
+    photo: 'https://m.media-amazon.com/images/G/02/CerberusPrimeVideo-FN38FSBD/adult-1.png',
+    given: 'Olga',
     elo: 2179,
     score: 86
   });
