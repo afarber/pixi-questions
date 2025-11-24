@@ -35,5 +35,6 @@ export default {
   ___QUESTION_RESIGN___: "Möchten Sie wirklich aufgeben?",
   ___QUESTION_SHARE___: "Möchten Sie wirklich teilen?",
   ___QUESTION_PLAY___: "Möchten Sie wirklich spielen?",
+  ___SCORE___: "Punkte",
   ___LANG___: "de"
 };

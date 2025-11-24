@@ -35,5 +35,6 @@ export default {
   ___QUESTION_RESIGN___: "Do you really want to resign?",
   ___QUESTION_SHARE___: "Do you really want to share?",
   ___QUESTION_PLAY___: "Do you really want to play?",
+  ___SCORE___: "Score",
   ___LANG___: "en"
 };

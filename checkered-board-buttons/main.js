@@ -10,6 +10,7 @@ import { Tween, Easing, Group } from '@tweenjs/tween.js';
 import { Board, NUM_CELLS } from './Board';
 import { Tile, TILE_SIZE } from './Tile';
 import { Button, buttonsTweenGroup } from './components/Button';
+import { Avatar } from './components/Avatar';
 import { GamesList } from './components/GamesList';
 import { games } from './TestData';
 import { VerticalPanel } from './layout/VerticalPanel';
@@ -102,6 +103,7 @@ const manifest = {
   app.stage.hitArea = app.screen;
 
   const leftPanel = new VerticalPanel(app.stage);
+  const avatarPanel = new VerticalPanel(app.stage);
   const midPanel = new VerticalPanel(app.stage);
   const rightPanel = new VerticalPanel(app.stage);
 
@@ -142,6 +144,22 @@ const manifest = {
 
   const newGameButton = new Button({ text: '___NEW_GAME___' });
   leftPanel.addChild(newGameButton);
+
+  // Create player avatars in avatar panel
+  const avatar1 = new Avatar({
+    first: 'Alexander',
+    elo: 2317,
+    score: 81
+  });
+  avatarPanel.addChild(avatar1);
+
+  const avatar2 = new Avatar({
+    imageUrl: 'https://m.media-amazon.com/images/G/02/CerberusPrimeVideo-FN38FSBD/adult-1.png',
+    first: 'Olga',
+    elo: 2179,
+    score: 86
+  });
+  avatarPanel.addChild(avatar2);
 
   const gamesList = new GamesList();
   gamesList.setGames(games);
@@ -272,6 +290,7 @@ const manifest = {
   }
 
   leftPanel.addChildrenToStage(app.stage);
+  avatarPanel.addChildrenToStage(app.stage);
   midPanel.addChildrenToStage(app.stage);
   rightPanel.addChildrenToStage(app.stage);
 
@@ -279,7 +298,7 @@ const manifest = {
   app.stage.addChild(swapDialog);
 
   // Initialize layout manager with dialog and setup event listeners
-  const layoutManager = new LayoutManager(app, leftPanel, midPanel, rightPanel, [confirmDialog, swapDialog]);
+  const layoutManager = new LayoutManager(app, leftPanel, avatarPanel, midPanel, rightPanel, [confirmDialog, swapDialog]);
   layoutManager.setupEventListeners();
 
   app.ticker.add((time) => {

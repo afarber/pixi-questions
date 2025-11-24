@@ -7,16 +7,20 @@
 
 import { UI_PADDING, UI_WIDTH } from "../Theme.js";
 
+// Width for the avatar panel
+const AVATAR_PANEL_WIDTH = 80;
+
 /**
- * Manages the three-column layout system for the application.
+ * Manages the multi-column layout system for the application.
  * Handles responsive resizing and fullscreen transitions.
  */
 export class LayoutManager {
   _resizeTimeout = null;
 
-  constructor(app, leftPanel, midPanel, rightPanel, dialogs = []) {
+  constructor(app, leftPanel, avatarPanel, midPanel, rightPanel, dialogs = []) {
     this.app = app;
     this.leftPanel = leftPanel;
+    this.avatarPanel = avatarPanel;
     this.midPanel = midPanel;
     this.rightPanel = rightPanel;
     this.dialogs = dialogs;
@@ -48,9 +52,14 @@ export class LayoutManager {
     // Left panel: Fixed width, full height with padding
     this.leftPanel.resize(UI_PADDING, UI_PADDING, UI_WIDTH, screenHeight - 2 * UI_PADDING);
 
-    // Middle panel: Flexible width between fixed panels
-    const middleWidth = screenWidth - 2 * UI_WIDTH - 4 * UI_PADDING;
-    this.midPanel.resize(UI_WIDTH + 2 * UI_PADDING, UI_PADDING, middleWidth, screenHeight - 2 * UI_PADDING);
+    // Avatar panel: Between left and mid panels
+    const avatarX = UI_WIDTH + 2 * UI_PADDING;
+    this.avatarPanel.resize(avatarX, UI_PADDING, AVATAR_PANEL_WIDTH, screenHeight - 2 * UI_PADDING);
+
+    // Middle panel: Flexible width between avatar and right panels
+    const midX = avatarX + AVATAR_PANEL_WIDTH + UI_PADDING;
+    const middleWidth = screenWidth - midX - UI_WIDTH - 2 * UI_PADDING;
+    this.midPanel.resize(midX, UI_PADDING, middleWidth, screenHeight - 2 * UI_PADDING);
 
     // Right panel: Fixed width, positioned at right edge
     this.rightPanel.resize(screenWidth - UI_WIDTH - UI_PADDING, UI_PADDING, UI_WIDTH, screenHeight - 2 * UI_PADDING);
