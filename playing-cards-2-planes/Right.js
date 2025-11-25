@@ -5,9 +5,9 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container } from "pixi.js";
-import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from "./Card.js";
+import { Container } from 'pixi.js';
+import { Tween, Easing } from '@tweenjs/tween.js';
+import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from './Card.js';
 
 export class Right extends Container {
   constructor(screen) {
@@ -74,16 +74,18 @@ export class Right extends Container {
     const totalCards = cards.length;
 
     // Pivot point inside top-right corner with padding
+    // (if the pivot is outside, start/end cards are cut off)
     const pivotX = this.screen.width - RADIAL_PIVOT_PADDING;
     const pivotY = RADIAL_PIVOT_PADDING;
 
-    // Angle step: divide 90 degrees by (totalCards + 1) for equal gaps at both ends
-    const angleStepDeg = 90 / (totalCards + 1);
+    // Angle step: divide 90 degrees by (totalCards + 3)
+    // for equal gaps (angle step x2) at both ends
+    const angleStepDeg = 90 / (totalCards + 3);
 
     cards.forEach((card, index) => {
       // Mirror of Left: angles go from 180 degrees down toward 90 degrees
-      // Card N gets angle 180 - (N + 1) * angleStep
-      const angleDeg = 180 - (index + 1) * angleStepDeg;
+      // Card N gets angle 180 - (N + 2) * angleStep
+      const angleDeg = 180 - (index + 2) * angleStepDeg;
       const angleRad = (angleDeg * Math.PI) / 180;
 
       // Position from polar coordinates

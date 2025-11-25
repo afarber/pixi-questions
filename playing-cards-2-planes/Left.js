@@ -5,9 +5,9 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container } from "pixi.js";
-import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from "./Card.js";
+import { Container } from 'pixi.js';
+import { Tween, Easing } from '@tweenjs/tween.js';
+import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from './Card.js';
 
 export class Left extends Container {
   constructor(screen) {
@@ -76,15 +76,17 @@ export class Left extends Container {
     const totalCards = cards.length;
 
     // Pivot point inside top-left corner with padding
+    // (if the pivot is outside, start/end cards are cut off)
     const pivotX = RADIAL_PIVOT_PADDING;
     const pivotY = RADIAL_PIVOT_PADDING;
 
-    // Angle step: divide 90 degrees by (totalCards + 1) for equal gaps at both ends
-    const angleStepDeg = 90 / (totalCards + 1);
+    // Angle step: divide 90 degrees by (totalCards + 3)
+    // for equal gaps (angle step x2) at both ends
+    const angleStepDeg = 90 / (totalCards + 3);
 
     cards.forEach((card, index) => {
-      // Card N gets angle (N + 1) * angleStep
-      const angleDeg = (index + 1) * angleStepDeg;
+      // Card N gets angle (N + 2) * angleStep
+      const angleDeg = (index + 2) * angleStepDeg;
       const angleRad = (angleDeg * Math.PI) / 180;
 
       // Position from polar coordinates
