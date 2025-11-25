@@ -16,6 +16,8 @@ export const CARD_WIDTH = 188;
 export const CARD_HEIGHT = 263;
 export const TWEEN_DURATION = 400;
 export const CARD_VISIBLE_RATIO = 0.3;
+export const RADIAL_FAN_RADIUS = 600;
+export const RADIAL_HOVER_DISTANCE = 40;
 
 export class Card extends Container {
   static tweenGroup = new Group();
@@ -99,12 +101,10 @@ export class Card extends Container {
       if (this.isParentHand()) {
         // On mouse hover, move the hand card up by 1/6
         this.y = this.baseY - CARD_HEIGHT / 6;
-      } else if (this.isParentLeft()) {
-        // On mouse hover, move the left card right by 1/6
-        this.x = this.baseX + CARD_WIDTH / 6;
-      } else if (this.isParentRight()) {
-        // On mouse hover, move the right card left by 1/6
-        this.x = this.baseX - CARD_WIDTH / 6;
+      } else if (this.isParentLeft() || this.isParentRight()) {
+        // On mouse hover, push card outward along its radial direction
+        this.x = this.baseX + this.radialDirX * RADIAL_HOVER_DISTANCE;
+        this.y = this.baseY + this.radialDirY * RADIAL_HOVER_DISTANCE;
       }
 
       this.once("pointerleave", () => {
@@ -112,6 +112,7 @@ export class Card extends Container {
           this.y = this.baseY;
         } else if (this.isParentLeft() || this.isParentRight()) {
           this.x = this.baseX;
+          this.y = this.baseY;
         }
       });
     });

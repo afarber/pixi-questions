@@ -7,7 +7,7 @@
 
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from "./Card.js";
+import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS } from "./Card.js";
 
 export class Right extends Container {
   constructor(screen) {
@@ -68,44 +68,38 @@ export class Right extends Container {
       return;
     }
 
-    if (cards.length === 1) {
-      const card = cards[0];
-      // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from left, rest is off-screen at right
-      card.x = this.screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;
-      card.baseX = card.x;
-      card.y = this.screen.height / 2;
-      card.angle = 90;
-      return;
-    }
-
+    // Sort cards for consistent ordering
     cards.sort(Card.compareCards);
 
     const totalCards = cards.length;
-    const paddingTop = 0;
-    const paddingBottom = CARD_VISIBLE_RATIO * CARD_HEIGHT;
-    const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
-    // Available height for card spacing (excluding padding and 1 card height)
-    const availableHeight = this.screen.height - paddingTop - paddingBottom - CARD_HEIGHT;
+    // Pivot point outside top-right corner
+    const pivotX = this.screen.width + RADIAL_FAN_RADIUS * 0.3;
+    const pivotY = -RADIAL_FAN_RADIUS * 0.2;
 
-    // Calculate spacing between cards
-    const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
-
-    // Center the cards vertically
-    const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
-    const firstCardY = paddingTop + CARD_HEIGHT / 2 + (availableHeight - totalCardsHeight) / 2;
-
-    // Position so only CARD_VISIBLE_RATIO (30%) of card width is visible from left, rest is off-screen at right
-    const cardX = this.screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;
-    const middleIndex = (totalCards - 1) / 2;
+    // Angle step: divide 90 degrees by (totalCards + 1) for equal gaps at both ends
+    const angleStepDeg = 90 / (totalCards + 1);
 
     cards.forEach((card, index) => {
-      card.x = cardX + card.jitterX;
-      // Store base X position for hover effect
+      // Mirror of Left: angles go from 180 degrees down toward 90 degrees
+      // Card N gets angle 180 - (N + 1) * angleStep
+      const angleDeg = 180 - (index + 1) * angleStepDeg;
+      const angleRad = (angleDeg * Math.PI) / 180;
+
+      // Position from polar coordinates
+      card.x = pivotX + RADIAL_FAN_RADIUS * Math.cos(angleRad) + card.jitterX;
+      card.y = pivotY + RADIAL_FAN_RADIUS * Math.sin(angleRad) + card.jitterY;
+
+      // Store base position for hover effect
       card.baseX = card.x;
-      card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
-      // Apply tilt: 90 degrees at middle (horizontal), decreasing by 1 degree per card away from center (opposite fan direction)
-      card.angle = 90 - (index - middleIndex) * 1;
+      card.baseY = card.y;
+
+      // Store radial direction unit vector for hover push-out
+      card.radialDirX = Math.cos(angleRad);
+      card.radialDirY = Math.sin(angleRad);
+
+      // Card rotation tangent to arc
+      card.angle = angleDeg - 90;
     });
 
     // Update z-order in reverse (cards at bottom position render on top)
