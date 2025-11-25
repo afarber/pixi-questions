@@ -9,30 +9,51 @@ import { Container } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
 import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from './Card.js';
 
+/**
+ * Left container for displaying opponent cards in a radial fan from the top-left corner.
+ * Cards fan out from a pivot point with consistent angle spacing.
+ * @extends Container
+ */
 export class Left extends Container {
+  /**
+   * Creates a new Left container.
+   * @param {object} screen - The screen/viewport dimensions object with width and height
+   */
   constructor(screen) {
     super();
 
-    this.screen = screen;
+    this._screen = screen;
 
     // Apply perspective transform: compress vertically to simulate viewing from above
     this.scale.y = 0.75;
   }
 
+  /**
+   * Handles window resize by repositioning the container and all cards.
+   */
   resize() {
     // Left plane positioned to account for perspective transform
     this.x = 0;
     this.y = 0;
 
     // Reposition cards after resize
-    this.repositionCards();
+    this._repositionCards();
   }
 
+  /**
+   * Adds a card to the left fan with optional animation from a starting position.
+   * @param {object} spriteSheet - The sprite sheet containing card textures
+   * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
+   * @param {object|null} startPos - Starting position for animation, or null for initial placement
+   * @param {number|null} startAngle - Starting angle for animation
+   * @param {number|null} startAlpha - Starting alpha for animation
+   * @param {Function|null} clickHandler - Optional click handler callback
+   */
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
     const card = new Card(spriteSheet, textureKey, clickHandler);
 
     this.addChild(card);
-    this.repositionCards();
+    this._repositionCards();
 
     const targetX = card.x;
     const targetY = card.y;
@@ -57,11 +78,20 @@ export class Left extends Container {
     }
   }
 
+  /**
+   * Removes a card from the left fan.
+   * @param {Card} card - The card to remove
+   */
   removeCard(card) {
     this.removeChild(card);
   }
 
-  repositionCards() {
+  /**
+   * Repositions all cards in a radial fan arrangement from the top-left corner.
+   * Cards are arranged along an arc with consistent angle spacing.
+   * @private
+   */
+  _repositionCards() {
     const cards = this.children.filter((child) => child instanceof Card);
 
     if (cards.length === 0) {
