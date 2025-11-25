@@ -18,6 +18,7 @@ export const TWEEN_DURATION = 400;
 export const CARD_VISIBLE_RATIO = 0.3;
 export const RADIAL_FAN_RADIUS = 600;
 export const RADIAL_HOVER_DISTANCE = 40;
+export const RADIAL_PIVOT_PADDING = 30;
 
 export class Card extends Container {
   static tweenGroup = new Group();

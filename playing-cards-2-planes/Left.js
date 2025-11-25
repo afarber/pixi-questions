@@ -7,7 +7,7 @@
 
 import { Container } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS } from "./Card.js";
+import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from "./Card.js";
 
 export class Left extends Container {
   constructor(screen) {
@@ -75,9 +75,9 @@ export class Left extends Container {
 
     const totalCards = cards.length;
 
-    // Pivot point outside top-left corner
-    const pivotX = -RADIAL_FAN_RADIUS * 0.3;
-    const pivotY = -RADIAL_FAN_RADIUS * 0.2;
+    // Pivot point inside top-left corner with padding
+    const pivotX = RADIAL_PIVOT_PADDING;
+    const pivotY = RADIAL_PIVOT_PADDING;
 
     // Angle step: divide 90 degrees by (totalCards + 1) for equal gaps at both ends
     const angleStepDeg = 90 / (totalCards + 1);
