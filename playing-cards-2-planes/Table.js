@@ -5,9 +5,9 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container } from "pixi.js";
+import { Container, Graphics } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from "./Card.js";
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, RADIAL_FAN_RADIUS } from "./Card.js";
 
 export class Table extends Container {
   constructor(screen) {
@@ -17,6 +17,22 @@ export class Table extends Container {
 
     // Apply perspective transform: compress vertically to simulate viewing from above
     this.scale.y = 0.75;
+
+    // Trapezoid bounds (SSOT) - will be calculated in updateTrapezoid()
+    this.trapezoid = {
+      minY: 0,
+      maxY: 0,
+      topWidth: 0,
+      bottomWidth: 0
+    };
+
+    // Debug trapezoid outline (set alpha to 0 to hide)
+    this.trapezoidGraphics = new Graphics();
+    this.trapezoidGraphics.alpha = 1;
+    this.addChild(this.trapezoidGraphics);
+
+    // Initialize trapezoid bounds
+    this.updateTrapezoid();
   }
 
   resize() {
@@ -24,38 +40,87 @@ export class Table extends Container {
     this.x = 0;
     this.y = 0;
 
+    // Update trapezoid bounds (SSOT)
+    this.updateTrapezoid();
+
     // Reposition all cards within new screen bounds
     this.repositionCards();
   }
 
+  updateTrapezoid() {
+    // Vertical bounds (in Table's local coordinates, accounting for scale.y = 0.75)
+    const topMargin = RADIAL_FAN_RADIUS * 0.4;
+    // Hand cards top edge is at screen.height - CARD_HEIGHT * 0.3 in screen coords
+    // Convert to Table's local coords by dividing by scale.y (0.75)
+    // Then subtract CARD_HEIGHT/2 (for card center) and a gap
+    const handTopYScreen = this.screen.height - CARD_HEIGHT * 0.3;
+    const handTopYLocal = handTopYScreen / 0.75;
+    this.trapezoid.minY = topMargin + CARD_HEIGHT / 2;
+    // maxY is the card CENTER position, so card bottom edge will be at maxY + CARD_HEIGHT/2
+    // We want: (maxY + CARD_HEIGHT/2) * 0.75 < handTopYScreen
+    // So: maxY < handTopYScreen/0.75 - CARD_HEIGHT/2
+    this.trapezoid.maxY = handTopYLocal - CARD_HEIGHT - 20;
+
+    // Trapezoid widths: narrower at top (between corner fans), wider at bottom
+    this.trapezoid.topWidth = this.screen.width * 0.4;
+    this.trapezoid.bottomWidth = this.screen.width * 0.6;
+
+    // Draw trapezoid outline
+    const topLeftX = (this.screen.width - this.trapezoid.topWidth) / 2;
+    const topRightX = topLeftX + this.trapezoid.topWidth;
+    const bottomLeftX = (this.screen.width - this.trapezoid.bottomWidth) / 2;
+    const bottomRightX = bottomLeftX + this.trapezoid.bottomWidth;
+
+    this.trapezoidGraphics.clear();
+    this.trapezoidGraphics.moveTo(topLeftX, this.trapezoid.minY);
+    this.trapezoidGraphics.lineTo(topRightX, this.trapezoid.minY);
+    this.trapezoidGraphics.lineTo(bottomRightX, this.trapezoid.maxY);
+    this.trapezoidGraphics.lineTo(bottomLeftX, this.trapezoid.maxY);
+    this.trapezoidGraphics.lineTo(topLeftX, this.trapezoid.minY);
+    this.trapezoidGraphics.stroke({ width: 2, color: 0xff0000 });
+  }
+
+  // Get the width of the trapezoid at a given Y position
+  getWidthAtY(y) {
+    const { minY, maxY, topWidth, bottomWidth } = this.trapezoid;
+    const t = (y - minY) / (maxY - minY);
+    return topWidth + t * (bottomWidth - topWidth);
+  }
+
+  // Get the left edge X at a given Y position
+  getLeftEdgeAtY(y) {
+    const widthAtY = this.getWidthAtY(y);
+    return (this.screen.width - widthAtY) / 2;
+  }
+
   repositionCards() {
-    const margin = 50;
-    const handAreaHeight = CARD_HEIGHT / 2;
+    const { minY, maxY } = this.trapezoid;
 
     this.children
-      .filter(child => child instanceof Card)
+      .filter((child) => child instanceof Card)
       .forEach((card) => {
-        // Keep cards within bounds after resize
-        card.x = Math.min(Math.max(card.x, margin + CARD_WIDTH / 2), this.screen.width - margin - CARD_WIDTH / 2);
-        card.y = Math.min(
-          Math.max(card.y, margin + CARD_HEIGHT / 2),
-          this.screen.height - handAreaHeight - margin - CARD_HEIGHT / 2
-        );
+        // Clamp Y first
+        card.y = Math.min(Math.max(card.y, minY), maxY);
+
+        // Clamp X within trapezoid width at this Y level
+        const leftEdge = this.getLeftEdgeAtY(card.y);
+        const widthAtY = this.getWidthAtY(card.y);
+        const minX = leftEdge + CARD_WIDTH / 2;
+        const maxX = leftEdge + widthAtY - CARD_WIDTH / 2;
+        card.x = Math.min(Math.max(card.x, minX), maxX);
       });
   }
 
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    // Random position within the center area,
-    // avoiding the bottom area where hand cards are and the left/right columns
-    const margin = 50;
-    const columnWidth = CARD_WIDTH + 2 * margin;
-    const handAreaHeight = CARD_HEIGHT / 2;
+    const { minY, maxY } = this.trapezoid;
 
-    const centerWidth = this.screen.width - 2 * columnWidth;
-    const centerHeight = this.screen.height - handAreaHeight - 2 * margin - CARD_HEIGHT;
+    // Pick random Y first
+    const y = minY + Math.random() * (maxY - minY);
 
-    const x = Math.random() * centerWidth + columnWidth + CARD_WIDTH / 2;
-    const y = Math.random() * centerHeight + margin + CARD_HEIGHT / 2;
+    // Get trapezoid width at this Y and pick random X within it
+    const leftEdge = this.getLeftEdgeAtY(y);
+    const widthAtY = this.getWidthAtY(y);
+    const x = leftEdge + CARD_WIDTH / 2 + Math.random() * (widthAtY - CARD_WIDTH);
 
     // Random angle between -20 and +20 degrees
     const angle = Math.random() * 40 - 20;

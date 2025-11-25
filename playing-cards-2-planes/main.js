@@ -41,10 +41,11 @@ import { APP_BACKGROUND } from "./Theme.js";
   const hand = new Hand(app.screen);
 
   // Add to stage in z-order (back to front)
+  // Hand at bottom, Table above hand, Left/Right on top (so radial fans are visible)
+  app.stage.addChild(hand);
+  app.stage.addChild(table);
   app.stage.addChild(left);
   app.stage.addChild(right);
-  app.stage.addChild(table);
-  app.stage.addChild(hand);
 
   // Click handler: Table to Hand, any other parent (Left, Right, Hand) to Table
   const onCardClick = (card) => {
