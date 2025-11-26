@@ -23,21 +23,21 @@ describe('GamesList', () => {
     expect(list.children).toBeDefined();
     expect(Array.isArray(list.children)).toBe(true);
     
-    // Should have a scroll box
-    expect(list.scrollBox).toBeDefined();
+    // Should have a sectioned list
+    expect(list.sectionedList).toBeDefined();
   });
-  
-  // Test scroll box initialization
-  test('initializes scroll box correctly', () => {
+
+  // Test sectioned list initialization
+  test('initializes sectioned list correctly', () => {
     const list = new GamesList();
-    
-    // Scroll box should be added as child
-    expect(list.children).toContain(list.scrollBox);
-    
-    // Scroll box should have required properties
-    expect(list.scrollBox.options).toBeDefined();
-    expect(list.scrollBox.items).toBeDefined();
-    expect(Array.isArray(list.scrollBox.items)).toBe(true);
+
+    // Sectioned list should be added as child
+    expect(list.children).toContain(list.sectionedList);
+
+    // Sectioned list should have required properties
+    expect(list.sectionedList.options).toBeDefined();
+    expect(list.sectionedList.items).toBeDefined();
+    expect(Array.isArray(list.sectionedList.items)).toBe(true);
   });
   
   // Test setGames with empty array
@@ -48,7 +48,7 @@ describe('GamesList', () => {
     expect(() => list.setGames([])).not.toThrow();
     
     // Should show zero games message
-    expect(list.scrollBox.items).toHaveLength(1);
+    expect(list.sectionedList.items).toHaveLength(1);
   });
   
   // Test setGames with null/undefined
@@ -60,7 +60,7 @@ describe('GamesList', () => {
     expect(() => list.setGames(undefined)).not.toThrow();
     
     // Should show zero games message
-    expect(list.scrollBox.items).toHaveLength(1);
+    expect(list.sectionedList.items).toHaveLength(1);
   });
   
   // Test setGames with non-array input
@@ -73,7 +73,7 @@ describe('GamesList', () => {
     expect(() => list.setGames({})).not.toThrow();
     
     // Should show zero games message
-    expect(list.scrollBox.items).toHaveLength(1);
+    expect(list.sectionedList.items).toHaveLength(1);
   });
   
   // Test game categorization logic
@@ -108,7 +108,7 @@ describe('GamesList', () => {
     list.setGames(testGames);
     
     // Should have items for sections and games
-    expect(list.scrollBox.items.length).toBeGreaterThan(3);
+    expect(list.sectionedList.items.length).toBeGreaterThan(3);
   });
   
   // Test your turn logic
@@ -126,7 +126,7 @@ describe('GamesList', () => {
     list.setGames([yourTurnGame]);
     
     // Should categorize as your turn
-    expect(list.scrollBox.items.length).toBeGreaterThan(0);
+    expect(list.sectionedList.items.length).toBeGreaterThan(0);
   });
   
   // Test opponent turn logic  
@@ -144,7 +144,7 @@ describe('GamesList', () => {
     list.setGames([opponentTurnGame]);
     
     // Should categorize as opponent turn
-    expect(list.scrollBox.items.length).toBeGreaterThan(0);
+    expect(list.sectionedList.items.length).toBeGreaterThan(0);
   });
   
   // Test finished game detection
@@ -162,7 +162,7 @@ describe('GamesList', () => {
     list.setGames([finishedGame]);
     
     // Should categorize as finished
-    expect(list.scrollBox.items.length).toBeGreaterThan(0);
+    expect(list.sectionedList.items.length).toBeGreaterThan(0);
   });
   
   // Test createSection method
@@ -170,13 +170,13 @@ describe('GamesList', () => {
     const list = new GamesList();
     
     // Clear items first
-    list.scrollBox.removeItems();
+    list.sectionedList.removeItems();
     
     // Create a section with games
     list.createSection('Test Section', [1, 2, 3]);
     
     // Should add title and game buttons
-    expect(list.scrollBox.items.length).toBeGreaterThan(3);
+    expect(list.sectionedList.items.length).toBeGreaterThan(3);
   });
   
   // Test createSection with empty games
@@ -184,14 +184,14 @@ describe('GamesList', () => {
     const list = new GamesList();
     
     // Clear items first
-    list.scrollBox.removeItems();
-    const initialItemCount = list.scrollBox.items.length;
+    list.sectionedList.removeItems();
+    const initialItemCount = list.sectionedList.items.length;
     
     // Create section with no games
     list.createSection('Empty Section', []);
     
     // Should not add anything for empty array
-    expect(list.scrollBox.items.length).toBe(initialItemCount);
+    expect(list.sectionedList.items.length).toBe(initialItemCount);
   });
   
   // Test createParentContainer method
@@ -222,8 +222,8 @@ describe('GamesList', () => {
     expect(() => list.resize(x, y, w, h)).not.toThrow();
     
     // Should update scroll box position and size
-    expect(list.scrollBox.options.width).toBe(w);
-    expect(list.scrollBox.options.height).toBe(h);
+    expect(list.sectionedList.options.width).toBe(w);
+    expect(list.sectionedList.options.height).toBe(h);
   });
   
   // Test with real test data
@@ -234,7 +234,7 @@ describe('GamesList', () => {
     expect(() => list.setGames(games)).not.toThrow();
     
     // Should have categorized the games
-    expect(list.scrollBox.items.length).toBeGreaterThan(0);
+    expect(list.sectionedList.items.length).toBeGreaterThan(0);
   });
   
   // Test removeItems is called before setting new games
@@ -242,12 +242,12 @@ describe('GamesList', () => {
     const list = new GamesList();
     
     // Mock removeItems to track calls
-    list.scrollBox.removeItems = vi.fn();
+    list.sectionedList.removeItems = vi.fn();
     
     list.setGames([{ id: 1, finished: 0, played1: 1000, played2: 2000 }]);
     
     // Should clear previous items
-    expect(list.scrollBox.removeItems).toHaveBeenCalled();
+    expect(list.sectionedList.removeItems).toHaveBeenCalled();
   });
   
   // Test game ID handling in button creation
