@@ -28,6 +28,30 @@ done < <(find . -type f -name "*.py" \
          -not -path "*/venv/*" \
          -not -path "*/__pycache__/*")
 
+# Check package.json files for correct license field
+MISSING_LICENSE_FILES=()
+while IFS= read -r file; do
+  if ! grep -q '"license": "MIT"' "$file"; then
+    MISSING_LICENSE_FILES+=("$file")
+  fi
+done < <(find . -type f -name "package.json" \
+         -not -path "*/node_modules/*" \
+         -not -path "*/dist/*")
+
+if [ ${#MISSING_LICENSE_FILES[@]} -gt 0 ]; then
+  echo ""
+  echo "ERROR: The following package.json files are missing the correct MIT license:"
+  echo ""
+  for file in "${MISSING_LICENSE_FILES[@]}"; do
+    echo "  - $file"
+  done
+  echo ""
+  echo "Required license field:"
+  echo '  "license": "MIT"'
+  echo ""
+  exit 1
+fi
+
 if [ ${#MISSING_FILES[@]} -gt 0 ]; then
   echo ""
   echo "ERROR: The following files are missing the MIT copyright header:"
