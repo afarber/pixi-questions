@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@pixi/layout": "^3.2.0",
-    "@pixi/ui": "^2.3.0",
     "@tweenjs/tween.js": "^25.0.0",
     "pixi.js": "^8.14.3"
   },
@@ -31,5 +30,5 @@
     "pixi.js"
   ],
   "author": "Alexander Farber",
-  "license": "Public Domain"
+  "license": "MIT license"
 }
