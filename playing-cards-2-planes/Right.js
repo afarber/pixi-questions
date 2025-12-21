@@ -98,10 +98,10 @@ export class Right extends Container {
       return;
     }
 
-    // Sort cards and update z-order (reverse for right side)
+    // Sort cards and update z-order
     cards.sort(Card.compareCards);
     cards.forEach((card) => this.removeChild(card));
-    cards.reverse().forEach((card) => this.addChild(card));
+    cards.forEach((card) => this.addChild(card));
 
     const totalCards = cards.length;
     // Use CARD_WIDTH for spacing since cards are rotated 90 degrees
@@ -124,8 +124,8 @@ export class Right extends Container {
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
       card.baseX = card.x;
       card.baseY = card.y;
-      // Hover direction: push right (positive X)
-      card.hoverDirX = 1;
+      // Hover direction: push right (negative X)
+      card.hoverDirX = -1;
       card.hoverDirY = 0;
       // Base -90 degrees for landscape mode, plus tilt: mirrored - cards at top tilt right (+), cards at bottom tilt left (-)
       card.angle = -90 - (index - middleIndex) * 1;

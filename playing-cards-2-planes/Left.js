@@ -124,8 +124,8 @@ export class Left extends Container {
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
       card.baseX = card.x;
       card.baseY = card.y;
-      // Hover direction: push left (negative X)
-      card.hoverDirX = -1;
+      // Hover direction: push right (positive X)
+      card.hoverDirX = 1;
       card.hoverDirY = 0;
       // Base 90 degrees for landscape mode, plus tilt: cards at top tilt left (-), cards at bottom tilt right (+)
       card.angle = 90 + (index - middleIndex) * 1;
