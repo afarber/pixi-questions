@@ -11,7 +11,7 @@ import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
 
 /**
  * Table container for displaying cards in the center play area.
- * Cards are placed randomly within a trapezoid-shaped region.
+ * Cards are placed randomly within a rectangular region.
  * @extends Container
  */
 export class Table extends Container {
@@ -27,21 +27,21 @@ export class Table extends Container {
     // Apply perspective transform: compress vertically to simulate viewing from above
     this.scale.y = 0.75;
 
-    // Trapezoid bounds (SSOT) - will be calculated in _updateTrapezoid()
-    this._trapezoid = {
+    // Rectangle bounds (SSOT) - will be calculated in _updateBounds()
+    this._bounds = {
+      minX: 0,
+      maxX: 0,
       minY: 0,
-      maxY: 0,
-      topWidth: 0,
-      bottomWidth: 0
+      maxY: 0
     };
 
-    // Debug trapezoid outline (set alpha to 0 to hide)
-    this._trapezoidGraphics = new Graphics();
-    this._trapezoidGraphics.alpha = 1;
-    this.addChild(this._trapezoidGraphics);
+    // Debug bounds outline (set alpha to 0 to hide)
+    this._boundsGraphics = new Graphics();
+    this._boundsGraphics.alpha = 1;
+    this.addChild(this._boundsGraphics);
 
-    // Initialize trapezoid bounds
-    this._updateTrapezoid();
+    // Initialize bounds
+    this._updateBounds();
   }
 
   /**
@@ -51,100 +51,63 @@ export class Table extends Container {
     this.x = 0;
     this.y = 0;
 
-    this._updateTrapezoid();
+    this._updateBounds();
     this._repositionCards();
   }
 
   /**
-   * Updates the trapezoid bounds and redraws the debug outline.
-   * The trapezoid is narrower at top and wider at bottom.
+   * Updates the rectangle bounds and redraws the debug outline.
+   * Uses consistent padding matching Left/Right containers.
    * @private
    */
-  _updateTrapezoid() {
-    // Vertical bounds (in Table's local coordinates, accounting for scale.y = 0.75)
-    const topMargin = 120;
-    // Hand cards top edge is at screen.height - CARD_HEIGHT * 0.3 in screen coords
-    // Convert to Table's local coords by dividing by scale.y (0.75)
-    const handTopYScreen = this._screen.height - CARD_HEIGHT * 0.3;
-    const handTopYLocal = handTopYScreen / 0.75;
-    this._trapezoid.minY = topMargin + CARD_HEIGHT;
-    // maxY is the card CENTER position, so card bottom edge will be at maxY + CARD_HEIGHT/2
-    // We want: (maxY + CARD_HEIGHT/2) * 0.75 < handTopYScreen
-    this._trapezoid.maxY = handTopYLocal - CARD_HEIGHT - 50;
+  _updateBounds() {
+    const paddingY = CARD_WIDTH / 6;
+    // Horizontal padding must be wider to avoid Left/Right cards (which are rotated 90 degrees)
+    const paddingX = CARD_HEIGHT;
 
-    // Trapezoid widths: narrower at top (between corner fans), wider at bottom
-    this._trapezoid.topWidth = this._screen.width * 0.1;
-    this._trapezoid.bottomWidth = this._screen.width * 0.5;
+    // Card positions are at center, so add half card size to keep cards fully inside
+    this._bounds.minX = paddingX + CARD_WIDTH / 3;
+    this._bounds.maxX = this._screen.width - paddingX - CARD_WIDTH / 3;
+    this._bounds.minY = paddingY + CARD_HEIGHT / 2;
+    this._bounds.maxY = this._screen.height - paddingY - (2 * CARD_HEIGHT) / 3;
 
-    this._drawTrapezoid();
+    this._drawBounds();
   }
 
   /**
-   * Draws the trapezoid outline for debugging purposes.
+   * Draws the rectangle outline for debugging purposes.
    * @private
    */
-  _drawTrapezoid() {
-    const topLeftX = (this._screen.width - this._trapezoid.topWidth) / 2;
-    const topRightX = topLeftX + this._trapezoid.topWidth;
-    const bottomLeftX = (this._screen.width - this._trapezoid.bottomWidth) / 2;
-    const bottomRightX = bottomLeftX + this._trapezoid.bottomWidth;
+  _drawBounds() {
+    const { minX, maxX, minY, maxY } = this._bounds;
 
-    this._trapezoidGraphics.clear();
-    this._trapezoidGraphics.moveTo(topLeftX, this._trapezoid.minY);
-    this._trapezoidGraphics.lineTo(topRightX, this._trapezoid.minY);
-    this._trapezoidGraphics.lineTo(bottomRightX, this._trapezoid.maxY);
-    this._trapezoidGraphics.lineTo(bottomLeftX, this._trapezoid.maxY);
-    this._trapezoidGraphics.lineTo(topLeftX, this._trapezoid.minY);
-    this._trapezoidGraphics.stroke({ width: 2, color: 0xff0000 });
+    this._boundsGraphics.clear();
+    this._boundsGraphics.rect(
+      minX - CARD_WIDTH / 2,
+      minY - CARD_HEIGHT / 2,
+      maxX - minX + CARD_WIDTH,
+      maxY - minY + CARD_HEIGHT
+    );
+    this._boundsGraphics.stroke({ width: 2, color: 0xff0000 });
   }
 
   /**
-   * Gets the width of the trapezoid at a given Y position.
-   * @param {number} y - The Y coordinate in local space
-   * @returns {number} The width of the trapezoid at that Y level
-   * @private
-   */
-  _getWidthAtY(y) {
-    const { minY, maxY, topWidth, bottomWidth } = this._trapezoid;
-    const t = (y - minY) / (maxY - minY);
-    return topWidth + t * (bottomWidth - topWidth);
-  }
-
-  /**
-   * Gets the left edge X coordinate of the trapezoid at a given Y position.
-   * @param {number} y - The Y coordinate in local space
-   * @returns {number} The X coordinate of the left edge at that Y level
-   * @private
-   */
-  _getLeftEdgeAtY(y) {
-    const widthAtY = this._getWidthAtY(y);
-    return (this._screen.width - widthAtY) / 2;
-  }
-
-  /**
-   * Repositions all cards to stay within the trapezoid bounds after resize.
+   * Repositions all cards to stay within the rectangle bounds after resize.
    * @private
    */
   _repositionCards() {
-    const { minY, maxY } = this._trapezoid;
+    const { minX, maxX, minY, maxY } = this._bounds;
 
     this.children
       .filter((child) => child instanceof Card)
       .forEach((card) => {
-        // Clamp Y first
-        card.y = Math.min(Math.max(card.y, minY), maxY);
-
-        // Clamp X within trapezoid width at this Y level
-        const leftEdge = this._getLeftEdgeAtY(card.y);
-        const widthAtY = this._getWidthAtY(card.y);
-        const minX = leftEdge + CARD_WIDTH / 2;
-        const maxX = leftEdge + widthAtY - CARD_WIDTH / 2;
         card.x = Math.min(Math.max(card.x, minX), maxX);
+        card.y = Math.min(Math.max(card.y, minY), maxY);
       });
   }
 
   /**
-   * Adds a card to the table at a random position within the trapezoid area.
+   * Adds a card to the table at a random position within the rectangle area.
    * @param {object} spriteSheet - The sprite sheet containing card textures
    * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
    * @param {object|null} startPos - Starting position for animation, or null for initial placement
@@ -153,15 +116,11 @@ export class Table extends Container {
    * @param {Function|null} clickHandler - Optional click handler callback
    */
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    const { minY, maxY } = this._trapezoid;
+    const { minX, maxX, minY, maxY } = this._bounds;
 
-    // Pick random Y first
+    // Pick random position within rectangle bounds
+    const x = minX + Math.random() * (maxX - minX);
     const y = minY + Math.random() * (maxY - minY);
-
-    // Get trapezoid width at this Y and pick random X within it
-    const leftEdge = this._getLeftEdgeAtY(y);
-    const widthAtY = this._getWidthAtY(y);
-    const x = leftEdge + CARD_WIDTH / 2 + Math.random() * (widthAtY - CARD_WIDTH);
 
     // Random angle between -20 and +20 degrees
     const angle = Math.random() * 40 - 20;

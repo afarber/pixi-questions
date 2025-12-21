@@ -5,86 +5,28 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container } from 'pixi.js';
-import { Tween, Easing } from '@tweenjs/tween.js';
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from './Card.js';
+import { CardContainer } from './CardContainer.js';
+import { Card, CARD_WIDTH, CARD_HEIGHT, CARD_VISIBLE_RATIO } from './Card.js';
 
 /**
  * Hand container for displaying the player's cards at the bottom of the screen.
  * Cards are arranged horizontally with a slight fan tilt effect.
- * @extends Container
+ * @extends CardContainer
  */
-export class Hand extends Container {
+export class Hand extends CardContainer {
   /**
    * Creates a new Hand container.
    * @param {object} screen - The screen/viewport dimensions object with width and height
    */
   constructor(screen) {
-    super();
-
-    this._screen = screen;
-  }
-
-  /**
-   * Handles window resize by repositioning the container and all cards.
-   */
-  resize() {
-    this.x = 0;
-    this.y = 0;
-
-    this._repositionCards();
-  }
-
-  /**
-   * Adds a card to the hand with optional animation from a starting position.
-   * @param {object} spriteSheet - The sprite sheet containing card textures
-   * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
-   * @param {object|null} startPos - Starting position for animation, or null for initial placement
-   * @param {number|null} startAngle - Starting angle for animation
-   * @param {number|null} startAlpha - Starting alpha for animation
-   * @param {Function|null} clickHandler - Optional click handler callback
-   */
-  addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    const card = new Card(spriteSheet, textureKey, clickHandler);
-
-    this.addChild(card);
-    this._repositionCards();
-
-    const targetX = card.x;
-    const targetY = card.y;
-    const targetAngle = card.angle;
-
-    if (startPos) {
-      // Animate card from startPos to target position
-      card.x = startPos.x;
-      card.y = startPos.y;
-      card.angle = startAngle;
-      card.alpha = startAlpha;
-
-      const tween = new Tween(card, Card.tweenGroup)
-        .to({ x: targetX, y: targetY, angle: targetAngle, alpha: 1 }, TWEEN_DURATION)
-        .easing(Easing.Cubic.Out)
-        .onComplete(() => card.enableHoverEffect());
-      Card.tweenGroup.add(tween);
-      tween.start();
-    } else {
-      // Initial card placement: enable hover immediately
-      card.enableHoverEffect();
-    }
-  }
-
-  /**
-   * Removes a card from the hand.
-   * @param {Card} card - The card to remove
-   */
-  removeCard(card) {
-    this.removeChild(card);
+    super(screen);
   }
 
   /**
    * Repositions all cards in a horizontal fan arrangement.
    * Cards are centered at the bottom of the screen with a slight tilt.
-   * @private
+   * @protected
+   * @override
    */
   _repositionCards() {
     const cards = this.children.filter((child) => child instanceof Card);
@@ -109,6 +51,7 @@ export class Hand extends Container {
 
     const totalCards = cards.length;
     const minPaddingToScreenEdge = CARD_WIDTH / 6;
+    // Limit max spacing to prevent cards from spreading too far in late game
     const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
     const availableWidth = this._screen.width - 2 * minPaddingToScreenEdge - CARD_WIDTH;
