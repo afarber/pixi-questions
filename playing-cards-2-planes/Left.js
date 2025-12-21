@@ -105,14 +105,16 @@ export class Left extends Container {
 
     const totalCards = cards.length;
     // Use CARD_WIDTH for spacing since cards are rotated 90 degrees
-    const minPaddingToScreenEdge = CARD_WIDTH / 3;
+    // Asymmetric padding: less at top, more at bottom to avoid Hand cards
+    const minPaddingTop = CARD_WIDTH / 6;
+    const minPaddingBottom = CARD_WIDTH / 2;
     const maxSpacingBetweenCards = CARD_WIDTH * CARD_VISIBLE_RATIO;
 
-    const availableHeight = this._screen.height - 2 * minPaddingToScreenEdge - CARD_WIDTH;
+    const availableHeight = this._screen.height - minPaddingTop - minPaddingBottom - CARD_WIDTH;
     const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
 
-    const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
-    const firstCardY = this._screen.height / 2 - totalCardsHeight / 2;
+    // Start from top padding instead of centering
+    const firstCardY = minPaddingTop + CARD_WIDTH / 2;
 
     // Fixed X position near left edge, partially off-screen like Hand.js
     const cardX = CARD_VISIBLE_RATIO * CARD_WIDTH;

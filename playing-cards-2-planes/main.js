@@ -5,24 +5,19 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Application, Assets, Container, Graphics, Rectangle, TexturePool } from "pixi.js";
-import { Card } from "./Card.js";
-import { Hand } from "./Hand.js";
-import { Table } from "./Table.js";
-import { Left } from "./Left.js";
-import { Right } from "./Right.js";
-import { Background } from "./Background.js";
-import {
-  APP_BACKGROUND,
-  APP_BOUNDS_LANDSCAPE,
-  APP_BOUNDS_PORTRAIT,
-  CARD_AREA_SIZE
-} from "./Theme.js";
+import { Application, Assets, Container, Graphics, Rectangle, TexturePool } from 'pixi.js';
+import { Card } from './Card.js';
+import { Hand } from './Hand.js';
+import { Table } from './Table.js';
+import { Left } from './Left.js';
+import { Right } from './Right.js';
+import { Background } from './Background.js';
+import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SIZE } from './Theme.js';
 
 (async () => {
-  TexturePool.textureOptions.scaleMode = "nearest";
+  TexturePool.textureOptions.scaleMode = 'nearest';
 
-  const spriteSheet = await Assets.load("playing-cards.json");
+  const spriteSheet = await Assets.load('playing-cards.json');
 
   const app = new Application();
   await app.init({
@@ -37,7 +32,7 @@ import {
 
   // Orientation detection helpers
   const isLandscape = () => app.screen.width >= app.screen.height;
-  const getAppBounds = () => isLandscape() ? APP_BOUNDS_LANDSCAPE : APP_BOUNDS_PORTRAIT;
+  const getAppBounds = () => (isLandscape() ? APP_BOUNDS_LANDSCAPE : APP_BOUNDS_PORTRAIT);
   const getCardOffset = () => {
     const bounds = getAppBounds();
     return {
@@ -66,11 +61,10 @@ import {
   const hand = new Hand(cardBounds);
 
   // Add to card container in z-order (back to front)
-  // Hand at bottom, Table above hand, Left/Right on top (so radial fans are visible)
-  cardContainer.addChild(hand);
   cardContainer.addChild(table);
   cardContainer.addChild(left);
   cardContainer.addChild(right);
+  cardContainer.addChild(hand);
 
   // Debug outlines (set alpha to 0 to hide)
   const debugAppBounds = new Graphics();
@@ -166,10 +160,7 @@ import {
       const appBounds = getAppBounds();
 
       // Scale app content to fit screen while maintaining aspect ratio
-      const scale = Math.min(
-        app.screen.width / appBounds.width,
-        app.screen.height / appBounds.height
-      );
+      const scale = Math.min(app.screen.width / appBounds.width, app.screen.height / appBounds.height);
       appContainer.scale.set(scale);
 
       // Center the app container in the window
@@ -192,7 +183,7 @@ import {
     }, 500);
   };
 
-  addEventListener("resize", onResize);
+  addEventListener('resize', onResize);
   onResize();
 
   // Update tween.js animations every frame
