@@ -5,9 +5,9 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container } from "pixi.js";
-import { Tween, Easing } from "@tweenjs/tween.js";
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from "./Card.js";
+import { Container } from 'pixi.js';
+import { Tween, Easing } from '@tweenjs/tween.js';
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from './Card.js';
 
 /**
  * Hand container for displaying the player's cards at the bottom of the screen.
@@ -108,7 +108,7 @@ export class Hand extends Container {
     cards.forEach((card) => this.addChild(card));
 
     const totalCards = cards.length;
-    const minPaddingToScreenEdge = CARD_WIDTH / 3;
+    const minPaddingToScreenEdge = CARD_WIDTH / 6;
     const maxSpacingBetweenCards = CARD_WIDTH / 2;
 
     const availableWidth = this._screen.width - 2 * minPaddingToScreenEdge - CARD_WIDTH;
