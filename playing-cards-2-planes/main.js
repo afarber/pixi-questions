@@ -5,14 +5,19 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Application, Assets, Container, Graphics, TexturePool } from "pixi.js";
+import { Application, Assets, Container, Graphics, Rectangle, TexturePool } from "pixi.js";
 import { Card } from "./Card.js";
 import { Hand } from "./Hand.js";
 import { Table } from "./Table.js";
 import { Left } from "./Left.js";
 import { Right } from "./Right.js";
 import { Background } from "./Background.js";
-import { APP_BACKGROUND, DESIGN_SCREEN } from "./Theme.js";
+import {
+  APP_BACKGROUND,
+  APP_BOUNDS_LANDSCAPE,
+  APP_BOUNDS_PORTRAIT,
+  CARD_AREA_SIZE
+} from "./Theme.js";
 
 (async () => {
   TexturePool.textureOptions.scaleMode = "nearest";
@@ -30,33 +35,63 @@ import { APP_BACKGROUND, DESIGN_SCREEN } from "./Theme.js";
   // Append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
+  // Orientation detection helpers
+  const isLandscape = () => app.screen.width >= app.screen.height;
+  const getAppBounds = () => isLandscape() ? APP_BOUNDS_LANDSCAPE : APP_BOUNDS_PORTRAIT;
+  const getCardOffset = () => {
+    const bounds = getAppBounds();
+    return {
+      x: (bounds.width - CARD_AREA_SIZE) / 2,
+      y: (bounds.height - CARD_AREA_SIZE) / 2
+    };
+  };
+
   // Layer 1: Background (unscaled, fills actual screen)
   const background = new Background(app.screen);
   app.stage.addChild(background);
 
-  // Layer 2: Game container (scaled to fit screen)
-  const gameContainer = new Container();
-  app.stage.addChild(gameContainer);
+  // Layer 2: App container (scaled to fit screen)
+  const appContainer = new Container();
+  app.stage.addChild(appContainer);
 
-  // Create the four planes using design dimensions
-  const left = new Left(DESIGN_SCREEN);
-  const right = new Right(DESIGN_SCREEN);
-  const table = new Table(DESIGN_SCREEN);
-  const hand = new Hand(DESIGN_SCREEN);
+  // Layer 3: Card container (positioned within appContainer)
+  const cardContainer = new Container();
+  appContainer.addChild(cardContainer);
 
-  // Add to game container in z-order (back to front)
+  // Card planes use fixed CARD_AREA_SIZE coordinate system
+  const cardBounds = new Rectangle(0, 0, CARD_AREA_SIZE, CARD_AREA_SIZE);
+  const left = new Left(cardBounds);
+  const right = new Right(cardBounds);
+  const table = new Table(cardBounds);
+  const hand = new Hand(cardBounds);
+
+  // Add to card container in z-order (back to front)
   // Hand at bottom, Table above hand, Left/Right on top (so radial fans are visible)
-  gameContainer.addChild(hand);
-  gameContainer.addChild(table);
-  gameContainer.addChild(left);
-  gameContainer.addChild(right);
+  cardContainer.addChild(hand);
+  cardContainer.addChild(table);
+  cardContainer.addChild(left);
+  cardContainer.addChild(right);
 
-  // Debug outline showing DESIGN_SCREEN bounds (set alpha to 0 to hide)
-  const debugScreen = new Graphics();
-  debugScreen.rect(DESIGN_SCREEN.x, DESIGN_SCREEN.y, DESIGN_SCREEN.width, DESIGN_SCREEN.height);
-  debugScreen.stroke({ width: 2, color: 0xff0000 });
-  debugScreen.alpha = 1;
-  gameContainer.addChild(debugScreen);
+  // Debug outlines (set alpha to 0 to hide)
+  const debugAppBounds = new Graphics();
+  debugAppBounds.alpha = 1;
+  appContainer.addChild(debugAppBounds);
+
+  const debugCardBounds = new Graphics();
+  debugCardBounds.alpha = 1;
+  cardContainer.addChild(debugCardBounds);
+
+  const updateDebugOutlines = (appBounds) => {
+    // Red outline for APP_BOUNDS
+    debugAppBounds.clear();
+    debugAppBounds.rect(0, 0, appBounds.width, appBounds.height);
+    debugAppBounds.stroke({ width: 2, color: 0xff0000 });
+
+    // Green outline for card area
+    debugCardBounds.clear();
+    debugCardBounds.rect(0, 0, CARD_AREA_SIZE, CARD_AREA_SIZE);
+    debugCardBounds.stroke({ width: 2, color: 0x00ff00 });
+  };
 
   // Click handler: Table to Hand, any other parent (Left, Right, Hand) to Table
   const onCardClick = (card) => {
@@ -127,18 +162,29 @@ import { APP_BACKGROUND, DESIGN_SCREEN } from "./Theme.js";
       // Background fills actual screen (unscaled)
       background.resize();
 
-      // Scale game content to fit screen while maintaining aspect ratio
+      // Get layout for current orientation
+      const appBounds = getAppBounds();
+
+      // Scale app content to fit screen while maintaining aspect ratio
       const scale = Math.min(
-        app.screen.width / DESIGN_SCREEN.width,
-        app.screen.height / DESIGN_SCREEN.height
+        app.screen.width / appBounds.width,
+        app.screen.height / appBounds.height
       );
-      gameContainer.scale.set(scale);
+      appContainer.scale.set(scale);
 
-      // Center the scaled game container in the window
-      gameContainer.x = (app.screen.width - DESIGN_SCREEN.width * scale) / 2;
-      gameContainer.y = (app.screen.height - DESIGN_SCREEN.height * scale) / 2;
+      // Center the app container in the window
+      appContainer.x = (app.screen.width - appBounds.width * scale) / 2;
+      appContainer.y = (app.screen.height - appBounds.height * scale) / 2;
 
-      // Game containers use fixed designScreen dimensions
+      // Position card container within app bounds
+      const cardOffset = getCardOffset();
+      cardContainer.x = cardOffset.x;
+      cardContainer.y = cardOffset.y;
+
+      // Update debug outlines for current orientation
+      updateDebugOutlines(appBounds);
+
+      // Card containers resize (mostly no-op with fixed dimensions)
       left.resize();
       right.resize();
       table.resize();

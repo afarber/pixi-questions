@@ -15,5 +15,18 @@ export const TABLE_COLOR_BOTTOM = '#8BC34A';
 // App background color (matches mid-gradient)
 export const APP_BACKGROUND = TABLE_COLOR_MID;
 
-// Design resolution for scaling (16:9 aspect ratio)
-export const DESIGN_SCREEN = new Rectangle(0, 0, 1280, 720);
+// Base dimension - card area is a 1:1 square
+export const CARD_AREA_SIZE = 720;
+
+// GUI panel size (space for avatars, scores, etc.)
+export const GUI_AREA_SIZE = 280;
+
+// Derived: Total app dimensions
+const APP_LONG_SIDE = CARD_AREA_SIZE + 2 * GUI_AREA_SIZE;
+const APP_SHORT_SIDE = CARD_AREA_SIZE;
+
+// Landscape layout (16:9) - GUI on left/right
+export const APP_BOUNDS_LANDSCAPE = new Rectangle(0, 0, APP_LONG_SIDE, APP_SHORT_SIDE);
+
+// Portrait layout (9:16) - GUI on top/bottom
+export const APP_BOUNDS_PORTRAIT = new Rectangle(0, 0, APP_SHORT_SIDE, APP_LONG_SIDE);
