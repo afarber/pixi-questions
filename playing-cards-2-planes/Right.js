@@ -119,7 +119,8 @@ export class Right extends Container {
 
     const middleIndex = (totalCards - 1) / 2;
 
-    cards.forEach((card, index) => {
+    // Iterate in reverse so first sorted card is at bottom, indices face center
+    cards.reverse().forEach((card, index) => {
       card.x = cardX + card.jitterX;
       card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
       card.baseX = card.x;
