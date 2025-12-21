@@ -5,7 +5,7 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Application, Assets, Container, TexturePool } from "pixi.js";
+import { Application, Assets, Container, Graphics, TexturePool } from "pixi.js";
 import { Card } from "./Card.js";
 import { Hand } from "./Hand.js";
 import { Table } from "./Table.js";
@@ -50,6 +50,13 @@ import { APP_BACKGROUND, DESIGN_SCREEN } from "./Theme.js";
   gameContainer.addChild(table);
   gameContainer.addChild(left);
   gameContainer.addChild(right);
+
+  // Debug outline showing DESIGN_SCREEN bounds (set alpha to 0 to hide)
+  const debugScreen = new Graphics();
+  debugScreen.rect(DESIGN_SCREEN.x, DESIGN_SCREEN.y, DESIGN_SCREEN.width, DESIGN_SCREEN.height);
+  debugScreen.stroke({ width: 2, color: 0xff0000 });
+  debugScreen.alpha = 1;
+  gameContainer.addChild(debugScreen);
 
   // Click handler: Table to Hand, any other parent (Left, Right, Hand) to Table
   const onCardClick = (card) => {
