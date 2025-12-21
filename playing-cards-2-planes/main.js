@@ -12,7 +12,7 @@ import { Table } from "./Table.js";
 import { Left } from "./Left.js";
 import { Right } from "./Right.js";
 import { Background } from "./Background.js";
-import { APP_BACKGROUND, DESIGN_WIDTH, DESIGN_HEIGHT } from "./Theme.js";
+import { APP_BACKGROUND, DESIGN_SCREEN } from "./Theme.js";
 
 (async () => {
   TexturePool.textureOptions.scaleMode = "nearest";
@@ -38,14 +38,11 @@ import { APP_BACKGROUND, DESIGN_WIDTH, DESIGN_HEIGHT } from "./Theme.js";
   const gameContainer = new Container();
   app.stage.addChild(gameContainer);
 
-  // Design screen with fixed dimensions for consistent layout
-  const designScreen = { width: DESIGN_WIDTH, height: DESIGN_HEIGHT };
-
   // Create the four planes using design dimensions
-  const left = new Left(designScreen);
-  const right = new Right(designScreen);
-  const table = new Table(designScreen);
-  const hand = new Hand(designScreen);
+  const left = new Left(DESIGN_SCREEN);
+  const right = new Right(DESIGN_SCREEN);
+  const table = new Table(DESIGN_SCREEN);
+  const hand = new Hand(DESIGN_SCREEN);
 
   // Add to game container in z-order (back to front)
   // Hand at bottom, Table above hand, Left/Right on top (so radial fans are visible)
@@ -125,14 +122,14 @@ import { APP_BACKGROUND, DESIGN_WIDTH, DESIGN_HEIGHT } from "./Theme.js";
 
       // Scale game content to fit screen while maintaining aspect ratio
       const scale = Math.min(
-        app.screen.width / DESIGN_WIDTH,
-        app.screen.height / DESIGN_HEIGHT
+        app.screen.width / DESIGN_SCREEN.width,
+        app.screen.height / DESIGN_SCREEN.height
       );
       gameContainer.scale.set(scale);
 
       // Center the scaled game container in the window
-      gameContainer.x = (app.screen.width - DESIGN_WIDTH * scale) / 2;
-      gameContainer.y = (app.screen.height - DESIGN_HEIGHT * scale) / 2;
+      gameContainer.x = (app.screen.width - DESIGN_SCREEN.width * scale) / 2;
+      gameContainer.y = (app.screen.height - DESIGN_SCREEN.height * scale) / 2;
 
       // Game containers use fixed designScreen dimensions
       left.resize();
