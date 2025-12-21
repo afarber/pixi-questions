@@ -114,8 +114,8 @@ export class Left extends Container {
     const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
     const firstCardY = this._screen.height / 2 - totalCardsHeight / 2;
 
-    // Fixed X position near left edge
-    const cardX = CARD_WIDTH / 2 + CARD_WIDTH / 6;
+    // Fixed X position near left edge, partially off-screen like Hand.js
+    const cardX = CARD_VISIBLE_RATIO * CARD_WIDTH;
 
     const middleIndex = (totalCards - 1) / 2;
 
