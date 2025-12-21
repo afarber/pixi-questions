@@ -7,12 +7,11 @@
 
 import { Container, Graphics } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, RADIAL_FAN_RADIUS } from './Card.js';
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
 
 /**
  * Table container for displaying cards in the center play area.
- * Cards are placed randomly within a trapezoid-shaped region that avoids
- * the corner radial fans and the hand area at the bottom.
+ * Cards are placed randomly within a trapezoid-shaped region.
  * @extends Container
  */
 export class Table extends Container {
@@ -58,12 +57,12 @@ export class Table extends Container {
 
   /**
    * Updates the trapezoid bounds and redraws the debug outline.
-   * The trapezoid is narrower at top (between corner fans) and wider at bottom.
+   * The trapezoid is narrower at top and wider at bottom.
    * @private
    */
   _updateTrapezoid() {
     // Vertical bounds (in Table's local coordinates, accounting for scale.y = 0.75)
-    const topMargin = RADIAL_FAN_RADIUS * 0.4;
+    const topMargin = 120;
     // Hand cards top edge is at screen.height - CARD_HEIGHT * 0.3 in screen coords
     // Convert to Table's local coords by dividing by scale.y (0.75)
     const handTopYScreen = this._screen.height - CARD_HEIGHT * 0.3;

@@ -24,14 +24,8 @@ export const TWEEN_DURATION = 400;
 /** @constant {number} Ratio of card height visible when stacked (0.3 = 30%) */
 export const CARD_VISIBLE_RATIO = 0.3;
 
-/** @constant {number} Radius for radial fan layout in Left/Right containers */
-export const RADIAL_FAN_RADIUS = 300;
-
-/** @constant {number} Distance cards move outward on hover in radial layout */
-export const RADIAL_HOVER_DISTANCE = 40;
-
-/** @constant {number} Padding from screen corner for radial fan pivot point */
-export const RADIAL_PIVOT_PADDING = 60;
+/** @constant {number} Distance cards move on hover */
+export const HOVER_DISTANCE = 40;
 
 /**
  * Represents a playing card that can be displayed and animated.
@@ -161,15 +155,15 @@ export class Card extends Container {
 
   /**
    * Enables the hover effect for this card.
-   * Hand cards move up, Left/Right cards push outward along radial direction.
+   * Hand cards move up, Left/Right cards push outward horizontally.
    */
   enableHoverEffect() {
     this.on('pointerenter', () => {
       if (this.isParentHand()) {
         this.y = this.baseY - CARD_HEIGHT / 6;
       } else if (this.isParentLeft() || this.isParentRight()) {
-        this.x = this.baseX + this.radialDirX * RADIAL_HOVER_DISTANCE;
-        this.y = this.baseY + this.radialDirY * RADIAL_HOVER_DISTANCE;
+        this.x = this.baseX + this.hoverDirX * HOVER_DISTANCE;
+        this.y = this.baseY + this.hoverDirY * HOVER_DISTANCE;
       }
 
       this.once('pointerleave', () => {

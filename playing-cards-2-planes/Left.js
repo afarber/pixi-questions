@@ -7,11 +7,11 @@
 
 import { Container } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
-import { Card, TWEEN_DURATION, RADIAL_FAN_RADIUS, RADIAL_PIVOT_PADDING } from './Card.js';
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from './Card.js';
 
 /**
- * Left container for displaying opponent cards in a radial fan from the top-left corner.
- * Cards fan out from a pivot point with consistent angle spacing.
+ * Left container for displaying opponent cards in a vertical column on the left edge.
+ * Cards are stacked vertically with slight fan tilt effect.
  * @extends Container
  */
 export class Left extends Container {
@@ -41,7 +41,7 @@ export class Left extends Container {
   }
 
   /**
-   * Adds a card to the left fan with optional animation from a starting position.
+   * Adds a card to the left column with optional animation from a starting position.
    * @param {object} spriteSheet - The sprite sheet containing card textures
    * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
    * @param {object|null} startPos - Starting position for animation, or null for initial placement
@@ -79,7 +79,7 @@ export class Left extends Container {
   }
 
   /**
-   * Removes a card from the left fan.
+   * Removes a card from the left column.
    * @param {Card} card - The card to remove
    */
   removeCard(card) {
@@ -87,8 +87,8 @@ export class Left extends Container {
   }
 
   /**
-   * Repositions all cards in a radial fan arrangement from the top-left corner.
-   * Cards are arranged along an arc with consistent angle spacing.
+   * Repositions all cards in a vertical column arrangement on the left edge.
+   * Cards are stacked vertically with slight fan tilt.
    * @private
    */
   _repositionCards() {
@@ -104,35 +104,30 @@ export class Left extends Container {
     cards.forEach((card) => this.addChild(card));
 
     const totalCards = cards.length;
+    const minPaddingToScreenEdge = CARD_HEIGHT / 3;
+    const maxSpacingBetweenCards = CARD_HEIGHT * CARD_VISIBLE_RATIO;
 
-    // Pivot point inside top-left corner with padding
-    // (if the pivot is outside, start/end cards are cut off)
-    const pivotX = RADIAL_PIVOT_PADDING;
-    const pivotY = RADIAL_PIVOT_PADDING;
+    const availableHeight = this._screen.height - 2 * minPaddingToScreenEdge - CARD_HEIGHT;
+    const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
 
-    // Angle step: divide 90 degrees by (totalCards + 3)
-    // for equal gaps (angle step x2) at both ends
-    const angleStepDeg = 90 / (totalCards + 3);
+    const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
+    const firstCardY = this._screen.height / 2 - totalCardsHeight / 2;
+
+    // Fixed X position near left edge
+    const cardX = CARD_WIDTH / 2 + CARD_WIDTH / 6;
+
+    const middleIndex = (totalCards - 1) / 2;
 
     cards.forEach((card, index) => {
-      // Card N gets angle (N + 2) * angleStep
-      const angleDeg = (index + 2) * angleStepDeg;
-      const angleRad = (angleDeg * Math.PI) / 180;
-
-      // Position from polar coordinates
-      card.x = pivotX + RADIAL_FAN_RADIUS * Math.cos(angleRad) + card.jitterX;
-      card.y = pivotY + RADIAL_FAN_RADIUS * Math.sin(angleRad) + card.jitterY;
-
-      // Store base position for hover effect
+      card.x = cardX + card.jitterX;
+      card.y = firstCardY + index * spacingBetweenCards + card.jitterY;
       card.baseX = card.x;
       card.baseY = card.y;
-
-      // Store radial direction unit vector for hover push-out
-      card.radialDirX = Math.cos(angleRad);
-      card.radialDirY = Math.sin(angleRad);
-
-      // Card rotation tangent to arc
-      card.angle = angleDeg + 90;
+      // Hover direction: push left (negative X)
+      card.hoverDirX = -1;
+      card.hoverDirY = 0;
+      // Tilt: cards at top tilt left (-), cards at bottom tilt right (+)
+      card.angle = (index - middleIndex) * 1;
     });
   }
 }
