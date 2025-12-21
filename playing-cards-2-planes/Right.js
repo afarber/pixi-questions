@@ -7,7 +7,7 @@
 
 import { Container } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION, CARD_VISIBLE_RATIO } from './Card.js';
+import { Card, CARD_WIDTH, TWEEN_DURATION, CARD_VISIBLE_RATIO } from './Card.js';
 
 /**
  * Right container for displaying opponent cards in a vertical column on the right edge.
@@ -104,10 +104,11 @@ export class Right extends Container {
     cards.reverse().forEach((card) => this.addChild(card));
 
     const totalCards = cards.length;
-    const minPaddingToScreenEdge = CARD_HEIGHT / 3;
-    const maxSpacingBetweenCards = CARD_HEIGHT * CARD_VISIBLE_RATIO;
+    // Use CARD_WIDTH for spacing since cards are rotated 90 degrees
+    const minPaddingToScreenEdge = CARD_WIDTH / 3;
+    const maxSpacingBetweenCards = CARD_WIDTH * CARD_VISIBLE_RATIO;
 
-    const availableHeight = this._screen.height - 2 * minPaddingToScreenEdge - CARD_HEIGHT;
+    const availableHeight = this._screen.height - 2 * minPaddingToScreenEdge - CARD_WIDTH;
     const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
 
     const totalCardsHeight = (totalCards - 1) * spacingBetweenCards;
@@ -126,8 +127,8 @@ export class Right extends Container {
       // Hover direction: push right (positive X)
       card.hoverDirX = 1;
       card.hoverDirY = 0;
-      // Tilt: mirrored - cards at top tilt right (+), cards at bottom tilt left (-)
-      card.angle = -(index - middleIndex) * 1;
+      // Base -90 degrees for landscape mode, plus tilt: mirrored - cards at top tilt right (+), cards at bottom tilt left (-)
+      card.angle = -90 - (index - middleIndex) * 1;
     });
   }
 }
