@@ -166,12 +166,7 @@ export class Card extends Container {
       // This creates an annoying oscillation between two cards.
       // Solution: expand the hit area on hover so the card "owns" the mouse
       // position even after moving, preventing the neighbor from triggering.
-      this.hitArea = new Rectangle(
-        -CARD_WIDTH / 2 - HOVER_DISTANCE,
-        -CARD_HEIGHT / 2 - HOVER_DISTANCE,
-        CARD_WIDTH + 2 * HOVER_DISTANCE,
-        CARD_HEIGHT + 2 * HOVER_DISTANCE
-      );
+      this.hitArea = new Rectangle(-CARD_WIDTH / 2, -CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT + 1.5 * HOVER_DISTANCE);
 
       if (this.isParentHand()) {
         this.y = this.baseY - CARD_HEIGHT / 6;
