@@ -159,6 +159,20 @@ export class Card extends Container {
    */
   enableHoverEffect() {
     this.on('pointerenter', () => {
+      // Workaround for hover oscillation issue:
+      // When a card moves on hover, the mouse pointer stays in place.
+      // If the card moves away from the pointer, it may expose a neighbor card,
+      // triggering that card's hover and causing the original card to "leave".
+      // This creates an annoying oscillation between two cards.
+      // Solution: expand the hit area on hover so the card "owns" the mouse
+      // position even after moving, preventing the neighbor from triggering.
+      this.hitArea = new Rectangle(
+        -CARD_WIDTH / 2 - HOVER_DISTANCE,
+        -CARD_HEIGHT / 2 - HOVER_DISTANCE,
+        CARD_WIDTH + 2 * HOVER_DISTANCE,
+        CARD_HEIGHT + 2 * HOVER_DISTANCE
+      );
+
       if (this.isParentHand()) {
         this.y = this.baseY - CARD_HEIGHT / 6;
       } else if (this.isParentLeft() || this.isParentRight()) {
@@ -167,6 +181,9 @@ export class Card extends Container {
       }
 
       this.once('pointerleave', () => {
+        // Restore original hit area when hover ends
+        this.hitArea = new Rectangle(-CARD_WIDTH / 2, -CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
+
         if (this.isParentHand()) {
           this.y = this.baseY;
         } else if (this.isParentLeft() || this.isParentRight()) {
