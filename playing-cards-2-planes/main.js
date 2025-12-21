@@ -5,14 +5,14 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Application, Assets, TexturePool } from "pixi.js";
+import { Application, Assets, Container, TexturePool } from "pixi.js";
 import { Card } from "./Card.js";
 import { Hand } from "./Hand.js";
 import { Table } from "./Table.js";
 import { Left } from "./Left.js";
 import { Right } from "./Right.js";
 import { Background } from "./Background.js";
-import { APP_BACKGROUND } from "./Theme.js";
+import { APP_BACKGROUND, DESIGN_WIDTH, DESIGN_HEIGHT } from "./Theme.js";
 
 (async () => {
   TexturePool.textureOptions.scaleMode = "nearest";
@@ -30,22 +30,29 @@ import { APP_BACKGROUND } from "./Theme.js";
   // Append the app canvas to the document body
   document.body.appendChild(app.canvas);
 
-  // Create background (added first, rendered behind everything)
+  // Layer 1: Background (unscaled, fills actual screen)
   const background = new Background(app.screen);
   app.stage.addChild(background);
 
-  // Create the four planes
-  const left = new Left(app.screen);
-  const right = new Right(app.screen);
-  const table = new Table(app.screen);
-  const hand = new Hand(app.screen);
+  // Layer 2: Game container (scaled to fit screen)
+  const gameContainer = new Container();
+  app.stage.addChild(gameContainer);
 
-  // Add to stage in z-order (back to front)
+  // Design screen with fixed dimensions for consistent layout
+  const designScreen = { width: DESIGN_WIDTH, height: DESIGN_HEIGHT };
+
+  // Create the four planes using design dimensions
+  const left = new Left(designScreen);
+  const right = new Right(designScreen);
+  const table = new Table(designScreen);
+  const hand = new Hand(designScreen);
+
+  // Add to game container in z-order (back to front)
   // Hand at bottom, Table above hand, Left/Right on top (so radial fans are visible)
-  app.stage.addChild(hand);
-  app.stage.addChild(table);
-  app.stage.addChild(left);
-  app.stage.addChild(right);
+  gameContainer.addChild(hand);
+  gameContainer.addChild(table);
+  gameContainer.addChild(left);
+  gameContainer.addChild(right);
 
   // Click handler: Table to Hand, any other parent (Left, Right, Hand) to Table
   const onCardClick = (card) => {
@@ -113,7 +120,21 @@ import { APP_BACKGROUND } from "./Theme.js";
     clearTimeout(resizeTimeout);
 
     resizeTimeout = setTimeout(() => {
+      // Background fills actual screen (unscaled)
       background.resize();
+
+      // Scale game content to fit screen while maintaining aspect ratio
+      const scale = Math.min(
+        app.screen.width / DESIGN_WIDTH,
+        app.screen.height / DESIGN_HEIGHT
+      );
+      gameContainer.scale.set(scale);
+
+      // Center the scaled game container in the window
+      gameContainer.x = (app.screen.width - DESIGN_WIDTH * scale) / 2;
+      gameContainer.y = (app.screen.height - DESIGN_HEIGHT * scale) / 2;
+
+      // Game containers use fixed designScreen dimensions
       left.resize();
       right.resize();
       table.resize();

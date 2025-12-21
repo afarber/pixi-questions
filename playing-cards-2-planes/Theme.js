@@ -12,3 +12,7 @@ export const TABLE_COLOR_BOTTOM = '#8BC34A';
 
 // App background color (matches mid-gradient)
 export const APP_BACKGROUND = TABLE_COLOR_MID;
+
+// Design resolution for scaling (16:9 aspect ratio)
+export const DESIGN_WIDTH = 1600;
+export const DESIGN_HEIGHT = 900;
