@@ -5,17 +5,16 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container, Graphics, Rectangle, Matrix } from 'pixi.js';
+import { Container, Graphics, Rectangle } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
 import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
 
 // Maximum attempts to find a valid position with visible corner
 const MAX_PLACEMENT_ATTEMPTS = 50;
 
-// Reusable objects to avoid allocations
-const tempMatrix = new Matrix();
-const hotCornerRect = new Rectangle();
-const cardRect = new Rectangle();
+// All collision detection is done in local Table coordinates.
+// No global coordinate transforms or Matrix operations are needed
+// because all cards are children of the same Table container.
 
 /**
  * Table container for displaying cards in the center play area.
@@ -115,102 +114,69 @@ export class Table extends Container {
   }
 
   /**
-   * Checks if a hot corner rectangle at given position intersects with a card at given position/angle.
-   * @param {number} cornerX - Hot corner center X in world coordinates
-   * @param {number} cornerY - Hot corner center Y in world coordinates
-   * @param {number} cardX - Card center X
-   * @param {number} cardY - Card center Y
-   * @param {number} cardAngle - Card rotation in degrees
-   * @returns {boolean} True if the hot corner overlaps with the card
+   * Gets the two hot corner rectangles for a card (axis-aligned bounding boxes).
+   * Since card rotation is small (-20 to +20 degrees), AABB approximation is sufficient.
+   * @param {Card} card - The card to get hot corners for
+   * @returns {Rectangle[]} Array of two Rectangle objects (top-left and bottom-right hot corners)
    * @private
    */
-  _hotCornerIntersectsCard(cornerX, cornerY, cardX, cardY, cardAngle) {
-    // Hot corner dimensions - the rank/suit indicator area at card corners
+  _getHotCornerRects(card) {
     const hotCornerWidth = CARD_WIDTH / 6;
     const hotCornerHeight = CARD_HEIGHT / 5;
 
-    // Set up hot corner rectangle
-    hotCornerRect.x = cornerX - hotCornerWidth / 2;
-    hotCornerRect.y = cornerY - hotCornerHeight / 2;
-    hotCornerRect.width = hotCornerWidth;
-    hotCornerRect.height = hotCornerHeight;
+    // Top-left hot corner
+    const tlRect = new Rectangle(
+      card.x - CARD_WIDTH / 2,
+      card.y - CARD_HEIGHT / 2,
+      hotCornerWidth,
+      hotCornerHeight
+    );
 
-    // Set up card's transform matrix
-    const angleRad = (cardAngle * Math.PI) / 180;
-    tempMatrix.identity();
-    tempMatrix.translate(-cardX, -cardY);
-    tempMatrix.rotate(-angleRad);
+    // Bottom-right hot corner
+    const brRect = new Rectangle(
+      card.x + CARD_WIDTH / 2 - hotCornerWidth,
+      card.y + CARD_HEIGHT / 2 - hotCornerHeight,
+      hotCornerWidth,
+      hotCornerHeight
+    );
 
-    // Set up card rectangle (centered at origin after transform)
-    cardRect.x = -CARD_WIDTH / 2;
-    cardRect.y = -CARD_HEIGHT / 2;
-    cardRect.width = CARD_WIDTH;
-    cardRect.height = CARD_HEIGHT;
-
-    return hotCornerRect.intersects(cardRect, tempMatrix);
+    return [tlRect, brRect];
   }
 
   /**
-   * Gets the two hot corner positions for a card at given position and angle.
+   * Gets the bounding rectangle for a card at given position (axis-aligned).
    * @param {number} x - Card center X
    * @param {number} y - Card center Y
-   * @param {number} angle - Card rotation in degrees
-   * @returns {Array<{x: number, y: number}>} Array of two corner positions
+   * @returns {Rectangle} The card's bounding rectangle
    * @private
    */
-  _getHotCorners(x, y, angle) {
-    const hotCornerWidth = CARD_WIDTH / 6;
-    const hotCornerHeight = CARD_HEIGHT / 5;
-
-    const angleRad = (angle * Math.PI) / 180;
-    const cos = Math.cos(angleRad);
-    const sin = Math.sin(angleRad);
-
-    // Top-left corner offset (center of the hot corner area)
-    const tlOffsetX = -CARD_WIDTH / 2 + hotCornerWidth / 2;
-    const tlOffsetY = -CARD_HEIGHT / 2 + hotCornerHeight / 2;
-
-    // Bottom-right corner offset (center of the hot corner area)
-    const brOffsetX = CARD_WIDTH / 2 - hotCornerWidth / 2;
-    const brOffsetY = CARD_HEIGHT / 2 - hotCornerHeight / 2;
-
-    // Apply rotation to get world positions
-    return [
-      {
-        x: x + tlOffsetX * cos - tlOffsetY * sin,
-        y: y + tlOffsetX * sin + tlOffsetY * cos
-      },
-      {
-        x: x + brOffsetX * cos - brOffsetY * sin,
-        y: y + brOffsetX * sin + brOffsetY * cos
-      }
-    ];
+  _getCardRect(x, y) {
+    return new Rectangle(
+      x - CARD_WIDTH / 2,
+      y - CARD_HEIGHT / 2,
+      CARD_WIDTH,
+      CARD_HEIGHT
+    );
   }
 
   /**
-   * Checks if placing a new card at given position would obscure all hot corners of any existing card.
-   * @param {number} x - New card center X
-   * @param {number} y - New card center Y
-   * @param {number} angle - New card rotation in degrees
-   * @returns {boolean} True if any existing card would have all its hot corners covered
+   * Checks if placing a new card would obscure all hot corners of any existing card.
+   * Only checks against the new card (previous placements were already validated).
+   * @param {number} newX - New card center X
+   * @param {number} newY - New card center Y
+   * @returns {boolean} True if any existing card would have both hot corners obscured
    * @private
    */
-  _wouldObscureExistingCards(x, y, angle) {
+  _wouldObscureExistingCards(newX, newY) {
     const existingCards = this.children.filter((child) => child instanceof Card);
+    const newCardRect = this._getCardRect(newX, newY);
 
     for (const card of existingCards) {
-      const corners = this._getHotCorners(card.x, card.y, card.angle);
-      let allCornersCovered = true;
+      const [tlRect, brRect] = this._getHotCornerRects(card);
 
-      for (const corner of corners) {
-        // Check if the NEW card would cover this existing card's corner
-        if (!this._hotCornerIntersectsCard(corner.x, corner.y, x, y, angle)) {
-          allCornersCovered = false;
-          break;
-        }
-      }
-
-      if (allCornersCovered) {
+      // If BOTH hot corners intersect with the new card, the existing card would be obscured
+      if (newCardRect.intersects(tlRect) && newCardRect.intersects(brRect)) {
+        console.log(`  ${card.textureKey} would be obscured by new card at (${Math.round(newX)}, ${Math.round(newY)})`);
         return true;
       }
     }
@@ -243,7 +209,7 @@ export class Table extends Container {
       // Random angle between -20 and +20 degrees
       angle = Math.random() * 40 - 20;
 
-      if (!this._wouldObscureExistingCards(x, y, angle)) {
+      if (!this._wouldObscureExistingCards(x, y)) {
         break;
       }
     }
