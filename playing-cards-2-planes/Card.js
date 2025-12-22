@@ -27,6 +27,9 @@ export const CARD_VISIBLE_RATIO = 0.3;
 /** @constant {number} Distance cards move on hover */
 export const HOVER_DISTANCE = 40;
 
+/** @constant {number} Maximum angle for cards on the table */
+export const CARD_MAX_TABLE_ANGLE = 20;
+
 /**
  * Represents a playing card that can be displayed and animated.
  * Cards can be placed in Hand, Table, Left, or Right containers.
@@ -210,10 +213,7 @@ export class Card extends Container {
       .chain(
         new Tween(this, Card.tweenGroup)
           .to({ [prop]: original - 10 }, 50)
-          .chain(
-            new Tween(this, Card.tweenGroup)
-              .to({ [prop]: original }, 50)
-          )
+          .chain(new Tween(this, Card.tweenGroup).to({ [prop]: original }, 50))
       )
       .start();
   }

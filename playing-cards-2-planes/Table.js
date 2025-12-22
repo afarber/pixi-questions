@@ -7,7 +7,7 @@
 
 import { Container, Graphics } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
-import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
+import { Card, CARD_WIDTH, CARD_HEIGHT, CARD_MAX_TABLE_ANGLE, TWEEN_DURATION } from './Card.js';
 
 /**
  * Table container for displaying cards in the center play area.
@@ -72,7 +72,7 @@ export class Table extends Container {
     // Card positions are at center, so add half card size to keep cards fully inside
     this._bounds.minX = paddingX + CARD_WIDTH / 3;
     this._bounds.maxX = this._screen.width - paddingX - CARD_WIDTH / 3;
-    this._bounds.minY = paddingY + CARD_HEIGHT / 2;
+    this._bounds.minY = paddingY + CARD_HEIGHT / 3;
     this._bounds.maxY = this._screen.height - paddingY - (2 * CARD_HEIGHT) / 3;
 
     this._drawBounds();
@@ -128,12 +128,7 @@ export class Table extends Container {
 
     for (let i = 0; i < this._quadrantCards.length; i++) {
       const qb = this._getQuadrantBounds(i);
-      this._boundsGraphics.rect(
-        qb.minX,
-        qb.minY,
-        qb.maxX - qb.minX,
-        qb.maxY - qb.minY
-      );
+      this._boundsGraphics.rect(qb.minX, qb.minY, qb.maxX - qb.minX, qb.maxY - qb.minY);
       this._boundsGraphics.stroke({ width: 2, color: 0xff0000 });
     }
   }
@@ -182,17 +177,17 @@ export class Table extends Container {
     // CCW is negative in Pixi.js, CW is positive
     let angle;
     switch (quadrantIndex) {
-    case 0: // top-left: CCW 0 to 20 (angle -20 to 0)
-      angle = Math.random() * -20;
+    case 0: // top-left: CW 0 to CARD_MAX_TABLE_ANGLE
+      angle = Math.random() * CARD_MAX_TABLE_ANGLE;
       break;
-    case 1: // top-right: CW 0 to 20 (angle 0 to 20)
-      angle = Math.random() * 20;
+    case 1: // top-right: CCW 0 to CARD_MAX_TABLE_ANGLE
+      angle = Math.random() * -CARD_MAX_TABLE_ANGLE;
       break;
-    case 2: // bottom-left: CW 0 to 20 (angle 0 to 20)
-      angle = Math.random() * 20;
+    case 2: // bottom-left: CCW 0 to CARD_MAX_TABLE_ANGLE
+      angle = Math.random() * -CARD_MAX_TABLE_ANGLE;
       break;
-    case 3: // bottom-right: CCW 0 to 20 (angle -20 to 0)
-      angle = Math.random() * -20;
+    case 3: // bottom-right: CCW 0 to CARD_MAX_TABLE_ANGLE
+      angle = Math.random() * -CARD_MAX_TABLE_ANGLE;
       break;
     default:
       angle = 0;
