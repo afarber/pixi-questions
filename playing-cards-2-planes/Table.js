@@ -7,7 +7,7 @@
 
 import { Container, Graphics } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
-import { Card, CARD_WIDTH, CARD_HEIGHT, CARD_MAX_TABLE_ANGLE, TWEEN_DURATION } from './Card.js';
+import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
 
 /**
  * Table container for displaying cards in the center play area.
@@ -119,6 +119,15 @@ export class Table extends Container {
   }
 
   /**
+   * Gets the number of cards currently on the table.
+   * @returns {number} The card count
+   * @private
+   */
+  _getCardCount() {
+    return this._quadrantCards.filter(c => c !== null).length;
+  }
+
+  /**
    * Draws 4 quadrant rectangles for debugging purposes.
    * Shows the area where card centers can be placed.
    * @private
@@ -173,25 +182,11 @@ export class Table extends Container {
     const x = qb.minX + Math.random() * (qb.maxX - qb.minX);
     const y = qb.minY + Math.random() * (qb.maxY - qb.minY);
 
-    // Quadrant-specific angles to keep hot corners visible (facing outward)
-    // CCW is negative in Pixi.js, CW is positive
-    let angle;
-    switch (quadrantIndex) {
-    case 0: // top-left: CW 0 to CARD_MAX_TABLE_ANGLE
-      angle = Math.random() * CARD_MAX_TABLE_ANGLE;
-      break;
-    case 1: // top-right: CCW 0 to CARD_MAX_TABLE_ANGLE
-      angle = Math.random() * -CARD_MAX_TABLE_ANGLE;
-      break;
-    case 2: // bottom-left: CCW 0 to CARD_MAX_TABLE_ANGLE
-      angle = Math.random() * -CARD_MAX_TABLE_ANGLE;
-      break;
-    case 3: // bottom-right: CCW 0 to CARD_MAX_TABLE_ANGLE
-      angle = Math.random() * -CARD_MAX_TABLE_ANGLE;
-      break;
-    default:
-      angle = 0;
-    }
+    // Each card rotates 20 degrees more clockwise than the previous
+    // Starting at -40 degrees for the first card
+    const baseAngle = -40 + this._getCardCount() * 20;
+    const jitter = Math.random() * 10 - 5; // +/- 5 degrees
+    const angle = baseAngle + jitter;
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
     this.addChild(card);
