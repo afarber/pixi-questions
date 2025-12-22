@@ -178,8 +178,25 @@ export class Table extends Container {
     const x = qb.minX + Math.random() * (qb.maxX - qb.minX);
     const y = qb.minY + Math.random() * (qb.maxY - qb.minY);
 
-    // Random angle between -20 and +20 degrees
-    const angle = Math.random() * 40 - 20;
+    // Quadrant-specific angles to keep hot corners visible (facing outward)
+    // CCW is negative in Pixi.js, CW is positive
+    let angle;
+    switch (quadrantIndex) {
+    case 0: // top-left: CCW 0 to 20 (angle -20 to 0)
+      angle = Math.random() * -20;
+      break;
+    case 1: // top-right: CW 0 to 20 (angle 0 to 20)
+      angle = Math.random() * 20;
+      break;
+    case 2: // bottom-left: CW 0 to 20 (angle 0 to 20)
+      angle = Math.random() * 20;
+      break;
+    case 3: // bottom-right: CCW 0 to 20 (angle -20 to 0)
+      angle = Math.random() * -20;
+      break;
+    default:
+      angle = 0;
+    }
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
     this.addChild(card);

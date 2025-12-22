@@ -136,7 +136,8 @@ import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SI
 
     // If the target container is full, shake the card and re-enable hover
     if (!success) {
-      card.shake();
+      // Hand and Table cards shake vertically, Left/Right shake horizontally
+      card.shake(card.isParentHand() || card.isParentTable() ? 'y' : 'x');
       card.enableHoverEffect();
     }
   };

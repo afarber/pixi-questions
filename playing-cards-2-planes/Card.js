@@ -199,18 +199,20 @@ export class Card extends Container {
 
   /**
    * Plays a shake animation to indicate rejection (e.g., container is full).
+   * @param {string} axis - The axis to shake on ('x' or 'y'), defaults to 'x'
    */
-  shake() {
-    const originalX = this.x;
+  shake(axis = 'x') {
+    const original = axis === 'y' ? this.y : this.x;
+    const prop = axis === 'y' ? 'y' : 'x';
     new Tween(this, Card.tweenGroup)
-      .to({ x: originalX + 10 }, 50)
+      .to({ [prop]: original + 10 }, 50)
       .easing(Easing.Quadratic.Out)
       .chain(
         new Tween(this, Card.tweenGroup)
-          .to({ x: originalX - 10 }, 50)
+          .to({ [prop]: original - 10 }, 50)
           .chain(
             new Tween(this, Card.tweenGroup)
-              .to({ x: originalX }, 50)
+              .to({ [prop]: original }, 50)
           )
       )
       .start();
