@@ -115,14 +115,16 @@ export class Table extends Container {
   }
 
   /**
-   * Checks if a hot corner rectangle at given position/angle intersects with a card.
+   * Checks if a hot corner rectangle at given position intersects with a card at given position/angle.
    * @param {number} cornerX - Hot corner center X in world coordinates
    * @param {number} cornerY - Hot corner center Y in world coordinates
-   * @param {Card} card - The card to check against
+   * @param {number} cardX - Card center X
+   * @param {number} cardY - Card center Y
+   * @param {number} cardAngle - Card rotation in degrees
    * @returns {boolean} True if the hot corner overlaps with the card
    * @private
    */
-  _hotCornerIntersectsCard(cornerX, cornerY, card) {
+  _hotCornerIntersectsCard(cornerX, cornerY, cardX, cardY, cardAngle) {
     // Hot corner dimensions - the rank/suit indicator area at card corners
     const hotCornerWidth = CARD_WIDTH / 6;
     const hotCornerHeight = CARD_HEIGHT / 5;
@@ -134,9 +136,9 @@ export class Table extends Container {
     hotCornerRect.height = hotCornerHeight;
 
     // Set up card's transform matrix
-    const angleRad = (card.angle * Math.PI) / 180;
+    const angleRad = (cardAngle * Math.PI) / 180;
     tempMatrix.identity();
-    tempMatrix.translate(-card.x, -card.y);
+    tempMatrix.translate(-cardX, -cardY);
     tempMatrix.rotate(-angleRad);
 
     // Set up card rectangle (centered at origin after transform)
@@ -186,34 +188,29 @@ export class Table extends Container {
   }
 
   /**
-   * Checks if a card at the given position would have at least one visible hot corner.
-   * A hot corner is visible if it doesn't overlap with any existing card on the table.
-   * @param {number} x - Card center X
-   * @param {number} y - Card center Y
-   * @param {number} angle - Card rotation in degrees
-   * @returns {boolean} True if at least one hot corner would be visible
+   * Checks if placing a new card at given position would obscure all hot corners of any existing card.
+   * @param {number} x - New card center X
+   * @param {number} y - New card center Y
+   * @param {number} angle - New card rotation in degrees
+   * @returns {boolean} True if any existing card would have all its hot corners covered
    * @private
    */
-  _hasVisibleCorner(x, y, angle) {
+  _wouldObscureExistingCards(x, y, angle) {
     const existingCards = this.children.filter((child) => child instanceof Card);
 
-    if (existingCards.length === 0) {
-      return true;
-    }
+    for (const card of existingCards) {
+      const corners = this._getHotCorners(card.x, card.y, card.angle);
+      let allCornersCovered = true;
 
-    const corners = this._getHotCorners(x, y, angle);
-
-    for (const corner of corners) {
-      let cornerVisible = true;
-
-      for (const card of existingCards) {
-        if (this._hotCornerIntersectsCard(corner.x, corner.y, card)) {
-          cornerVisible = false;
+      for (const corner of corners) {
+        // Check if the NEW card would cover this existing card's corner
+        if (!this._hotCornerIntersectsCard(corner.x, corner.y, x, y, angle)) {
+          allCornersCovered = false;
           break;
         }
       }
 
-      if (cornerVisible) {
+      if (allCornersCovered) {
         return true;
       }
     }
@@ -235,9 +232,10 @@ export class Table extends Container {
     const { minX, maxX, minY, maxY } = this._bounds;
 
     let x, y, angle;
+    let attempt;
 
-    // Try to find a position where at least one hot corner is visible
-    for (let attempt = 0; attempt < MAX_PLACEMENT_ATTEMPTS; attempt++) {
+    // Try to find a position where the new card doesn't obscure all hot corners of any existing card
+    for (attempt = 0; attempt < MAX_PLACEMENT_ATTEMPTS; attempt++) {
       // Pick random position within rectangle bounds
       x = minX + Math.random() * (maxX - minX);
       y = minY + Math.random() * (maxY - minY);
@@ -245,9 +243,13 @@ export class Table extends Container {
       // Random angle between -20 and +20 degrees
       angle = Math.random() * 40 - 20;
 
-      if (this._hasVisibleCorner(x, y, angle)) {
+      if (!this._wouldObscureExistingCards(x, y, angle)) {
         break;
       }
+    }
+
+    if (attempt === MAX_PLACEMENT_ATTEMPTS) {
+      console.log(`Table: failed to find valid position for ${textureKey} after ${MAX_PLACEMENT_ATTEMPTS} attempts`);
     }
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
