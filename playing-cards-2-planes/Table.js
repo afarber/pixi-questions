@@ -5,9 +5,17 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Rectangle, Matrix } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
 import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
+
+// Maximum attempts to find a valid position with visible corner
+const MAX_PLACEMENT_ATTEMPTS = 50;
+
+// Reusable objects to avoid allocations
+const tempMatrix = new Matrix();
+const hotCornerRect = new Rectangle();
+const cardRect = new Rectangle();
 
 /**
  * Table container for displaying cards in the center play area.
@@ -107,7 +115,115 @@ export class Table extends Container {
   }
 
   /**
+   * Checks if a hot corner rectangle at given position/angle intersects with a card.
+   * @param {number} cornerX - Hot corner center X in world coordinates
+   * @param {number} cornerY - Hot corner center Y in world coordinates
+   * @param {Card} card - The card to check against
+   * @returns {boolean} True if the hot corner overlaps with the card
+   * @private
+   */
+  _hotCornerIntersectsCard(cornerX, cornerY, card) {
+    // Hot corner dimensions - the rank/suit indicator area at card corners
+    const hotCornerWidth = CARD_WIDTH / 6;
+    const hotCornerHeight = CARD_HEIGHT / 5;
+
+    // Set up hot corner rectangle
+    hotCornerRect.x = cornerX - hotCornerWidth / 2;
+    hotCornerRect.y = cornerY - hotCornerHeight / 2;
+    hotCornerRect.width = hotCornerWidth;
+    hotCornerRect.height = hotCornerHeight;
+
+    // Set up card's transform matrix
+    const angleRad = (card.angle * Math.PI) / 180;
+    tempMatrix.identity();
+    tempMatrix.translate(-card.x, -card.y);
+    tempMatrix.rotate(-angleRad);
+
+    // Set up card rectangle (centered at origin after transform)
+    cardRect.x = -CARD_WIDTH / 2;
+    cardRect.y = -CARD_HEIGHT / 2;
+    cardRect.width = CARD_WIDTH;
+    cardRect.height = CARD_HEIGHT;
+
+    return hotCornerRect.intersects(cardRect, tempMatrix);
+  }
+
+  /**
+   * Gets the two hot corner positions for a card at given position and angle.
+   * @param {number} x - Card center X
+   * @param {number} y - Card center Y
+   * @param {number} angle - Card rotation in degrees
+   * @returns {Array<{x: number, y: number}>} Array of two corner positions
+   * @private
+   */
+  _getHotCorners(x, y, angle) {
+    const hotCornerWidth = CARD_WIDTH / 6;
+    const hotCornerHeight = CARD_HEIGHT / 5;
+
+    const angleRad = (angle * Math.PI) / 180;
+    const cos = Math.cos(angleRad);
+    const sin = Math.sin(angleRad);
+
+    // Top-left corner offset (center of the hot corner area)
+    const tlOffsetX = -CARD_WIDTH / 2 + hotCornerWidth / 2;
+    const tlOffsetY = -CARD_HEIGHT / 2 + hotCornerHeight / 2;
+
+    // Bottom-right corner offset (center of the hot corner area)
+    const brOffsetX = CARD_WIDTH / 2 - hotCornerWidth / 2;
+    const brOffsetY = CARD_HEIGHT / 2 - hotCornerHeight / 2;
+
+    // Apply rotation to get world positions
+    return [
+      {
+        x: x + tlOffsetX * cos - tlOffsetY * sin,
+        y: y + tlOffsetX * sin + tlOffsetY * cos
+      },
+      {
+        x: x + brOffsetX * cos - brOffsetY * sin,
+        y: y + brOffsetX * sin + brOffsetY * cos
+      }
+    ];
+  }
+
+  /**
+   * Checks if a card at the given position would have at least one visible hot corner.
+   * A hot corner is visible if it doesn't overlap with any existing card on the table.
+   * @param {number} x - Card center X
+   * @param {number} y - Card center Y
+   * @param {number} angle - Card rotation in degrees
+   * @returns {boolean} True if at least one hot corner would be visible
+   * @private
+   */
+  _hasVisibleCorner(x, y, angle) {
+    const existingCards = this.children.filter((child) => child instanceof Card);
+
+    if (existingCards.length === 0) {
+      return true;
+    }
+
+    const corners = this._getHotCorners(x, y, angle);
+
+    for (const corner of corners) {
+      let cornerVisible = true;
+
+      for (const card of existingCards) {
+        if (this._hotCornerIntersectsCard(corner.x, corner.y, card)) {
+          cornerVisible = false;
+          break;
+        }
+      }
+
+      if (cornerVisible) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Adds a card to the table at a random position within the rectangle area.
+   * Ensures at least one hot corner (rank/suit area) remains visible.
    * @param {object} spriteSheet - The sprite sheet containing card textures
    * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
    * @param {object|null} startPos - Starting position for animation, or null for initial placement
@@ -118,12 +234,21 @@ export class Table extends Container {
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
     const { minX, maxX, minY, maxY } = this._bounds;
 
-    // Pick random position within rectangle bounds
-    const x = minX + Math.random() * (maxX - minX);
-    const y = minY + Math.random() * (maxY - minY);
+    let x, y, angle;
 
-    // Random angle between -20 and +20 degrees
-    const angle = Math.random() * 40 - 20;
+    // Try to find a position where at least one hot corner is visible
+    for (let attempt = 0; attempt < MAX_PLACEMENT_ATTEMPTS; attempt++) {
+      // Pick random position within rectangle bounds
+      x = minX + Math.random() * (maxX - minX);
+      y = minY + Math.random() * (maxY - minY);
+
+      // Random angle between -20 and +20 degrees
+      angle = Math.random() * 40 - 20;
+
+      if (this._hasVisibleCorner(x, y, angle)) {
+        break;
+      }
+    }
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
     this.addChild(card);
