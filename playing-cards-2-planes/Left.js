@@ -20,6 +20,7 @@ export class Left extends CardContainer {
    */
   constructor(screen) {
     super(screen);
+    this._maxCards = 12;
 
     // Apply perspective transform: compress vertically to simulate viewing from above
     this.scale.y = 0.75;

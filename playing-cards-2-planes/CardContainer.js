@@ -23,6 +23,16 @@ export class CardContainer extends Container {
   constructor(screen) {
     super();
     this._screen = screen;
+    this._maxCards = Infinity;
+  }
+
+  /**
+   * Gets the number of cards currently in this container.
+   * @returns {number} The card count
+   * @protected
+   */
+  _getCardCount() {
+    return this.children.filter((child) => child instanceof Card).length;
   }
 
   /**
@@ -42,8 +52,13 @@ export class CardContainer extends Container {
    * @param {number|null} startAngle - Starting angle for animation
    * @param {number|null} startAlpha - Starting alpha for animation
    * @param {Function|null} clickHandler - Optional click handler callback
+   * @returns {boolean} True if card was added, false if container is at capacity
    */
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
+    if (this._getCardCount() >= this._maxCards) {
+      return false;
+    }
+
     const card = new Card(spriteSheet, textureKey, clickHandler);
 
     this.addChild(card);
@@ -70,6 +85,8 @@ export class CardContainer extends Container {
       // Initial card placement: enable hover immediately
       card.enableHoverEffect();
     }
+
+    return true;
   }
 
   /**

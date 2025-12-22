@@ -102,26 +102,42 @@ import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SI
     const globalPos = card.parent.toGlobal(card.position);
     // Note: angle is same in both coordinate spaces since planes are not rotated
 
+    let success = false;
+
     if (card.isParentTable()) {
       // Table to Hand
       const handPos = hand.toLocal(globalPos);
-      table.removeCard(card);
-      hand.addCard(spriteSheet, card.textureKey, handPos, card.angle, 0.7, onCardClick);
+      success = hand.addCard(spriteSheet, card.textureKey, handPos, card.angle, 0.7, onCardClick);
+      if (success) {
+        table.removeCard(card);
+      }
     } else if (card.isParentHand()) {
       // Hand to Table
       const tablePos = table.toLocal(globalPos);
-      hand.removeCard(card);
-      table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      success = table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      if (success) {
+        hand.removeCard(card);
+      }
     } else if (card.isParentLeft()) {
       // Left to Table
       const tablePos = table.toLocal(globalPos);
-      left.removeCard(card);
-      table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      success = table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      if (success) {
+        left.removeCard(card);
+      }
     } else if (card.isParentRight()) {
       // Right to Table
       const tablePos = table.toLocal(globalPos);
-      right.removeCard(card);
-      table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      success = table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      if (success) {
+        right.removeCard(card);
+      }
+    }
+
+    // If the target container is full, shake the card and re-enable hover
+    if (!success) {
+      card.shake();
+      card.enableHoverEffect();
     }
   };
 

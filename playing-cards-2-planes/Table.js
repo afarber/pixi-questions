@@ -5,20 +5,13 @@
  * This file is part of the pixi-questions project (https://github.com/afarber/pixi-questions)
  */
 
-import { Container, Graphics, Rectangle } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
 import { Tween, Easing } from '@tweenjs/tween.js';
 import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
 
-// Maximum attempts to find a valid position with visible corner
-const MAX_PLACEMENT_ATTEMPTS = 50;
-
-// All collision detection is done in local Table coordinates.
-// No global coordinate transforms or Matrix operations are needed
-// because all cards are children of the same Table container.
-
 /**
  * Table container for displaying cards in the center play area.
- * Cards are placed randomly within a rectangular region.
+ * Uses a 2x2 quadrant system where each quadrant holds at most one card.
  * @extends Container
  */
 export class Table extends Container {
@@ -41,6 +34,10 @@ export class Table extends Container {
       minY: 0,
       maxY: 0
     };
+
+    // Track which card is in each quadrant (null = empty)
+    // Layout: [0: top-left, 1: top-right, 2: bottom-left, 3: bottom-right]
+    this._quadrantCards = [null, null, null, null];
 
     // Debug bounds outline (set alpha to 0 to hide)
     this._boundsGraphics = new Graphics();
@@ -82,144 +79,113 @@ export class Table extends Container {
   }
 
   /**
-   * Draws the rectangle outline for debugging purposes.
+   * Gets the bounds for a specific quadrant.
+   * @param {number} index - Quadrant index (0-3)
+   * @returns {object} Object with minX, maxX, minY, maxY for the quadrant
+   * @private
+   */
+  _getQuadrantBounds(index) {
+    const { minX, maxX, minY, maxY } = this._bounds;
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+
+    switch (index) {
+    case 0: // top-left
+      return { minX, maxX: midX, minY, maxY: midY };
+    case 1: // top-right
+      return { minX: midX, maxX, minY, maxY: midY };
+    case 2: // bottom-left
+      return { minX, maxX: midX, minY: midY, maxY };
+    case 3: // bottom-right
+      return { minX: midX, maxX, minY: midY, maxY };
+    default:
+      return { minX, maxX, minY, maxY };
+    }
+  }
+
+  /**
+   * Gets indices of quadrants that don't have a card.
+   * @returns {number[]} Array of free quadrant indices
+   * @private
+   */
+  _getFreeQuadrants() {
+    const free = [];
+    for (let i = 0; i < this._quadrantCards.length; i++) {
+      if (this._quadrantCards[i] === null) {
+        free.push(i);
+      }
+    }
+    return free;
+  }
+
+  /**
+   * Draws 4 quadrant rectangles for debugging purposes.
+   * Shows the area where card centers can be placed.
    * @private
    */
   _drawBounds() {
-    const { minX, maxX, minY, maxY } = this._bounds;
-
     this._boundsGraphics.clear();
-    this._boundsGraphics.rect(
-      minX - CARD_WIDTH / 2,
-      minY - CARD_HEIGHT / 2,
-      maxX - minX + CARD_WIDTH,
-      maxY - minY + CARD_HEIGHT
-    );
-    this._boundsGraphics.stroke({ width: 2, color: 0xff0000 });
+
+    for (let i = 0; i < this._quadrantCards.length; i++) {
+      const qb = this._getQuadrantBounds(i);
+      this._boundsGraphics.rect(
+        qb.minX,
+        qb.minY,
+        qb.maxX - qb.minX,
+        qb.maxY - qb.minY
+      );
+      this._boundsGraphics.stroke({ width: 2, color: 0xff0000 });
+    }
   }
 
   /**
-   * Repositions all cards to stay within the rectangle bounds after resize.
+   * Repositions all cards to stay within their quadrant bounds after resize.
    * @private
    */
   _repositionCards() {
-    const { minX, maxX, minY, maxY } = this._bounds;
-
-    this.children
-      .filter((child) => child instanceof Card)
-      .forEach((card) => {
-        card.x = Math.min(Math.max(card.x, minX), maxX);
-        card.y = Math.min(Math.max(card.y, minY), maxY);
-      });
-  }
-
-  /**
-   * Gets the two hot corner rectangles for a card (axis-aligned bounding boxes).
-   * Since card rotation is small (-20 to +20 degrees), AABB approximation is sufficient.
-   * @param {Card} card - The card to get hot corners for
-   * @returns {Rectangle[]} Array of two Rectangle objects (top-left and bottom-right hot corners)
-   * @private
-   */
-  _getHotCornerRects(card) {
-    const hotCornerWidth = CARD_WIDTH / 6;
-    const hotCornerHeight = CARD_HEIGHT / 5;
-
-    // Top-left hot corner
-    const tlRect = new Rectangle(
-      card.x - CARD_WIDTH / 2,
-      card.y - CARD_HEIGHT / 2,
-      hotCornerWidth,
-      hotCornerHeight
-    );
-
-    // Bottom-right hot corner
-    const brRect = new Rectangle(
-      card.x + CARD_WIDTH / 2 - hotCornerWidth,
-      card.y + CARD_HEIGHT / 2 - hotCornerHeight,
-      hotCornerWidth,
-      hotCornerHeight
-    );
-
-    return [tlRect, brRect];
-  }
-
-  /**
-   * Gets the bounding rectangle for a card at given position (axis-aligned).
-   * @param {number} x - Card center X
-   * @param {number} y - Card center Y
-   * @returns {Rectangle} The card's bounding rectangle
-   * @private
-   */
-  _getCardRect(x, y) {
-    return new Rectangle(
-      x - CARD_WIDTH / 2,
-      y - CARD_HEIGHT / 2,
-      CARD_WIDTH,
-      CARD_HEIGHT
-    );
-  }
-
-  /**
-   * Checks if placing a new card would obscure all hot corners of any existing card.
-   * Only checks against the new card (previous placements were already validated).
-   * @param {number} newX - New card center X
-   * @param {number} newY - New card center Y
-   * @returns {boolean} True if any existing card would have both hot corners obscured
-   * @private
-   */
-  _wouldObscureExistingCards(newX, newY) {
-    const existingCards = this.children.filter((child) => child instanceof Card);
-    const newCardRect = this._getCardRect(newX, newY);
-
-    for (const card of existingCards) {
-      const [tlRect, brRect] = this._getHotCornerRects(card);
-
-      // If BOTH hot corners intersect with the new card, the existing card would be obscured
-      if (newCardRect.intersects(tlRect) && newCardRect.intersects(brRect)) {
-        console.log(`  ${card.textureKey} would be obscured by new card at (${Math.round(newX)}, ${Math.round(newY)})`);
-        return true;
+    for (let i = 0; i < this._quadrantCards.length; i++) {
+      const card = this._quadrantCards[i];
+      if (card) {
+        const qb = this._getQuadrantBounds(i);
+        card.x = Math.min(Math.max(card.x, qb.minX), qb.maxX);
+        card.y = Math.min(Math.max(card.y, qb.minY), qb.maxY);
       }
     }
-
-    return false;
   }
 
   /**
-   * Adds a card to the table at a random position within the rectangle area.
-   * Ensures at least one hot corner (rank/suit area) remains visible.
+   * Adds a card to the table in a random free quadrant.
    * @param {object} spriteSheet - The sprite sheet containing card textures
    * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
    * @param {object|null} startPos - Starting position for animation, or null for initial placement
    * @param {number|null} startAngle - Starting angle for animation
    * @param {number|null} startAlpha - Starting alpha for animation
    * @param {Function|null} clickHandler - Optional click handler callback
+   * @returns {boolean} True if card was added, false if all quadrants are full
    */
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    const { minX, maxX, minY, maxY } = this._bounds;
+    const freeQuadrants = this._getFreeQuadrants();
 
-    let x, y, angle;
-    let attempt;
-
-    // Try to find a position where the new card doesn't obscure all hot corners of any existing card
-    for (attempt = 0; attempt < MAX_PLACEMENT_ATTEMPTS; attempt++) {
-      // Pick random position within rectangle bounds
-      x = minX + Math.random() * (maxX - minX);
-      y = minY + Math.random() * (maxY - minY);
-
-      // Random angle between -20 and +20 degrees
-      angle = Math.random() * 40 - 20;
-
-      if (!this._wouldObscureExistingCards(x, y)) {
-        break;
-      }
+    if (freeQuadrants.length === 0) {
+      return false;
     }
 
-    if (attempt === MAX_PLACEMENT_ATTEMPTS) {
-      console.log(`Table: failed to find valid position for ${textureKey} after ${MAX_PLACEMENT_ATTEMPTS} attempts`);
-    }
+    // Pick a random free quadrant
+    const quadrantIndex = freeQuadrants[Math.floor(Math.random() * freeQuadrants.length)];
+    const qb = this._getQuadrantBounds(quadrantIndex);
+
+    // Random position within the quadrant
+    const x = qb.minX + Math.random() * (qb.maxX - qb.minX);
+    const y = qb.minY + Math.random() * (qb.maxY - qb.minY);
+
+    // Random angle between -20 and +20 degrees
+    const angle = Math.random() * 40 - 20;
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
     this.addChild(card);
+
+    // Mark quadrant as occupied
+    this._quadrantCards[quadrantIndex] = card;
 
     if (startPos) {
       // Animate card from startPos to target position
@@ -238,13 +204,23 @@ export class Table extends Container {
       Card.tweenGroup.add(tween);
       tween.start();
     }
+
+    return true;
   }
 
   /**
-   * Removes a card from the table.
+   * Removes a card from the table and frees its quadrant.
    * @param {Card} card - The card to remove
    */
   removeCard(card) {
+    // Find which quadrant the card was in and free it
+    for (let i = 0; i < this._quadrantCards.length; i++) {
+      if (this._quadrantCards[i] === card) {
+        this._quadrantCards[i] = null;
+        break;
+      }
+    }
+
     this.removeChild(card);
   }
 }

@@ -6,7 +6,7 @@
  */
 
 import { Container, Sprite, Rectangle } from 'pixi.js';
-import { Group } from '@tweenjs/tween.js';
+import { Group, Tween, Easing } from '@tweenjs/tween.js';
 import { Hand } from './Hand.js';
 import { Table } from './Table.js';
 import { Left } from './Left.js';
@@ -195,6 +195,25 @@ export class Card extends Container {
   disableHoverEffect() {
     this.off('pointerenter');
     this.off('pointerleave');
+  }
+
+  /**
+   * Plays a shake animation to indicate rejection (e.g., container is full).
+   */
+  shake() {
+    const originalX = this.x;
+    new Tween(this, Card.tweenGroup)
+      .to({ x: originalX + 10 }, 50)
+      .easing(Easing.Quadratic.Out)
+      .chain(
+        new Tween(this, Card.tweenGroup)
+          .to({ x: originalX - 10 }, 50)
+          .chain(
+            new Tween(this, Card.tweenGroup)
+              .to({ x: originalX }, 50)
+          )
+      )
+      .start();
   }
 
   /**

@@ -20,6 +20,7 @@ export class Hand extends CardContainer {
    */
   constructor(screen) {
     super(screen);
+    this._maxCards = 12;
   }
 
   /**
