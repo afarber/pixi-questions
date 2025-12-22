@@ -153,6 +153,8 @@ export class Table extends Container {
         const qb = this._getQuadrantBounds(i);
         card.x = Math.min(Math.max(card.x, qb.minX), qb.maxX);
         card.y = Math.min(Math.max(card.y, qb.minY), qb.maxY);
+        card.baseX = card.x;
+        card.baseY = card.y;
       }
     }
   }
@@ -189,6 +191,8 @@ export class Table extends Container {
     const angle = baseAngle + jitter;
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
+    card.baseX = x;
+    card.baseY = y;
     this.addChild(card);
 
     // Mark quadrant as occupied

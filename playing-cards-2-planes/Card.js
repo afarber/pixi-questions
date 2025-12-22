@@ -198,6 +198,11 @@ export class Card extends Container {
   disableHoverEffect() {
     this.off('pointerenter');
     this.off('pointerleave');
+    // Reset position to base values
+    this.x = this.baseX;
+    this.y = this.baseY;
+    // Reset hit area to default
+    this.hitArea = new Rectangle(-CARD_WIDTH / 2, -CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
   }
 
   /**
