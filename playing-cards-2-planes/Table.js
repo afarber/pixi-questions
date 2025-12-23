@@ -37,7 +37,7 @@ export class Table extends Container {
 
     // Track which card is in each cell (null = empty)
     // Layout: [0: top, 1: second, 2: third, 3: bottom]
-    this._quadrantCards = [null, null, null, null];
+    this._cellCards = [null, null, null, null];
 
     // Debug bounds outline (set alpha to 0 to hide)
     this._boundsGraphics = new Graphics();
@@ -84,7 +84,7 @@ export class Table extends Container {
    * @returns {object} Object with minX, maxX, minY, maxY for the cell
    * @private
    */
-  _getQuadrantBounds(index) {
+  _getCellBounds(index) {
     const { minX, maxX, minY, maxY } = this._bounds;
     const height = maxY - minY;
     const quarterHeight = height / 4;
@@ -112,23 +112,14 @@ export class Table extends Container {
    * @returns {number[]} Array of free cell indices
    * @private
    */
-  _getFreeQuadrants() {
+  _getFreeCells() {
     const free = [];
-    for (let i = 0; i < this._quadrantCards.length; i++) {
-      if (this._quadrantCards[i] === null) {
+    for (let i = 0; i < this._cellCards.length; i++) {
+      if (this._cellCards[i] === null) {
         free.push(i);
       }
     }
     return free;
-  }
-
-  /**
-   * Gets the number of cards currently on the table.
-   * @returns {number} The card count
-   * @private
-   */
-  _getCardCount() {
-    return this._quadrantCards.filter(c => c !== null).length;
   }
 
   /**
@@ -139,8 +130,8 @@ export class Table extends Container {
   _drawBounds() {
     this._boundsGraphics.clear();
 
-    for (let i = 0; i < this._quadrantCards.length; i++) {
-      const qb = this._getQuadrantBounds(i);
+    for (let i = 0; i < this._cellCards.length; i++) {
+      const qb = this._getCellBounds(i);
       this._boundsGraphics.rect(qb.minX, qb.minY, qb.maxX - qb.minX, qb.maxY - qb.minY);
       this._boundsGraphics.stroke({ width: 2, color: 0xff0000 });
     }
@@ -151,10 +142,10 @@ export class Table extends Container {
    * @private
    */
   _repositionCards() {
-    for (let i = 0; i < this._quadrantCards.length; i++) {
-      const card = this._quadrantCards[i];
+    for (let i = 0; i < this._cellCards.length; i++) {
+      const card = this._cellCards[i];
       if (card) {
-        const qb = this._getQuadrantBounds(i);
+        const qb = this._getCellBounds(i);
         card.x = Math.min(Math.max(card.x, qb.minX), qb.maxX);
         card.y = Math.min(Math.max(card.y, qb.minY), qb.maxY);
         card.baseX = card.x;
@@ -174,7 +165,7 @@ export class Table extends Container {
    * @returns {boolean} True if card was added, false if all cells are full
    */
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    const freeCells = this._getFreeQuadrants();
+    const freeCells = this._getFreeCells();
 
     if (freeCells.length === 0) {
       return false;
@@ -182,7 +173,7 @@ export class Table extends Container {
 
     // Pick the first free cell (top to bottom order)
     const cellIndex = freeCells[0];
-    const qb = this._getQuadrantBounds(cellIndex);
+    const qb = this._getCellBounds(cellIndex);
 
     // Random X within the cell, Y fixed at cell center
     const x = qb.minX + Math.random() * (qb.maxX - qb.minX);
@@ -197,7 +188,7 @@ export class Table extends Container {
     this.addChild(card);
 
     // Mark cell as occupied
-    this._quadrantCards[cellIndex] = card;
+    this._cellCards[cellIndex] = card;
 
     if (startPos) {
       // Animate card from startPos to target position
@@ -226,9 +217,9 @@ export class Table extends Container {
    */
   removeCard(card) {
     // Find which cell the card was in and free it
-    for (let i = 0; i < this._quadrantCards.length; i++) {
-      if (this._quadrantCards[i] === card) {
-        this._quadrantCards[i] = null;
+    for (let i = 0; i < this._cellCards.length; i++) {
+      if (this._cellCards[i] === card) {
+        this._cellCards[i] = null;
         break;
       }
     }
