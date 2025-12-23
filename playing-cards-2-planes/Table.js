@@ -11,7 +11,7 @@ import { Card, CARD_WIDTH, CARD_HEIGHT, TWEEN_DURATION } from './Card.js';
 
 /**
  * Table container for displaying cards in the center play area.
- * Uses a 2x2 quadrant system where each quadrant holds at most one card.
+ * Uses a 1x4 cell system (1 column, 4 rows) where each cell holds at most one card.
  * @extends Container
  */
 export class Table extends Container {
@@ -35,8 +35,8 @@ export class Table extends Container {
       maxY: 0
     };
 
-    // Track which card is in each quadrant (null = empty)
-    // Layout: [0: top-left, 1: top-right, 2: bottom-left, 3: bottom-right]
+    // Track which card is in each cell (null = empty)
+    // Layout: [0: top, 1: second, 2: third, 3: bottom]
     this._quadrantCards = [null, null, null, null];
 
     // Debug bounds outline (set alpha to 0 to hide)
@@ -79,33 +79,37 @@ export class Table extends Container {
   }
 
   /**
-   * Gets the bounds for a specific quadrant.
-   * @param {number} index - Quadrant index (0-3)
-   * @returns {object} Object with minX, maxX, minY, maxY for the quadrant
+   * Gets the bounds for a specific cell.
+   * @param {number} index - Cell index (0-3), from top to bottom
+   * @returns {object} Object with minX, maxX, minY, maxY for the cell
    * @private
    */
   _getQuadrantBounds(index) {
     const { minX, maxX, minY, maxY } = this._bounds;
-    const midX = (minX + maxX) / 2;
-    const midY = (minY + maxY) / 2;
+    const height = maxY - minY;
+    const quarterHeight = height / 4;
 
     switch (index) {
-    case 0: // top-left
-      return { minX, maxX: midX, minY, maxY: midY };
-    case 1: // top-right
-      return { minX: midX, maxX, minY, maxY: midY };
-    case 2: // bottom-left
-      return { minX, maxX: midX, minY: midY, maxY };
-    case 3: // bottom-right
-      return { minX: midX, maxX, minY: midY, maxY };
+    case 0:
+      // top cell
+      return { minX, maxX, minY, maxY: minY + quarterHeight };
+    case 1:
+      // second cell
+      return { minX, maxX, minY: minY + quarterHeight, maxY: minY + 2 * quarterHeight };
+    case 2:
+      // third cell
+      return { minX, maxX, minY: minY + 2 * quarterHeight, maxY: minY + 3 * quarterHeight };
+    case 3:
+      // bottom cell
+      return { minX, maxX, minY: minY + 3 * quarterHeight, maxY };
     default:
       return { minX, maxX, minY, maxY };
     }
   }
 
   /**
-   * Gets indices of quadrants that don't have a card.
-   * @returns {number[]} Array of free quadrant indices
+   * Gets indices of cells that don't have a card.
+   * @returns {number[]} Array of free cell indices
    * @private
    */
   _getFreeQuadrants() {
@@ -128,7 +132,7 @@ export class Table extends Container {
   }
 
   /**
-   * Draws 4 quadrant rectangles for debugging purposes.
+   * Draws 4 cell rectangles for debugging purposes.
    * Shows the area where card centers can be placed.
    * @private
    */
@@ -143,7 +147,7 @@ export class Table extends Container {
   }
 
   /**
-   * Repositions all cards to stay within their quadrant bounds after resize.
+   * Repositions all cards to stay within their cell bounds after resize.
    * @private
    */
   _repositionCards() {
@@ -160,43 +164,40 @@ export class Table extends Container {
   }
 
   /**
-   * Adds a card to the table in a random free quadrant.
+   * Adds a card to the table in the first free cell (top to bottom order).
    * @param {object} spriteSheet - The sprite sheet containing card textures
    * @param {string} textureKey - The texture key for the card (e.g., "AS", "KH")
    * @param {object|null} startPos - Starting position for animation, or null for initial placement
    * @param {number|null} startAngle - Starting angle for animation
    * @param {number|null} startAlpha - Starting alpha for animation
    * @param {Function|null} clickHandler - Optional click handler callback
-   * @returns {boolean} True if card was added, false if all quadrants are full
+   * @returns {boolean} True if card was added, false if all cells are full
    */
   addCard(spriteSheet, textureKey, startPos, startAngle, startAlpha, clickHandler = null) {
-    const freeQuadrants = this._getFreeQuadrants();
+    const freeCells = this._getFreeQuadrants();
 
-    if (freeQuadrants.length === 0) {
+    if (freeCells.length === 0) {
       return false;
     }
 
-    // Pick a random free quadrant
-    const quadrantIndex = freeQuadrants[Math.floor(Math.random() * freeQuadrants.length)];
-    const qb = this._getQuadrantBounds(quadrantIndex);
+    // Pick the first free cell (top to bottom order)
+    const cellIndex = freeCells[0];
+    const qb = this._getQuadrantBounds(cellIndex);
 
-    // Random position within the quadrant
+    // Random position within the cell
     const x = qb.minX + Math.random() * (qb.maxX - qb.minX);
     const y = qb.minY + Math.random() * (qb.maxY - qb.minY);
 
-    // Each card rotates 20 degrees more clockwise than the previous
-    // Starting at -40 degrees for the first card
-    const baseAngle = -40 + this._getCardCount() * 20;
-    const jitter = Math.random() * 10 - 5; // +/- 5 degrees
-    const angle = baseAngle + jitter;
+    // Random rotation in range [-20, 20] degrees
+    const angle = Math.random() * 40 - 20;
 
     const card = new Card(spriteSheet, textureKey, clickHandler, x, y, angle);
     card.baseX = x;
     card.baseY = y;
     this.addChild(card);
 
-    // Mark quadrant as occupied
-    this._quadrantCards[quadrantIndex] = card;
+    // Mark cell as occupied
+    this._quadrantCards[cellIndex] = card;
 
     if (startPos) {
       // Animate card from startPos to target position
@@ -220,11 +221,11 @@ export class Table extends Container {
   }
 
   /**
-   * Removes a card from the table and frees its quadrant.
+   * Removes a card from the table and frees its cell.
    * @param {Card} card - The card to remove
    */
   removeCard(card) {
-    // Find which quadrant the card was in and free it
+    // Find which cell the card was in and free it
     for (let i = 0; i < this._quadrantCards.length; i++) {
       if (this._quadrantCards[i] === card) {
         this._quadrantCards[i] = null;
