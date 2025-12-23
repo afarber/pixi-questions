@@ -184,9 +184,9 @@ export class Table extends Container {
     const cellIndex = freeCells[0];
     const qb = this._getQuadrantBounds(cellIndex);
 
-    // Random position within the cell
+    // Random X within the cell, Y fixed at cell center
     const x = qb.minX + Math.random() * (qb.maxX - qb.minX);
-    const y = qb.minY + Math.random() * (qb.maxY - qb.minY);
+    const y = (qb.minY + qb.maxY) / 2;
 
     // Random rotation in range [-20, 20] degrees
     const angle = Math.random() * 40 - 20;
