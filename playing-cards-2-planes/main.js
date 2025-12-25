@@ -12,7 +12,15 @@ import { Table } from './Table.js';
 import { Left } from './Left.js';
 import { Right } from './Right.js';
 import { Background } from './Background.js';
-import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SIZE } from './Theme.js';
+import {
+  APP_BACKGROUND,
+  APP_BOUNDS_LANDSCAPE,
+  APP_BOUNDS_PORTRAIT,
+  CARD_AREA_SIZE,
+  GUI_AREA_SIZE,
+  USER_SIZE
+} from './Theme.js';
+import { User } from './User.js';
 
 (async () => {
   TexturePool.textureOptions.scaleMode = 'nearest';
@@ -65,6 +73,14 @@ import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SI
   cardContainer.addChild(left);
   cardContainer.addChild(right);
   cardContainer.addChild(hand);
+
+  // User panels (added before cardContainer for correct z-order)
+  const leftOpponent = new User();
+  const rightOpponent = new User();
+  const currentPlayer = new User();
+  appContainer.addChild(leftOpponent);
+  appContainer.addChild(rightOpponent);
+  appContainer.addChild(currentPlayer);
 
   // Debug outlines (set alpha to 0 to hide)
   const debugAppBounds = new Graphics();
@@ -162,6 +178,51 @@ import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SI
     table.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
 
+  // Set up user panels with test data
+  leftOpponent.setAvatar(spriteSheet, '1B');
+  leftOpponent.username = 'Opponent 1';
+  leftOpponent.bid = '6H';
+  leftOpponent.tricks = '2';
+
+  rightOpponent.setAvatar(spriteSheet, '2B');
+  rightOpponent.username = 'Opponent 2';
+  rightOpponent.bid = 'Pass';
+  rightOpponent.tricks = '1';
+
+  currentPlayer.setAvatar(spriteSheet, '3B');
+  currentPlayer.username = 'You';
+  currentPlayer.bid = '7S';
+  currentPlayer.tricks = '4';
+
+  // Position user panels based on orientation
+  const positionUsers = (appBounds) => {
+    const padding = 20;
+
+    if (isLandscape()) {
+      // Left GUI panel - opponent 1 at top-left
+      leftOpponent.x = padding;
+      leftOpponent.y = padding;
+
+      // Right GUI panel - opponent 2 at top-right
+      rightOpponent.x = appBounds.width - GUI_AREA_SIZE + padding;
+      rightOpponent.y = padding;
+
+      // Left GUI panel - current player at bottom-left
+      currentPlayer.x = padding;
+      currentPlayer.y = appBounds.height - USER_SIZE - padding;
+    } else {
+      // Portrait: top GUI for opponents, bottom GUI for current player
+      leftOpponent.x = padding;
+      leftOpponent.y = padding;
+
+      rightOpponent.x = appBounds.width - USER_SIZE - padding;
+      rightOpponent.y = padding;
+
+      currentPlayer.x = (appBounds.width - USER_SIZE) / 2;
+      currentPlayer.y = appBounds.height - GUI_AREA_SIZE + padding;
+    }
+  };
+
   let resizeTimeout;
 
   // Debounce resize handler to avoid excessive repositioning
@@ -197,6 +258,9 @@ import { APP_BACKGROUND, APP_BOUNDS_LANDSCAPE, APP_BOUNDS_PORTRAIT, CARD_AREA_SI
       right.resize();
       table.resize();
       hand.resize();
+
+      // Position user panels
+      positionUsers(appBounds);
     }, 500);
   };
 

@@ -30,3 +30,18 @@ export const APP_BOUNDS_LANDSCAPE = new Rectangle(0, 0, APP_LONG_SIDE, APP_SHORT
 
 // Portrait layout (9:16) - GUI on top/bottom
 export const APP_BOUNDS_PORTRAIT = new Rectangle(0, 0, APP_SHORT_SIDE, APP_LONG_SIDE);
+
+// User component dimensions
+export const USER_SIZE = 240;
+export const USER_AVATAR_SIZE = 200;
+export const USER_LABEL_HEIGHT = 40;
+
+// User font sizes
+export const USER_FONT_SIZE_NAME = 16;
+export const USER_FONT_SIZE_LABEL = 20;
+
+// User colors
+export const USER_BACKGROUND_COLOR = 0xFFFFFF;
+export const USER_BACKGROUND_ALPHA = 0.9;
+export const USER_BORDER_COLOR = 0x888888;
+export const USER_TEXT_COLOR = 0x333333;
