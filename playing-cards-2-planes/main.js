@@ -25,7 +25,8 @@ import { User } from './User.js';
 (async () => {
   TexturePool.textureOptions.scaleMode = 'nearest';
 
-  const spriteSheet = await Assets.load('playing-cards.json');
+  const playingCardsSheet = await Assets.load('playing-cards.json');
+  const avatarsSheet = await Assets.load('eight-kings.json');
 
   const app = new Application();
   await app.init({
@@ -123,28 +124,28 @@ import { User } from './User.js';
     if (card.isParentTable()) {
       // Table to Hand
       const handPos = hand.toLocal(globalPos);
-      success = hand.addCard(spriteSheet, card.textureKey, handPos, card.angle, 0.7, onCardClick);
+      success = hand.addCard(playingCardsSheet, card.textureKey, handPos, card.angle, 0.7, onCardClick);
       if (success) {
         table.removeCard(card);
       }
     } else if (card.isParentHand()) {
       // Hand to Table
       const tablePos = table.toLocal(globalPos);
-      success = table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      success = table.addCard(playingCardsSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
       if (success) {
         hand.removeCard(card);
       }
     } else if (card.isParentLeft()) {
       // Left to Table
       const tablePos = table.toLocal(globalPos);
-      success = table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      success = table.addCard(playingCardsSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
       if (success) {
         left.removeCard(card);
       }
     } else if (card.isParentRight()) {
       // Right to Table
       const tablePos = table.toLocal(globalPos);
-      success = table.addCard(spriteSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
+      success = table.addCard(playingCardsSheet, card.textureKey, tablePos, card.angle, 0.7, onCardClick);
       if (success) {
         right.removeCard(card);
       }
@@ -159,40 +160,40 @@ import { User } from './User.js';
   };
 
   // Get all available card texture keys, filtering with Card.isValidCard
-  const cardTextureKeys = Object.keys(spriteSheet.textures).filter(Card.isValidCard);
+  const cardTextureKeys = Object.keys(playingCardsSheet.textures).filter(Card.isValidCard);
 
   // Shuffle the cards
   const shuffledTextureKeys = cardTextureKeys.sort(() => Math.random() - 0.5);
 
   // Distribute cards: 10 to hand, 10 to left, 10 to right, 2 to table
   for (let i = 0; i < 10; i++) {
-    hand.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
+    hand.addCard(playingCardsSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
   for (let i = 10; i < 20; i++) {
-    left.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
+    left.addCard(playingCardsSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
   for (let i = 20; i < 30; i++) {
-    right.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
+    right.addCard(playingCardsSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
   for (let i = 30; i < 32; i++) {
-    table.addCard(spriteSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
+    table.addCard(playingCardsSheet, shuffledTextureKeys[i], null, null, null, onCardClick);
   }
 
   // Set up user panels with test data
-  leftOpponent.setAvatar(spriteSheet, '1B');
-  leftOpponent.username = 'Opponent 1';
-  leftOpponent.bid = '6H';
-  leftOpponent.tricks = '2';
+  leftOpponent.setAvatar(avatarsSheet, 'king1');
+  leftOpponent.username = 'Player 1';
+  leftOpponent.bid = '6♠️';
+  leftOpponent.tricks = '(1)';
 
-  rightOpponent.setAvatar(spriteSheet, '2B');
-  rightOpponent.username = 'Opponent 2';
+  rightOpponent.setAvatar(avatarsSheet, 'king2');
+  rightOpponent.username = 'Player 2';
   rightOpponent.bid = 'Pass';
-  rightOpponent.tricks = '1';
+  rightOpponent.tricks = '(2)';
 
-  currentPlayer.setAvatar(spriteSheet, '3B');
+  currentPlayer.setAvatar(avatarsSheet, 'king3');
   currentPlayer.username = 'You';
-  currentPlayer.bid = '7S';
-  currentPlayer.tricks = '4';
+  currentPlayer.bid = '7♦️';
+  currentPlayer.tricks = '(3)';
 
   // Position user panels based on orientation
   const positionUsers = (appBounds) => {
