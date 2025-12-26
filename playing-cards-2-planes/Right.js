@@ -6,7 +6,7 @@
  */
 
 import { CardContainer } from './CardContainer.js';
-import { Card, CARD_WIDTH, CARD_VISIBLE_RATIO } from './Card.js';
+import { Card, CARD_WIDTH } from './Card.js';
 
 /**
  * Right container for displaying opponent cards in a vertical column on the right edge.
@@ -49,7 +49,7 @@ export class Right extends CardContainer {
     // Asymmetric padding: less at top, more at bottom to avoid Hand cards
     const minPaddingTop = CARD_WIDTH / 6;
     const minPaddingBottom = CARD_WIDTH / 2;
-    const maxSpacingBetweenCards = CARD_WIDTH * CARD_VISIBLE_RATIO;
+    const maxSpacingBetweenCards = CARD_WIDTH / 3;
 
     const availableHeight = this._screen.height - minPaddingTop - minPaddingBottom - CARD_WIDTH;
     const spacingBetweenCards = Math.min(maxSpacingBetweenCards, availableHeight / (totalCards - 1));
@@ -57,8 +57,8 @@ export class Right extends CardContainer {
     // Start from top padding instead of centering
     const firstCardY = minPaddingTop + CARD_WIDTH / 2;
 
-    // Fixed X position near right edge, partially off-screen like Hand.js
-    const cardX = this._screen.width - CARD_VISIBLE_RATIO * CARD_WIDTH;
+    // Fixed X position at right edge, card center on boundary
+    const cardX = this._screen.width;
 
     const middleIndex = (totalCards - 1) / 2;
 

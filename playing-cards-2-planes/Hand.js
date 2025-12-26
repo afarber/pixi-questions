@@ -6,7 +6,7 @@
  */
 
 import { CardContainer } from './CardContainer.js';
-import { Card, CARD_WIDTH, CARD_HEIGHT, CARD_VISIBLE_RATIO } from './Card.js';
+import { Card, CARD_HEIGHT, CARD_WIDTH } from './Card.js';
 
 /**
  * Hand container for displaying the player's cards at the bottom of the screen.
@@ -39,7 +39,7 @@ export class Hand extends CardContainer {
     if (cards.length === 1) {
       const card = cards[0];
       card.x = this._screen.width / 2;
-      card.y = this._screen.height - CARD_VISIBLE_RATIO * CARD_HEIGHT;
+      card.y = this._screen.height;
       card.baseX = card.x;
       card.baseY = card.y;
       card.angle = 0;
@@ -66,7 +66,7 @@ export class Hand extends CardContainer {
 
     cards.forEach((card, index) => {
       card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
-      card.y = this._screen.height - CARD_VISIBLE_RATIO * CARD_HEIGHT + card.jitterY;
+      card.y = this._screen.height + card.jitterY - CARD_HEIGHT / 3;
       card.baseX = card.x;
       card.baseY = card.y;
       // Apply tilt: 0 degrees at middle, increasing by 1 degree per card away from center

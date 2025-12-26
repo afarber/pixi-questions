@@ -21,9 +21,6 @@ export const CARD_HEIGHT = 263;
 /** @constant {number} Tween animation duration in milliseconds */
 export const TWEEN_DURATION = 400;
 
-/** @constant {number} Ratio of card height visible when stacked (0.3 = 30%) */
-export const CARD_VISIBLE_RATIO = 0.3;
-
 /** @constant {number} Distance cards move on hover */
 export const HOVER_DISTANCE = 40;
 
