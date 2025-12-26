@@ -48,7 +48,7 @@ export class Right extends CardContainer {
     // Use CARD_WIDTH for spacing since cards are rotated 90 degrees
     // Asymmetric padding: less at top, more at bottom to avoid Hand cards
     const minPaddingTop = CARD_WIDTH / 6;
-    const minPaddingBottom = CARD_WIDTH / 2;
+    const minPaddingBottom = CARD_WIDTH / 4;
     const maxSpacingBetweenCards = CARD_WIDTH / 3;
 
     const availableHeight = this._screen.height - minPaddingTop - minPaddingBottom - CARD_WIDTH;

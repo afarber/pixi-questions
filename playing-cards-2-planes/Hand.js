@@ -66,7 +66,7 @@ export class Hand extends CardContainer {
 
     cards.forEach((card, index) => {
       card.x = firstCardX + index * spacingBetweenCards + card.jitterX;
-      card.y = this._screen.height + card.jitterY - CARD_HEIGHT / 3;
+      card.y = this._screen.height + card.jitterY - CARD_HEIGHT / 6;
       card.baseX = card.x;
       card.baseY = card.y;
       // Apply tilt: 0 degrees at middle, increasing by 1 degree per card away from center
