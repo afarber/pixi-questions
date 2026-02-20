@@ -53,6 +53,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-2-planes/screenshot.png)
 
+[german-skat](https://github.com/afarber/pixi-questions/tree/master/german-skat) single-player German Skat implemented with PixiJS
+
+![screenshot](https://raw.github.com/afarber/pixi-questions/master/german-skat/screenshot.png)
+
 [playing-cards-3d-effect](https://github.com/afarber/pixi-questions/tree/master/playing-cards-3d-effect) with draggable PNG cards created by [Adrian Kennard](https://www.me.uk/cards/)
 
 ![screenshot](https://raw.github.com/afarber/pixi-questions/master/playing-cards-3d-effect/screenshot.gif)
